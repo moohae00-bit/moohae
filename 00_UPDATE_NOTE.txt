@@ -1,0 +1,18 @@
+무해 통합 수정본
+
+수정 완료:
+- 메인 히어로 쇼파 이미지 경로
+- 스토리 침실 이미지 경로
+- Care Report 미리보기 이미지 경로
+- Before / After 정상 유지
+
+설치:
+현재 GitHub Desktop 저장소 루트
+moohae-site > moohae
+에 이 압축파일의 내용 전체를 덮어쓰세요.
+
+중요:
+기존 CNAME 파일은 삭제하지 마세요.
+
+이후 GitHub Desktop에서
+Commit to main → Push origin

@@ -1,0 +1,15 @@
+MOOHAE STATIC SECURITY REVIEW — 2026-08-18
+
+PUBLIC DEPLOYMENT
+- index.html, care.html, diagnosis.html, report.html
+- No admin/editor page is included in public deployment until authentication/authorization is implemented.
+- No API keys, database credentials, passwords, private tokens, or service secrets are included.
+- There is no database code in this version, so SQL injection currently has no execution path.
+- Dynamic diagnosis output uses textContent/createElement rather than user-controlled innerHTML.
+- Public ?edit=1 behavior and public image upload controls were removed.
+- External font CDN was removed to tighten CSP and reduce third-party dependencies.
+- Kakao links use HTTPS.
+- CSP is present as a meta policy. GitHub Pages is static hosting, so server response security headers require a hosting/CDN layer that supports custom headers.
+
+DO NOT COMMIT
+.env, API keys, service-role keys, DB passwords, access tokens, private customer exports or private report data.
