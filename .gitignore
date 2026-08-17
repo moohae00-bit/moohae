@@ -1,0 +1,17 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local/private customer data
+private/
+customer-data/
+exports/
+
+# Editor/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
