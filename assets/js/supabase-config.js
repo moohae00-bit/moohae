@@ -9,7 +9,7 @@
   // Secret key / service_role key는 절대 입력하지 마세요.
   // ==========================================================
 
-  const SUPABASE_URL = 'https://tvullgydrkvqbutuhvsu.supabase.co/rest/v1/';
+  const SUPABASE_URL = 'https://tvullgydrkvqbutuhvsu.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_gCGil2x3zSz413uCjMBkXA_qSZLMiBz';
 
   const isPlaceholder =
