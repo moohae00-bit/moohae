@@ -11,3 +11,24 @@
 .result-copy{max-width:590px;margin:0 auto;color:var(--gray);font-size:15px;line-height:1.8}
 .result-recommend{margin:26px 0 0;padding:22px;border-radius:18px;background:#f2efe8;text-align:left;color:var(--ink-soft);font-size:13px;line-height:1.75}
 .result-recommend strong{display:block;margin-bottom:6px;color:var(--ink);font-size:15px}
+.lead-form{margin-top:30px;padding:28px;border:1px solid var(--line);border-radius:22px;background:#fff;text-align:left}
+.lead-form-head h3{margin:8px 0 10px;font-size:24px;letter-spacing:-.035em}
+.lead-form-head>p{margin:0 0 22px;color:var(--gray);font-size:13px;line-height:1.7}
+#diagnosisSubmitForm{display:grid;gap:14px}
+.field-label>span{display:block;margin-bottom:7px;color:var(--ink);font-size:12px;font-weight:700}
+.field-label input{width:100%;min-height:50px;padding:0 15px;border:1px solid var(--line);border-radius:14px;background:#fbfaf7;color:var(--ink);outline:none}
+.field-label input:focus{border-color:var(--sage-dark);box-shadow:0 0 0 4px rgba(102,125,101,.08)}
+.consent-box{padding:16px;border-radius:15px;background:#f6f4ee}
+.consent-box.sensitive{background:#edf1ea}
+.consent-row{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.consent-row input{width:18px;height:18px;margin-top:1px;accent-color:var(--sage-dark)}
+.consent-row span{display:block;flex:1}
+.consent-row strong{display:block;color:var(--ink);font-size:12px}
+.consent-row small{display:block;margin-top:4px;color:var(--gray);font-size:11px;line-height:1.5}
+.consent-detail{margin:10px 0 0 28px!important;color:var(--gray-light)!important;font-size:10px!important;line-height:1.65!important}
+.submit-diagnosis{width:100%;border-radius:14px;margin-top:4px;cursor:pointer}
+.submit-diagnosis:disabled{opacity:.55;cursor:not-allowed}
+.submit-message{min-height:20px!important;margin:0!important;color:#a1544e!important;font-size:11px!important;text-align:center}
+.submit-message.success{color:var(--sage-dark)!important}
+.honeypot{position:absolute!important;left:-99999px!important;opacity:0!important;pointer-events:none!important;width:1px!important;height:1px!important}
+@media(max-width:600px){.lead-form{padding:22px 18px}.lead-form-head h3{font-size:21px}.consent-detail{margin-left:0!important}}
