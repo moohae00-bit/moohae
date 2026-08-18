@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+                 base-uri 'none';
+                 object-src 'none';
+                 frame-ancestors 'none';
+                 script-src 'self' https://cdn.jsdelivr.net;
+                 style-src 'self';
+                 img-src 'self' data:;
+                 font-src 'self';
+                 connect-src 'self' https://*.supabase.co wss://*.supabase.co;
+                 upgrade-insecure-requests">
+  <meta name="referrer" content="no-referrer">
+  <title>m∞hae Admin</title>
+  <link rel="stylesheet" href="../assets/css/admin-auth.css">
+</head>
+<body class="dashboard-page">
+  <header class="admin-topbar">
+    <a class="admin-logo" href="./dashboard.html">m∞hae <span>ADMIN</span></a>
+    <div class="admin-topbar-actions">
+      <span id="adminIdentity">확인 중...</span>
+      <button id="logoutButton" class="secondary-button" type="button">로그아웃</button>
+    </div>
+  </header>
+
+  <main class="dashboard-shell">
+    <section class="dashboard-hero">
+      <p class="eyebrow">MOOHAE OPERATIONS</p>
+      <h1>오늘의 무해를<br>한눈에 관리합니다.</h1>
+      <p>고객, 진단, 방문 케어, Care Report를 한 흐름으로 연결합니다.</p>
+    </section>
+
+    <section class="metric-grid" aria-label="운영 현황">
+      <article class="metric-card">
+        <span>고객</span>
+        <strong id="customerCount">—</strong>
+        <small>전체 고객</small>
+      </article>
+      <article class="metric-card">
+        <span>온라인 진단</span>
+        <strong id="diagnosisCount">—</strong>
+        <small>누적 진단</small>
+      </article>
+      <article class="metric-card">
+        <span>방문 케어</span>
+        <strong id="visitCount">—</strong>
+        <small>방문 기록</small>
+      </article>
+      <article class="metric-card">
+        <span>Care Report</span>
+        <strong id="reportCount">—</strong>
+        <small>생성 리포트</small>
+      </article>
+    </section>
+
+    <section class="dashboard-card">
+      <div>
+        <p class="eyebrow">NEXT STEP</p>
+        <h2>관리자 인증 연결 완료 후<br>고객 관리 기능을 붙입니다.</h2>
+      </div>
+      <p id="dashboardMessage" class="dashboard-message" role="status" aria-live="polite">
+        관리자 권한을 확인하고 있습니다.
+      </p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/admin-dashboard.js"></script>
+</body>
+</html>

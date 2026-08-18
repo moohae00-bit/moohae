@@ -1,0 +1,41 @@
+MOOHAE 관리자 로그인 연결 파일
+
+[어디에 넣나요?]
+현재 실제 사이트 폴더:
+moohae-site > moohae
+
+이 압축파일 안의 admin 폴더와 assets 폴더를
+moohae 폴더 안에 그대로 넣거나 덮어쓰면 됩니다.
+
+[가장 중요한 설정 1개]
+assets/js/supabase-config.js 를 열고 아래 두 값만 교체하세요.
+
+YOUR_SUPABASE_URL
+→ Supabase Data API 화면에서 복사한 API URL
+
+YOUR_SUPABASE_PUBLISHABLE_KEY
+→ Settings > API Keys 의 Publishable key
+
+주의:
+Secret key / service_role key는 절대 입력하지 마세요.
+
+[테스트 주소]
+GitHub에 Push 후:
+https://moohae.me/admin/login.html
+
+[현재 구현]
+- 이메일/비밀번호 로그인
+- Supabase Auth 세션
+- admin_profiles 권한 확인
+- admin 또는 manager + is_active=true 만 통과
+- 권한 없으면 즉시 로그아웃
+- 관리자 대시보드 진입
+- customers / diagnoses / care_visits / reports 카운트 조회
+- 로그아웃
+
+[아직 구현하지 않음]
+- 고객 목록 UI
+- 진단 제출 DB 저장
+- 방문 일정 관리
+- Before/After Storage 업로드
+- 실제 Care Report 생성/공유
