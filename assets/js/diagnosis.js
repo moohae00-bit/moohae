@@ -19,11 +19,25 @@
     btn.addEventListener('click',()=>{
       const value=btn.textContent.trim();
       btn.classList.toggle('selected');
+      if(value==='해당 없음'){
+        question.querySelectorAll('.option').forEach(other=>{
+          if(other!==btn) other.classList.remove('selected');
+        });
+        answers[qIndex]=btn.classList.contains('selected') ? ['해당 없음'] : [];
+        return;
+      }
+
+      const noneButton=[...question.querySelectorAll('.option')].find(other=>other.textContent.trim()==='해당 없음');
+      if(noneButton) noneButton.classList.remove('selected');
+      answers[qIndex]=answers[qIndex].filter(item=>item!=='해당 없음');
+
       if(btn.classList.contains('selected')){if(!answers[qIndex].includes(value))answers[qIndex].push(value)}
       else answers[qIndex]=answers[qIndex].filter(item=>item!==value);
     });
   }));
   const flat=()=>answers.flat();
+  const allergyChoices=['아토피 관련 고민','비염 관련 고민','천식 관련 고민','털 알레르기','먼지 알레르기'];
+  const hasAllergyConcern=()=>flat().some(item=>allergyChoices.includes(item));
   const has=text=>flat().some(item=>item.includes(text));
   const appendText=(parent,tag,text,className='')=>{
     const node=document.createElement(tag);
@@ -58,6 +72,10 @@
       copy='현재 체크에서는 특정 문제에 집중되기보다 기본적인 생활환경 관리에 대한 관심이 확인되었습니다. 온라인 질문만으로 보이지 않는 먼지와 패브릭 상태까지 정확하게 알 수는 없습니다.';
       recommendation='짧은 상담으로 평소 관리 방식과 생활환경을 알려주신 뒤, 방문 진단으로 실제 상태를 확인해보세요. 필요한 경우에만 적합한 케어를 안내합니다.';
     }
+    if(hasAllergyConcern()){
+      recommendation+=' 알레르기 관련 고민을 선택하셨다면 침구·소파·매트리스처럼 몸과 자주 닿는 패브릭 환경을 더 세심하게 살펴보는 것이 좋습니다. 집먼지진드기, 미세 각질, 비듬처럼 눈에 잘 보이지 않는 요소가 쌓이기 쉬운 공간을 꾸준히 관리하는 것이 중요합니다.';
+    }
+
     if(wantsVisit&&wantsConsult)recommendation+=' 상담과 방문 진단을 모두 선택하셨으므로, 상담에서 방문 일정을 함께 잡는 방식이 가장 간단합니다.';
     else if(wantsVisit)recommendation+=' 방문 진단을 선택하셨으므로, 상담 채널에서 가능한 방문 일정부터 확인해보세요.';
     else if(wantsConsult)recommendation+=' 상담을 선택하셨으므로, 먼저 현재 가장 신경 쓰이는 공간을 알려주시면 방문 진단이 필요한지 함께 정리해드립니다.';
