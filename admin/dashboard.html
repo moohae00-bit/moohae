@@ -29,10 +29,12 @@
   </header>
 
   <main class="dashboard-shell">
-    <section class="dashboard-hero">
-      <p class="eyebrow">MOOHAE OPERATIONS</p>
-      <h1>오늘의 무해를<br>한눈에 관리합니다.</h1>
-      <p>고객, 진단, 방문 케어, Care Report를 한 흐름으로 연결합니다.</p>
+    <section class="dashboard-hero compact">
+      <div>
+        <p class="eyebrow">MOOHAE OPERATIONS</p>
+        <h1>고객과 케어 흐름을<br>한곳에서 관리합니다.</h1>
+      </div>
+      <p>진단에서 방문, Care Report까지 고객 한 명의 기록이 자연스럽게 이어지도록 관리합니다.</p>
     </section>
 
     <section class="metric-grid" aria-label="운영 현황">
@@ -58,14 +60,44 @@
       </article>
     </section>
 
-    <section class="dashboard-card">
-      <div>
-        <p class="eyebrow">NEXT STEP</p>
-        <h2>관리자 인증 연결 완료 후<br>고객 관리 기능을 붙입니다.</h2>
+    <section class="customer-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">CUSTOMERS</p>
+          <h2>고객 목록</h2>
+        </div>
+        <p id="dashboardMessage" class="dashboard-message" role="status" aria-live="polite">
+          고객 데이터를 확인하고 있습니다.
+        </p>
       </div>
-      <p id="dashboardMessage" class="dashboard-message" role="status" aria-live="polite">
-        관리자 권한을 확인하고 있습니다.
-      </p>
+
+      <div class="customer-toolbar" aria-label="고객 검색 및 필터">
+        <label class="search-box">
+          <span class="sr-only">고객 검색</span>
+          <input id="customerSearch" type="search" autocomplete="off"
+                 placeholder="이름, 연락처, 알레르기 관련 고민 검색">
+        </label>
+
+        <label class="filter-box">
+          <span class="sr-only">상태 필터</span>
+          <select id="statusFilter">
+            <option value="all">전체 상태</option>
+            <option value="new">신규 문의</option>
+            <option value="consulting">상담 중</option>
+            <option value="visit_scheduled">방문 예정</option>
+            <option value="care_completed">케어 완료</option>
+            <option value="follow_up">재관리 대상</option>
+            <option value="closed">종료</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="customerList" class="customer-list" aria-live="polite"></div>
+
+      <div id="emptyCustomers" class="empty-state" hidden>
+        <strong>아직 등록된 고객이 없습니다.</strong>
+        <p>다음 단계에서 무료 진단 페이지와 DB를 연결하면 고객이 자동으로 이곳에 표시됩니다.</p>
+      </div>
     </section>
   </main>
 
