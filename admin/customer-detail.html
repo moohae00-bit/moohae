@@ -113,6 +113,89 @@
       </article>
     </section>
 
+    <section class="detail-grid operation-grid">
+      <article class="detail-card">
+        <div class="detail-card-head">
+          <div>
+            <p class="eyebrow">COMPLETE CARE</p>
+            <h2>방문 케어 완료</h2>
+          </div>
+        </div>
+
+        <form id="careCompleteForm" class="admin-form" novalidate>
+          <label>
+            <span>완료할 방문 일정</span>
+            <select id="careVisitSelect" required>
+              <option value="">방문 일정을 선택해주세요</option>
+            </select>
+          </label>
+
+          <label>
+            <span>케어 전 상태</span>
+            <textarea id="beforeDiagnosis" maxlength="3000"
+                      placeholder="케어 전 확인된 상태를 기록하세요." required></textarea>
+          </label>
+
+          <label>
+            <span>케어 후 상태</span>
+            <textarea id="afterDiagnosis" maxlength="3000"
+                      placeholder="케어 후 변화와 확인 사항을 기록하세요." required></textarea>
+          </label>
+
+          <fieldset class="care-item-fieldset">
+            <legend>실제 진행한 케어</legend>
+            <div class="check-grid">
+              <label><input type="checkbox" name="completedCareItem" value="매트리스 케어"><span>매트리스 케어</span></label>
+              <label><input type="checkbox" name="completedCareItem" value="패브릭 케어"><span>패브릭 케어</span></label>
+              <label><input type="checkbox" name="completedCareItem" value="실내 공간 케어"><span>실내 공간 케어</span></label>
+              <label><input type="checkbox" name="completedCareItem" value="바닥 케어"><span>바닥 케어</span></label>
+            </div>
+          </fieldset>
+
+          <label>
+            <span>관리자 방문 메모</span>
+            <textarea id="visitAdminMemo" maxlength="5000"
+                      placeholder="현장 특이사항, 고객 요청, 다음 확인 사항 등을 기록하세요."></textarea>
+          </label>
+
+          <button id="completeCareButton" class="primary-button" type="submit">케어 완료 처리</button>
+          <p id="careCompleteMessage" class="inline-message" role="status" aria-live="polite"></p>
+        </form>
+      </article>
+
+      <article class="detail-card">
+        <div class="detail-card-head">
+          <div>
+            <p class="eyebrow">CARE REPORT</p>
+            <h2>Care Report 작성</h2>
+          </div>
+          <span id="reportEditStatus" class="status-badge neutral">리포트 없음</span>
+        </div>
+
+        <form id="reportEditorForm" class="admin-form" novalidate>
+          <input id="reportEditorId" type="hidden">
+
+          <label>
+            <span>담당자 코멘트</span>
+            <textarea id="reportManagerComment" maxlength="5000"
+                      placeholder="고객에게 전달할 핵심 내용을 작성하세요."></textarea>
+          </label>
+
+          <label>
+            <span>다음 케어 권장사항</span>
+            <textarea id="reportNextCare" maxlength="3000"
+                      placeholder="다음 관리 시기나 권장 케어를 작성하세요."></textarea>
+          </label>
+
+          <div class="report-action-row">
+            <button id="saveReportButton" class="secondary-button report-action-button" type="button">임시 저장</button>
+            <button id="publishReportButton" class="primary-button report-action-button" type="button">리포트 발행</button>
+          </div>
+          <p id="reportEditorMessage" class="inline-message" role="status" aria-live="polite"></p>
+        </form>
+      </article>
+    </section>
+
     <section class="detail-grid">
       <article class="detail-card">
         <div class="detail-card-head">

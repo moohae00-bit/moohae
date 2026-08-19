@@ -17,6 +17,23 @@
   const scheduleVisitButton = document.getElementById('scheduleVisitButton');
   const visitMessage = document.getElementById('visitScheduleMessage');
 
+  const careCompleteForm = document.getElementById('careCompleteForm');
+  const careVisitSelect = document.getElementById('careVisitSelect');
+  const beforeDiagnosisInput = document.getElementById('beforeDiagnosis');
+  const afterDiagnosisInput = document.getElementById('afterDiagnosis');
+  const visitAdminMemoInput = document.getElementById('visitAdminMemo');
+  const completeCareButton = document.getElementById('completeCareButton');
+  const careCompleteMessage = document.getElementById('careCompleteMessage');
+
+  const reportEditorForm = document.getElementById('reportEditorForm');
+  const reportEditorId = document.getElementById('reportEditorId');
+  const reportManagerComment = document.getElementById('reportManagerComment');
+  const reportNextCare = document.getElementById('reportNextCare');
+  const reportEditStatus = document.getElementById('reportEditStatus');
+  const saveReportButton = document.getElementById('saveReportButton');
+  const publishReportButton = document.getElementById('publishReportButton');
+  const reportEditorMessage = document.getElementById('reportEditorMessage');
+
   const STATUS_LABELS = {
     new: '신규 문의',
     consulting: '상담 중',
@@ -243,6 +260,73 @@
     return article;
   }
 
+
+  function populateCareCompletion(visits) {
+    careVisitSelect.replaceChildren();
+
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = '방문 일정을 선택해주세요';
+    careVisitSelect.appendChild(placeholder);
+
+    const candidates = visits.filter((visit) =>
+      visit.visit_status === 'scheduled' || visit.visit_status === 'in_progress'
+    );
+
+    for (const visit of candidates) {
+      const option = document.createElement('option');
+      option.value = visit.id;
+      option.textContent =
+        `${formatDateTime(visit.scheduled_at)} · ${visit.care_area || '케어 공간 미입력'}`;
+      careVisitSelect.appendChild(option);
+    }
+
+    if (candidates.length === 0) {
+      careCompleteForm.hidden = true;
+      setMessage(careCompleteMessage, '완료 처리할 방문 일정이 없습니다.', true);
+    } else {
+      careCompleteForm.hidden = false;
+      setMessage(careCompleteMessage, '');
+    }
+  }
+
+  function populateReportEditor(reports) {
+    const editable =
+      reports.find((report) => report.report_status === 'draft') ||
+      reports.find((report) => report.report_status === 'published') ||
+      null;
+
+    if (!editable) {
+      reportEditorId.value = '';
+      reportManagerComment.value = '';
+      reportNextCare.value = '';
+      reportEditStatus.textContent = '리포트 없음';
+      reportEditStatus.className = 'status-badge neutral';
+      reportEditorForm.setAttribute('aria-disabled', 'true');
+      saveReportButton.disabled = true;
+      publishReportButton.disabled = true;
+      setMessage(reportEditorMessage, '케어 완료 처리 후 Care Report 초안이 자동 생성됩니다.');
+      return;
+    }
+
+    reportEditorId.value = editable.id;
+    reportManagerComment.value = editable.manager_comment || '';
+    reportNextCare.value = editable.next_care_recommendation || '';
+
+    const label = REPORT_LABELS[editable.report_status] || '상태 미정';
+    reportEditStatus.textContent = label;
+    reportEditStatus.className =
+      `status-badge status-${editable.report_status || 'neutral'}`;
+
+    reportEditorForm.setAttribute('aria-disabled', 'false');
+    saveReportButton.disabled = false;
+    publishReportButton.disabled = false;
+    publishReportButton.textContent =
+      editable.report_status === 'published' ? '발행 내용 저장' : '리포트 발행';
+
+    setMessage(reportEditorMessage, '');
+  }
+
   async function loadCustomerData() {
     const [
       customerResult,
@@ -288,6 +372,8 @@
     const reports = reportResult.data || [];
 
     latestDiagnosisId = diagnoses[0]?.id || null;
+    populateCareCompletion(visits);
+    populateReportEditor(reports);
 
     document.getElementById('customerName').textContent = customer.name || '이름 없음';
     document.getElementById('customerMeta').textContent =
@@ -452,6 +538,134 @@
       setBusy(scheduleVisitButton, false, '등록 중...', '방문 일정 등록');
     }
   });
+
+
+  careCompleteForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    setMessage(careCompleteMessage, '');
+
+    const visitId = careVisitSelect.value;
+    const beforeText = beforeDiagnosisInput.value.trim();
+    const afterText = afterDiagnosisInput.value.trim();
+    const adminMemo = visitAdminMemoInput.value.trim();
+
+    const careItems = [
+      ...careCompleteForm.querySelectorAll('input[name="completedCareItem"]:checked')
+    ]
+      .map((input) => input.value)
+      .filter((value) => ALLOWED_CARE_ITEMS.has(value));
+
+    if (!visitId || !UUID_PATTERN.test(visitId)) {
+      setMessage(careCompleteMessage, '완료할 방문 일정을 선택해주세요.');
+      return;
+    }
+
+    if (!beforeText || !afterText) {
+      setMessage(careCompleteMessage, '케어 전·후 상태를 모두 입력해주세요.');
+      return;
+    }
+
+    if (beforeText.length > 3000 || afterText.length > 3000) {
+      setMessage(careCompleteMessage, '케어 전·후 상태는 각각 3,000자 이내로 작성해주세요.');
+      return;
+    }
+
+    if (adminMemo.length > 5000) {
+      setMessage(careCompleteMessage, '관리자 메모는 5,000자 이내로 작성해주세요.');
+      return;
+    }
+
+    if (careItems.length === 0) {
+      setMessage(careCompleteMessage, '실제 진행한 케어를 한 개 이상 선택해주세요.');
+      return;
+    }
+
+    setBusy(completeCareButton, true, '완료 처리 중...', '케어 완료 처리');
+
+    try {
+      const { error } = await window.moohaeSupabase.rpc('admin_complete_visit', {
+        p_visit_id: visitId,
+        p_before_diagnosis: beforeText,
+        p_after_diagnosis: afterText,
+        p_care_items: careItems,
+        p_admin_memo: adminMemo || null
+      });
+
+      if (error) throw error;
+
+      careCompleteForm.reset();
+      setMessage(careCompleteMessage, '케어 완료 처리와 Care Report 초안 생성이 완료되었습니다.', true);
+      await loadCustomerData();
+    } catch (error) {
+      console.error('MOOHAE care complete error:', error);
+      setMessage(careCompleteMessage, '케어 완료 처리 중 오류가 발생했습니다.');
+    } finally {
+      setBusy(completeCareButton, false, '완료 처리 중...', '케어 완료 처리');
+    }
+  });
+
+  async function saveReport(status) {
+    setMessage(reportEditorMessage, '');
+
+    const reportId = reportEditorId.value;
+    const managerComment = reportManagerComment.value.trim();
+    const nextCare = reportNextCare.value.trim();
+
+    if (!reportId || !UUID_PATTERN.test(reportId)) {
+      setMessage(reportEditorMessage, '저장할 Care Report가 없습니다.');
+      return;
+    }
+
+    if (managerComment.length > 5000) {
+      setMessage(reportEditorMessage, '담당자 코멘트는 5,000자 이내로 작성해주세요.');
+      return;
+    }
+
+    if (nextCare.length > 3000) {
+      setMessage(reportEditorMessage, '다음 케어 권장사항은 3,000자 이내로 작성해주세요.');
+      return;
+    }
+
+    if (status === 'published' && (!managerComment || !nextCare)) {
+      setMessage(reportEditorMessage, '리포트 발행 전 코멘트와 다음 케어 권장사항을 모두 작성해주세요.');
+      return;
+    }
+
+    const targetButton = status === 'published' ? publishReportButton : saveReportButton;
+    const normalLabel = status === 'published' ? '리포트 발행' : '임시 저장';
+    const busyLabel = status === 'published' ? '발행 중...' : '저장 중...';
+
+    setBusy(targetButton, true, busyLabel, normalLabel);
+
+    try {
+      const { error } = await window.moohaeSupabase.rpc('admin_save_report', {
+        p_report_id: reportId,
+        p_manager_comment: managerComment || null,
+        p_next_care_recommendation: nextCare || null,
+        p_report_status: status
+      });
+
+      if (error) throw error;
+
+      setMessage(
+        reportEditorMessage,
+        status === 'published'
+          ? 'Care Report가 발행 상태로 저장되었습니다.'
+          : 'Care Report 초안이 저장되었습니다.',
+        true
+      );
+
+      await loadCustomerData();
+    } catch (error) {
+      console.error('MOOHAE report save error:', error);
+      setMessage(reportEditorMessage, 'Care Report를 저장하지 못했습니다.');
+    } finally {
+      setBusy(targetButton, false, busyLabel, normalLabel);
+    }
+  }
+
+  saveReportButton.addEventListener('click', () => saveReport('draft'));
+  publishReportButton.addEventListener('click', () => saveReport('published'));
 
   async function boot() {
     try {
