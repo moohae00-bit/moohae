@@ -41,6 +41,7 @@
 
   function formatDate(value) {
     if (!value) return '—';
+
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return '—';
 
@@ -49,6 +50,43 @@
       month: '2-digit',
       day: '2-digit'
     }).format(date);
+  }
+
+  function pickText(object, ...keys) {
+    for (const key of keys) {
+      const value = object?.[key];
+
+      if (typeof value === 'string' && value.trim()) {
+        return value.trim();
+      }
+    }
+
+    return '';
+  }
+
+  function setText(node, value, fallback = '—') {
+    if (!node) return;
+
+    node.textContent =
+      typeof value === 'string' && value.trim()
+        ? value.trim()
+        : fallback;
+  }
+
+  function renderCustomerName(report) {
+    const name = pickText(
+      report,
+      'customer_name',
+      'customerName'
+    );
+
+    setText(customerName, name, '고객');
+
+    document
+      .querySelectorAll('[data-output="customerName"]')
+      .forEach((node) => {
+        node.textContent = name || '고객';
+      });
   }
 
   function renderCareItems(items) {
@@ -83,6 +121,7 @@
 
   function isSafeLocalImagePath(value) {
     if (typeof value !== 'string') return false;
+
     const path = value.trim();
 
     if (!path) return false;
@@ -90,7 +129,11 @@
     if (path.startsWith('//')) return false;
     if (/^[a-z][a-z0-9+.-]*:/i.test(path)) return false;
 
-    return path.startsWith('./') || path.startsWith('../') || path.startsWith('/');
+    return (
+      path.startsWith('./') ||
+      path.startsWith('../') ||
+      path.startsWith('/')
+    );
   }
 
   function renderImages(beforePath, afterPath) {
@@ -118,73 +161,126 @@
   }
 
   function renderReport(report) {
-    customerName.textContent = report.customer_name || '고객';
-    careDate.textContent = formatDate(report.care_date);
+    renderCustomerName(report);
 
-    const area = report.care_area || '생활 공간';
+    careDate.textContent = formatDate(
+      report.care_date ?? report.careDate
+    );
+
+    const area =
+      pickText(report, 'care_area', 'careArea') || '생활 공간';
+
     careAreaTop.textContent = area;
     careAreaSummary.textContent = area;
 
     beforeDiagnosis.textContent =
-      report.before_diagnosis || '케어 전 상태 기록이 없습니다.';
+      pickText(
+        report,
+        'before_diagnosis',
+        'beforeDiagnosis'
+      ) || '케어 전 상태 기록이 없습니다.';
 
     afterDiagnosis.textContent =
-      report.after_diagnosis || '케어 후 상태 기록이 없습니다.';
+      pickText(
+        report,
+        'after_diagnosis',
+        'afterDiagnosis'
+      ) || '케어 후 상태 기록이 없습니다.';
 
     managerComment.textContent =
-      report.manager_comment || '담당자 코멘트가 없습니다.';
+      pickText(
+        report,
+        'manager_comment',
+        'managerComment'
+      ) || '담당자 코멘트가 없습니다.';
 
     const recommendation =
-      report.next_care_recommendation || '관리 상태에 따라 추후 확인';
+      pickText(
+        report,
+        'next_care_recommendation',
+        'nextCareRecommendation'
+      ) || '관리 상태에 따라 추후 확인';
 
     nextCare.textContent = recommendation;
     nextCareSummary.textContent = recommendation;
 
-    renderCareItems(report.care_items);
-    renderImages(report.before_image_path, report.after_image_path);
+    renderCareItems(
+      report.care_items ?? report.careItems
+    );
+
+    renderImages(
+      report.before_image_path ?? report.beforeImagePath,
+      report.after_image_path ?? report.afterImagePath
+    );
 
     showContent();
   }
 
   async function loadReport() {
-    const token = new URLSearchParams(window.location.search).get('token');
+    const token =
+      new URLSearchParams(window.location.search).get('token');
 
     if (!token || !UUID_PATTERN.test(token)) {
       showError('리포트 링크가 올바르지 않습니다.');
       return;
     }
 
-    if (!window.moohaeSupabaseConfigReady || !window.moohaeSupabase) {
-      showError('리포트 연결을 확인할 수 없습니다. 잠시 후 다시 시도해주세요.');
+    if (
+      !window.moohaeSupabaseConfigReady ||
+      !window.moohaeSupabase
+    ) {
+      showError(
+        '리포트 연결을 확인할 수 없습니다. 잠시 후 다시 시도해주세요.'
+      );
       return;
     }
 
     try {
-      const { data, error } = await window.moohaeSupabase.rpc(
-        'get_public_care_report',
-        { p_public_token: token }
-      );
+      const { data, error } =
+        await window.moohaeSupabase.rpc(
+          'get_public_care_report',
+          {
+            p_public_token: token
+          }
+        );
 
       if (error) {
-        console.error('MOOHAE public report RPC error:', {
-          code: error.code,
-          message: error.message
-        });
-        showError('리포트를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+        console.error(
+          'MOOHAE public report RPC error:',
+          {
+            code: error.code,
+            message: error.message
+          }
+        );
+
+        showError(
+          '리포트를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.'
+        );
+
         return;
       }
 
       const rows = Array.isArray(data) ? data : [];
 
       if (rows.length !== 1) {
-        showError('링크가 올바르지 않거나 아직 발행되지 않은 리포트입니다.');
+        showError(
+          '링크가 올바르지 않거나 아직 발행되지 않은 리포트입니다.'
+        );
+
         return;
       }
 
       renderReport(rows[0]);
+
     } catch (error) {
-      console.error('MOOHAE public report exception:', error);
-      showError('리포트를 불러오는 중 오류가 발생했습니다.');
+      console.error(
+        'MOOHAE public report exception:',
+        error
+      );
+
+      showError(
+        '리포트를 불러오는 중 오류가 발생했습니다.'
+      );
     }
   }
 
