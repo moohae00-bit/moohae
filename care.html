@@ -3,48 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="무해 Care — 눈에 보이지 않는 생활환경까지 살펴보는 홈케어 서비스와 제품 대여 안내">
-<title>무해 Care</title><meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests"><meta name="referrer" content="strict-origin-when-cross-origin">
-
-
-<link rel="stylesheet" href="./assets/css/site.css"><link rel="stylesheet" href="./assets/css/care.css"></head>
+<meta name="description" content="MOOHAE 365 — 더 깨끗한 집보다, 더 무해한 집. 우리 집의 주요 생활 접촉면을 확인하고, 케어하고, 기록하며 관리의 흐름을 이어갑니다.">
+<title>무해 Care — MOOHAE 365</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="stylesheet" href="./assets/css/site.css">
+<link rel="stylesheet" href="./assets/css/care.css?v=20260820-3">
+<style>
+  .care-intro{padding:110px 0 42px;text-align:center}.care-intro h2{margin:10px 0 18px}.care-intro h2 span,.plans-header h2 span,.focus-copy h2 span,.trust-copy h2 span{display:block}.care-intro p{max-width:650px;margin:0 auto;line-height:1.85}
+  .plans{padding:72px 0 110px}.plans-header{text-align:center;max-width:760px;margin:0 auto 46px}.plans-header p:last-child{line-height:1.8}.plan-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}.plan-card{position:relative;border:1px solid rgba(20,28,24,.12);border-radius:24px;padding:34px 28px;background:#fff;display:flex;flex-direction:column;min-height:610px}.plan-card.plus{border-color:rgba(20,28,24,.38);box-shadow:0 18px 50px rgba(20,28,24,.08);transform:translateY(-8px)}.plan-card.signature{background:#f3f4f0}.plan-badge{display:inline-flex;align-self:flex-start;margin-bottom:20px;padding:7px 11px;border-radius:999px;background:#202923;color:#fff;font-size:11px;letter-spacing:.08em}.plan-name{font-size:12px;letter-spacing:.12em;opacity:.58}.plan-card h3{font-size:28px;margin:10px 0 8px}.plan-message{min-height:54px;line-height:1.55}.plan-price{margin:25px 0 4px;font-size:34px;font-weight:700;letter-spacing:-.04em}.plan-price small{font-size:14px;font-weight:500;letter-spacing:0;opacity:.58}.plan-year{font-size:12px;opacity:.55;margin-bottom:24px}.plan-divider{height:1px;background:rgba(20,28,24,.1);margin:0 0 22px}.plan-list{list-style:none;padding:0;margin:0;display:grid;gap:13px}.plan-list li{position:relative;padding-left:20px;line-height:1.55}.plan-list li:before{content:'·';position:absolute;left:4px;font-weight:700}.plan-note{margin-top:auto;padding-top:28px;font-size:13px;line-height:1.65;opacity:.68}.plan-limit{margin-top:18px;padding:16px;border-radius:14px;background:rgba(255,255,255,.72);font-size:13px;line-height:1.65}.plan-limit strong{display:block;font-size:15px;margin-bottom:4px}.plan-actions{margin-top:28px}.plan-actions a{width:100%;justify-content:center;text-align:center}
+  .focus-section,.trust-section{padding:100px 0}.focus-grid,.trust-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}.focus-copy p,.trust-copy p{line-height:1.85}.focus-examples{display:grid;gap:12px}.focus-item{padding:22px;border-top:1px solid rgba(20,28,24,.12)}.focus-item strong{display:block;margin-bottom:7px}.focus-item p{margin:0;line-height:1.65}.trust-section{background:#f5f5f2}.trust-points{display:grid;gap:0}.trust-point{padding:22px 0;border-bottom:1px solid rgba(20,28,24,.12)}.trust-point span{display:block;font-size:11px;letter-spacing:.1em;opacity:.55;margin-bottom:7px}.trust-point strong{display:block;font-size:19px;margin-bottom:6px}.trust-point p{margin:0;line-height:1.65}.sos-box{margin-top:28px;padding:26px;border:1px solid rgba(20,28,24,.14);border-radius:18px}.sos-box strong{display:block;font-size:20px;margin-bottom:8px}.sos-box p{margin:0;line-height:1.7}.fineprint{max-width:780px;margin:30px auto 0;font-size:12px;line-height:1.7;opacity:.58;text-align:center}
+  @media(max-width:900px){.plan-grid{grid-template-columns:1fr}.plan-card{min-height:0}.plan-card.plus{transform:none}.focus-grid,.trust-grid{grid-template-columns:1fr;gap:36px}.plans{padding-bottom:80px}}
+  @media(max-width:640px){.care-intro{padding:78px 0 28px}.plans{padding:54px 0 72px}.plan-card{padding:28px 22px;border-radius:20px}.plan-card h3{font-size:25px}.plan-price{font-size:31px}.focus-section,.trust-section{padding:76px 0}.plans-header{text-align:left;margin-bottom:30px}.fineprint{text-align:left}}
+</style>
+</head>
 <body data-page="care">
 <div id="site-header"></div>
 <main>
-<section class="hero"><div class="hero-inner reveal"><p class="eyebrow">MOOHAE CARE</p><h1>보이는 곳보다<span>보이지 않는 곳까지.</span></h1><p>매트리스 속 먼지, 패브릭에 남는 털과 미세한 오염처럼 일상에서 놓치기 쉬운 생활 환경을 더 세심하게 살펴봅니다. 비염·아토피·천식 등 알레르기가 신경 쓰이는 가정, 반려동물 털과 먼지 관리가 어려운 집을 위한 홈케어입니다.</p><div class="hero-actions"><a href="./diagnosis.html" class="btn-primary">무료 진단</a><a href="#care-menu" class="btn-text">서비스 보기</a></div></div></section>
-<section class="invisible"><div class="wrap"><div class="invisible-grid"><div class="invisible-copy reveal"><p class="eyebrow">INVISIBLE CARE</p><h2>깨끗해 보여도<span>남아 있는 것들.</span></h2><p>무해는 질병을 치료하는 서비스가 아닙니다. 대신 알레르기가 신경 쓰이는 생활환경에서 놓치기 쉬운 먼지, 털, 패브릭 오염과 같은 요소를 더 꼼꼼히 확인하고 케어합니다.</p></div><div class="concern-grid reveal"><article class="concern"><strong>먼지</strong><p>눈에 보이는 표면뿐 아니라 생활 중 반복해서 쌓이는 먼지 환경을 살펴봅니다.</p></article><article class="concern"><strong>반려동물 털</strong><p>소파와 침구, 패브릭에 남기 쉬운 털과 생활 오염을 중심으로 케어합니다.</p></article><article class="concern"><strong>침구 · 패브릭</strong><p>매일 몸이 닿지만 관리하기 어려운 매트리스와 패브릭 공간을 확인합니다.</p></article><article class="concern"><strong>알레르기 생활환경</strong><p>비염·아토피·천식 등 알레르기가 신경 쓰이는 가정의 생활공간을 더 세심하게 봅니다.</p></article></div></div></div></section>
-<section class="menu-section" id="care-menu"><div class="wrap"><div class="section-header reveal"><p class="eyebrow">CARE SERVICE</p><h2>필요한 범위만<span>선택해서.</span></h2><p>집 전체를 무조건 관리하기보다, 현재 가장 신경 쓰이는 공간과 패브릭을 기준으로 선택할 수 있습니다.</p></div><div class="service-grid"><article class="service-card reveal">
-  <span class="service-tag">FABRIC CARE</span>
-  <h3>패브릭 케어</h3>
-  <div class="price">45,000원</div>
-  <p>침대, 소파, 카펫처럼 몸이 자주 닿는 패브릭을 중심으로 케어합니다.</p>
-  <div class="service-fit">
-    <span>이런 집에 추천해요</span>
-    <strong>침대·소파의 먼지, 털, 패브릭 관리가 특히 신경 쓰이는 집</strong>
-  </div>
-</article><article class="service-card featured reveal">
-  <span class="service-tag">STANDARD CARE</span>
-  <h3>스탠다드 케어</h3>
-  <div class="price">35,000원 <small>/ 방 하나 기준</small></div>
-  <p>방 하나를 기준으로 일상에서 쌓이는 먼지와 생활 오염을 기본 범위로 케어합니다.</p>
-  <div class="service-fit">
-    <span>이런 집에 추천해요</span>
-    <strong>한 공간부터 부담 없이 시작하고 싶은 집</strong>
-  </div>
-</article><article class="service-card reveal">
-  <span class="service-tag">ALL-IN-ONE CARE</span>
-  <h3>올인원 케어</h3>
-  <div class="price">55,000원 <small>/ 방 하나 기준</small></div>
-  <p>방 하나를 기준으로 보다 넓은 범위를 살펴보고 꼼꼼하게 케어합니다.</p>
-  <div class="service-fit">
-    <span>이런 집에 추천해요</span>
-    <strong>알레르기 생활환경과 공간 전체 관리가 특히 신경 쓰이는 집</strong>
-  </div>
-</article></div></div></section>
-<section class="rental"><div class="wrap"><div class="section-header reveal"><p class="eyebrow">PRODUCT RENTAL</p><h2>직접 관리하고 싶다면,<span>필요한 구성만 대여.</span></h2><p>제품 대여 금액은 구성에 따라 달라집니다. 아래 금액은 평일 1일 기준입니다.</p></div><div class="rental-grid"><article class="rental-card reveal"><h3>스탠다드</h3><div class="rental-price">86,000원</div><p>본체 + 바닥 브러시</p></article><article class="rental-card reveal"><h3>프로</h3><div class="rental-price">115,000원</div><p>본체 + 바닥 브러시 + 파워 브러시</p></article><article class="rental-card reveal"><h3>올인원</h3><div class="rental-price">135,000원</div><p>프로 구성 + 추가 브러시 4종</p></article></div><div class="rental-note reveal"><div class="note-box"><strong>이틀 연속 대여</strong><br>정상 대여 금액에서 35% 할인</div><div class="note-box"><strong>주말 대여</strong><br>평일 기준 대여 금액에서 5% 인상</div></div></div></section>
-<section class="process"><div class="wrap"><div class="section-header reveal"><p class="eyebrow">VISIT CARE PROCESS</p><h2>방문부터 마무리까지<span>이렇게 진행됩니다.</span></h2><p>무해는 먼저 고객의 이야기를 듣고, 상태를 직접 확인한 뒤 케어를 진행합니다.</p></div><div class="process-list"><div class="process-item reveal"><span class="process-num">01</span><span class="process-title">인사 · 인터뷰</span><span class="process-desc">케어가 어려운 부분과 평소 신경 쓰이는 공간을 간단한 Q&A로 확인합니다.</span></div><div class="process-item reveal"><span class="process-num">02</span><span class="process-title">제품 결합</span><span class="process-desc">오늘 진행할 케어 범위에 맞춰 필요한 장비와 브러시를 준비합니다.</span></div><div class="process-item reveal"><span class="process-num">03</span><span class="process-title">케어 전 진단</span><span class="process-desc">케어 전 현재 상태를 먼저 확인해 고객과 함께 살펴봅니다.</span></div><div class="process-item reveal"><span class="process-num">04</span><span class="process-title">케어 진행</span><span class="process-desc">확인한 공간과 패브릭을 중심으로 필요한 범위의 케어를 진행합니다.</span></div><div class="process-item reveal"><span class="process-num">05</span><span class="process-title">완료 후 재확인</span><span class="process-desc">케어가 끝난 뒤 다시 진단해 상태 변화를 확인합니다.</span></div><div class="process-item reveal"><span class="process-num">06</span><span class="process-title">서비스 구성 안내</span><span class="process-desc">현재 생활환경에 맞는 케어 구성과 이용 방법을 설명합니다.</span></div><div class="process-item reveal"><span class="process-num">07</span><span class="process-title">결정 · 스케줄 확정</span><span class="process-desc">원하는 서비스를 선택한 경우 다음 일정과 관리 스케줄을 함께 확정합니다.</span></div></div></div></section>
-<section class="final"><div class="reveal"><p class="eyebrow">MOOHAE CHECK</p><h2>무엇을 해야 할지 모르겠다면<span>먼저 확인해보세요.</span></h2><p>공간과 생활 방식에 따라 필요한 케어는 다릅니다. 몇 가지 질문으로 현재 우리 집에 필요한 방향부터 확인할 수 있습니다.</p><div class="final-actions"><a href="./diagnosis.html" class="btn-primary">무료 진단</a><a href="https://pf.kakao.com/_uRbiX/chat" target="_blank" rel="noopener noreferrer" class="btn-text">상담 신청</a></div></div></section>
+  <section class="hero">
+    <div class="hero-inner reveal">
+      <p class="eyebrow">MOOHAE CARE</p>
+      <h1>더 깨끗한 집보다,<span>더 무해한 집.</span></h1>
+      <p>집은 매일 다시 생활됩니다. 무해는 한 번 좋아지는 것보다 좋은 상태가 이어지도록, 우리 집의 주요 생활 접촉면을 확인하고 케어하고 기록합니다.</p>
+      <div class="hero-actions"><a href="#moohae365-plans" class="btn-primary">MOOHAE 365 보기</a><a href="./diagnosis.html" class="btn-text">우리 집 살펴보기</a></div>
+    </div>
+  </section>
+
+  <section class="care-intro">
+    <div class="wrap reveal">
+      <p class="eyebrow">MOOHAE 365</p>
+      <h2>한 번의 케어가 아니라,<span>관리의 흐름을 이어갑니다.</span></h2>
+      <p>가족 구성과 생활공간, 주 생활동선을 살펴 우리 집에 맞는 Home Profile을 만들고, 매 방문의 Care History를 이어갑니다. 시간이 지나도 “집 전체적으로 관리받고 있구나”라는 안심이 남도록.</p>
+    </div>
+  </section>
+
+  <section class="plans" id="moohae365-plans">
+    <div class="wrap">
+      <div class="plans-header reveal">
+        <p class="eyebrow">MOOHAE 365 PLAN</p>
+        <h2>우리 집에 맞는 만큼,<span>계속 맡길 수 있도록.</span></h2>
+        <p>관리시간을 사는 것이 아니라, 우리 집에 필요한 관리의 깊이와 빈도를 선택합니다.</p>
+      </div>
+      <div class="plan-grid">
+        <article class="plan-card reveal">
+          <span class="plan-name">STANDARD</span>
+          <h3>스탠다드</h3>
+          <p class="plan-message">우리 집 전체를 위한<br><strong>보편적인 지속관리.</strong></p>
+          <div class="plan-price">49,000원 <small>/ 월</small></div>
+          <div class="plan-year">연 588,000원 · 연 3회 정기관리</div>
+          <div class="plan-divider"></div>
+          <ul class="plan-list">
+            <li>방 3 · 거실 · 주방 기준 주요 생활 접촉면 관리</li>
+            <li>매트리스 · 소파 · 러그 · 카펫 등 건식 케어</li>
+            <li>Home Profile 기반 관리</li>
+            <li>매회 Care History 기록</li>
+            <li>회당 약 60분 케어</li>
+          </ul>
+          <p class="plan-note">집 전체를 한 해의 관리 흐름 안에서 꾸준히 살피고 싶은 가정에 권합니다.</p>
+          <div class="plan-actions"><a href="./diagnosis.html" class="btn-text">우리 집 살펴보기</a></div>
+        </article>
+
+        <article class="plan-card plus reveal">
+          <span class="plan-badge">MOOHAE 추천</span>
+          <span class="plan-name">PLUS</span>
+          <h3>플러스</h3>
+          <p class="plan-message">우리 집 전체,<br><strong>더 신경 쓰이는 생활까지.</strong></p>
+          <div class="plan-price">79,000원 <small>/ 월</small></div>
+          <div class="plan-year">연 948,000원 · 연 4회 정기관리</div>
+          <div class="plan-divider"></div>
+          <ul class="plan-list">
+            <li>STANDARD 전체 관리 범위 포함</li>
+            <li>아이 · 반려동물 등 FOCUS CARE</li>
+            <li>생활동선과 접촉면을 더 세심하게 관리</li>
+            <li>회당 약 90분 케어</li>
+            <li>PLUS 회원 우선 일정 안내</li>
+            <li>Extra Care 회원 할인 혜택</li>
+          </ul>
+          <p class="plan-note">집 전체와 함께, 우리 집에서 조금 더 신경 쓰이는 가족과 생활영역까지 맡기고 싶은 가정에 권합니다.</p>
+          <div class="plan-actions"><a href="./diagnosis.html" class="btn-primary">PLUS 살펴보기</a></div>
+        </article>
+
+        <article class="plan-card signature reveal">
+          <span class="plan-name">SIGNATURE · 가칭</span>
+          <h3>전담 관리</h3>
+          <p class="plan-message">더 자주 살피고,<br><strong>우리 집의 관리를 맡기다.</strong></p>
+          <div class="plan-price">119,000원 <small>/ 월</small></div>
+          <div class="plan-year">연 1,428,000원 · 연 6회 정기관리</div>
+          <div class="plan-divider"></div>
+          <ul class="plan-list">
+            <li>PLUS 전체 관리 범위 포함</li>
+            <li>생활 변화에 따라 조정되는 FOCUS CARE</li>
+            <li>상세 Home Profile · Care History 누적</li>
+            <li>회당 약 90분 케어</li>
+            <li>필요할 때, MOOHAE — 연 2회</li>
+            <li>최우선 일정 안내</li>
+            <li>Extra Care 강화 회원 혜택</li>
+            <li>연간 Care Check · 다음 관리 설계</li>
+          </ul>
+          <div class="plan-limit"><strong>관리자 한 명이 맡는 집은 단 5곳.</strong>더 많은 집을 관리하기보다, 한 집을 더 잘 알기 위해 담당 가구 수를 제한합니다.</div>
+          <p class="plan-note">※ 최상위 플랜의 공식 서비스명은 브랜드 네이밍 확정 후 반영됩니다.</p>
+          <div class="plan-actions"><a href="https://pf.kakao.com/_uRbiX/chat" target="_blank" rel="noopener noreferrer" class="btn-text">상담하기</a></div>
+        </article>
+      </div>
+      <p class="fineprint">관리 범위와 FOCUS CARE는 Home Profile과 현장 상태에 따라 조정됩니다. 습식 관리, 대형 패브릭, 카시트·유모차 등 별도 공정이 필요한 항목은 Extra Care로 운영될 수 있습니다.</p>
+    </div>
+  </section>
+
+  <section class="focus-section">
+    <div class="wrap focus-grid">
+      <div class="focus-copy reveal">
+        <p class="eyebrow">FOCUS CARE</p>
+        <h2>누구에게나 같은 관리보다,<span>우리 집에 필요한 곳을 더 세심하게.</span></h2>
+        <p>PLUS부터는 집 전체의 기본 관리에 더해, 우리 집에서 조금 더 신경 쓰이는 가족과 생활동선을 FOCUS로 정합니다. 아이와 반려동물이 없는 집도 이용할 수 있으며, Home Profile에 따라 집중 영역은 달라질 수 있습니다.</p>
+      </div>
+      <div class="focus-examples reveal">
+        <div class="focus-item"><strong>아이의 생활</strong><p>매트리스, 놀이매트, 소파 등 아이의 피부가 자주 닿고 오래 머무는 생활 접촉면을 중심으로 살핍니다.</p></div>
+        <div class="focus-item"><strong>반려동물의 생활</strong><p>방석, 소파의 주 사용 자리, 러그·카펫과 주요 생활동선처럼 털과 생활 오염이 반복되는 곳을 더 세심하게 봅니다.</p></div>
+        <div class="focus-item"><strong>우리 집의 FOCUS</strong><p>가족 구성과 생활 방식이 달라지면 집중관리의 우선순위도 함께 조정합니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust-section">
+    <div class="wrap trust-grid">
+      <div class="trust-copy reveal">
+        <p class="eyebrow">MANAGED, CONTINUOUSLY</p>
+        <h2>관리받는 순간보다,<span>맡길 수 있다는 안심.</span></h2>
+        <p>무해는 방문 횟수만 채우지 않습니다. 이전 기록을 확인하고, 지금의 생활을 다시 살피고, 다음 관리까지 이어갑니다.</p>
+        <div class="sos-box"><strong>필요할 때, MOOHAE.</strong><p>최상위 플랜은 예상하지 못한 생활 오염이 생겼을 때 정기관리일까지 기다리지 않고 연 2회 추가 케어를 요청할 수 있습니다. 요청 후 상태를 확인하고 가능한 일정에 우선 배정합니다.</p></div>
+      </div>
+      <div class="trust-points reveal">
+        <div class="trust-point"><span>01 · PROFILE</span><strong>우리 집을 먼저 압니다.</strong><p>가족 구성, 주요 생활공간과 동선을 Home Profile에 담습니다.</p></div>
+        <div class="trust-point"><span>02 · CARE</span><strong>필요한 곳을 관리합니다.</strong><p>정해진 메뉴를 반복하기보다 그날의 우선순위를 확인합니다.</p></div>
+        <div class="trust-point"><span>03 · HISTORY</span><strong>관리가 쌓입니다.</strong><p>매 방문의 관리내용을 Care History로 이어갑니다.</p></div>
+        <div class="trust-point"><span>04 · NEXT</span><strong>다음까지 생각합니다.</strong><p>생활의 변화에 따라 다음 관리의 방향을 조정합니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="process">
+    <div class="wrap">
+      <div class="section-header reveal"><p class="eyebrow">MOOHAE 365 PROCESS</p><h2>확인하고, 케어하고,<span>기록하며 이어갑니다.</span></h2><p>한 번의 방문으로 끝내지 않는 MOOHAE 365의 기본 관리 흐름입니다.</p></div>
+      <div class="process-list">
+        <div class="process-item reveal"><span class="process-num">01</span><span class="process-title">Home Profile</span><span class="process-desc">가족 구성과 주요 생활공간, 생활동선, 신경 쓰이는 부분을 확인합니다.</span></div>
+        <div class="process-item reveal"><span class="process-num">02</span><span class="process-title">CHECK</span><span class="process-desc">방문 시 현재 상태와 오늘 우선적으로 살펴볼 영역을 확인합니다.</span></div>
+        <div class="process-item reveal"><span class="process-num">03</span><span class="process-title">CARE</span><span class="process-desc">주요 생활 접촉면과 플랜별 FOCUS 영역을 필요한 방식으로 관리합니다.</span></div>
+        <div class="process-item reveal"><span class="process-num">04</span><span class="process-title">RE-CHECK</span><span class="process-desc">케어 후 상태를 다시 살피고 관리 내용을 확인합니다.</span></div>
+        <div class="process-item reveal"><span class="process-num">05</span><span class="process-title">CARE HISTORY</span><span class="process-desc">오늘의 관리와 변화를 기록해 다음 방문에 이어갑니다.</span></div>
+        <div class="process-item reveal"><span class="process-num">06</span><span class="process-title">NEXT</span><span class="process-desc">다음 방문 시기와 관리 우선순위를 생활 변화에 맞춰 이어갑니다.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="reveal">
+      <p class="eyebrow">MOOHAE CHECK</p>
+      <h2>우리 집은 지금<span>어떤 관리가 필요할까요?</span></h2>
+      <p>어떤 플랜이 맞는지 먼저 결정하지 않아도 됩니다. 몇 가지 질문으로 우리 집의 생활과 신경 쓰이는 곳부터 살펴보세요.</p>
+      <div class="final-actions"><a href="./diagnosis.html" class="btn-primary">우리 집 살펴보기</a><a href="https://pf.kakao.com/_uRbiX/chat" target="_blank" rel="noopener noreferrer" class="btn-text">상담 신청</a></div>
+    </div>
+  </section>
 </main>
 <div id="site-footer"></div>
-
-<script src="./assets/js/site.js"></script><script src="./assets/js/care.js"></script></body></html>
+<script src="./assets/js/site.js"></script>
+<script src="./assets/js/care.js"></script>
+</body>
+</html>
