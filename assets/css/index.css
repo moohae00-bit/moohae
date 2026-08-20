@@ -77,12 +77,19 @@
 .record-flow i{color:var(--sage-dark);font-style:normal}
 .record-note{margin:24px 0;color:var(--gray);font-size:14px;line-height:1.75}
 .report-mini{
-  width:100%;min-height:520px;border-radius:28px;
-  background:url("../images/care-report-preview.png") center top/cover no-repeat,var(--cream-deep);
-  box-shadow:0 28px 65px rgba(41,41,39,.12);transform:rotate(1deg);
-  transition:transform .7s var(--ease),box-shadow .7s var(--ease)
+  width:100%;
+  border-radius:28px;
+  overflow:hidden;
+  background:var(--cream-deep);
+  box-shadow:0 28px 65px rgba(41,41,39,.12);
 }
-.report-mini:hover{transform:rotate(0) translateY(-4px);box-shadow:0 34px 76px rgba(41,41,39,.15)}
+.report-mini img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  object-position:center top;
+}
 
 .final{
   min-height:92svh;padding:110px 24px;display:flex;align-items:center;justify-content:center;
@@ -104,6 +111,58 @@
   .method{padding:90px 0}.method-header{text-align:center;margin:0 auto 50px}.method-header h2{font-size:39px}
   .method-grid{grid-template-columns:1fr 1fr}.method-item{min-height:190px;padding:24px 18px;border-bottom:1px solid rgba(255,255,255,.14)}.method-item:nth-child(2){border-right:0}.method-item h3{margin-top:45px;font-size:21px}
   .moohae365{padding:95px 0}.moohae365-grid{grid-template-columns:1fr;gap:45px}.moohae365-copy{text-align:center}.moohae365-copy h2{font-size:39px}.moohae365-copy>p{font-size:14px}.history-card{padding:25px 22px}.history-line li{grid-template-columns:70px 1fr;gap:12px;padding-left:22px}
-  .record{padding:95px 0}.record-grid{grid-template-columns:1fr;gap:45px;text-align:center}.record-copy h2{font-size:39px}.record-flow{justify-content:center}.record-note{font-size:13px}.report-mini{min-height:440px;transform:none}
+  .record{padding:95px 0}.record-grid{grid-template-columns:1fr;gap:45px;text-align:center}.record-copy h2{font-size:39px}.record-flow{justify-content:center}.record-note{font-size:13px}.report-mini{min-height:0;transform:none}.report-mini img{width:100%;height:auto}
   .final{min-height:82svh;padding:90px 20px}.final h2{font-size:40px}.final-signature{margin-top:85px}
+}
+
+
+/* ===== V3 FIX: layout isolation / image alignment ===== */
+.hero,
+.why,
+.method,
+.moohae365,
+.record,
+.final{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+}
+
+.moohae365-grid,
+.record-grid{
+  min-width:0;
+}
+
+.moohae365-grid > *,
+.record-grid > *{
+  min-width:0;
+}
+
+.hero-photo{
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+  background-position:center center !important;
+}
+
+.history-card,
+.report-mini{
+  justify-self:stretch;
+  align-self:center;
+}
+
+@media(max-width:768px){
+  .moohae365-grid,
+  .record-grid{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+  }
+
+  .history-card,
+  .report-mini{
+    width:100%;
+    max-width:100%;
+    margin-left:auto;
+    margin-right:auto;
+  }
 }
