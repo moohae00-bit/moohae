@@ -1,63 +1,153 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>무해 — 집을 더 무해하게</title><meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests"><meta name="referrer" content="strict-origin-when-cross-origin"><link rel="stylesheet" href="./assets/css/site.css"><link rel="stylesheet" href="./assets/css/index.css"></head><body data-page="home"><div id="site-header"></div><main>
-<section class="hero"><div class="hero-copy reveal"><p class="eyebrow">MOOHAE HOME CARE</p><h1>집을 깨끗하게가 아니라<strong>집을 더 무해하게.</strong></h1><p class="hero-description">매일 생활하는 공간을 먼저 바라보고, 우리 집에 필요한 케어만 제안합니다.</p><div class="hero-actions"><a href="./diagnosis.html" class="btn-primary">무료 진단</a><a href="#story" class="btn-text">무해의 케어 알아보기</a></div></div><div class="hero-photo reveal image-slot" id="heroPhoto">
-      
-    </div></section>
-<section class="message"><div class="message-inner reveal"><p class="eyebrow">OUR POINT OF VIEW</p><h2>우리는 표면보다 먼저<span>생활을 봅니다.</span></h2><p>어디에서 자고, 어디에 오래 머무르고, 어떤 공간을 가장 자주 사용하는지. 무해의 케어는 그곳에서 시작합니다.</p></div></section>
-<section class="story" id="story"><div class="wrap"><div class="story-grid"><div class="story-copy reveal"><p class="eyebrow">BEDROOM</p><h2>매일 닿는 곳을<span>먼저 봅니다.</span></h2><p>하루의 시작과 끝을 함께하는 침실. 매일 몸이 닿는 공간의 상태부터 살펴봅니다.</p></div><div class="story-photo reveal image-slot" id="storyPhoto">
-      
-    </div></div></div></section>
-<section class="philosophy"><div class="reveal"><p class="eyebrow">MOOHAE METHOD</p><h2>단순히 정리하지 않습니다.<span>필요한 이유부터 찾습니다.</span></h2><div class="flow"><span>확인하고</span><span>진단하고</span><strong>필요한 만큼 케어합니다.</strong></div></div></section>
-<section class="process"><div class="wrap"><div class="process-header reveal"><p class="eyebrow">CARE PROCESS</p><h2>우리 집에 필요한 것만<span>정확하게.</span></h2></div><div class="process-list"><div class="process-item"><span class="process-num">01</span><span class="process-title">확인</span><span class="process-desc">생활 공간과 패브릭의 상태를 먼저 살펴봅니다.</span></div><div class="process-item"><span class="process-num">02</span><span class="process-title">진단</span><span class="process-desc">우리 집에서 필요한 케어 범위를 확인합니다.</span></div><div class="process-item"><span class="process-num">03</span><span class="process-title">맞춤 구성</span><span class="process-desc">필요한 서비스만 선택할 수 있도록 구성합니다.</span></div><div class="process-item"><span class="process-num">04</span><span class="process-title">케어</span><span class="process-desc">결정된 범위에 맞춰 케어를 진행합니다.</span></div></div></div></section>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>무해 MOOHAE — 더 깨끗한 집보다, 더 무해한 집</title>
+  <meta name="description" content="더 깨끗한 집보다, 더 무해한 집. 사는 동안, 무해하도록. 무해는 보이지 않는 생활환경을 확인하고, 케어하고, 기록하며 관리의 흐름을 이어갑니다.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="stylesheet" href="./assets/css/site.css">
+  <link rel="stylesheet" href="./assets/css/index.css">
+</head>
+<body data-page="home">
+  <div id="site-header"></div>
 
-<section class="compare" id="change">
-  <div class="wrap">
-    <div class="compare-header reveal">
-      <p class="eyebrow">FEEL THE CHANGE</p>
-      <h2>말보다<span>직접 확인해 보세요.</span></h2>
-      <p>케어 전과 후의 모습을 좌우로 움직이며 직접 비교해보세요.</p>
-    </div>
-
-    <div class="before-after reveal" id="comparison" role="slider" aria-label="케어 전후 비교" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">
-      
-      <div class="compare-layer before-photo image-slot" id="beforePhoto">
-        
-        <img
-          class="compare-image"
-          src="./assets/images/before.jpg"
-          alt="무해 케어 전 이미지"
-          draggable="false"
-        >
-
-        <span class="compare-label before-label">BEFORE</span>
-
-        
+  <main>
+    <!-- 01 HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">MOOHAE</p>
+        <h1 id="hero-title">더 깨끗한 집보다,<strong>더 무해한 집.</strong></h1>
+        <p class="hero-slogan">사는 동안, 무해하도록.</p>
+        <p class="hero-description">보이지 않는 생활환경을<br>확인하고, 케어하고, 기록합니다.</p>
+        <div class="hero-actions">
+          <a href="./diagnosis.html" class="btn-primary">우리 집 살펴보기</a>
+        </div>
       </div>
+      <div class="hero-photo reveal" role="img" aria-label="햇살이 머무는 정돈된 생활 공간"></div>
+    </section>
 
-      
-      <div class="compare-layer after-photo image-slot" id="afterPhoto">
-        
-        <img
-          class="compare-image"
-          src="./assets/images/after.jpg"
-          alt="무해 케어 후 이미지"
-          draggable="false"
-        >
-
-        <span class="compare-label after-label">AFTER</span>
-
-        
+    <!-- 02 WHY -->
+    <section class="why" id="point-of-view" aria-labelledby="why-title">
+      <div class="why-inner reveal">
+        <p class="eyebrow">WHY MOOHAE</p>
+        <h2 id="why-title">사랑하는 사람이<br>살아가는 곳이니까.</h2>
+        <p>집은 매일 다시 생활되고,<br>생활환경도 계속 달라집니다.</p>
+        <p class="why-emphasis">한 번 좋아지는 것보다<br><strong>좋은 상태가 이어지는 것을 생각합니다.</strong></p>
+        <div class="philosophy-signature" aria-label="무해 핵심 철학">
+          <span>더 무해,</span>
+          <strong>이어지다.</strong>
+        </div>
       </div>
+    </section>
 
-      <div class="divider"></div>
-      <div class="handle">‹ ›</div>
-    </div>
-    <p class="compare-hint">좌우로 드래그하여 변화를 확인해 보세요</p>
-  </div>
-</section>
+    <!-- 03 METHOD -->
+    <section class="method" aria-labelledby="method-title">
+      <div class="wrap">
+        <div class="method-header reveal">
+          <p class="eyebrow">MOOHAE METHOD</p>
+          <h2 id="method-title">한 번의 케어로<br>끝내지 않습니다.</h2>
+        </div>
 
-<section class="report-teaser"><div class="wrap"><div class="report-card reveal"><div><p class="eyebrow">CARE REPORT</p><h2>케어가 끝나도<span>기록은 남습니다.</span></h2><p>케어 전후의 변화, 오늘 진행한 관리, 담당자의 코멘트까지 한 장의 리포트로 정리해드립니다.</p><a href="./report.html" class="btn-text">Care Report 보기</a></div><div class="report-mini"></div></div></div></section>
-<section class="final"><div class="reveal"><p class="eyebrow">MOOHAE CHECK</p><h2>우리 집에 필요한 케어,<span>먼저 확인해보세요.</span></h2><p>몇 가지 질문으로 현재 생활 환경에 맞는 케어 방향을 확인할 수 있습니다.</p><div class="final-actions"><a href="./diagnosis.html" class="btn-primary">무료 진단</a><a href="./report.html" class="btn-text">Care Report</a></div></div></section>
-</main><div id="site-footer"></div>
+        <div class="method-grid">
+          <article class="method-item reveal">
+            <span>01</span>
+            <h3>확인하고</h3>
+            <p>지금 필요한 곳을 살핍니다.</p>
+          </article>
+          <article class="method-item reveal">
+            <span>02</span>
+            <h3>케어하고</h3>
+            <p>필요한 곳을 관리합니다.</p>
+          </article>
+          <article class="method-item reveal">
+            <span>03</span>
+            <h3>기록하고</h3>
+            <p>오늘의 변화를 남깁니다.</p>
+          </article>
+          <article class="method-item reveal">
+            <span>04</span>
+            <h3>이어갑니다.</h3>
+            <p>다음 관리까지 생각합니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
+    <!-- 04 MOOHAE 365 -->
+    <section class="moohae365" id="moohae365" aria-labelledby="moohae365-title">
+      <div class="wrap moohae365-grid">
+        <div class="moohae365-copy reveal">
+          <p class="eyebrow">MOOHAE 365</p>
+          <h2 id="moohae365-title">깨끗한 하루가 아닌,<strong>무해한 365일.</strong></h2>
+          <p>한 번의 관리가 아니라<br>우리 집의 생활환경을 지속적으로 살피고<br>관리 기록을 이어갑니다.</p>
+          <p class="安心">관리되고 있다는 안심.</p>
+        </div>
 
-<script src="./assets/js/site.js"></script><script src="./assets/js/index.js"></script></body></html>
+        <div class="history-card reveal" aria-label="MOOHAE 365 관리 이력 예시">
+          <div class="history-head">
+            <span>CARE HISTORY</span>
+            <strong>우리 집의 관리가 이어집니다.</strong>
+          </div>
+          <ol class="history-line">
+            <li>
+              <time>2026.08</time>
+              <div><strong>첫 생활환경 CHECK</strong><span>CARE REPORT 01</span></div>
+            </li>
+            <li>
+              <time>2026.11</time>
+              <div><strong>정기 CHECK</strong><span>CARE REPORT 02</span></div>
+            </li>
+            <li>
+              <time>2027.02</time>
+              <div><strong>생활환경 CHECK</strong><span>CARE REPORT 03</span></div>
+            </li>
+            <li class="next">
+              <time>NEXT</time>
+              <div><strong>다음 관리</strong><span>이어지는 관리 기록</span></div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 RECORD -->
+    <section class="record" aria-labelledby="record-title">
+      <div class="wrap record-grid">
+        <div class="record-copy reveal">
+          <p class="eyebrow">CARE REPORT</p>
+          <h2 id="record-title">관리는 지나가도,<strong>기록은 남습니다.</strong></h2>
+          <p class="record-quote">오늘 무엇을 했는지가 아니라,<br><strong>무엇이 달라졌는지.</strong></p>
+          <div class="record-flow" aria-label="Care Report 구성">
+            <span>CHECK</span><i>→</i><span>CARE</span><i>→</i><span>CHANGE</span><i>→</i><span>NEXT</span>
+          </div>
+          <p class="record-note">무해와 함께한 시간이<br>우리 집의 관리 기록이 됩니다.</p>
+          <a href="./report.html" class="btn-text">Care Report 보기</a>
+        </div>
+        <div class="report-mini reveal" role="img" aria-label="무해 Care Report 미리보기"></div>
+      </div>
+    </section>
+
+    <!-- 06 FINAL -->
+    <section class="final" aria-labelledby="final-title">
+      <div class="final-inner reveal">
+        <p class="eyebrow">MOOHAE CHECK</p>
+        <h2 id="final-title">우리 집은 지금<br><strong>어떤 관리가 필요할까요?</strong></h2>
+        <p>몇 가지 질문으로<br>우리 집의 생활환경부터 살펴보세요.</p>
+        <a href="./diagnosis.html" class="btn-primary">우리 집 살펴보기</a>
+        <small>약 1분 · 무료</small>
+
+        <div class="final-signature">
+          <p>사는 동안, 무해하도록.</p>
+          <strong>MOOHAE</strong>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="./assets/js/site.js"></script>
+  <script src="./assets/js/index.js"></script>
+</body>
+</html>
