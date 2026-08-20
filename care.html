@@ -15,6 +15,134 @@
   .focus-section,.trust-section{padding:100px 0}.focus-grid,.trust-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}.focus-copy p,.trust-copy p{line-height:1.85}.focus-examples{display:grid;gap:12px}.focus-item{padding:22px;border-top:1px solid rgba(20,28,24,.12)}.focus-item strong{display:block;margin-bottom:7px}.focus-item p{margin:0;line-height:1.65}.trust-section{background:#f5f5f2}.trust-points{display:grid;gap:0}.trust-point{padding:22px 0;border-bottom:1px solid rgba(20,28,24,.12)}.trust-point span{display:block;font-size:11px;letter-spacing:.1em;opacity:.55;margin-bottom:7px}.trust-point strong{display:block;font-size:19px;margin-bottom:6px}.trust-point p{margin:0;line-height:1.65}.sos-box{margin-top:28px;padding:26px;border:1px solid rgba(20,28,24,.14);border-radius:18px}.sos-box strong{display:block;font-size:20px;margin-bottom:8px}.sos-box p{margin:0;line-height:1.7}.fineprint{max-width:780px;margin:30px auto 0;font-size:12px;line-height:1.7;opacity:.58;text-align:center}
   @media(max-width:900px){.plan-grid{grid-template-columns:1fr}.plan-card{min-height:0}.plan-card.plus{transform:none}.focus-grid,.trust-grid{grid-template-columns:1fr;gap:36px}.plans{padding-bottom:80px}}
   @media(max-width:640px){.care-intro{padding:78px 0 28px}.plans{padding:54px 0 72px}.plan-card{padding:28px 22px;border-radius:20px}.plan-card h3{font-size:25px}.plan-price{font-size:31px}.focus-section,.trust-section{padding:76px 0}.plans-header{text-align:left;margin-bottom:30px}.fineprint{text-align:left}}
+
+  /* Price-plan cards: calm, subtle interaction only */
+  .plan-card{
+    cursor:default;
+    transition:
+      transform .34s cubic-bezier(.22,1,.36,1),
+      box-shadow .34s cubic-bezier(.22,1,.36,1),
+      border-color .34s ease,
+      background-color .34s ease;
+    will-change:transform;
+  }
+  .plan-card:not(.plus):hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 46px rgba(20,28,24,.075);
+    border-color:rgba(102,125,101,.24);
+  }
+  .plan-card.plus:hover{
+    transform:translateY(-12px);
+    box-shadow:0 25px 62px rgba(20,28,24,.13);
+    border-color:rgba(102,125,101,.48);
+  }
+  .plan-card.signature:hover{
+    background:#f0f2ed;
+  }
+  .plan-card:active{
+    transform:translateY(-2px) scale(.992);
+    transition-duration:.12s;
+  }
+  .plan-card.plus:active{
+    transform:translateY(-7px) scale(.992);
+  }
+  .plan-card:focus-within{
+    border-color:rgba(102,125,101,.46);
+    box-shadow:0 20px 54px rgba(20,28,24,.095);
+  }
+
+  .plan-price{
+    transition:transform .3s cubic-bezier(.22,1,.36,1),color .3s ease;
+  }
+  .plan-card:hover .plan-price{
+    transform:translateY(-2px);
+    color:#667d65;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .plan-card,.plan-price{
+      transition:none !important;
+      transform:none !important;
+    }
+  }
+
+  @media(max-width:900px){
+    .plan-card.plus:hover,
+    .plan-card:not(.plus):hover,
+    .plan-card:active,
+    .plan-card.plus:active{
+      transform:none;
+    }
+  }
+
+
+  /* ===== MOOHAE CARE — KEY TEXT EMPHASIS ===== */
+  /* 색상/밑줄 없이 크기와 굵기만으로 위계 설정 */
+
+  .hero h1 span{
+    font-size:1.13em;
+    font-weight:750;
+  }
+
+  .invisible-copy h2 span{
+    font-size:1.10em;
+    font-weight:750;
+  }
+
+  .plans-intro h2{
+    line-height:1.28;
+  }
+
+  .plans-intro h2 span{
+    font-size:1.12em;
+    font-weight:750;
+  }
+
+  .plan-card.plus .plan-price strong{
+    font-size:1.08em;
+  }
+
+  .plan-card.signature .plan-desc{
+    font-size:1.08em;
+    font-weight:650;
+  }
+
+  .limit-card strong,
+  .manager-limit strong{
+    font-size:1.12em;
+    font-weight:750;
+  }
+
+  .final h2 span{
+    font-size:1.10em;
+    font-weight:750;
+  }
+
+  @media(max-width:720px){
+    .hero h1 span{
+      font-size:1.08em;
+    }
+
+    .invisible-copy h2 span,
+    .plans-intro h2 span,
+    .final h2 span{
+      font-size:1.07em;
+    }
+
+    .plan-card.plus .plan-price strong{
+      font-size:1.05em;
+    }
+
+    .plan-card.signature .plan-desc{
+      font-size:1.04em;
+    }
+
+    .limit-card strong,
+    .manager-limit strong{
+      font-size:1.07em;
+    }
+  }
+
 </style>
 </head>
 <body data-page="care">
@@ -26,14 +154,6 @@
       <h1>더 깨끗한 집보다,<span>더 무해한 집.</span></h1>
       <p>집은 매일 다시 생활됩니다. 무해는 한 번 좋아지는 것보다 좋은 상태가 이어지도록, 우리 집의 주요 생활 접촉면을 확인하고 케어하고 기록합니다.</p>
       <div class="hero-actions"><a href="#moohae365-plans" class="btn-primary">MOOHAE 365 보기</a><a href="./diagnosis.html" class="btn-text">우리 집 살펴보기</a></div>
-    </div>
-  </section>
-
-  <section class="care-intro">
-    <div class="wrap reveal">
-      <p class="eyebrow">MOOHAE 365</p>
-      <h2>한 번의 케어가 아니라,<span>관리의 흐름을 이어갑니다.</span></h2>
-      <p>가족 구성과 생활공간, 주 생활동선을 살펴 우리 집에 맞는 Home Profile을 만들고, 매 방문의 Care History를 이어갑니다. 시간이 지나도 “집 전체적으로 관리받고 있구나”라는 안심이 남도록.</p>
     </div>
   </section>
 
