@@ -1,275 +1,165 @@
 (() => {
   'use strict';
 
-  const qs = [...document.querySelectorAll('.question')];
-  const progress = document.getElementById('progress');
-  const prev = document.getElementById('prev');
-  const next = document.getElementById('next');
-  const result = document.getElementById('result');
-  const navButtons = document.getElementById('navButtons');
-  const submitForm = document.getElementById('diagnosisSubmitForm');
-  const submitButton = document.getElementById('diagnosisSubmitButton');
-  const submitMessage = document.getElementById('diagnosisSubmitMessage');
+  const qs=[...document.querySelectorAll('.question')];
+  const progress=document.getElementById('progress');
+  const prev=document.getElementById('prev');
+  const next=document.getElementById('next');
+  const result=document.getElementById('result');
+  const navButtons=document.getElementById('navButtons');
+  const answers=qs.map(()=>[]);
+  let current=0;
 
-  const answers = qs.map(() => []);
-  let current = 0;
-  let resultPayload = null;
-
-  const allergyChoices = [
-    '아토피 관련 고민',
-    '비염 관련 고민',
-    '천식 관련 고민',
-    '털 알레르기',
-    '먼지 알레르기'
-  ];
-
-  function render() {
-    qs.forEach((q, i) => {
-      q.hidden = i !== current;
-      q.classList.toggle('active', i === current);
-    });
-    progress.style.width = (current / qs.length) * 100 + '%';
-    prev.style.visibility = current === 0 ? 'hidden' : 'visible';
-    next.textContent = current === qs.length - 1 ? '결과 보기' : '다음';
+  function render(){
+    qs.forEach((q,i)=>{q.hidden=i!==current;q.classList.toggle('active',i===current)});
+    progress.style.width=(current/qs.length)*100+'%';
+    prev.style.visibility=current===0?'hidden':'visible';
+    next.textContent=current===qs.length-1?'결과 보기':'다음';
   }
 
-  qs.forEach((question, qIndex) => {
-    question.querySelectorAll('.option').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const value = btn.textContent.trim();
-        btn.classList.toggle('selected');
-
-        if (value === '해당 없음') {
-          question.querySelectorAll('.option').forEach((other) => {
-            if (other !== btn) other.classList.remove('selected');
-          });
-          answers[qIndex] = btn.classList.contains('selected') ? ['해당 없음'] : [];
+  qs.forEach((question,qIndex)=>{
+    const single=question.dataset.single==='true';
+    question.querySelectorAll('.option').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const value=btn.textContent.trim();
+        if(single){
+          question.querySelectorAll('.option').forEach(item=>item.classList.remove('selected'));
+          answers[qIndex]=[value];
+          btn.classList.add('selected');
           return;
         }
-
-        const noneButton = [...question.querySelectorAll('.option')]
-          .find((other) => other.textContent.trim() === '해당 없음');
-
-        if (noneButton) noneButton.classList.remove('selected');
-        answers[qIndex] = answers[qIndex].filter((item) => item !== '해당 없음');
-
-        if (btn.classList.contains('selected')) {
-          if (!answers[qIndex].includes(value)) answers[qIndex].push(value);
-        } else {
-          answers[qIndex] = answers[qIndex].filter((item) => item !== value);
+        btn.classList.toggle('selected');
+        if(btn.classList.contains('selected')){
+          if(!answers[qIndex].includes(value))answers[qIndex].push(value);
+        }else{
+          answers[qIndex]=answers[qIndex].filter(item=>item!==value);
         }
       });
     });
   });
 
-  const flat = () => answers.flat();
-  const has = (text) => flat().some((item) => item.includes(text));
-  const hasAllergyConcern = () => flat().some((item) => allergyChoices.includes(item));
-
-  const appendText = (parent, tag, text, className = '') => {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    node.textContent = text;
+  const flat=()=>answers.flat();
+  const has=text=>flat().some(item=>item.includes(text));
+  const joinNatural=(items)=>{
+    if(items.length===0)return '';
+    if(items.length===1)return items[0];
+    if(items.length===2)return `${items[0]}와 ${items[1]}`;
+    return `${items.slice(0,-1).join(', ')}, 그리고 ${items[items.length-1]}`;
+  };
+  const appendText=(parent,tag,text,className='')=>{
+    const node=document.createElement(tag);
+    if(className)node.className=className;
+    node.textContent=text;
     parent.appendChild(node);
     return node;
   };
 
-  function buildResult() {
-    const total = answers.reduce((sum, a) => sum + a.length, 0);
-    const signals = [
-      '먼지와 실내 공기',
-      '반려동물 생활 공간',
-      '관리해도 금방 먼지가 다시 쌓인다',
-      '매트리스 내부가 걱정된다',
-      '패브릭 관리가 어렵다'
-    ].filter((item) => flat().includes(item)).length;
+  function buildResult(){
+    const household=answers[0];
+    const spaces=answers[1];
+    const surfaces=answers[2];
+    const concerns=answers[3];
+    const delegation=answers[4][0]||'';
 
-    const broad = has('집 전체') || has('전체적인 관리');
-    const focused =
-      has('침대와 패브릭') ||
-      has('매트리스 내부') ||
-      has('패브릭 관리') ||
-      has('반려동물') ||
-      has('먼지') ||
-      has('관리해도 금방');
+    const hasChild=household.includes('아이');
+    const hasPet=household.includes('반려동물');
+    const repeatedStress=concerns.includes('관리해도 금방 다시 신경 쓰인다');
+    const uncertainty=concerns.includes('언제, 어디까지 관리해야 할지 모르겠다');
+    const childFocus=concerns.includes('아이의 생활공간은 조금 더 세심하게 보고 싶다');
+    const petFocus=concerns.includes('반려동물의 생활공간은 조금 더 세심하게 보고 싶다');
+    const wantsSOS=concerns.includes('예상하지 못한 오염이 생길 때도 도움받고 싶다');
+    const wantsSignature=delegation.includes('담당 관리자가');
+    const wantsPlus=delegation.includes('더 신경 쓰이는 생활까지');
+    const wantsStandard=delegation.includes('기본적으로 꾸준히');
+    const wantsConsult=delegation.includes('상담을 통해');
 
-    const wantsVisit = has('무료 방문 진단');
-    const wantsConsult = has('상담부터');
+    let plan='STANDARD';
+    let price='월 49,000원';
+    let level='STANDARD FIT';
 
-    let level;
-    let title;
-    let copy;
-    let recommendation;
-
-    if (signals >= 3 || broad || total >= 8) {
-      level = 'DETAILED';
-      title = '눈에 보이는 관리만으로는 확인하기 어려운 부분이 많습니다.';
-      copy = '선택하신 내용을 보면 한 가지 공간보다 여러 생활 영역이 함께 신경 쓰이고 있습니다. 온라인 체크만으로 실제 상태를 판단하기보다, 무해가 직접 방문해 눈에 보이지 않는 생활환경을 확인해보는 것을 권합니다.';
-      recommendation = '먼저 상담으로 가장 신경 쓰이는 부분을 알려주세요. 이후 방문 진단에서 실제 상태를 함께 확인하고, 필요한 범위만 케어 방향으로 제안해드립니다.';
-    } else if (focused || signals >= 1) {
-      level = 'FOCUSED';
-      title = '특정 공간을 조금 더 자세히 확인해볼 필요가 있습니다.';
-      copy = '침구·패브릭, 먼지 또는 반려동물 생활 공간처럼 평소 관리가 어려운 영역이 확인되었습니다. 겉으로 깨끗해 보여도 실제 상태는 생활 방식과 공간에 따라 다를 수 있습니다.';
-      recommendation = '상담 후 방문 진단을 받아보세요. 무해가 고객님이 선택한 공간을 우선 확인하고, 현장에서 상태를 본 뒤 필요한 케어 범위를 안내합니다.';
-    } else {
-      level = 'BASIC';
-      title = '지금은 우리 집의 상태를 직접 확인해보는 단계가 좋습니다.';
-      copy = '현재 체크에서는 특정 문제에 집중되기보다 기본적인 생활환경 관리에 대한 관심이 확인되었습니다. 온라인 질문만으로 보이지 않는 먼지와 패브릭 상태까지 정확하게 알 수는 없습니다.';
-      recommendation = '짧은 상담으로 평소 관리 방식과 생활환경을 알려주신 뒤, 방문 진단으로 실제 상태를 확인해보세요. 필요한 경우에만 적합한 케어를 안내합니다.';
+    if(wantsSignature || wantsSOS){
+      plan='SIGNATURE'; price='월 119,000원'; level='SIGNATURE FIT';
+    }else if(wantsPlus || childFocus || petFocus || (hasChild && surfaces.length>=3) || (hasPet && surfaces.length>=3)){
+      plan='PLUS'; price='월 79,000원'; level='PLUS FIT';
     }
 
-    if (hasAllergyConcern()) {
-      recommendation += ' 알레르기 관련 고민을 선택하셨다면 침구·소파·매트리스처럼 몸과 자주 닿는 패브릭 환경을 더 세심하게 살펴보는 것이 좋습니다. 집먼지진드기, 미세 각질, 비듬처럼 눈에 잘 보이지 않는 요소가 쌓이기 쉬운 공간을 꾸준히 관리하는 것이 중요합니다.';
+    const spaceText=spaces.includes('여러 공간에 고르게') ? '집 안 여러 공간' : joinNatural(spaces);
+    const surfaceText=surfaces.includes('여러 곳이 함께') ? '여러 생활 접촉면' : joinNatural(surfaces);
+
+    const needParts=[];
+    if(spaceText) needParts.push(`${spaceText}에서 보내는 시간이 많고`);
+    if(surfaceText) needParts.push(`${surfaceText}이 특히 신경 쓰이는 집으로 보입니다`);
+
+    const emotionParts=[];
+    if(repeatedStress) emotionParts.push('관리를 해도 다시 금방 신경 쓰이는 반복적인 피로');
+    if(uncertainty) emotionParts.push('언제, 어디까지 관리해야 하는지 스스로 판단해야 하는 부담');
+    if(childFocus) emotionParts.push('아이 생활공간을 조금 더 세심하게 챙기고 싶은 마음');
+    if(petFocus) emotionParts.push('반려동물의 생활공간을 더 편하게 맡기고 싶은 마음');
+    if(wantsSOS) emotionParts.push('갑작스러운 오염이 생겼을 때 혼자 해결해야 한다는 걱정');
+
+    let title='우리 집 전체를 꾸준히 관리하는 방향이 잘 맞습니다.';
+    if(plan==='PLUS') title='집 전체와 함께, 더 신경 쓰이는 생활까지 맡기는 편이 잘 맞습니다.';
+    if(plan==='SIGNATURE') title='관리 자체를 무해에게 더 많이 맡기고 싶은 집에 가깝습니다.';
+
+    let copy='';
+    if(needParts.length) copy += `선택하신 내용을 보면 ${needParts.join(' ')}. `;
+    if(emotionParts.length){
+      copy += `특히 ${joinNatural(emotionParts)}이 함께 보입니다. `;
+    }else{
+      copy += '특정한 문제 하나보다 집 전체를 일정한 주기로 관리하고 싶은 니즈가 더 크게 보입니다. ';
     }
 
-    if (wantsVisit && wantsConsult) {
-      recommendation += ' 상담과 방문 진단을 모두 선택하셨으므로, 상담에서 방문 일정을 함께 잡는 방식이 가장 간단합니다.';
-    } else if (wantsVisit) {
-      recommendation += ' 방문 진단을 선택하셨으므로, 상담 채널에서 가능한 방문 일정부터 확인해보세요.';
-    } else if (wantsConsult) {
-      recommendation += ' 상담을 선택하셨으므로, 먼저 현재 가장 신경 쓰이는 공간을 알려주시면 방문 진단이 필요한지 함께 정리해드립니다.';
+    if(repeatedStress || uncertainty){
+      copy += '이 경우 필요한 것은 관리 횟수를 늘리는 것만이 아니라, 무엇을 언제 챙길지 계속 생각해야 하는 부담을 줄이는 것입니다. ';
+    }
+    if(childFocus || petFocus){
+      copy += '가족 전체의 기본 관리 위에, 조금 더 마음이 쓰이는 생활동선을 따로 살피는 방식이 잘 맞습니다. ';
+    }
+    if(wantsSOS){
+      copy += '정기관리 사이의 예상하지 못한 순간에도 도움을 요청할 수 있다는 점이 안심에 중요한 요소로 보입니다. ';
     }
 
-    document.getElementById('resultLevel').textContent = `${level} CHECK`;
-    document.getElementById('resultTitle').textContent = title;
-    document.getElementById('resultCopy').textContent = copy;
+    let recommendation='';
+    if(plan==='STANDARD'){
+      recommendation='MOOHAE 365 STANDARD는 연 3회 정기관리로 집 전체의 주요 생활 접촉면을 한 해 동안 꾸준히 관리합니다. “집 전체는 챙기고 싶지만, 관리가 생활의 큰 부담이 되지는 않았으면 좋겠다”는 선택에 가장 가깝습니다.';
+    }else if(plan==='PLUS'){
+      recommendation='MOOHAE 365 PLUS는 연 4회 정기관리와 FOCUS CARE를 통해 집 전체를 기본으로 보면서 아이·반려동물 등 더 신경 쓰이는 생활영역을 한 단계 더 세심하게 관리합니다. “전체는 맡기되, 우리 집에서 특별히 마음 쓰이는 부분은 더 깊게 봐줬으면 좋겠다”는 니즈에 가깝습니다.';
+    }else{
+      recommendation='SIGNATURE는 연 6회 정기관리, FOCUS CARE, 필요할 때 MOOHAE 연 2회, 최우선 일정과 담당 관리자 1명당 최대 5가구 관리 원칙을 포함합니다. “이제 이 부분은 내가 계속 신경 쓰기보다, 우리 집을 아는 담당자에게 맡기고 싶다”는 니즈에 가장 가깝습니다.';
+    }
 
-    const rec = document.getElementById('resultRecommend');
+    if(wantsConsult){
+      recommendation += ' 아직 플랜을 정하기 어렵다면 괜찮습니다. 상담에서 Home Profile을 간단히 확인한 뒤 실제 생활방식에 맞춰 범위를 조정하는 편이 더 정확합니다.';
+    }
+
+    document.getElementById('resultLevel').textContent=level;
+    document.getElementById('resultTitle').textContent=title;
+    document.getElementById('resultCopy').textContent=copy;
+
+    const rec=document.getElementById('resultRecommend');
     rec.replaceChildren();
-    appendText(rec, 'strong', '추천 다음 단계');
-    appendText(rec, 'p', recommendation);
+    appendText(rec,'strong',`${plan} · ${price}`);
+    appendText(rec,'p',recommendation);
 
-    const summary = document.getElementById('resultSummary');
+    const summary=document.getElementById('resultSummary');
     summary.replaceChildren();
-    appendText(summary, 'strong', '선택한 내용');
-    answers.forEach((group, i) => appendText(summary, 'p', `Q${i + 1}  ${group.join(' · ')}`));
-
-    resultPayload = {
-      spaces: [...answers[0]],
-      concerns: [...answers[1]],
-      difficulties: [...answers[2]],
-      allergy_concerns: [...answers[3]],
-      preferred_contact: [...answers[4]],
-      result_level: level
-    };
+    appendText(summary,'strong','우리 집 Home Profile 시작점');
+    if(household.length) appendText(summary,'p',`함께 생활하는 구성원  ${household.join(' · ')}`);
+    if(spaces.length) appendText(summary,'p',`주 생활공간  ${spaces.join(' · ')}`);
+    if(surfaces.length) appendText(summary,'p',`신경 쓰이는 접촉면  ${surfaces.join(' · ')}`);
+    if(concerns.length) appendText(summary,'p',`관리에서 느끼는 부담  ${concerns.join(' · ')}`);
   }
 
-  next.addEventListener('click', () => {
-    if (answers[current].length === 0) {
-      alert('한 개 이상 선택해주세요.');
-      return;
-    }
-
-    if (current < qs.length - 1) {
-      current++;
-      render();
-      return;
-    }
-
+  next.addEventListener('click',()=>{
+    if(answers[current].length===0){alert('한 개 이상 선택해주세요.');return}
+    if(current<qs.length-1){current++;render();return}
     buildResult();
-    qs.forEach((q) => { q.hidden = true; });
-    navButtons.hidden = true;
-    progress.style.width = '100%';
-    result.style.display = 'block';
-    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    qs.forEach(q=>q.hidden=true);
+    navButtons.hidden=true;
+    progress.style.width='100%';
+    result.style.display='block';
+    result.scrollIntoView({behavior:'smooth',block:'start'});
   });
-
-  prev.addEventListener('click', () => {
-    if (current > 0) {
-      current--;
-      render();
-    }
-  });
-
-  function setSubmitMessage(text, ok = false) {
-    submitMessage.textContent = text;
-    submitMessage.classList.toggle('success', ok);
-  }
-
-  function setSubmitBusy(busy) {
-    submitButton.disabled = busy;
-    submitButton.textContent = busy
-      ? '안전하게 저장하고 있습니다...'
-      : '진단 결과 보내고 상담 신청하기';
-  }
-
-  function normalizePhone(value) {
-    return value.replace(/\D/g, '');
-  }
-
-  submitForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    setSubmitMessage('');
-
-    if (!resultPayload) {
-      setSubmitMessage('진단 결과를 먼저 완료해주세요.');
-      return;
-    }
-
-    if (!window.moohaeSupabaseConfigReady || !window.moohaeSupabase) {
-      setSubmitMessage('상담 신청 연결을 확인하는 중입니다. 잠시 후 다시 시도해주세요.');
-      return;
-    }
-
-    const name = document.getElementById('customerName').value.trim();
-    const phone = normalizePhone(document.getElementById('customerPhone').value);
-    const privacyConsent = document.getElementById('privacyConsent').checked;
-    const sensitiveConsent = document.getElementById('sensitiveConsent').checked;
-    const website = document.getElementById('websiteField').value.trim();
-
-    if (name.length < 1 || name.length > 80) {
-      setSubmitMessage('이름을 확인해주세요.');
-      return;
-    }
-
-    if (phone.length < 9 || phone.length > 12) {
-      setSubmitMessage('연락처를 확인해주세요.');
-      return;
-    }
-
-    if (!privacyConsent || !sensitiveConsent) {
-      setSubmitMessage('필수 동의 항목을 확인해주세요.');
-      return;
-    }
-
-    setSubmitBusy(true);
-
-    try {
-      const { data, error } = await window.moohaeSupabase.functions.invoke('submit-diagnosis', {
-        body: {
-          name,
-          phone,
-          privacy_consent: privacyConsent,
-          sensitive_consent: sensitiveConsent,
-          website,
-          ...resultPayload
-        }
-      });
-
-      if (error) {
-        console.error('MOOHAE diagnosis submit error:', error);
-        setSubmitMessage('신청을 저장하지 못했습니다. 잠시 후 다시 시도해주세요.');
-        return;
-      }
-
-      if (!data || data.ok !== true) {
-        setSubmitMessage('신청 정보를 확인하지 못했습니다. 잠시 후 다시 시도해주세요.');
-        return;
-      }
-
-      setSubmitMessage('신청이 접수되었습니다. 무해가 진단 내용을 확인한 뒤 연락드리겠습니다.', true);
-      submitButton.textContent = '상담 신청 완료';
-      submitButton.disabled = true;
-      submitForm.querySelectorAll('input').forEach((input) => { input.disabled = true; });
-    } catch (error) {
-      console.error('MOOHAE diagnosis submit exception:', error);
-      setSubmitMessage('신청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-    } finally {
-      if (submitButton.textContent !== '상담 신청 완료') {
-        setSubmitBusy(false);
-      }
-    }
-  });
-
+  prev.addEventListener('click',()=>{if(current>0){current--;render()}});
   render();
 })();
