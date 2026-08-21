@@ -1,14 +1,316 @@
 /* ============================================================
    MOOHAE CARE
-   MOBILE ONE-TIME SERVICE SWIPE
+   care.css
    ============================================================ */
 
-.one-time-swipe-hint{
-  display:none;
-  margin:0 0 14px;
-  color:var(--gray);
-  font-size:12px;
-  text-align:right;
+
+/* ============================================================
+   COMMON
+   ============================================================ */
+
+.care-page {
+  overflow-x: hidden;
+}
+
+.care-page * {
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   ONE-TIME CARE
+   ============================================================ */
+
+.one-time-care {
+  padding: 110px 0 100px;
+}
+
+.one-time-header {
+  max-width: 720px;
+  margin: 0 auto 50px;
+  text-align: center;
+}
+
+.one-time-header .eyebrow {
+  margin-bottom: 14px;
+}
+
+.one-time-header h2 {
+  margin: 0;
+  font-size: clamp(38px, 5vw, 60px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.one-time-header > p:last-child {
+  margin: 22px auto 0;
+  color: var(--gray);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+
+/* ============================================================
+   ONE-TIME GRID
+   DESKTOP
+   ============================================================ */
+
+.one-time-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+
+/* ============================================================
+   ONE-TIME CARD
+   ============================================================ */
+
+.one-time-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 310px;
+  padding: 30px 26px;
+  overflow: hidden;
+
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.one-time-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.07);
+}
+
+
+/* ============================================================
+   ONE-TIME CARD TOP
+   ============================================================ */
+
+.one-time-card-top {
+  min-height: 60px;
+}
+
+.one-time-name {
+  margin: 0;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.one-time-korean-name {
+  margin: 7px 0 0;
+  color: var(--gray);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+   ONE-TIME PRICE
+   ============================================================ */
+
+.one-time-price-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 28px;
+}
+
+.one-time-price {
+  color: var(--text);
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.one-time-unit {
+  margin-top: 9px;
+  color: var(--gray);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   ONE-TIME DESCRIPTION
+   ============================================================ */
+
+.one-time-description {
+  margin: auto 0 0;
+  padding-top: 26px;
+  color: var(--gray);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+
+/* ============================================================
+   ONE-TIME SWIPE HINT
+   ============================================================ */
+
+.one-time-swipe-hint {
+  display: none;
+  margin: 0 0 12px;
+  color: var(--gray);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   SLIDER DOTS
+   ============================================================ */
+
+.slider-dots,
+.plan-slider-dots,
+.one-time-slider-dots {
+  display: none;
+}
+
+.slider-dot,
+.plan-slider-dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.18);
+  cursor: pointer;
+
+  transition:
+    width 180ms ease,
+    background 180ms ease;
+}
+
+.slider-dot.active,
+.plan-slider-dot.active {
+  width: 20px;
+  background: var(--text);
+}
+
+
+/* ============================================================
+   ONE-TIME → 365 BRIDGE
+   ============================================================ */
+
+.care-bridge {
+  padding: 35px 0 105px;
+  text-align: center;
+}
+
+.care-bridge-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.care-bridge h2 {
+  margin: 0;
+  font-size: clamp(34px, 4.5vw, 54px);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+}
+
+.care-bridge p {
+  margin: 22px 0 0;
+  color: var(--gray);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+
+/* ============================================================
+   MOOHAE 365 PLAN GRID
+   DESKTOP
+   ============================================================ */
+
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  width: 100%;
+}
+
+
+/* ============================================================
+   PLAN CARD
+   ============================================================ */
+
+.plan-card {
+  position: relative;
+  min-width: 0;
+  padding: 34px 30px;
+  overflow: hidden;
+
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+}
+
+
+/* PLUS 등의 강조 카드가 기존 HTML에서 별도 클래스를
+   사용하고 있다면 기존 디자인을 최대한 유지합니다. */
+
+.plan-card.featured,
+.plan-card.recommended {
+  border-color: rgba(15, 23, 42, 0.28);
+}
+
+
+/* ============================================================
+   PLAN TYPOGRAPHY
+   ============================================================ */
+
+.plan-card h3 {
+  margin-top: 0;
+}
+
+.plan-card p {
+  line-height: 1.7;
+}
+
+.plan-card ul {
+  padding-left: 18px;
+}
+
+.plan-card li {
+  margin-bottom: 10px;
+  line-height: 1.65;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 960px) {
+
+  .one-time-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .plan-grid {
+    gap: 14px;
+  }
+
+  .plan-card {
+    padding: 28px 23px;
+  }
+
 }
 
 
@@ -16,140 +318,406 @@
    MOBILE
    ============================================================ */
 
-@media(max-width:640px){
+@media (max-width: 640px) {
 
-  /* ----------------------------------------------------------
-     ONE-TIME SERVICE SECTION
-     ---------------------------------------------------------- */
+  /* ==========================================================
+     ONE-TIME SECTION
+     ========================================================== */
 
-  .one-time-care{
-    padding:76px 0 66px;
+  .one-time-care {
+    padding: 72px 0 62px;
   }
 
-  .one-time-header{
-    margin-bottom:28px;
-    text-align:left;
+  .one-time-header {
+    margin-bottom: 28px;
+    text-align: left;
   }
 
-  .one-time-header h2{
-    font-size:36px;
+  .one-time-header h2 {
+    font-size: 36px;
+    line-height: 1.08;
   }
 
-  .one-time-swipe-hint{
-    display:block;
-    margin-bottom:12px;
-    text-align:left;
+  .one-time-header > p:last-child {
+    margin-top: 17px;
+    font-size: 14px;
+    line-height: 1.7;
   }
 
 
-  /* ----------------------------------------------------------
-     핵심:
-     기존 1열 GRID를 가로 FLEX SLIDER로 강제 변경
-     ---------------------------------------------------------- */
+  /* ==========================================================
+     ONE-TIME SWIPE HINT
+     ========================================================== */
 
-  .one-time-grid{
-    display:flex !important;
+  .one-time-swipe-hint {
+    display: block;
+    margin-bottom: 12px;
+    text-align: left;
+  }
 
-    grid-template-columns:none !important;
 
-    gap:12px;
+  /* ==========================================================
+     ONE-TIME MOBILE SLIDER
 
-    width:auto;
+     중요:
+     PC grid를 모바일에서 flex로 변경합니다.
+     ========================================================== */
 
-    overflow-x:auto;
+  .one-time-grid {
+    display: flex !important;
 
-    overflow-y:hidden;
+    grid-template-columns: none !important;
 
-    scroll-snap-type:x mandatory;
+    gap: 12px;
 
-    scroll-padding-left:20px;
+    width: auto;
+
+    margin-left: -20px;
+    margin-right: -20px;
 
     padding:
       4px
       20px
-      18px;
-
-    margin-left:-20px;
-    margin-right:-20px;
-
-    -webkit-overflow-scrolling:touch;
-
-    scrollbar-width:none;
-
-    overscroll-behavior-x:contain;
-
-    touch-action:pan-x;
-  }
-
-
-  .one-time-grid::-webkit-scrollbar{
-    display:none;
-  }
-
-
-  /* ----------------------------------------------------------
-     각 카드가 화면 한 장 정도 차지
-     오른쪽 다음 카드 일부가 보이도록 82vw 사용
-     ---------------------------------------------------------- */
-
-  .one-time-card{
-    flex:
-      0
-      0
-      min(82vw,320px);
-
-    width:
-      min(82vw,320px);
-
-    min-width:
-      min(82vw,320px);
-
-    min-height:235px;
-
-    padding:24px 21px;
-
-    border-radius:20px;
-
-    scroll-snap-align:start;
-
-    scroll-snap-stop:always;
-  }
-
-
-  .one-time-card:hover{
-    transform:none;
-    box-shadow:none;
-  }
-
-
-  .one-time-card h3{
-    font-size:22px;
-  }
-
-
-  .one-time-price{
-    margin-top:21px;
-    font-size:29px;
-  }
-
-
-  .one-time-divider{
-    margin:
-      20px
-      0
       16px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 20px;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+
+    overscroll-behavior-x: contain;
+
+    touch-action: pan-x pan-y;
+  }
+
+  .one-time-grid::-webkit-scrollbar {
+    display: none;
   }
 
 
-  .one-time-description{
-    font-size:12.5px;
-    line-height:1.65;
+  /* ==========================================================
+     ONE-TIME MOBILE CARD
+
+     82vw로 만들어 다음 카드 일부가 보이게 합니다.
+     ========================================================== */
+
+  .one-time-card {
+    flex: 0 0 min(82vw, 320px);
+
+    width: min(82vw, 320px);
+
+    min-width: min(82vw, 320px);
+
+    min-height: 225px;
+
+    padding: 23px 21px;
+
+    border-radius: 20px;
+
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .one-time-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .one-time-card-top {
+    min-height: 48px;
+  }
+
+  .one-time-name {
+    font-size: 17px;
+  }
+
+  .one-time-korean-name {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+  .one-time-price-block {
+    margin-top: 20px;
+  }
+
+  .one-time-price {
+    font-size: 29px;
+  }
+
+  .one-time-unit {
+    margin-top: 7px;
+    font-size: 11.5px;
+  }
+
+  .one-time-description {
+    padding-top: 20px;
+    font-size: 12.5px;
+    line-height: 1.6;
   }
 
 
-  .one-time-note{
-    margin-top:18px;
-    text-align:left;
+  /* ==========================================================
+     ONE-TIME SLIDER DOTS
+     ========================================================== */
+
+  .one-time-slider-dots,
+  #oneTimeSliderDots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    min-height: 20px;
+
+    margin-top: 4px;
+  }
+
+
+  /* ==========================================================
+     BRIDGE
+     ========================================================== */
+
+  .care-bridge {
+    padding: 42px 0 72px;
+    text-align: left;
+  }
+
+  .care-bridge h2 {
+    font-size: 34px;
+    line-height: 1.1;
+  }
+
+  .care-bridge p {
+    margin-top: 17px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+
+  /* ==========================================================
+     MOOHAE 365 MOBILE SLIDER
+
+     기존 세로 1열 구조를 가로 슬라이드로 변경
+     ========================================================== */
+
+  .plan-grid {
+    display: flex !important;
+
+    grid-template-columns: none !important;
+
+    gap: 12px;
+
+    width: auto;
+
+    margin-left: -20px;
+    margin-right: -20px;
+
+    padding:
+      5px
+      20px
+      17px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 20px;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+
+    overscroll-behavior-x: contain;
+
+    touch-action: pan-x pan-y;
+  }
+
+  .plan-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  /* ==========================================================
+     MOOHAE 365 CARD SIZE REDUCTION
+
+     기존보다 폭/패딩/간격을 줄여
+     모바일 세로 길이를 압축합니다.
+     ========================================================== */
+
+  .plan-card {
+    flex: 0 0 min(84vw, 330px);
+
+    width: min(84vw, 330px);
+
+    min-width: min(84vw, 330px);
+
+    padding: 23px 20px;
+
+    border-radius: 20px;
+
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+
+  /* 카드 내부의 큰 여백 축소 */
+
+  .plan-card > *:first-child {
+    margin-top: 0;
+  }
+
+  .plan-card h3 {
+    margin-top: 0;
+    margin-bottom: 7px;
+
+    font-size: 22px;
+    line-height: 1.15;
+  }
+
+  .plan-card p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    font-size: 12.5px;
+    line-height: 1.55;
+  }
+
+  .plan-card ul {
+    margin-top: 15px;
+    margin-bottom: 0;
+
+    padding-left: 17px;
+  }
+
+  .plan-card li {
+    margin-bottom: 6px;
+
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+
+  /* ==========================================================
+     기존 클래스가 있다면 가격 영역도 압축
+     ========================================================== */
+
+  .plan-price {
+    margin-top: 18px;
+    margin-bottom: 16px;
+  }
+
+  .plan-price strong {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .plan-price span {
+    font-size: 11px;
+  }
+
+  .plan-name {
+    font-size: 13px;
+  }
+
+  .plan-description {
+    margin-top: 10px;
+  }
+
+  .plan-features {
+    margin-top: 16px;
+  }
+
+  .plan-feature {
+    padding: 7px 0;
+  }
+
+
+  /* ==========================================================
+     SIGNATURE / NOTICE BOX 등이 있을 경우 압축
+     ========================================================== */
+
+  .plan-note,
+  .plan-card-note,
+  .signature-note {
+    margin-top: 15px;
+    padding: 12px 13px;
+
+    font-size: 11.5px;
+    line-height: 1.55;
+
+    border-radius: 14px;
+  }
+
+
+  /* ==========================================================
+     PLAN DOTS
+     ========================================================== */
+
+  .plan-slider-dots,
+  #planSliderDots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    min-height: 20px;
+
+    margin-top: 4px;
+  }
+
+
+  /* ==========================================================
+     GENERIC DOT
+     ========================================================== */
+
+  .slider-dot,
+  .plan-slider-dot {
+    display: block;
+
+    width: 6px;
+    height: 6px;
+
+    min-width: 6px;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 999px;
+
+    background: rgba(15, 23, 42, 0.18);
+  }
+
+  .slider-dot.active,
+  .plan-slider-dot.active {
+    width: 20px;
+
+    background: var(--text);
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+  .one-time-card {
+    flex-basis: 84vw;
+    width: 84vw;
+    min-width: 84vw;
+  }
+
+  .plan-card {
+    flex-basis: 86vw;
+    width: 86vw;
+    min-width: 86vw;
   }
 
 }
