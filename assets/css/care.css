@@ -1081,3 +1081,337 @@ button{
   }
 
 }
+
+/* ============================================================
+   MOOHAE CARE — HERO / FINAL LAYOUT RECOVERY
+   care 페이지 전용
+   ============================================================ */
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+body[data-page="care"] .hero{
+  position:relative;
+  width:100%;
+  min-height:88svh;
+
+  padding:120px 24px 80px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 72% 30%,
+      rgba(143,168,140,.17),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 25% 65%,
+      rgba(71,119,142,.07),
+      transparent 25%
+    ),
+    var(--cream);
+}
+
+
+body[data-page="care"] .hero-inner{
+  position:relative;
+
+  width:100%;
+  max-width:880px;
+
+  margin:0 auto;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+
+body[data-page="care"] .hero .eyebrow{
+  margin-bottom:17px;
+}
+
+
+body[data-page="care"] .hero h1{
+  width:100%;
+
+  margin:0;
+
+  color:var(--ink);
+
+  font-size:clamp(44px,6vw,76px);
+  font-weight:750;
+
+  line-height:1.06;
+  letter-spacing:-.06em;
+
+  text-align:center;
+}
+
+
+body[data-page="care"] .hero h1 span{
+  display:block;
+
+  color:var(--sage-dark);
+
+  font-size:1.13em;
+  font-weight:750;
+}
+
+
+body[data-page="care"] .hero-inner > p:not(.eyebrow){
+  width:100%;
+  max-width:620px;
+
+  margin:25px auto 0;
+
+  color:var(--gray);
+
+  font-size:16px;
+  line-height:1.75;
+
+  text-align:center;
+}
+
+
+body[data-page="care"] .hero-actions{
+  width:100%;
+
+  margin-top:30px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:20px;
+}
+
+
+body[data-page="care"] .hero-actions .btn-primary,
+body[data-page="care"] .hero-actions .btn-text{
+  flex:none;
+}
+
+
+/* ============================================================
+   FINAL SECTION
+   ============================================================ */
+
+body[data-page="care"] .final{
+  position:relative;
+
+  width:100%;
+  min-height:68svh;
+
+  padding:90px 24px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+
+  overflow:hidden;
+}
+
+
+body[data-page="care"] .final > div{
+  width:100%;
+  max-width:760px;
+
+  margin:0 auto;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+
+body[data-page="care"] .final .eyebrow{
+  margin-bottom:17px;
+}
+
+
+body[data-page="care"] .final h2{
+  width:100%;
+
+  margin:0;
+
+  color:var(--ink);
+
+  font-size:clamp(40px,5.8vw,68px);
+  font-weight:750;
+
+  line-height:1.08;
+  letter-spacing:-.055em;
+
+  text-align:center;
+}
+
+
+body[data-page="care"] .final h2 span{
+  display:block;
+
+  color:var(--sage-dark);
+
+  font-size:1.10em;
+  font-weight:750;
+}
+
+
+body[data-page="care"] .final > div > p:not(.eyebrow){
+  width:100%;
+  max-width:520px;
+
+  margin:22px auto 0;
+
+  color:var(--gray);
+
+  font-size:14px;
+  line-height:1.7;
+
+  text-align:center;
+}
+
+
+body[data-page="care"] .final-actions{
+  width:100%;
+
+  margin-top:28px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:18px;
+}
+
+
+body[data-page="care"] .final-actions .btn-primary,
+body[data-page="care"] .final-actions .btn-text{
+  flex:none;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media(max-width:768px){
+
+  body[data-page="care"] .hero{
+    min-height:auto;
+
+    padding:
+      95px
+      20px
+      70px;
+  }
+
+
+  body[data-page="care"] .hero-inner{
+    max-width:100%;
+  }
+
+
+  body[data-page="care"] .hero h1{
+    font-size:38px;
+
+    line-height:1.1;
+  }
+
+
+  body[data-page="care"] .hero h1 span{
+    font-size:1.08em;
+  }
+
+
+  body[data-page="care"] .hero-inner > p:not(.eyebrow){
+    max-width:520px;
+
+    margin-top:20px;
+
+    font-size:14px;
+    line-height:1.7;
+  }
+
+
+  body[data-page="care"] .hero-actions{
+    max-width:320px;
+
+    margin-left:auto;
+    margin-right:auto;
+
+    flex-direction:column;
+
+    gap:14px;
+  }
+
+
+  body[data-page="care"] .hero-actions .btn-primary{
+    width:100%;
+  }
+
+
+  body[data-page="care"] .final{
+    min-height:70svh;
+
+    padding:
+      78px
+      20px;
+  }
+
+
+  body[data-page="care"] .final > div{
+    max-width:100%;
+  }
+
+
+  body[data-page="care"] .final h2{
+    font-size:38px;
+
+    line-height:1.1;
+  }
+
+
+  body[data-page="care"] .final h2 span{
+    font-size:1.07em;
+  }
+
+
+  body[data-page="care"] .final > div > p:not(.eyebrow){
+    max-width:480px;
+
+    margin-top:18px;
+
+    font-size:14px;
+    line-height:1.7;
+  }
+
+
+  body[data-page="care"] .final-actions{
+    max-width:320px;
+
+    margin-left:auto;
+    margin-right:auto;
+
+    flex-direction:column;
+
+    gap:14px;
+  }
+
+
+  body[data-page="care"] .final-actions .btn-primary{
+    width:100%;
+  }
+
+}
