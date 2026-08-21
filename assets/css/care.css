@@ -1,80 +1,155 @@
-:root{--cream:#f6f3ed;--cream-deep:#ede9e0;--paper:#fbfaf7;--white:#fff;--ink:#292927;--ink-soft:#4f504c;--gray:#74756f;--gray-light:#a7a8a2;--sage:#8fa88c;--sage-dark:#667d65;--sage-soft:#e2e9df;--blue:#47778e;--line:rgba(41,41,39,.09);--max:1180px;--ease:cubic-bezier(.22,1,.36,1)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;overflow-x:hidden;background:var(--cream);color:var(--ink);font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all}a{color:inherit;text-decoration:none}button{font:inherit}
-.nav{position:fixed;left:0;top:0;width:100%;height:58px;z-index:1000;background:rgba(246,243,237,.72);backdrop-filter:blur(18px);border-bottom:1px solid transparent;transition:.3s ease}.nav.scrolled{background:rgba(246,243,237,.96);border-color:var(--line)}.nav-inner{width:min(var(--max),calc(100% - 48px));height:100%;margin:auto;display:flex;align-items:center;justify-content:space-between}.logo{font-size:20px;font-weight:900;letter-spacing:-.055em;line-height:1}.nav-menu{display:flex;gap:28px;color:var(--gray);font-size:12px}.nav-menu a:hover,.nav-menu a.active{color:var(--ink)}.nav-cta{min-height:34px;padding:0 15px;display:flex;align-items:center;border-radius:999px;background:var(--ink);color:#fff;font-size:11px;font-weight:650}.mobile-toggle{display:none;border:0;background:transparent;font-size:22px}.mobile-panel{display:none;position:fixed;top:54px;left:0;right:0;z-index:999;background:rgba(246,243,237,.98);border-bottom:1px solid var(--line);padding:18px 20px}.mobile-panel.open{display:block}.mobile-panel a{display:block;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px}.mobile-panel a:last-child{border-bottom:0}
-.wrap{width:min(var(--max),calc(100% - 48px));margin:auto}.eyebrow{margin:0 0 17px;color:var(--sage-dark);font-size:10px;font-weight:750;letter-spacing:.15em}.btn-primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 22px;border-radius:999px;background:var(--ink);color:#fff;font-size:13px;font-weight:650}.btn-text{color:var(--blue);font-size:13px;font-weight:600}.btn-text::after{content:" →"}
-.hero{min-height:88svh;padding:120px 24px 80px;display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 72% 30%,rgba(143,168,140,.17),transparent 28%),radial-gradient(circle at 25% 65%,rgba(71,119,142,.07),transparent 25%),var(--cream)}.hero-inner{max-width:880px}.hero h1{margin:0;font-size:clamp(44px,6vw,76px);line-height:1.06;letter-spacing:-.06em}.hero h1 span{display:block;color:var(--sage-dark)}.hero p{max-width:620px;margin:25px auto 0;color:var(--gray);font-size:16px;line-height:1.75}.hero-actions{margin-top:30px;display:flex;justify-content:center;gap:20px}
-.invisible{padding:110px 0;background:var(--paper)}.invisible-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:70px;align-items:center}.invisible-copy h2,.section-header h2{margin:0;font-size:clamp(38px,5vw,62px);line-height:1.08;letter-spacing:-.055em}.invisible-copy h2 span,.section-header h2 span{display:block;color:var(--sage-dark)}.invisible-copy p,.section-header p{margin:24px 0 0;color:var(--gray);font-size:15px;line-height:1.75}.concern-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.concern{min-height:145px;padding:24px;border-radius:22px;background:var(--cream);border:1px solid var(--line)}.concern strong{display:block;margin-bottom:10px;font-size:18px}.concern p{margin:0;color:var(--gray);font-size:12px;line-height:1.65}
-.menu-section,.rental,.process{padding:115px 0}.section-header{max-width:700px;margin-bottom:48px}.service-grid,.rental-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.service-card{padding:30px 26px 28px;border-radius:26px;background:var(--paper);border:1px solid var(--line);min-height:280px;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}.service-card:hover{transform:translateY(-5px);box-shadow:0 20px 55px rgba(0,0,0,.07)}.service-card.featured{background:#30342f;color:#fff}.service-tag{display:inline-block;margin-bottom:26px;color:var(--sage-dark);font-size:9px;font-weight:750;letter-spacing:.13em}.featured .service-tag{color:#a9bca5}.service-card h3,.rental-card h3{margin:0;font-size:24px;letter-spacing:-.04em}.price{margin-top:14px;font-size:34px;font-weight:750;letter-spacing:-.04em}.price small{font-size:13px;font-weight:500;color:var(--gray)}.featured .price small{color:rgba(255,255,255,.5)}.service-card p,.rental-card p{margin:18px 0 0;color:var(--gray);font-size:13px;line-height:1.65}.featured p{color:rgba(255,255,255,.55)}
-.rental{background:var(--cream-deep)}.rental-card{padding:28px 24px;border-radius:24px;background:rgba(255,255,255,.72);border:1px solid rgba(41,41,39,.08)}.rental-price{margin-top:12px;color:var(--sage-dark);font-size:30px;font-weight:750}.rental-note{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:12px}.note-box{padding:20px;border-radius:18px;background:var(--paper);border:1px solid var(--line);font-size:13px;line-height:1.65}.note-box strong{color:var(--sage-dark)}
-.process{background:var(--paper)}.process-list{margin-top:50px;border-top:1px solid var(--line)}.process-item{min-height:118px;display:grid;grid-template-columns:70px 1fr 1.2fr;gap:28px;align-items:center;border-bottom:1px solid var(--line)}.process-num{color:var(--gray-light);font-size:11px}.process-title{font-size:22px;font-weight:650}.process-desc{color:var(--gray);font-size:13px;line-height:1.65}
-.final{min-height:68svh;padding:90px 24px;display:flex;align-items:center;justify-content:center;text-align:center}.final h2{margin:0;font-size:clamp(40px,5.8vw,68px);line-height:1.08;letter-spacing:-.055em}.final h2 span{display:block;color:var(--sage-dark)}.final p{max-width:500px;margin:22px auto 0;color:var(--gray);font-size:14px;line-height:1.7}.final-actions{margin-top:28px;display:flex;justify-content:center;gap:18px}.footer{padding:38px 24px;text-align:center;background:var(--cream-deep);border-top:1px solid var(--line);color:var(--gray);font-size:11px;line-height:1.7}.footer-logo{margin-bottom:8px;color:var(--ink);font-size:18px;font-weight:900;letter-spacing:-.055em}.reveal{opacity:0;filter:blur(8px);transform:scale(.987);transition:opacity .9s var(--ease),filter 1s var(--ease),transform 1s var(--ease)}.reveal.in-view{opacity:1;filter:none;transform:none}
-@media(max-width:768px){.nav{height:54px}.nav-inner,.wrap{width:calc(100% - 40px)}.nav-menu,.nav-cta{display:none}.mobile-toggle{display:block}.logo{font-size:18px}.hero{min-height:auto;padding:95px 20px 70px}.hero h1{font-size:38px;line-height:1.1}.hero p{font-size:14px}.hero-actions{flex-direction:column;gap:14px}.invisible,.menu-section,.rental,.process{padding:80px 0}.invisible-grid{grid-template-columns:1fr;gap:38px}.invisible-copy{text-align:center}.invisible-copy h2,.section-header h2{font-size:36px}.concern-grid,.service-grid,.rental-grid,.rental-note{grid-template-columns:1fr}.process-item{grid-template-columns:45px 1fr;gap:12px;padding:22px 0}.process-desc{grid-column:2}.final h2{font-size:38px}.final-actions{flex-direction:column}}
-
-.service-fit{
-  margin-top:22px;
-  padding-top:18px;
-  border-top:1px solid var(--line);
-}
-.service-fit span{
-  display:block;
-  margin-bottom:7px;
-  color:var(--gray-light);
-  font-size:9px;
-  font-weight:750;
-  letter-spacing:.08em;
-}
-.service-fit strong{
-  display:block;
-  color:var(--ink-soft);
-  font-size:13px;
-  line-height:1.55;
-}
-.featured .service-fit{border-top-color:rgba(255,255,255,.10)}
-.featured .service-fit span{color:rgba(255,255,255,.38)}
-.featured .service-fit strong{color:rgba(255,255,255,.88)}
 /* ============================================================
-   MOOHAE CARE — ONE-TIME SERVICES
-   Prices/content are rendered from assets/js/care.js.
+   MOOHAE CARE
+   MOBILE ONE-TIME SERVICE SWIPE
    ============================================================ */
-.one-time-care{padding:110px 0 92px;background:var(--paper)}
-.one-time-header{max-width:720px;margin:0 auto 46px;text-align:center}
-.one-time-header h2,.care-bridge h2{margin:0;font-size:clamp(38px,5vw,62px);line-height:1.08;letter-spacing:-.055em}
-.one-time-header h2 span,.care-bridge h2 span{display:block;color:var(--sage-dark)}
-.one-time-header>p:last-child,.care-bridge p{margin:24px auto 0;color:var(--gray);font-size:15px;line-height:1.75}
-.one-time-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.one-time-card{display:flex;flex-direction:column;min-height:330px;padding:30px 26px;border:1px solid var(--line);border-radius:24px;background:var(--cream);transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s ease}
-.one-time-card:hover{transform:translateY(-4px);box-shadow:0 18px 48px rgba(0,0,0,.06);border-color:rgba(102,125,101,.22)}
-.one-time-name{margin:0 0 8px;color:var(--sage-dark);font-size:10px;font-weight:750;letter-spacing:.12em}
-.one-time-card h3{margin:0;font-size:24px;letter-spacing:-.04em}
-.one-time-price{margin:26px 0 6px;font-size:32px;font-weight:750;letter-spacing:-.045em}
-.one-time-unit{margin:0;color:var(--gray);font-size:12px}
-.one-time-divider{height:1px;margin:24px 0 18px;background:var(--line)}
-.one-time-description{margin:0;color:var(--gray);font-size:13px;line-height:1.7}
-.one-time-note{max-width:760px;margin:28px auto 0;color:var(--gray);font-size:12px;line-height:1.7;text-align:center}
-.care-bridge{padding:86px 0;text-align:center;background:var(--cream)}
-.care-bridge-inner{max-width:760px;margin:auto}
-.plan-swipe-hint,.one-time-swipe-hint{display:none;margin:0 0 14px;color:var(--gray);font-size:12px;text-align:right}
 
-@media(max-width:980px){.one-time-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:900px){
-  .plan-swipe-hint,.one-time-swipe-hint{display:block;text-align:left}
-  .one-time-grid{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:20px;padding:6px 20px 18px;margin-left:-20px;margin-right:-20px;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
-  .one-time-grid::-webkit-scrollbar{display:none}
-  .one-time-card{flex:0 0 min(78vw,330px);min-height:250px;scroll-snap-align:start;scroll-snap-stop:always}
-  .plan-grid{overscroll-behavior-x:contain}
-  .plan-card{scroll-snap-stop:always}
+.one-time-swipe-hint{
+  display:none;
+  margin:0 0 14px;
+  color:var(--gray);
+  font-size:12px;
+  text-align:right;
 }
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
 @media(max-width:640px){
-  .one-time-care{padding:76px 0 62px}
-  .one-time-header{text-align:left;margin-bottom:24px}
-  .one-time-header h2,.care-bridge h2{font-size:36px}
-  .one-time-card{flex-basis:min(78vw,310px);min-height:230px;padding:22px 18px;border-radius:18px}
-  .one-time-card h3{font-size:21px}
-  .one-time-price{margin:18px 0 4px;font-size:28px}
-  .one-time-divider{margin:18px 0 14px}
-  .one-time-description{font-size:12px;line-height:1.55}
-  .one-time-note{text-align:left;margin-top:18px;font-size:11px}
-  .care-bridge{padding:70px 0;text-align:left}
-  .care-bridge p{margin-left:0}
+
+  /* ----------------------------------------------------------
+     ONE-TIME SERVICE SECTION
+     ---------------------------------------------------------- */
+
+  .one-time-care{
+    padding:76px 0 66px;
+  }
+
+  .one-time-header{
+    margin-bottom:28px;
+    text-align:left;
+  }
+
+  .one-time-header h2{
+    font-size:36px;
+  }
+
+  .one-time-swipe-hint{
+    display:block;
+    margin-bottom:12px;
+    text-align:left;
+  }
+
+
+  /* ----------------------------------------------------------
+     핵심:
+     기존 1열 GRID를 가로 FLEX SLIDER로 강제 변경
+     ---------------------------------------------------------- */
+
+  .one-time-grid{
+    display:flex !important;
+
+    grid-template-columns:none !important;
+
+    gap:12px;
+
+    width:auto;
+
+    overflow-x:auto;
+
+    overflow-y:hidden;
+
+    scroll-snap-type:x mandatory;
+
+    scroll-padding-left:20px;
+
+    padding:
+      4px
+      20px
+      18px;
+
+    margin-left:-20px;
+    margin-right:-20px;
+
+    -webkit-overflow-scrolling:touch;
+
+    scrollbar-width:none;
+
+    overscroll-behavior-x:contain;
+
+    touch-action:pan-x;
+  }
+
+
+  .one-time-grid::-webkit-scrollbar{
+    display:none;
+  }
+
+
+  /* ----------------------------------------------------------
+     각 카드가 화면 한 장 정도 차지
+     오른쪽 다음 카드 일부가 보이도록 82vw 사용
+     ---------------------------------------------------------- */
+
+  .one-time-card{
+    flex:
+      0
+      0
+      min(82vw,320px);
+
+    width:
+      min(82vw,320px);
+
+    min-width:
+      min(82vw,320px);
+
+    min-height:235px;
+
+    padding:24px 21px;
+
+    border-radius:20px;
+
+    scroll-snap-align:start;
+
+    scroll-snap-stop:always;
+  }
+
+
+  .one-time-card:hover{
+    transform:none;
+    box-shadow:none;
+  }
+
+
+  .one-time-card h3{
+    font-size:22px;
+  }
+
+
+  .one-time-price{
+    margin-top:21px;
+    font-size:29px;
+  }
+
+
+  .one-time-divider{
+    margin:
+      20px
+      0
+      16px;
+  }
+
+
+  .one-time-description{
+    font-size:12.5px;
+    line-height:1.65;
+  }
+
+
+  .one-time-note{
+    margin-top:18px;
+    text-align:left;
+  }
+
 }
-@media(prefers-reduced-motion:reduce){.one-time-card{transition:none}.one-time-card:hover{transform:none}}
