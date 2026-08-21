@@ -2,270 +2,935 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex,nofollow">
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self';
-                 base-uri 'none';
-                 object-src 'none';
-                 frame-ancestors 'none';
-                 script-src 'self' https://cdn.jsdelivr.net;
-                 style-src 'self';
-                 img-src 'self' data:;
-                 font-src 'self';
-                 connect-src 'self' https://*.supabase.co wss://*.supabase.co;
-                 upgrade-insecure-requests">
-  <meta name="referrer" content="no-referrer">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <meta
+    name="robots"
+    content="noindex,nofollow"
+  >
+
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="
+      default-src 'self';
+      base-uri 'none';
+      object-src 'none';
+      frame-ancestors 'none';
+      script-src 'self' https://cdn.jsdelivr.net;
+      style-src 'self';
+      img-src 'self' data:;
+      font-src 'self';
+      connect-src 'self' https://*.supabase.co wss://*.supabase.co;
+      upgrade-insecure-requests
+    "
+  >
+
+  <meta
+    name="referrer"
+    content="no-referrer"
+  >
+
   <title>고객 상세 · m∞hae Admin</title>
-  <link rel="stylesheet" href="../assets/css/admin-auth.css">
+
+  <link
+    rel="stylesheet"
+    href="../assets/css/admin-auth.css"
+  >
 </head>
+
 <body class="dashboard-page">
+
+  <!-- =========================================================
+       ADMIN TOP BAR
+  ========================================================== -->
+
   <header class="admin-topbar">
-    <a class="admin-logo" href="./dashboard.html">m∞hae <span>ADMIN</span></a>
+
+    <a
+      class="admin-logo"
+      href="./dashboard.html"
+    >
+      m∞hae
+      <span>ADMIN</span>
+    </a>
+
     <div class="admin-topbar-actions">
-      <span id="adminIdentity">확인 중...</span>
-      <button id="logoutButton" class="secondary-button" type="button">로그아웃</button>
+
+      <span id="adminIdentity">
+        확인 중...
+      </span>
+
+      <button
+        id="logoutButton"
+        class="secondary-button"
+        type="button"
+      >
+        로그아웃
+      </button>
+
     </div>
+
   </header>
 
+
+  <!-- =========================================================
+       CUSTOMER DETAIL
+  ========================================================== -->
+
   <main class="dashboard-shell detail-shell">
-    <a class="back-link" href="./dashboard.html">← 고객 목록</a>
+
+    <a
+      class="back-link"
+      href="./dashboard.html"
+    >
+      ← 고객 목록
+    </a>
+
+
+    <!-- =======================================================
+         CUSTOMER HERO
+    ======================================================== -->
 
     <section class="customer-detail-hero">
+
       <div>
-        <p class="eyebrow">CUSTOMER PROFILE</p>
-        <h1 id="customerName">고객 정보를 확인하고 있습니다.</h1>
-        <p id="customerMeta" class="detail-meta">—</p>
+
+        <p class="eyebrow">
+          CUSTOMER PROFILE
+        </p>
+
+        <h1 id="customerName">
+          고객 정보를 확인하고 있습니다.
+        </h1>
+
+        <p
+          id="customerMeta"
+          class="detail-meta"
+        >
+          —
+        </p>
+
       </div>
-      <span id="customerStatus" class="status-badge neutral">확인 중</span>
+
+
+      <span
+        id="customerStatus"
+        class="status-badge neutral"
+      >
+        확인 중
+      </span>
+
     </section>
 
+
+    <!-- =======================================================
+         CUSTOMER MANAGEMENT / SCHEDULE VISIT
+    ======================================================== -->
+
     <section class="detail-grid operation-grid">
+
+
+      <!-- CUSTOMER MANAGEMENT -->
+
       <article class="detail-card">
+
         <div class="detail-card-head">
+
           <div>
-            <p class="eyebrow">CUSTOMER MANAGEMENT</p>
-            <h2>상담 상태 · 운영 메모</h2>
+
+            <p class="eyebrow">
+              CUSTOMER MANAGEMENT
+            </p>
+
+            <h2>
+              상담 상태 · 운영 메모
+            </h2>
+
           </div>
+
         </div>
 
-        <form id="customerManagementForm" class="admin-form" novalidate>
+
+        <form
+          id="customerManagementForm"
+          class="admin-form"
+          novalidate
+        >
+
           <label>
-            <span>고객 상태</span>
-            <select id="customerStatusSelect" required>
-              <option value="new">신규 문의</option>
-              <option value="consulting">상담 중</option>
-              <option value="visit_scheduled">방문 예정</option>
-              <option value="care_completed">케어 완료</option>
-              <option value="follow_up">재관리 대상</option>
-              <option value="closed">종료</option>
+
+            <span>
+              고객 상태
+            </span>
+
+            <select
+              id="customerStatusSelect"
+              required
+            >
+
+              <option value="new">
+                신규 문의
+              </option>
+
+              <option value="consulting">
+                상담 중
+              </option>
+
+              <option value="visit_scheduled">
+                방문 예정
+              </option>
+
+              <option value="care_completed">
+                케어 완료
+              </option>
+
+              <option value="follow_up">
+                재관리 대상
+              </option>
+
+              <option value="closed">
+                종료
+              </option>
+
             </select>
+
           </label>
+
 
           <label>
-            <span>운영 메모</span>
-            <textarea id="customerNotes" maxlength="5000"
-                      placeholder="통화 내용, 고객 요청사항, 다음 확인사항 등을 기록하세요."></textarea>
+
+            <span>
+              운영 메모
+            </span>
+
+            <textarea
+              id="customerNotes"
+              maxlength="5000"
+              placeholder="통화 내용, 고객 요청사항, 다음 확인사항 등을 기록하세요."
+            ></textarea>
+
           </label>
 
-          <button id="saveCustomerButton" class="primary-button" type="submit">
+
+          <button
+            id="saveCustomerButton"
+            class="primary-button"
+            type="submit"
+          >
             고객 정보 저장
           </button>
-          <p id="customerManagementMessage" class="inline-message" role="status" aria-live="polite"></p>
+
+
+          <p
+            id="customerManagementMessage"
+            class="inline-message"
+            role="status"
+            aria-live="polite"
+          ></p>
+
         </form>
+
       </article>
 
+
+      <!-- SCHEDULE VISIT -->
+
       <article class="detail-card">
+
         <div class="detail-card-head">
+
           <div>
-            <p class="eyebrow">SCHEDULE VISIT</p>
-            <h2>방문 일정 등록</h2>
+
+            <p class="eyebrow">
+              SCHEDULE VISIT
+            </p>
+
+            <h2>
+              방문 일정 등록
+            </h2>
+
           </div>
+
         </div>
 
-        <form id="visitScheduleForm" class="admin-form" novalidate>
-          <label>
-            <span>방문 일시</span>
-            <input id="visitScheduledAt" type="datetime-local" required>
-          </label>
+
+        <form
+          id="visitScheduleForm"
+          class="admin-form"
+          novalidate
+        >
 
           <label>
-            <span>케어 공간</span>
-            <input id="visitCareArea" type="text" maxlength="300"
-                   placeholder="예: 안방 매트리스 · 거실 소파">
+
+            <span>
+              방문 일시
+            </span>
+
+            <input
+              id="visitScheduledAt"
+              type="datetime-local"
+              required
+            >
+
           </label>
+
+
+          <label>
+
+            <span>
+              케어 공간
+            </span>
+
+            <input
+              id="visitCareArea"
+              type="text"
+              maxlength="300"
+              placeholder="예: 안방 매트리스 · 거실 소파"
+            >
+
+          </label>
+
 
           <fieldset class="care-item-fieldset">
-            <legend>예정 케어</legend>
+
+            <legend>
+              예정 케어
+            </legend>
+
+
             <div class="check-grid">
-              <label><input type="checkbox" name="careItem" value="매트리스 케어"><span>매트리스 케어</span></label>
-              <label><input type="checkbox" name="careItem" value="패브릭 케어"><span>패브릭 케어</span></label>
-              <label><input type="checkbox" name="careItem" value="실내 공간 케어"><span>실내 공간 케어</span></label>
-              <label><input type="checkbox" name="careItem" value="바닥 케어"><span>바닥 케어</span></label>
+
+              <label>
+
+                <input
+                  type="checkbox"
+                  name="careItem"
+                  value="매트리스 케어"
+                >
+
+                <span>
+                  매트리스 케어
+                </span>
+
+              </label>
+
+
+              <label>
+
+                <input
+                  type="checkbox"
+                  name="careItem"
+                  value="패브릭 케어"
+                >
+
+                <span>
+                  패브릭 케어
+                </span>
+
+              </label>
+
+
+              <label>
+
+                <input
+                  type="checkbox"
+                  name="careItem"
+                  value="실내 공간 케어"
+                >
+
+                <span>
+                  실내 공간 케어
+                </span>
+
+              </label>
+
+
+              <label>
+
+                <input
+                  type="checkbox"
+                  name="careItem"
+                  value="바닥 케어"
+                >
+
+                <span>
+                  바닥 케어
+                </span>
+
+              </label>
+
             </div>
+
           </fieldset>
 
-          <button id="scheduleVisitButton" class="primary-button" type="submit">
+
+          <button
+            id="scheduleVisitButton"
+            class="primary-button"
+            type="submit"
+          >
             방문 일정 등록
           </button>
-          <p id="visitScheduleMessage" class="inline-message" role="status" aria-live="polite"></p>
+
+
+          <p
+            id="visitScheduleMessage"
+            class="inline-message"
+            role="status"
+            aria-live="polite"
+          ></p>
+
         </form>
+
       </article>
+
     </section>
+
+
+    <!-- =======================================================
+         COMPLETE CARE / REPORT EDITOR
+    ======================================================== -->
 
     <section class="detail-grid operation-grid">
+
+
+      <!-- COMPLETE CARE -->
+
       <article class="detail-card">
+
         <div class="detail-card-head">
+
           <div>
-            <p class="eyebrow">COMPLETE CARE</p>
-            <h2>방문 케어 완료</h2>
+
+            <p class="eyebrow">
+              COMPLETE CARE
+            </p>
+
+            <h2>
+              방문 케어 완료
+            </h2>
+
           </div>
+
         </div>
 
-        <form id="careCompleteForm" class="admin-form" novalidate>
+
+        <form
+          id="careCompleteForm"
+          class="admin-form"
+          novalidate
+        >
+
           <label>
-            <span>완료할 방문 일정</span>
-            <select id="careVisitSelect" required>
-              <option value="">방문 일정을 선택해주세요</option>
+
+            <span>
+              완료할 방문 일정
+            </span>
+
+            <select
+              id="careVisitSelect"
+              required
+            >
+
+              <option value="">
+                방문 일정을 선택해주세요
+              </option>
+
             </select>
+
           </label>
 
-          <label>
-            <span>케어 전 상태</span>
-            <textarea id="beforeDiagnosis" maxlength="3000"
-                      placeholder="케어 전 확인된 상태를 기록하세요." required></textarea>
-          </label>
 
           <label>
-            <span>케어 후 상태</span>
-            <textarea id="afterDiagnosis" maxlength="3000"
-                      placeholder="케어 후 변화와 확인 사항을 기록하세요." required></textarea>
+
+            <span>
+              케어 전 상태
+            </span>
+
+            <textarea
+              id="beforeDiagnosis"
+              maxlength="3000"
+              placeholder="케어 전 확인된 상태를 기록하세요."
+              required
+            ></textarea>
+
           </label>
+
+
+          <label>
+
+            <span>
+              케어 후 상태
+            </span>
+
+            <textarea
+              id="afterDiagnosis"
+              maxlength="3000"
+              placeholder="케어 후 변화와 확인 사항을 기록하세요."
+              required
+            ></textarea>
+
+          </label>
+
 
           <fieldset class="care-item-fieldset">
-            <legend>실제 진행한 케어</legend>
+
+            <legend>
+              실제 진행한 케어
+            </legend>
+
+
             <div class="check-grid">
-              <label><input type="checkbox" name="completedCareItem" value="매트리스 케어"><span>매트리스 케어</span></label>
-              <label><input type="checkbox" name="completedCareItem" value="패브릭 케어"><span>패브릭 케어</span></label>
-              <label><input type="checkbox" name="completedCareItem" value="실내 공간 케어"><span>실내 공간 케어</span></label>
-              <label><input type="checkbox" name="completedCareItem" value="바닥 케어"><span>바닥 케어</span></label>
+
+              <label>
+
+                <input
+                  type="checkbox"
+                  name="completedCareItem"
+                  value="매트리스 케어"
+                >
+
+                <span>
+                  매트리스 케어
+                </span>
+
+              </label>
+
+
+              <label>
+
+                <input
+                  type="checkbox"
+                  name="completedCareItem"
+                  value="패브릭 케어"
+                >
+
+                <span>
+                  패브릭 케어
+                </span>
+
+              </label>
+
+
+              <label>
+
+                <input
+                  type="checkbox"
+                  name="completedCareItem"
+                  value="실내 공간 케어"
+                >
+
+                <span>
+                  실내 공간 케어
+                </span>
+
+              </label>
+
+
+              <label>
+
+                <input
+                  type="checkbox"
+                  name="completedCareItem"
+                  value="바닥 케어"
+                >
+
+                <span>
+                  바닥 케어
+                </span>
+
+              </label>
+
             </div>
+
           </fieldset>
 
+
           <label>
-            <span>관리자 방문 메모</span>
-            <textarea id="visitAdminMemo" maxlength="5000"
-                      placeholder="현장 특이사항, 고객 요청, 다음 확인 사항 등을 기록하세요."></textarea>
+
+            <span>
+              관리자 방문 메모
+            </span>
+
+            <textarea
+              id="visitAdminMemo"
+              maxlength="5000"
+              placeholder="현장 특이사항, 고객 요청, 다음 확인 사항 등을 기록하세요."
+            ></textarea>
+
           </label>
 
-          <button id="completeCareButton" class="primary-button" type="submit">케어 완료 처리</button>
-          <p id="careCompleteMessage" class="inline-message" role="status" aria-live="polite"></p>
+
+          <button
+            id="completeCareButton"
+            class="primary-button"
+            type="submit"
+          >
+            케어 완료 처리
+          </button>
+
+
+          <p
+            id="careCompleteMessage"
+            class="inline-message"
+            role="status"
+            aria-live="polite"
+          ></p>
+
         </form>
+
       </article>
 
+
+      <!-- CARE REPORT -->
+
       <article class="detail-card">
+
         <div class="detail-card-head">
+
           <div>
-            <p class="eyebrow">CARE REPORT</p>
-            <h2>Care Report 작성</h2>
+
+            <p class="eyebrow">
+              CARE REPORT
+            </p>
+
+            <h2>
+              Care Report 작성
+            </h2>
+
           </div>
-          <span id="reportEditStatus" class="status-badge neutral">리포트 없음</span>
+
+
+          <span
+            id="reportEditStatus"
+            class="status-badge neutral"
+          >
+            리포트 없음
+          </span>
+
         </div>
 
-        <form id="reportEditorForm" class="admin-form" novalidate>
-          <input id="reportEditorId" type="hidden">
+
+        <form
+          id="reportEditorForm"
+          class="admin-form"
+          novalidate
+        >
+
+          <input
+            id="reportEditorId"
+            type="hidden"
+          >
+
 
           <label>
-            <span>담당자 코멘트</span>
-            <textarea id="reportManagerComment" maxlength="5000"
-                      placeholder="고객에게 전달할 핵심 내용을 작성하세요."></textarea>
+
+            <span>
+              담당자 코멘트
+            </span>
+
+            <textarea
+              id="reportManagerComment"
+              maxlength="5000"
+              placeholder="고객에게 전달할 핵심 내용을 작성하세요."
+            ></textarea>
+
           </label>
 
+
           <label>
-            <span>다음 케어 권장사항</span>
-            <textarea id="reportNextCare" maxlength="3000"
-                      placeholder="다음 관리 시기나 권장 케어를 작성하세요."></textarea>
+
+            <span>
+              다음 케어 권장사항
+            </span>
+
+            <textarea
+              id="reportNextCare"
+              maxlength="3000"
+              placeholder="다음 관리 시기나 권장 케어를 작성하세요."
+            ></textarea>
+
           </label>
+
 
           <div class="report-action-row">
-            <button id="saveReportButton" class="secondary-button report-action-button" type="button">임시 저장</button>
-            <button id="publishReportButton" class="primary-button report-action-button" type="button">리포트 발행</button>
+
+            <button
+              id="saveReportButton"
+              class="secondary-button report-action-button"
+              type="button"
+            >
+              임시 저장
+            </button>
+
+
+            <button
+              id="publishReportButton"
+              class="primary-button report-action-button"
+              type="button"
+            >
+              리포트 발행
+            </button>
+
           </div>
-          <p id="reportEditorMessage" class="inline-message" role="status" aria-live="polite"></p>
+
+
+          <p
+            id="reportEditorMessage"
+            class="inline-message"
+            role="status"
+            aria-live="polite"
+          ></p>
+
         </form>
+
       </article>
+
     </section>
+
+
+    <!-- =======================================================
+         BASIC INFO / LATEST HOME PROFILE
+    ======================================================== -->
 
     <section class="detail-grid">
-      <article class="detail-card">
-        <div class="detail-card-head">
-          <div>
-            <p class="eyebrow">BASIC INFO</p>
-            <h2>고객 기본정보</h2>
-          </div>
-        </div>
-        <dl class="info-list">
-          <div><dt>이름</dt><dd id="detailName">—</dd></div>
-          <div><dt>연락처</dt><dd id="detailPhone">—</dd></div>
-          <div><dt>상태</dt><dd id="detailStatus">—</dd></div>
-          <div><dt>개인정보 동의</dt><dd id="detailConsent">—</dd></div>
-          <div><dt>등록일</dt><dd id="detailCreatedAt">—</dd></div>
-        </dl>
-      </article>
+
+
+      <!-- BASIC INFO -->
 
       <article class="detail-card">
+
         <div class="detail-card-head">
+
           <div>
-            <p class="eyebrow">LATEST DIAGNOSIS</p>
-            <h2>최근 온라인 진단</h2>
+
+            <p class="eyebrow">
+              BASIC INFO
+            </p>
+
+            <h2>
+              고객 기본정보
+            </h2>
+
           </div>
+
         </div>
-        <div id="latestDiagnosis" class="timeline-block">
-          <p class="muted-copy">진단 정보를 확인하고 있습니다.</p>
-        </div>
+
+
+        <dl class="info-list">
+
+          <div>
+            <dt>이름</dt>
+            <dd id="detailName">—</dd>
+          </div>
+
+          <div>
+            <dt>연락처</dt>
+            <dd id="detailPhone">—</dd>
+          </div>
+
+          <div>
+            <dt>상태</dt>
+            <dd id="detailStatus">—</dd>
+          </div>
+
+          <div>
+            <dt>개인정보 동의</dt>
+            <dd id="detailConsent">—</dd>
+          </div>
+
+          <div>
+            <dt>등록일</dt>
+            <dd id="detailCreatedAt">—</dd>
+          </div>
+
+        </dl>
+
       </article>
+
+
+      <!-- LATEST MOOHAE CHECK -->
+
+      <article class="detail-card">
+
+        <div class="detail-card-head">
+
+          <div>
+
+            <p class="eyebrow">
+              LATEST MOOHAE CHECK
+            </p>
+
+            <h2>
+              최근 Home Profile
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="latestDiagnosis"
+          class="timeline-block"
+        >
+
+          <p class="muted-copy">
+            MOOHAE CHECK 정보를 확인하고 있습니다.
+          </p>
+
+        </div>
+
+      </article>
+
     </section>
+
+
+    <!-- =======================================================
+         MOOHAE CHECK HISTORY
+    ======================================================== -->
 
     <section class="detail-card wide-card">
+
       <div class="detail-card-head">
+
         <div>
-          <p class="eyebrow">HISTORY</p>
-          <h2>온라인 진단 기록</h2>
+
+          <p class="eyebrow">
+            MOOHAE CHECK HISTORY
+          </p>
+
+          <h2>
+            MOOHAE CHECK 기록
+          </h2>
+
         </div>
-        <span id="diagnosisHistoryCount" class="count-pill">0</span>
+
+
+        <span
+          id="diagnosisHistoryCount"
+          class="count-pill"
+        >
+          0
+        </span>
+
       </div>
-      <div id="diagnosisHistory" class="history-list"></div>
+
+
+      <div
+        id="diagnosisHistory"
+        class="history-list"
+      ></div>
+
     </section>
+
+
+    <!-- =======================================================
+         VISIT HISTORY / REPORT HISTORY
+    ======================================================== -->
 
     <section class="detail-grid">
-      <article class="detail-card">
-        <div class="detail-card-head">
-          <div>
-            <p class="eyebrow">CARE VISITS</p>
-            <h2>방문 케어 기록</h2>
-          </div>
-          <span id="visitHistoryCount" class="count-pill">0</span>
-        </div>
-        <div id="visitHistory" class="history-list compact-history"></div>
-      </article>
+
+
+      <!-- CARE VISITS -->
 
       <article class="detail-card">
+
         <div class="detail-card-head">
+
           <div>
-            <p class="eyebrow">CARE REPORTS</p>
-            <h2>Care Report</h2>
+
+            <p class="eyebrow">
+              CARE VISITS
+            </p>
+
+            <h2>
+              방문 케어 기록
+            </h2>
+
           </div>
-          <span id="reportHistoryCount" class="count-pill">0</span>
+
+
+          <span
+            id="visitHistoryCount"
+            class="count-pill"
+          >
+            0
+          </span>
+
         </div>
-        <div id="reportHistory" class="history-list compact-history"></div>
+
+
+        <div
+          id="visitHistory"
+          class="history-list compact-history"
+        ></div>
+
       </article>
+
+
+      <!-- CARE REPORTS -->
+
+      <article class="detail-card">
+
+        <div class="detail-card-head">
+
+          <div>
+
+            <p class="eyebrow">
+              CARE REPORTS
+            </p>
+
+            <h2>
+              Care Report
+            </h2>
+
+          </div>
+
+
+          <span
+            id="reportHistoryCount"
+            class="count-pill"
+          >
+            0
+          </span>
+
+        </div>
+
+
+        <div
+          id="reportHistory"
+          class="history-list compact-history"
+        ></div>
+
+      </article>
+
     </section>
 
-    <p id="detailMessage" class="dashboard-message" role="status" aria-live="polite"></p>
+
+    <p
+      id="detailMessage"
+      class="dashboard-message"
+      role="status"
+      aria-live="polite"
+    ></p>
+
   </main>
 
+
+  <!-- =========================================================
+       SCRIPTS
+  ========================================================== -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script src="../assets/js/supabase-config.js"></script>
+
   <script src="../assets/js/admin-customer-detail.js"></script>
+
 </body>
 </html>

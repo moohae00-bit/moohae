@@ -1,38 +1,103 @@
 (() => {
   'use strict';
 
-  const identity = document.getElementById('adminIdentity');
-  const logoutButton = document.getElementById('logoutButton');
-  const detailMessage = document.getElementById('detailMessage');
 
-  const managementForm = document.getElementById('customerManagementForm');
-  const statusSelect = document.getElementById('customerStatusSelect');
-  const notesInput = document.getElementById('customerNotes');
-  const saveCustomerButton = document.getElementById('saveCustomerButton');
-  const managementMessage = document.getElementById('customerManagementMessage');
+  // ============================================================
+  // ELEMENTS
+  // ============================================================
 
-  const visitForm = document.getElementById('visitScheduleForm');
-  const visitScheduledAt = document.getElementById('visitScheduledAt');
-  const visitCareArea = document.getElementById('visitCareArea');
-  const scheduleVisitButton = document.getElementById('scheduleVisitButton');
-  const visitMessage = document.getElementById('visitScheduleMessage');
+  const identity =
+    document.getElementById('adminIdentity');
 
-  const careCompleteForm = document.getElementById('careCompleteForm');
-  const careVisitSelect = document.getElementById('careVisitSelect');
-  const beforeDiagnosisInput = document.getElementById('beforeDiagnosis');
-  const afterDiagnosisInput = document.getElementById('afterDiagnosis');
-  const visitAdminMemoInput = document.getElementById('visitAdminMemo');
-  const completeCareButton = document.getElementById('completeCareButton');
-  const careCompleteMessage = document.getElementById('careCompleteMessage');
+  const logoutButton =
+    document.getElementById('logoutButton');
 
-  const reportEditorForm = document.getElementById('reportEditorForm');
-  const reportEditorId = document.getElementById('reportEditorId');
-  const reportManagerComment = document.getElementById('reportManagerComment');
-  const reportNextCare = document.getElementById('reportNextCare');
-  const reportEditStatus = document.getElementById('reportEditStatus');
-  const saveReportButton = document.getElementById('saveReportButton');
-  const publishReportButton = document.getElementById('publishReportButton');
-  const reportEditorMessage = document.getElementById('reportEditorMessage');
+  const detailMessage =
+    document.getElementById('detailMessage');
+
+
+  const managementForm =
+    document.getElementById('customerManagementForm');
+
+  const statusSelect =
+    document.getElementById('customerStatusSelect');
+
+  const notesInput =
+    document.getElementById('customerNotes');
+
+  const saveCustomerButton =
+    document.getElementById('saveCustomerButton');
+
+  const managementMessage =
+    document.getElementById('customerManagementMessage');
+
+
+  const visitForm =
+    document.getElementById('visitScheduleForm');
+
+  const visitScheduledAt =
+    document.getElementById('visitScheduledAt');
+
+  const visitCareArea =
+    document.getElementById('visitCareArea');
+
+  const scheduleVisitButton =
+    document.getElementById('scheduleVisitButton');
+
+  const visitMessage =
+    document.getElementById('visitScheduleMessage');
+
+
+  const careCompleteForm =
+    document.getElementById('careCompleteForm');
+
+  const careVisitSelect =
+    document.getElementById('careVisitSelect');
+
+  const beforeDiagnosisInput =
+    document.getElementById('beforeDiagnosis');
+
+  const afterDiagnosisInput =
+    document.getElementById('afterDiagnosis');
+
+  const visitAdminMemoInput =
+    document.getElementById('visitAdminMemo');
+
+  const completeCareButton =
+    document.getElementById('completeCareButton');
+
+  const careCompleteMessage =
+    document.getElementById('careCompleteMessage');
+
+
+  const reportEditorForm =
+    document.getElementById('reportEditorForm');
+
+  const reportEditorId =
+    document.getElementById('reportEditorId');
+
+  const reportManagerComment =
+    document.getElementById('reportManagerComment');
+
+  const reportNextCare =
+    document.getElementById('reportNextCare');
+
+  const reportEditStatus =
+    document.getElementById('reportEditStatus');
+
+  const saveReportButton =
+    document.getElementById('saveReportButton');
+
+  const publishReportButton =
+    document.getElementById('publishReportButton');
+
+  const reportEditorMessage =
+    document.getElementById('reportEditorMessage');
+
+
+  // ============================================================
+  // LABELS
+  // ============================================================
 
   const STATUS_LABELS = {
     new: '신규 문의',
@@ -43,6 +108,7 @@
     closed: '종료'
   };
 
+
   const VISIT_LABELS = {
     scheduled: '방문 예정',
     in_progress: '진행 중',
@@ -50,46 +116,94 @@
     cancelled: '취소'
   };
 
+
   const REPORT_LABELS = {
     draft: '작성 중',
     published: '발행',
     archived: '보관'
   };
 
-  const ALLOWED_STATUSES = new Set(Object.keys(STATUS_LABELS));
 
-  const ALLOWED_CARE_ITEMS = new Set([
-    '매트리스 케어',
-    '패브릭 케어',
-    '실내 공간 케어',
-    '바닥 케어'
-  ]);
+  const ALLOWED_STATUSES =
+    new Set(
+      Object.keys(
+        STATUS_LABELS
+      )
+    );
+
+
+  const ALLOWED_CARE_ITEMS =
+    new Set([
+      '매트리스 케어',
+      '패브릭 케어',
+      '실내 공간 케어',
+      '바닥 케어'
+    ]);
+
+
+  const ALLOWED_V2_PLANS =
+    new Set([
+      'STANDARD',
+      'PLUS',
+      'SIGNATURE'
+    ]);
+
 
   const UUID_PATTERN =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+
+  // ============================================================
+  // STATE
+  // ============================================================
+
   let authContext = null;
+
   let customerId = null;
+
   let latestDiagnosisId = null;
 
-  const make = (tag, className, text = '') => {
-    const node = document.createElement(tag);
+
+  // ============================================================
+  // DOM HELPERS
+  // ============================================================
+
+  const make = (
+    tag,
+    className,
+    text = ''
+  ) => {
+    const node =
+      document.createElement(tag);
 
     if (className) {
-      node.className = className;
+      node.className =
+        className;
     }
 
     if (text) {
-      node.textContent = text;
+      node.textContent =
+        text;
     }
 
     return node;
   };
 
-  const setMessage = (node, text, ok = false) => {
-    node.textContent = text;
-    node.classList.toggle('success', ok);
+
+  const setMessage = (
+    node,
+    text,
+    ok = false
+  ) => {
+    node.textContent =
+      text;
+
+    node.classList.toggle(
+      'success',
+      ok
+    );
   };
+
 
   const setBusy = (
     button,
@@ -97,67 +211,100 @@
     busyLabel,
     normalLabel
   ) => {
-    button.disabled = busy;
-    button.textContent = busy
-      ? busyLabel
-      : normalLabel;
-  };
+    button.disabled =
+      busy;
 
-  const formatDateTime = (value) => {
-    if (!value) {
-      return '—';
-    }
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) {
-      return '—';
-    }
-
-    return new Intl.DateTimeFormat('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit'
-    }).format(date);
-  };
-
-  const formatDate = (value) => {
-    if (!value) {
-      return '—';
-    }
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) {
-      return '—';
-    }
-
-    return new Intl.DateTimeFormat('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    }).format(date);
+    button.textContent =
+      busy
+        ? busyLabel
+        : normalLabel;
   };
 
 
   // ============================================================
-  // PUBLIC CARE REPORT LINK
+  // DATE
   // ============================================================
 
-  function buildPublicReportUrl(publicToken) {
+  const formatDateTime = (
+    value
+  ) => {
+    if (!value) {
+      return '—';
+    }
+
+    const date =
+      new Date(value);
+
     if (
-      !publicToken ||
-      !UUID_PATTERN.test(publicToken)
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return '—';
+    }
+
+    return new Intl.DateTimeFormat(
+      'ko-KR',
+      {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }
+    ).format(date);
+  };
+
+
+  const formatDate = (
+    value
+  ) => {
+    if (!value) {
+      return '—';
+    }
+
+    const date =
+      new Date(value);
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return '—';
+    }
+
+    return new Intl.DateTimeFormat(
+      'ko-KR',
+      {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }
+    ).format(date);
+  };
+
+
+  // ============================================================
+  // PUBLIC CARE REPORT
+  // ============================================================
+
+  function buildPublicReportUrl(
+    publicToken
+  ) {
+    if (
+      !UUID_PATTERN.test(
+        publicToken || ''
+      )
     ) {
       return null;
     }
 
-    const url = new URL(
-      '/report.html',
-      window.location.origin
-    );
+    const url =
+      new URL(
+        '/report.html',
+        window.location.origin
+      );
 
     url.searchParams.set(
       'token',
@@ -168,52 +315,15 @@
   }
 
 
-  async function copyTextToClipboard(text) {
-    if (
-      navigator.clipboard &&
-      typeof navigator.clipboard.writeText === 'function'
-    ) {
-      await navigator.clipboard.writeText(text);
-      return;
-    }
-
-    const textarea =
-      document.createElement('textarea');
-
-    textarea.value = text;
-    textarea.setAttribute(
-      'readonly',
-      ''
-    );
-
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    textarea.style.pointerEvents = 'none';
-
-    document.body.appendChild(textarea);
-
-    textarea.focus();
-    textarea.select();
-
-    const copied =
-      document.execCommand('copy');
-
-    textarea.remove();
-
-    if (!copied) {
-      throw new Error(
-        'Clipboard copy failed'
-      );
-    }
-  }
-
-
   async function copyPublicReportLink(
     publicToken,
     button
   ) {
     const url =
-      buildPublicReportUrl(publicToken);
+      buildPublicReportUrl(
+        publicToken
+      );
+
 
     if (!url) {
       setMessage(
@@ -224,29 +334,29 @@
       return;
     }
 
-    const originalText =
+
+    const originalLabel =
       button.textContent;
 
-    button.disabled = true;
 
     try {
-      await copyTextToClipboard(url);
+      await navigator
+        .clipboard
+        .writeText(
+          url
+        );
+
 
       button.textContent =
-        '복사 완료 ✓';
+        '복사 완료';
+
 
       setMessage(
         detailMessage,
-        '고객에게 전달할 Care Report 링크가 복사되었습니다.',
+        '고객용 Care Report 링크가 복사되었습니다.',
         true
       );
 
-      window.setTimeout(() => {
-        button.textContent =
-          originalText;
-
-        button.disabled = false;
-      }, 1800);
 
     } catch (error) {
       console.error(
@@ -254,14 +364,20 @@
         error
       );
 
-      button.textContent =
-        originalText;
-
-      button.disabled = false;
 
       setMessage(
         detailMessage,
-        '링크를 복사하지 못했습니다. 리포트 보기 버튼으로 먼저 확인해주세요.'
+        '링크를 복사하지 못했습니다. 리포트 보기 버튼으로 열어주세요.'
+      );
+
+
+    } finally {
+      window.setTimeout(
+        () => {
+          button.textContent =
+            originalLabel;
+        },
+        1800
       );
     }
   }
@@ -271,7 +387,10 @@
     publicToken
   ) {
     const url =
-      buildPublicReportUrl(publicToken);
+      buildPublicReportUrl(
+        publicToken
+      );
+
 
     if (!url) {
       setMessage(
@@ -282,28 +401,24 @@
       return;
     }
 
-    const newWindow =
-      window.open(
-        url,
-        '_blank',
-        'noopener,noreferrer'
-      );
 
-    if (!newWindow) {
-      setMessage(
-        detailMessage,
-        '팝업이 차단되었습니다. 브라우저의 팝업 허용 상태를 확인해주세요.'
-      );
-    }
+    window.open(
+      url,
+      '_blank',
+      'noopener,noreferrer'
+    );
   }
 
 
   // ============================================================
-  // ADMIN AUTH
+  // AUTH
   // ============================================================
 
   async function requireAuthorizedAdmin() {
-    if (!window.moohaeSupabaseConfigReady) {
+    if (
+      !window
+        .moohaeSupabaseConfigReady
+    ) {
       window.location.replace(
         './login.html'
       );
@@ -311,13 +426,16 @@
       return null;
     }
 
+
     const {
       data,
       error
     } =
-      await window.moohaeSupabase
+      await window
+        .moohaeSupabase
         .auth
         .getUser();
+
 
     if (
       error ||
@@ -330,12 +448,16 @@
       return null;
     }
 
+
     const {
       data: profile,
       error: profileError
     } =
-      await window.moohaeSupabase
-        .from('admin_profiles')
+      await window
+        .moohaeSupabase
+        .from(
+          'admin_profiles'
+        )
         .select(
           'display_name, role, is_active'
         )
@@ -344,6 +466,7 @@
           data.user.id
         )
         .maybeSingle();
+
 
     const allowed =
       !profileError &&
@@ -354,10 +477,13 @@
         profile.role === 'manager'
       );
 
+
     if (!allowed) {
-      await window.moohaeSupabase
+      await window
+        .moohaeSupabase
         .auth
         .signOut();
+
 
       window.location.replace(
         './login.html'
@@ -366,15 +492,18 @@
       return null;
     }
 
+
     return {
-      user: data.user,
+      user:
+        data.user,
+
       profile
     };
   }
 
 
   // ============================================================
-  // COMMON UI
+  // CHIP RENDERER
   // ============================================================
 
   function renderChips(
@@ -382,6 +511,7 @@
     values
   ) {
     parent.replaceChildren();
+
 
     if (
       !Array.isArray(values) ||
@@ -398,7 +528,11 @@
       return;
     }
 
-    for (const value of values) {
+
+    for (
+      const value
+      of values
+    ) {
       parent.appendChild(
         make(
           'span',
@@ -411,10 +545,70 @@
 
 
   // ============================================================
-  // DIAGNOSIS CARD
+  // DIAGNOSIS HELPERS
   // ============================================================
 
-  function diagnosisCard(
+  function appendHistoryGroup(
+    article,
+    label,
+    values
+  ) {
+    const block =
+      make(
+        'div',
+        'history-group'
+      );
+
+
+    block.appendChild(
+      make(
+        'span',
+        'history-label',
+        label
+      )
+    );
+
+
+    const chips =
+      make(
+        'div',
+        'chip-line'
+      );
+
+
+    renderChips(
+      chips,
+      values
+    );
+
+
+    block.appendChild(
+      chips
+    );
+
+
+    article.appendChild(
+      block
+    );
+  }
+
+
+  function isV2Diagnosis(
+    diagnosis
+  ) {
+    return (
+      Number(
+        diagnosis.check_version
+      ) === 2
+    );
+  }
+
+
+  // ============================================================
+  // MOOHAE CHECK V2 CARD
+  // ============================================================
+
+  function diagnosisCardV2(
     diagnosis,
     isLatest = false
   ) {
@@ -424,23 +618,26 @@
         'history-item'
       );
 
+
     const header =
       make(
         'div',
         'history-item-head'
       );
 
+
     const left =
       make('div');
+
 
     left.appendChild(
       make(
         'strong',
         '',
-        diagnosis.result_level ||
-          '진단'
+        'MOOHAE CHECK · V2'
       )
     );
+
 
     left.appendChild(
       make(
@@ -452,7 +649,11 @@
       )
     );
 
-    header.appendChild(left);
+
+    header.appendChild(
+      left
+    );
+
 
     if (isLatest) {
       header.appendChild(
@@ -464,70 +665,75 @@
       );
     }
 
-    article.appendChild(header);
 
-    const groups = [
-      [
-        '생활 공간',
-        diagnosis.spaces
-      ],
-      [
-        '신경 쓰이는 부분',
-        diagnosis.concerns
-      ],
-      [
-        '관리 어려움',
-        diagnosis.difficulties
-      ],
-      [
-        '알레르기 관련 고민',
-        diagnosis.allergy_concerns
-      ],
-      [
-        '희망 방식',
-        diagnosis.preferred_contact
-      ]
-    ];
+    article.appendChild(
+      header
+    );
 
-    for (
-      const [
-        label,
-        values
-      ] of groups
+
+    // ----------------------------------------------------------
+    // RECOMMENDED PLAN
+    //
+    // 가격은 절대 표시하지 않음
+    // ----------------------------------------------------------
+
+    if (
+      ALLOWED_V2_PLANS.has(
+        diagnosis.recommended_plan
+      )
     ) {
-      const block =
-        make(
-          'div',
-          'history-group'
-        );
-
-      block.appendChild(
-        make(
-          'span',
-          'history-label',
-          label
-        )
-      );
-
-      const chips =
-        make(
-          'div',
-          'chip-line'
-        );
-
-      renderChips(
-        chips,
-        values
-      );
-
-      block.appendChild(
-        chips
-      );
-
-      article.appendChild(
-        block
+      appendHistoryGroup(
+        article,
+        '추천 관리 유형',
+        [
+          diagnosis.recommended_plan
+        ]
       );
     }
+
+
+    // ----------------------------------------------------------
+    // HOME PROFILE
+    // ----------------------------------------------------------
+
+    appendHistoryGroup(
+      article,
+      '함께 생활',
+      diagnosis.household
+    );
+
+
+    appendHistoryGroup(
+      article,
+      '주요 생활공간',
+      diagnosis.living_spaces
+    );
+
+
+    appendHistoryGroup(
+      article,
+      '신경 쓰이는 생활 접촉면',
+      diagnosis.contact_surfaces
+    );
+
+
+    appendHistoryGroup(
+      article,
+      '관리 고민',
+      diagnosis.management_worries
+    );
+
+
+    appendHistoryGroup(
+      article,
+      '원하는 관리 방식',
+      diagnosis.management_preference
+    );
+
+
+    // ----------------------------------------------------------
+    // SERVER RESULT MESSAGE
+    // ----------------------------------------------------------
 
     if (
       diagnosis.result_message
@@ -541,20 +747,171 @@
       );
     }
 
+
     return article;
   }
 
 
   // ============================================================
-  // CARE VISIT CARD
+  // LEGACY V1 DIAGNOSIS CARD
   // ============================================================
 
-  function visitCard(visit) {
+  function diagnosisCardV1(
+    diagnosis,
+    isLatest = false
+  ) {
     const article =
       make(
         'article',
         'history-item'
       );
+
+
+    const header =
+      make(
+        'div',
+        'history-item-head'
+      );
+
+
+    const left =
+      make('div');
+
+
+    left.appendChild(
+      make(
+        'strong',
+        '',
+        diagnosis.result_level ||
+        '진단'
+      )
+    );
+
+
+    left.appendChild(
+      make(
+        'span',
+        '',
+        formatDateTime(
+          diagnosis.created_at
+        )
+      )
+    );
+
+
+    header.appendChild(
+      left
+    );
+
+
+    if (isLatest) {
+      header.appendChild(
+        make(
+          'span',
+          'count-pill',
+          'LATEST'
+        )
+      );
+    }
+
+
+    article.appendChild(
+      header
+    );
+
+
+    appendHistoryGroup(
+      article,
+      '생활 공간',
+      diagnosis.spaces
+    );
+
+
+    appendHistoryGroup(
+      article,
+      '신경 쓰이는 부분',
+      diagnosis.concerns
+    );
+
+
+    appendHistoryGroup(
+      article,
+      '관리 어려움',
+      diagnosis.difficulties
+    );
+
+
+    appendHistoryGroup(
+      article,
+      '알레르기 관련 고민',
+      diagnosis.allergy_concerns
+    );
+
+
+    appendHistoryGroup(
+      article,
+      '희망 방식',
+      diagnosis.preferred_contact
+    );
+
+
+    if (
+      diagnosis.result_message
+    ) {
+      article.appendChild(
+        make(
+          'p',
+          'history-copy',
+          diagnosis.result_message
+        )
+      );
+    }
+
+
+    return article;
+  }
+
+
+  // ============================================================
+  // DIAGNOSIS ROUTER
+  // ============================================================
+
+  function diagnosisCard(
+    diagnosis,
+    isLatest = false
+  ) {
+    if (
+      isV2Diagnosis(
+        diagnosis
+      )
+    ) {
+      return diagnosisCardV2(
+        diagnosis,
+        isLatest
+      );
+    }
+
+
+    return diagnosisCardV1(
+      diagnosis,
+      isLatest
+    );
+  }
+
+
+  // ============================================================
+  // VISIT CARD
+  // ============================================================
+
+  function visitCard(
+    visit
+  ) {
+    const article =
+      make(
+        'article',
+        'history-item'
+      );
+
 
     const head =
       make(
@@ -562,17 +919,20 @@
         'history-item-head'
       );
 
+
     const left =
       make('div');
+
 
     left.appendChild(
       make(
         'strong',
         '',
         visit.care_area ||
-          '방문 케어'
+        '방문 케어'
       )
     );
+
 
     left.appendChild(
       make(
@@ -585,7 +945,11 @@
       )
     );
 
-    head.appendChild(left);
+
+    head.appendChild(
+      left
+    );
+
 
     head.appendChild(
       make(
@@ -593,13 +957,16 @@
         `status-badge status-${visit.visit_status || 'neutral'}`,
         VISIT_LABELS[
           visit.visit_status
-        ] || '상태 미정'
+        ] ||
+        '상태 미정'
       )
     );
+
 
     article.appendChild(
       head
     );
+
 
     if (
       Array.isArray(
@@ -613,15 +980,18 @@
           'chip-line'
         );
 
+
       renderChips(
         chips,
         visit.care_items
       );
 
+
       article.appendChild(
         chips
       );
     }
+
 
     if (
       visit.before_diagnosis
@@ -635,6 +1005,7 @@
       );
     }
 
+
     if (
       visit.after_diagnosis
     ) {
@@ -647,6 +1018,7 @@
       );
     }
 
+
     return article;
   }
 
@@ -655,12 +1027,15 @@
   // CARE REPORT CARD
   // ============================================================
 
-  function reportCard(report) {
+  function reportCard(
+    report
+  ) {
     const article =
       make(
         'article',
         'history-item'
       );
+
 
     const head =
       make(
@@ -668,8 +1043,10 @@
         'history-item-head'
       );
 
+
     const left =
       make('div');
+
 
     left.appendChild(
       make(
@@ -678,6 +1055,7 @@
         'Care Report'
       )
     );
+
 
     left.appendChild(
       make(
@@ -690,7 +1068,11 @@
       )
     );
 
-    head.appendChild(left);
+
+    head.appendChild(
+      left
+    );
+
 
     head.appendChild(
       make(
@@ -698,13 +1080,16 @@
         `status-badge status-${report.report_status || 'neutral'}`,
         REPORT_LABELS[
           report.report_status
-        ] || '상태 미정'
+        ] ||
+        '상태 미정'
       )
     );
+
 
     article.appendChild(
       head
     );
+
 
     if (
       report.manager_comment
@@ -717,6 +1102,7 @@
         )
       );
     }
+
 
     if (
       report.next_care_recommendation
@@ -732,24 +1118,23 @@
 
 
     // ----------------------------------------------------------
-    // 발행된 리포트에만 고객용 버튼 표시
+    // PUBLIC REPORT ACTIONS
     // ----------------------------------------------------------
 
-    const canShareReport =
+    if (
       report.report_status ===
         'published' &&
-      typeof report.public_token ===
-        'string' &&
       UUID_PATTERN.test(
-        report.public_token
-      );
-
-    if (canShareReport) {
+        report.public_token ||
+        ''
+      )
+    ) {
       const actions =
         make(
           'div',
           'report-action-row'
         );
+
 
       const openButton =
         make(
@@ -758,8 +1143,10 @@
           '리포트 보기'
         );
 
+
       openButton.type =
         'button';
+
 
       openButton.addEventListener(
         'click',
@@ -770,6 +1157,7 @@
         }
       );
 
+
       const copyButton =
         make(
           'button',
@@ -777,8 +1165,10 @@
           '링크 복사'
         );
 
+
       copyButton.type =
         'button';
+
 
       copyButton.addEventListener(
         'click',
@@ -790,22 +1180,25 @@
         }
       );
 
+
       actions.append(
         openButton,
         copyButton
       );
+
 
       article.appendChild(
         actions
       );
     }
 
+
     return article;
   }
 
 
   // ============================================================
-  // CARE COMPLETION OPTIONS
+  // CARE COMPLETION
   // ============================================================
 
   function populateCareCompletion(
@@ -814,19 +1207,25 @@
     careVisitSelect
       .replaceChildren();
 
+
     const placeholder =
       document.createElement(
         'option'
       );
 
-    placeholder.value = '';
+
+    placeholder.value =
+      '';
+
 
     placeholder.textContent =
       '방문 일정을 선택해주세요';
 
+
     careVisitSelect.appendChild(
       placeholder
     );
+
 
     const candidates =
       visits.filter(
@@ -837,16 +1236,20 @@
             'in_progress'
       );
 
+
     for (
-      const visit of candidates
+      const visit
+      of candidates
     ) {
       const option =
         document.createElement(
           'option'
         );
 
+
       option.value =
         visit.id;
+
 
       option.textContent =
         `${formatDateTime(
@@ -856,10 +1259,12 @@
           '케어 공간 미입력'
         }`;
 
+
       careVisitSelect.appendChild(
         option
       );
     }
+
 
     if (
       candidates.length === 0
@@ -867,15 +1272,18 @@
       careCompleteForm.hidden =
         true;
 
+
       setMessage(
         careCompleteMessage,
         '완료 처리할 방문 일정이 없습니다.',
         true
       );
 
+
     } else {
       careCompleteForm.hidden =
         false;
+
 
       setMessage(
         careCompleteMessage,
@@ -905,80 +1313,102 @@
       ) ||
       null;
 
+
     if (!editable) {
       reportEditorId.value =
         '';
 
+
       reportManagerComment.value =
         '';
+
 
       reportNextCare.value =
         '';
 
+
       reportEditStatus.textContent =
         '리포트 없음';
 
+
       reportEditStatus.className =
         'status-badge neutral';
+
 
       reportEditorForm.setAttribute(
         'aria-disabled',
         'true'
       );
 
+
       saveReportButton.disabled =
         true;
 
+
       publishReportButton.disabled =
         true;
+
 
       setMessage(
         reportEditorMessage,
         '케어 완료 처리 후 Care Report 초안이 자동 생성됩니다.'
       );
 
+
       return;
     }
+
 
     reportEditorId.value =
       editable.id;
 
+
     reportManagerComment.value =
       editable.manager_comment ||
       '';
+
 
     reportNextCare.value =
       editable
         .next_care_recommendation ||
       '';
 
+
     const label =
       REPORT_LABELS[
         editable.report_status
-      ] || '상태 미정';
+      ] ||
+      '상태 미정';
+
 
     reportEditStatus.textContent =
       label;
 
+
     reportEditStatus.className =
       `status-badge status-${editable.report_status || 'neutral'}`;
+
 
     reportEditorForm.setAttribute(
       'aria-disabled',
       'false'
     );
 
+
     saveReportButton.disabled =
       false;
 
+
     publishReportButton.disabled =
       false;
+
 
     publishReportButton.textContent =
       editable.report_status ===
       'published'
         ? '발행 내용 저장'
         : '리포트 발행';
+
 
     setMessage(
       reportEditorMessage,
@@ -1000,8 +1430,16 @@
     ] =
       await Promise.all([
 
-        window.moohaeSupabase
-          .from('customers')
+
+        // ------------------------------------------------------
+        // CUSTOMER
+        // ------------------------------------------------------
+
+        window
+          .moohaeSupabase
+          .from(
+            'customers'
+          )
           .select(
             'id, name, phone, status, privacy_consent, privacy_consented_at, notes, created_at'
           )
@@ -1011,11 +1449,39 @@
           )
           .maybeSingle(),
 
-        window.moohaeSupabase
-          .from('diagnoses')
-          .select(
-            'id, spaces, concerns, difficulties, allergy_concerns, preferred_contact, result_level, result_message, created_at'
+
+        // ------------------------------------------------------
+        // MOOHAE CHECK
+        //
+        // V1 + V2 모두 조회
+        // ------------------------------------------------------
+
+        window
+          .moohaeSupabase
+          .from(
+            'diagnoses'
           )
+          .select(`
+            id,
+            check_version,
+
+            household,
+            living_spaces,
+            contact_surfaces,
+            management_worries,
+            management_preference,
+            recommended_plan,
+
+            spaces,
+            concerns,
+            difficulties,
+            allergy_concerns,
+            preferred_contact,
+            result_level,
+            result_message,
+
+            created_at
+          `)
           .eq(
             'customer_id',
             customerId
@@ -1027,8 +1493,16 @@
             }
           ),
 
-        window.moohaeSupabase
-          .from('care_visits')
+
+        // ------------------------------------------------------
+        // CARE VISITS
+        // ------------------------------------------------------
+
+        window
+          .moohaeSupabase
+          .from(
+            'care_visits'
+          )
           .select(
             'id, scheduled_at, completed_at, care_area, before_diagnosis, after_diagnosis, care_items, visit_status, created_at'
           )
@@ -1043,8 +1517,16 @@
             }
           ),
 
-        window.moohaeSupabase
-          .from('reports')
+
+        // ------------------------------------------------------
+        // REPORTS
+        // ------------------------------------------------------
+
+        window
+          .moohaeSupabase
+          .from(
+            'reports'
+          )
           .select(
             'id, public_token, manager_comment, next_care_recommendation, report_status, published_at, created_at'
           )
@@ -1058,8 +1540,13 @@
               ascending: false
             }
           )
+
       ]);
 
+
+    // ==========================================================
+    // ERROR CHECK
+    // ==========================================================
 
     if (
       customerResult.error ||
@@ -1073,17 +1560,20 @@
       );
     }
 
+
     if (
       diagnosisResult.error
     ) {
       throw diagnosisResult.error;
     }
 
+
     if (
       visitResult.error
     ) {
       throw visitResult.error;
     }
+
 
     if (
       reportResult.error
@@ -1092,17 +1582,27 @@
     }
 
 
+    // ==========================================================
+    // DATA
+    // ==========================================================
+
     const customer =
       customerResult.data;
 
+
     const diagnoses =
-      diagnosisResult.data || [];
+      diagnosisResult.data ||
+      [];
+
 
     const visits =
-      visitResult.data || [];
+      visitResult.data ||
+      [];
+
 
     const reports =
-      reportResult.data || [];
+      reportResult.data ||
+      [];
 
 
     latestDiagnosisId =
@@ -1114,10 +1614,15 @@
       visits
     );
 
+
     populateReportEditor(
       reports
     );
 
+
+    // ==========================================================
+    // CUSTOMER HERO
+    // ==========================================================
 
     document
       .getElementById(
@@ -1155,12 +1660,18 @@
         'customerStatus'
       );
 
+
     statusBadge.textContent =
       statusText;
+
 
     statusBadge.className =
       `status-badge status-${customer.status || 'neutral'}`;
 
+
+    // ==========================================================
+    // BASIC INFO
+    // ==========================================================
 
     document
       .getElementById(
@@ -1224,14 +1735,15 @@
       '';
 
 
-    // ----------------------------------------------------------
-    // LATEST DIAGNOSIS
-    // ----------------------------------------------------------
+    // ==========================================================
+    // LATEST MOOHAE CHECK
+    // ==========================================================
 
     const latestDiagnosis =
       document.getElementById(
         'latestDiagnosis'
       );
+
 
     latestDiagnosis
       .replaceChildren();
@@ -1247,25 +1759,27 @@
         )
       );
 
+
     } else {
       latestDiagnosis.appendChild(
         make(
           'p',
           'muted-copy',
-          '아직 온라인 진단 기록이 없습니다.'
+          '아직 MOOHAE CHECK 기록이 없습니다.'
         )
       );
     }
 
 
-    // ----------------------------------------------------------
-    // DIAGNOSIS HISTORY
-    // ----------------------------------------------------------
+    // ==========================================================
+    // MOOHAE CHECK HISTORY
+    // ==========================================================
 
     const diagnosisHistory =
       document.getElementById(
         'diagnosisHistory'
       );
+
 
     diagnosisHistory
       .replaceChildren();
@@ -1289,36 +1803,36 @@
           item,
           index
         ) => {
-          diagnosisHistory
-            .appendChild(
-              diagnosisCard(
-                item,
-                index === 0
-              )
-            );
+          diagnosisHistory.appendChild(
+            diagnosisCard(
+              item,
+              index === 0
+            )
+          );
         }
       );
 
+
     } else {
-      diagnosisHistory
-        .appendChild(
-          make(
-            'p',
-            'muted-copy',
-            '진단 기록이 없습니다.'
-          )
-        );
+      diagnosisHistory.appendChild(
+        make(
+          'p',
+          'muted-copy',
+          'MOOHAE CHECK 기록이 없습니다.'
+        )
+      );
     }
 
 
-    // ----------------------------------------------------------
+    // ==========================================================
     // VISIT HISTORY
-    // ----------------------------------------------------------
+    // ==========================================================
 
     const visitHistory =
       document.getElementById(
         'visitHistory'
       );
+
 
     visitHistory
       .replaceChildren();
@@ -1339,35 +1853,35 @@
     ) {
       visits.forEach(
         (item) => {
-          visitHistory
-            .appendChild(
-              visitCard(
-                item
-              )
-            );
+          visitHistory.appendChild(
+            visitCard(
+              item
+            )
+          );
         }
       );
 
+
     } else {
-      visitHistory
-        .appendChild(
-          make(
-            'p',
-            'muted-copy',
-            '방문 케어 기록이 없습니다.'
-          )
-        );
+      visitHistory.appendChild(
+        make(
+          'p',
+          'muted-copy',
+          '방문 케어 기록이 없습니다.'
+        )
+      );
     }
 
 
-    // ----------------------------------------------------------
+    // ==========================================================
     // REPORT HISTORY
-    // ----------------------------------------------------------
+    // ==========================================================
 
     const reportHistory =
       document.getElementById(
         'reportHistory'
       );
+
 
     reportHistory
       .replaceChildren();
@@ -1388,24 +1902,23 @@
     ) {
       reports.forEach(
         (item) => {
-          reportHistory
-            .appendChild(
-              reportCard(
-                item
-              )
-            );
+          reportHistory.appendChild(
+            reportCard(
+              item
+            )
+          );
         }
       );
 
+
     } else {
-      reportHistory
-        .appendChild(
-          make(
-            'p',
-            'muted-copy',
-            'Care Report가 아직 없습니다.'
-          )
-        );
+      reportHistory.appendChild(
+        make(
+          'p',
+          'muted-copy',
+          'Care Report가 아직 없습니다.'
+        )
+      );
     }
 
 
@@ -1415,21 +1928,26 @@
 
 
   // ============================================================
-  // UPDATE CUSTOMER
+  // CUSTOMER MANAGEMENT
   // ============================================================
 
   managementForm.addEventListener(
     'submit',
-    async (event) => {
+    async (
+      event
+    ) => {
       event.preventDefault();
+
 
       setMessage(
         managementMessage,
         ''
       );
 
+
       const status =
         statusSelect.value;
+
 
       const notes =
         notesInput
@@ -1515,10 +2033,12 @@
           error
         );
 
+
         setMessage(
           managementMessage,
           '고객 정보를 저장하지 못했습니다.'
         );
+
 
       } finally {
         setBusy(
@@ -1538,8 +2058,11 @@
 
   visitForm.addEventListener(
     'submit',
-    async (event) => {
+    async (
+      event
+    ) => {
       event.preventDefault();
+
 
       setMessage(
         visitMessage,
@@ -1550,26 +2073,30 @@
       const localDateTime =
         visitScheduledAt.value;
 
+
       const careArea =
         visitCareArea
           .value
           .trim();
 
 
-      const careItems = [
-        ...visitForm.querySelectorAll(
-          'input[name="careItem"]:checked'
-        )
-      ]
-        .map(
-          (input) =>
-            input.value
-        )
-        .filter(
-          (value) =>
-            ALLOWED_CARE_ITEMS
-              .has(value)
-        );
+      const careItems =
+        [
+          ...visitForm
+            .querySelectorAll(
+              'input[name="careItem"]:checked'
+            )
+        ]
+          .map(
+            (input) =>
+              input.value
+          )
+          .filter(
+            (value) =>
+              ALLOWED_CARE_ITEMS.has(
+                value
+              )
+          );
 
 
       if (
@@ -1677,10 +2204,12 @@
           error
         );
 
+
         setMessage(
           visitMessage,
           '방문 일정을 등록하지 못했습니다.'
         );
+
 
       } finally {
         setBusy(
@@ -1695,13 +2224,16 @@
 
 
   // ============================================================
-  // COMPLETE CARE VISIT
+  // COMPLETE CARE
   // ============================================================
 
   careCompleteForm.addEventListener(
     'submit',
-    async (event) => {
+    async (
+      event
+    ) => {
       event.preventDefault();
+
 
       setMessage(
         careCompleteMessage,
@@ -1712,15 +2244,18 @@
       const visitId =
         careVisitSelect.value;
 
+
       const beforeText =
         beforeDiagnosisInput
           .value
           .trim();
 
+
       const afterText =
         afterDiagnosisInput
           .value
           .trim();
+
 
       const adminMemo =
         visitAdminMemoInput
@@ -1728,21 +2263,23 @@
           .trim();
 
 
-      const careItems = [
-        ...careCompleteForm
-          .querySelectorAll(
-            'input[name="completedCareItem"]:checked'
+      const careItems =
+        [
+          ...careCompleteForm
+            .querySelectorAll(
+              'input[name="completedCareItem"]:checked'
+            )
+        ]
+          .map(
+            (input) =>
+              input.value
           )
-      ]
-        .map(
-          (input) =>
-            input.value
-        )
-        .filter(
-          (value) =>
-            ALLOWED_CARE_ITEMS
-              .has(value)
-        );
+          .filter(
+            (value) =>
+              ALLOWED_CARE_ITEMS.has(
+                value
+              )
+          );
 
 
       if (
@@ -1855,8 +2392,7 @@
         }
 
 
-        careCompleteForm
-          .reset();
+        careCompleteForm.reset();
 
 
         setMessage(
@@ -1875,10 +2411,12 @@
           error
         );
 
+
         setMessage(
           careCompleteMessage,
           '케어 완료 처리 중 오류가 발생했습니다.'
         );
+
 
       } finally {
         setBusy(
@@ -1893,7 +2431,7 @@
 
 
   // ============================================================
-  // SAVE / PUBLISH REPORT
+  // SAVE REPORT
   // ============================================================
 
   async function saveReport(
@@ -2060,10 +2598,12 @@
         error
       );
 
+
       setMessage(
         reportEditorMessage,
         'Care Report를 저장하지 못했습니다.'
       );
+
 
     } finally {
       setBusy(
@@ -2078,19 +2618,21 @@
 
   saveReportButton.addEventListener(
     'click',
-    () =>
+    () => {
       saveReport(
         'draft'
-      )
+      );
+    }
   );
 
 
   publishReportButton.addEventListener(
     'click',
-    () =>
+    () => {
       saveReport(
         'published'
-      )
+      );
+    }
   );
 
 
@@ -2116,7 +2658,9 @@
       customerId =
         new URLSearchParams(
           window.location.search
-        ).get('id');
+        ).get(
+          'id'
+        );
 
 
       if (
@@ -2128,11 +2672,14 @@
         detailMessage.textContent =
           '올바르지 않은 고객 주소입니다.';
 
+
         managementForm.hidden =
           true;
 
+
         visitForm.hidden =
           true;
+
 
         return;
       }
@@ -2146,6 +2693,7 @@
         'MOOHAE customer detail error:',
         error
       );
+
 
       detailMessage.textContent =
         '고객 정보를 불러오는 중 오류가 발생했습니다.';
@@ -2163,11 +2711,13 @@
       logoutButton.disabled =
         true;
 
+
       try {
         await window
           .moohaeSupabase
           .auth
           .signOut();
+
 
       } finally {
         window.location.replace(
@@ -2178,5 +2728,10 @@
   );
 
 
+  // ============================================================
+  // START
+  // ============================================================
+
   boot();
+
 })();
