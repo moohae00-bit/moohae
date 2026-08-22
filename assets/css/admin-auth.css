@@ -203,3 +203,170 @@ a{color:inherit;text-decoration:none}
   .booking-slot{grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:start}
   .booking-slot-actions{grid-column:2;justify-content:flex-start}
 }
+/* ============================================================
+   MOOHAE ADMIN
+   BOOKING HORIZONTAL SLIDER
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   BOOKING CALENDAR
+   기존 GRID → HORIZONTAL SLIDER
+   ------------------------------------------------------------ */
+
+.booking-calendar {
+  display: flex;
+  gap: 14px;
+
+  width: 100%;
+
+  margin-top: 18px;
+  padding-bottom: 12px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
+
+  overscroll-behavior-x: contain;
+}
+
+
+/* ------------------------------------------------------------
+   DAY CARD
+   PC
+   ------------------------------------------------------------ */
+
+.booking-day-card {
+  flex: 0 0 340px;
+
+  width: 340px;
+  min-width: 340px;
+
+  padding: 20px;
+
+  border: 1px solid var(--line);
+  border-radius: 20px;
+
+  background: #fff;
+
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+
+
+/* ------------------------------------------------------------
+   스크롤바
+   ------------------------------------------------------------ */
+
+.booking-calendar::-webkit-scrollbar {
+  height: 6px;
+}
+
+
+.booking-calendar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.booking-calendar::-webkit-scrollbar-thumb {
+  background: rgba(38, 40, 36, 0.18);
+  border-radius: 999px;
+}
+
+
+.booking-calendar::-webkit-scrollbar-thumb:hover {
+  background: rgba(38, 40, 36, 0.30);
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  .booking-calendar {
+    display: flex;
+
+    grid-template-columns: none;
+
+    gap: 12px;
+  }
+
+
+  .booking-day-card {
+    flex: 0 0 320px;
+
+    width: 320px;
+    min-width: 320px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 620px) {
+
+  .booking-calendar {
+    display: flex;
+
+    grid-template-columns: none;
+
+    gap: 12px;
+
+    width: calc(100% + 20px);
+
+    margin-right: -20px;
+
+    padding-right: 20px;
+    padding-bottom: 10px;
+
+    scroll-padding-left: 0;
+  }
+
+
+  /* ----------------------------------------------------------
+     카드 한 장 + 다음 카드 일부 노출
+
+     다음 콘텐츠가 있다는 것을
+     사용자가 자연스럽게 인식하도록 설계
+     ---------------------------------------------------------- */
+
+  .booking-day-card {
+    flex: 0 0 86%;
+
+    width: 86%;
+    min-width: 86%;
+
+    padding: 17px;
+
+    border-radius: 18px;
+
+    scroll-snap-align: start;
+  }
+
+
+  /* ----------------------------------------------------------
+     모바일 스크롤바 숨김
+     터치 슬라이드만 자연스럽게 사용
+     ---------------------------------------------------------- */
+
+  .booking-calendar {
+    scrollbar-width: none;
+  }
+
+
+  .booking-calendar::-webkit-scrollbar {
+    display: none;
+  }
+
+}
