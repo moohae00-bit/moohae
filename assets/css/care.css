@@ -1415,3 +1415,281 @@ body[data-page="care"] .final-actions .btn-text{
   }
 
 }
+/* ============================================================
+   MOOHAE CARE
+   SECTION COLOR SYSTEM
+   Reference image matched version
+   ============================================================ */
+
+
+/* ============================================================
+   01. HERO
+   따뜻한 아이보리
+   ============================================================ */
+
+body[data-page="care"] .hero{
+  background-color:#F4F0E5;
+}
+
+
+/* ============================================================
+   02. ONE-TIME CARE
+   깨끗한 웜 화이트
+   ============================================================ */
+
+body[data-page="care"] .one-time-care{
+  background:#FCFBF7;
+}
+
+body[data-page="care"] .one-time-card{
+  background:#FFFFFF;
+  border-color:rgba(52,63,45,.14);
+}
+
+
+/* ============================================================
+   03. ONE-TIME → MOOHAE 365 BRIDGE
+   시안의 타월 섹션 같은 세이지 톤
+   ============================================================ */
+
+body[data-page="care"] .care-bridge{
+  background:#D9DFCF;
+  border-top:0;
+  border-bottom:0;
+}
+
+body[data-page="care"] .care-bridge .eyebrow{
+  color:#394836;
+}
+
+body[data-page="care"] .care-bridge h2{
+  color:#20271F;
+}
+
+body[data-page="care"] .care-bridge h2 span{
+  color:#526F45;
+}
+
+body[data-page="care"] .care-bridge p{
+  color:#4C5548;
+}
+
+
+/* ============================================================
+   04. MOOHAE 365 PLAN
+   따뜻한 크림
+   ============================================================ */
+
+body[data-page="care"] .plans{
+  background:#F5F0DF;
+}
+
+
+/* 기본 카드 */
+
+body[data-page="care"] .plan-card{
+  background:#FFFDF8;
+  border-color:rgba(54,64,47,.16);
+}
+
+
+/* PLUS — 시안처럼 세이지 카드 */
+
+body[data-page="care"] .plan-card.plus{
+  background:#CCD3BD;
+  border-color:#BCC6AB;
+
+  box-shadow:
+    0 14px 35px
+    rgba(51,64,44,.08);
+}
+
+
+/* SIGNATURE */
+
+body[data-page="care"] .plan-card.signature{
+  background:#FFFDF8;
+}
+
+
+/* PLUS 내부 태그이 있다면 자연스럽게 */
+
+body[data-page="care"] .plan-card.plus .plan-badge,
+body[data-page="care"] .plan-card.plus .badge{
+  background:#31472D;
+  color:#FFFFFF;
+}
+
+
+/* ============================================================
+   05. FOCUS CARE
+   화이트
+   ============================================================ */
+
+body[data-page="care"] .focus-section{
+  background:#FFFFFF;
+}
+
+body[data-page="care"] .focus-item{
+  border-color:rgba(42,49,39,.10);
+}
+
+
+/* ============================================================
+   06. MANAGED CONTINUOUSLY
+   시안의 두 번째 세이지 영역
+   ============================================================ */
+
+body[data-page="care"] .trust-section{
+  background:#D7DDCE;
+}
+
+body[data-page="care"] .trust-section h2,
+body[data-page="care"] .trust-section h3{
+  color:#222A21;
+}
+
+body[data-page="care"] .trust-section p{
+  color:#4C5548;
+}
+
+body[data-page="care"] .trust-point{
+  border-color:rgba(48,60,43,.13);
+}
+
+body[data-page="care"] .sos-box{
+  background:rgba(255,255,255,.28);
+  border-color:rgba(48,60,43,.13);
+}
+
+
+/* ============================================================
+   07. PROCESS
+   따뜻한 아이보리
+   ============================================================ */
+
+body[data-page="care"] .process{
+  background:#F5F1E5;
+}
+
+body[data-page="care"] .process-list{
+  border-color:rgba(48,57,43,.12);
+}
+
+body[data-page="care"] .process-item{
+  border-color:rgba(48,57,43,.10);
+}
+
+
+/* ============================================================
+   08. FINAL / MOOHAE CHECK
+   시안의 딥 포레스트 그린
+   ============================================================ */
+
+body[data-page="care"] .final{
+  background:
+    radial-gradient(
+      circle at 12% 45%,
+      rgba(113,139,96,.18),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 88% 25%,
+      rgba(116,141,99,.11),
+      transparent 30%
+    ),
+    #263A27;
+
+  color:#FFFFFF;
+}
+
+
+/* MOOHAE CHECK */
+
+body[data-page="care"] .final .eyebrow{
+  color:rgba(255,255,255,.72);
+}
+
+
+/* 메인 카피 */
+
+body[data-page="care"] .final h2{
+  color:#FFFFFF;
+}
+
+body[data-page="care"] .final h2 span{
+  color:#FFFFFF;
+}
+
+
+/* 설명 */
+
+body[data-page="care"] .final > div > p:not(.eyebrow){
+  color:rgba(255,255,255,.70);
+}
+
+
+/* 메인 버튼 */
+
+body[data-page="care"] .final .btn-primary{
+  background:#F7F7F0;
+  color:#263A27;
+
+  border-color:#F7F7F0;
+}
+
+
+/* 서브 CTA */
+
+body[data-page="care"] .final .btn-text{
+  color:rgba(255,255,255,.82);
+}
+
+
+/* ============================================================
+   MOBILE
+   색상은 PC와 동일하게 유지
+   레이아웃 관련 속성은 절대 변경하지 않음
+   ============================================================ */
+
+@media(max-width:768px){
+
+  body[data-page="care"] .hero{
+    background-color:#F4F0E5;
+  }
+
+  body[data-page="care"] .one-time-care{
+    background:#FCFBF7;
+  }
+
+  body[data-page="care"] .care-bridge{
+    background:#D9DFCF;
+  }
+
+  body[data-page="care"] .plans{
+    background:#F5F0DF;
+  }
+
+  body[data-page="care"] .focus-section{
+    background:#FFFFFF;
+  }
+
+  body[data-page="care"] .trust-section{
+    background:#D7DDCE;
+  }
+
+  body[data-page="care"] .process{
+    background:#F5F1E5;
+  }
+
+  body[data-page="care"] .final{
+    background:
+      radial-gradient(
+        circle at 10% 30%,
+        rgba(113,139,96,.16),
+        transparent 38%
+      ),
+      #263A27;
+  }
+
+}
