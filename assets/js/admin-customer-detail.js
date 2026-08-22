@@ -1,103 +1,38 @@
 (() => {
   'use strict';
 
+  const identity = document.getElementById('adminIdentity');
+  const logoutButton = document.getElementById('logoutButton');
+  const detailMessage = document.getElementById('detailMessage');
 
-  // ============================================================
-  // ELEMENTS
-  // ============================================================
+  const managementForm = document.getElementById('customerManagementForm');
+  const statusSelect = document.getElementById('customerStatusSelect');
+  const notesInput = document.getElementById('customerNotes');
+  const saveCustomerButton = document.getElementById('saveCustomerButton');
+  const managementMessage = document.getElementById('customerManagementMessage');
 
-  const identity =
-    document.getElementById('adminIdentity');
+  const visitForm = document.getElementById('visitScheduleForm');
+  const visitScheduledAt = document.getElementById('visitScheduledAt');
+  const visitCareArea = document.getElementById('visitCareArea');
+  const scheduleVisitButton = document.getElementById('scheduleVisitButton');
+  const visitMessage = document.getElementById('visitScheduleMessage');
 
-  const logoutButton =
-    document.getElementById('logoutButton');
+  const careCompleteForm = document.getElementById('careCompleteForm');
+  const careVisitSelect = document.getElementById('careVisitSelect');
+  const beforeDiagnosisInput = document.getElementById('beforeDiagnosis');
+  const afterDiagnosisInput = document.getElementById('afterDiagnosis');
+  const visitAdminMemoInput = document.getElementById('visitAdminMemo');
+  const completeCareButton = document.getElementById('completeCareButton');
+  const careCompleteMessage = document.getElementById('careCompleteMessage');
 
-  const detailMessage =
-    document.getElementById('detailMessage');
-
-
-  const managementForm =
-    document.getElementById('customerManagementForm');
-
-  const statusSelect =
-    document.getElementById('customerStatusSelect');
-
-  const notesInput =
-    document.getElementById('customerNotes');
-
-  const saveCustomerButton =
-    document.getElementById('saveCustomerButton');
-
-  const managementMessage =
-    document.getElementById('customerManagementMessage');
-
-
-  const visitForm =
-    document.getElementById('visitScheduleForm');
-
-  const visitScheduledAt =
-    document.getElementById('visitScheduledAt');
-
-  const visitCareArea =
-    document.getElementById('visitCareArea');
-
-  const scheduleVisitButton =
-    document.getElementById('scheduleVisitButton');
-
-  const visitMessage =
-    document.getElementById('visitScheduleMessage');
-
-
-  const careCompleteForm =
-    document.getElementById('careCompleteForm');
-
-  const careVisitSelect =
-    document.getElementById('careVisitSelect');
-
-  const beforeDiagnosisInput =
-    document.getElementById('beforeDiagnosis');
-
-  const afterDiagnosisInput =
-    document.getElementById('afterDiagnosis');
-
-  const visitAdminMemoInput =
-    document.getElementById('visitAdminMemo');
-
-  const completeCareButton =
-    document.getElementById('completeCareButton');
-
-  const careCompleteMessage =
-    document.getElementById('careCompleteMessage');
-
-
-  const reportEditorForm =
-    document.getElementById('reportEditorForm');
-
-  const reportEditorId =
-    document.getElementById('reportEditorId');
-
-  const reportManagerComment =
-    document.getElementById('reportManagerComment');
-
-  const reportNextCare =
-    document.getElementById('reportNextCare');
-
-  const reportEditStatus =
-    document.getElementById('reportEditStatus');
-
-  const saveReportButton =
-    document.getElementById('saveReportButton');
-
-  const publishReportButton =
-    document.getElementById('publishReportButton');
-
-  const reportEditorMessage =
-    document.getElementById('reportEditorMessage');
-
-
-  // ============================================================
-  // LABELS
-  // ============================================================
+  const reportEditorForm = document.getElementById('reportEditorForm');
+  const reportEditorId = document.getElementById('reportEditorId');
+  const reportManagerComment = document.getElementById('reportManagerComment');
+  const reportNextCare = document.getElementById('reportNextCare');
+  const reportEditStatus = document.getElementById('reportEditStatus');
+  const saveReportButton = document.getElementById('saveReportButton');
+  const publishReportButton = document.getElementById('publishReportButton');
+  const reportEditorMessage = document.getElementById('reportEditorMessage');
 
   const STATUS_LABELS = {
     new: '신규 문의',
@@ -108,7 +43,6 @@
     closed: '종료'
   };
 
-
   const VISIT_LABELS = {
     scheduled: '방문 예정',
     in_progress: '진행 중',
@@ -116,57 +50,27 @@
     cancelled: '취소'
   };
 
-
   const REPORT_LABELS = {
     draft: '작성 중',
     published: '발행',
     archived: '보관'
   };
 
+  const ALLOWED_STATUSES = new Set(Object.keys(STATUS_LABELS));
 
-  const ALLOWED_STATUSES =
-    new Set(
-      Object.keys(
-        STATUS_LABELS
-      )
-    );
-
-
-  const ALLOWED_CARE_ITEMS =
-    new Set([
-      '매트리스 케어',
-      '패브릭 케어',
-      '실내 공간 케어',
-      '바닥 케어'
-    ]);
-
-
-  const ALLOWED_V2_PLANS =
-    new Set([
-      'STANDARD',
-      'PLUS',
-      'SIGNATURE'
-    ]);
-
+  const ALLOWED_CARE_ITEMS = new Set([
+    '매트리스 케어',
+    '패브릭 케어',
+    '실내 공간 케어',
+    '바닥 케어'
+  ]);
 
   const UUID_PATTERN =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-
-  // ============================================================
-  // STATE
-  // ============================================================
-
   let authContext = null;
-
   let customerId = null;
-
   let latestDiagnosisId = null;
-
-
-  // ============================================================
-  // DOM HELPERS
-  // ============================================================
 
   const make = (
     tag,
@@ -189,12 +93,15 @@
     return node;
   };
 
-
   const setMessage = (
     node,
     text,
     ok = false
   ) => {
+    if (!node) {
+      return;
+    }
+
     node.textContent =
       text;
 
@@ -204,13 +111,16 @@
     );
   };
 
-
   const setBusy = (
     button,
     busy,
     busyLabel,
     normalLabel
   ) => {
+    if (!button) {
+      return;
+    }
+
     button.disabled =
       busy;
 
@@ -219,11 +129,6 @@
         ? busyLabel
         : normalLabel;
   };
-
-
-  // ============================================================
-  // DATE
-  // ============================================================
 
   const formatDateTime = (
     value
@@ -252,9 +157,10 @@
         hour: '2-digit',
         minute: '2-digit'
       }
-    ).format(date);
+    ).format(
+      date
+    );
   };
-
 
   const formatDate = (
     value
@@ -281,12 +187,217 @@
         month: '2-digit',
         day: '2-digit'
       }
-    ).format(date);
+    ).format(
+      date
+    );
   };
 
 
   // ============================================================
-  // PUBLIC CARE REPORT
+  // CONFIRMED BOOKING → VISIT FORM
+  // ============================================================
+
+  const bookingToLocalInputValue = (
+    booking
+  ) => {
+    if (
+      !booking?.booking_date ||
+      !booking?.booking_time
+    ) {
+      return '';
+    }
+
+    const time =
+      String(
+        booking.booking_time
+      ).slice(
+        0,
+        5
+      );
+
+    if (
+      !/^\d{2}:\d{2}$/.test(
+        time
+      )
+    ) {
+      return '';
+    }
+
+    return `${booking.booking_date}T${time}`;
+  };
+
+
+  const visitMatchesConfirmedBooking = (
+    visit,
+    booking
+  ) => {
+    if (
+      !visit?.scheduled_at ||
+      !booking?.booking_date ||
+      !booking?.booking_time
+    ) {
+      return false;
+    }
+
+    const date =
+      new Date(
+        visit.scheduled_at
+      );
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return false;
+    }
+
+    const parts =
+      new Intl.DateTimeFormat(
+        'en-CA',
+        {
+          timeZone:
+            'Asia/Seoul',
+
+          year:
+            'numeric',
+
+          month:
+            '2-digit',
+
+          day:
+            '2-digit',
+
+          hour:
+            '2-digit',
+
+          minute:
+            '2-digit',
+
+          hourCycle:
+            'h23'
+        }
+      ).formatToParts(
+        date
+      );
+
+    const values =
+      Object.fromEntries(
+        parts.map(
+          (part) => [
+            part.type,
+            part.value
+          ]
+        )
+      );
+
+    const visitDate =
+      `${values.year}-${values.month}-${values.day}`;
+
+    const visitTime =
+      `${values.hour}:${values.minute}`;
+
+    const bookingTime =
+      String(
+        booking.booking_time
+      ).slice(
+        0,
+        5
+      );
+
+    return (
+      visitDate ===
+        booking.booking_date &&
+      visitTime ===
+        bookingTime
+    );
+  };
+
+
+  const applyConfirmedBookingToVisitForm = (
+    booking,
+    visits
+  ) => {
+    if (
+      !visitScheduledAt ||
+      !visitMessage
+    ) {
+      return;
+    }
+
+    if (!booking) {
+      return;
+    }
+
+    const inputValue =
+      bookingToLocalInputValue(
+        booking
+      );
+
+    if (!inputValue) {
+      return;
+    }
+
+    const alreadyRegistered =
+      (visits || []).some(
+        (visit) =>
+          visitMatchesConfirmedBooking(
+            visit,
+            booking
+          )
+      );
+
+    if (
+      alreadyRegistered
+    ) {
+      if (
+        visitScheduledAt.value ===
+        inputValue
+      ) {
+        visitScheduledAt.value =
+          '';
+      }
+
+      setMessage(
+        visitMessage,
+        `예약관리에서 확정된 ${formatDateTime(
+          `${booking.booking_date}T${String(
+            booking.booking_time
+          ).slice(
+            0,
+            5
+          )}:00+09:00`
+        )} 일정은 이미 방문 일정으로 등록되어 있습니다.`,
+        true
+      );
+
+      return;
+    }
+
+    if (
+      !visitScheduledAt.value
+    ) {
+      visitScheduledAt.value =
+        inputValue;
+
+      setMessage(
+        visitMessage,
+        `예약관리에서 확정된 방문 일정이 자동으로 반영되었습니다. · ${formatDateTime(
+          `${booking.booking_date}T${String(
+            booking.booking_time
+          ).slice(
+            0,
+            5
+          )}:00+09:00`
+        )}`,
+        true
+      );
+    }
+  };
+
+
+  // ============================================================
+  // PUBLIC REPORT
   // ============================================================
 
   function buildPublicReportUrl(
@@ -324,7 +435,6 @@
         publicToken
       );
 
-
     if (!url) {
       setMessage(
         detailMessage,
@@ -334,22 +444,16 @@
       return;
     }
 
-
     const originalLabel =
       button.textContent;
 
-
     try {
-      await navigator
-        .clipboard
-        .writeText(
-          url
-        );
-
+      await navigator.clipboard.writeText(
+        url
+      );
 
       button.textContent =
         '복사 완료';
-
 
       setMessage(
         detailMessage,
@@ -357,19 +461,18 @@
         true
       );
 
-
-    } catch (error) {
+    } catch (
+      error
+    ) {
       console.error(
         'MOOHAE report link copy error:',
         error
       );
 
-
       setMessage(
         detailMessage,
         '링크를 복사하지 못했습니다. 리포트 보기 버튼으로 열어주세요.'
       );
-
 
     } finally {
       window.setTimeout(
@@ -391,7 +494,6 @@
         publicToken
       );
 
-
     if (!url) {
       setMessage(
         detailMessage,
@@ -400,7 +502,6 @@
 
       return;
     }
-
 
     window.open(
       url,
@@ -411,13 +512,12 @@
 
 
   // ============================================================
-  // AUTH
+  // ADMIN AUTH
   // ============================================================
 
   async function requireAuthorizedAdmin() {
     if (
-      !window
-        .moohaeSupabaseConfigReady
+      !window.moohaeSupabaseConfigReady
     ) {
       window.location.replace(
         './login.html'
@@ -425,7 +525,6 @@
 
       return null;
     }
-
 
     const {
       data,
@@ -435,7 +534,6 @@
         .moohaeSupabase
         .auth
         .getUser();
-
 
     if (
       error ||
@@ -448,10 +546,12 @@
       return null;
     }
 
-
     const {
-      data: profile,
-      error: profileError
+      data:
+        profile,
+
+      error:
+        profileError
     } =
       await window
         .moohaeSupabase
@@ -467,23 +567,25 @@
         )
         .maybeSingle();
 
-
     const allowed =
       !profileError &&
       profile &&
-      profile.is_active === true &&
+      profile.is_active ===
+        true &&
       (
-        profile.role === 'admin' ||
-        profile.role === 'manager'
+        profile.role ===
+          'admin' ||
+        profile.role ===
+          'manager'
       );
 
-
-    if (!allowed) {
+    if (
+      !allowed
+    ) {
       await window
         .moohaeSupabase
         .auth
         .signOut();
-
 
       window.location.replace(
         './login.html'
@@ -491,7 +593,6 @@
 
       return null;
     }
-
 
     return {
       user:
@@ -503,7 +604,7 @@
 
 
   // ============================================================
-  // CHIP RENDERER
+  // UI HELPERS
   // ============================================================
 
   function renderChips(
@@ -512,10 +613,12 @@
   ) {
     parent.replaceChildren();
 
-
     if (
-      !Array.isArray(values) ||
-      values.length === 0
+      !Array.isArray(
+        values
+      ) ||
+      values.length ===
+        0
     ) {
       parent.appendChild(
         make(
@@ -528,7 +631,6 @@
       return;
     }
 
-
     for (
       const value
       of values
@@ -537,78 +639,16 @@
         make(
           'span',
           'mini-chip',
-          String(value)
+          String(
+            value
+          )
         )
       );
     }
   }
 
 
-  // ============================================================
-  // DIAGNOSIS HELPERS
-  // ============================================================
-
-  function appendHistoryGroup(
-    article,
-    label,
-    values
-  ) {
-    const block =
-      make(
-        'div',
-        'history-group'
-      );
-
-
-    block.appendChild(
-      make(
-        'span',
-        'history-label',
-        label
-      )
-    );
-
-
-    const chips =
-      make(
-        'div',
-        'chip-line'
-      );
-
-
-    renderChips(
-      chips,
-      values
-    );
-
-
-    block.appendChild(
-      chips
-    );
-
-
-    article.appendChild(
-      block
-    );
-  }
-
-
-  function isV2Diagnosis(
-    diagnosis
-  ) {
-    return (
-      Number(
-        diagnosis.check_version
-      ) === 2
-    );
-  }
-
-
-  // ============================================================
-  // MOOHAE CHECK V2 CARD
-  // ============================================================
-
-  function diagnosisCardV2(
+  function diagnosisCard(
     diagnosis,
     isLatest = false
   ) {
@@ -618,175 +658,25 @@
         'history-item'
       );
 
-
     const header =
       make(
         'div',
         'history-item-head'
       );
 
-
     const left =
-      make('div');
-
-
-    left.appendChild(
       make(
-        'strong',
-        '',
-        'MOOHAE CHECK · V2'
-      )
-    );
-
-
-    left.appendChild(
-      make(
-        'span',
-        '',
-        formatDateTime(
-          diagnosis.created_at
-        )
-      )
-    );
-
-
-    header.appendChild(
-      left
-    );
-
-
-    if (isLatest) {
-      header.appendChild(
-        make(
-          'span',
-          'count-pill',
-          'LATEST'
-        )
+        'div'
       );
-    }
-
-
-    article.appendChild(
-      header
-    );
-
-
-    // ----------------------------------------------------------
-    // RECOMMENDED PLAN
-    //
-    // 가격은 절대 표시하지 않음
-    // ----------------------------------------------------------
-
-    if (
-      ALLOWED_V2_PLANS.has(
-        diagnosis.recommended_plan
-      )
-    ) {
-      appendHistoryGroup(
-        article,
-        '추천 관리 유형',
-        [
-          diagnosis.recommended_plan
-        ]
-      );
-    }
-
-
-    // ----------------------------------------------------------
-    // HOME PROFILE
-    // ----------------------------------------------------------
-
-    appendHistoryGroup(
-      article,
-      '함께 생활',
-      diagnosis.household
-    );
-
-
-    appendHistoryGroup(
-      article,
-      '주요 생활공간',
-      diagnosis.living_spaces
-    );
-
-
-    appendHistoryGroup(
-      article,
-      '신경 쓰이는 생활 접촉면',
-      diagnosis.contact_surfaces
-    );
-
-
-    appendHistoryGroup(
-      article,
-      '관리 고민',
-      diagnosis.management_worries
-    );
-
-
-    appendHistoryGroup(
-      article,
-      '원하는 관리 방식',
-      diagnosis.management_preference
-    );
-
-
-    // ----------------------------------------------------------
-    // SERVER RESULT MESSAGE
-    // ----------------------------------------------------------
-
-    if (
-      diagnosis.result_message
-    ) {
-      article.appendChild(
-        make(
-          'p',
-          'history-copy',
-          diagnosis.result_message
-        )
-      );
-    }
-
-
-    return article;
-  }
-
-
-  // ============================================================
-  // LEGACY V1 DIAGNOSIS CARD
-  // ============================================================
-
-  function diagnosisCardV1(
-    diagnosis,
-    isLatest = false
-  ) {
-    const article =
-      make(
-        'article',
-        'history-item'
-      );
-
-
-    const header =
-      make(
-        'div',
-        'history-item-head'
-      );
-
-
-    const left =
-      make('div');
-
 
     left.appendChild(
       make(
         'strong',
         '',
         diagnosis.result_level ||
-        '진단'
+          '진단'
       )
     );
-
 
     left.appendChild(
       make(
@@ -798,13 +688,13 @@
       )
     );
 
-
     header.appendChild(
       left
     );
 
-
-    if (isLatest) {
+    if (
+      isLatest
+    ) {
       header.appendChild(
         make(
           'span',
@@ -814,46 +704,73 @@
       );
     }
 
-
     article.appendChild(
       header
     );
 
+    const groups = [
+      [
+        '생활 공간',
+        diagnosis.spaces
+      ],
+      [
+        '신경 쓰이는 부분',
+        diagnosis.concerns
+      ],
+      [
+        '관리 어려움',
+        diagnosis.difficulties
+      ],
+      [
+        '알레르기 관련 고민',
+        diagnosis.allergy_concerns
+      ],
+      [
+        '희망 방식',
+        diagnosis.preferred_contact
+      ]
+    ];
 
-    appendHistoryGroup(
-      article,
-      '생활 공간',
-      diagnosis.spaces
-    );
+    for (
+      const [
+        label,
+        values
+      ]
+      of groups
+    ) {
+      const block =
+        make(
+          'div',
+          'history-group'
+        );
 
+      block.appendChild(
+        make(
+          'span',
+          'history-label',
+          label
+        )
+      );
 
-    appendHistoryGroup(
-      article,
-      '신경 쓰이는 부분',
-      diagnosis.concerns
-    );
+      const chips =
+        make(
+          'div',
+          'chip-line'
+        );
 
+      renderChips(
+        chips,
+        values
+      );
 
-    appendHistoryGroup(
-      article,
-      '관리 어려움',
-      diagnosis.difficulties
-    );
+      block.appendChild(
+        chips
+      );
 
-
-    appendHistoryGroup(
-      article,
-      '알레르기 관련 고민',
-      diagnosis.allergy_concerns
-    );
-
-
-    appendHistoryGroup(
-      article,
-      '희망 방식',
-      diagnosis.preferred_contact
-    );
-
+      article.appendChild(
+        block
+      );
+    }
 
     if (
       diagnosis.result_message
@@ -867,41 +784,9 @@
       );
     }
 
-
     return article;
   }
 
-
-  // ============================================================
-  // DIAGNOSIS ROUTER
-  // ============================================================
-
-  function diagnosisCard(
-    diagnosis,
-    isLatest = false
-  ) {
-    if (
-      isV2Diagnosis(
-        diagnosis
-      )
-    ) {
-      return diagnosisCardV2(
-        diagnosis,
-        isLatest
-      );
-    }
-
-
-    return diagnosisCardV1(
-      diagnosis,
-      isLatest
-    );
-  }
-
-
-  // ============================================================
-  // VISIT CARD
-  // ============================================================
 
   function visitCard(
     visit
@@ -912,27 +797,25 @@
         'history-item'
       );
 
-
     const head =
       make(
         'div',
         'history-item-head'
       );
 
-
     const left =
-      make('div');
-
+      make(
+        'div'
+      );
 
     left.appendChild(
       make(
         'strong',
         '',
         visit.care_area ||
-        '방문 케어'
+          '방문 케어'
       )
     );
-
 
     left.appendChild(
       make(
@@ -945,11 +828,9 @@
       )
     );
 
-
     head.appendChild(
       left
     );
-
 
     head.appendChild(
       make(
@@ -958,15 +839,13 @@
         VISIT_LABELS[
           visit.visit_status
         ] ||
-        '상태 미정'
+          '상태 미정'
       )
     );
-
 
     article.appendChild(
       head
     );
-
 
     if (
       Array.isArray(
@@ -980,18 +859,15 @@
           'chip-line'
         );
 
-
       renderChips(
         chips,
         visit.care_items
       );
 
-
       article.appendChild(
         chips
       );
     }
-
 
     if (
       visit.before_diagnosis
@@ -1005,7 +881,6 @@
       );
     }
 
-
     if (
       visit.after_diagnosis
     ) {
@@ -1018,14 +893,9 @@
       );
     }
 
-
     return article;
   }
 
-
-  // ============================================================
-  // CARE REPORT CARD
-  // ============================================================
 
   function reportCard(
     report
@@ -1036,17 +906,16 @@
         'history-item'
       );
 
-
     const head =
       make(
         'div',
         'history-item-head'
       );
 
-
     const left =
-      make('div');
-
+      make(
+        'div'
+      );
 
     left.appendChild(
       make(
@@ -1055,7 +924,6 @@
         'Care Report'
       )
     );
-
 
     left.appendChild(
       make(
@@ -1068,11 +936,9 @@
       )
     );
 
-
     head.appendChild(
       left
     );
-
 
     head.appendChild(
       make(
@@ -1081,15 +947,13 @@
         REPORT_LABELS[
           report.report_status
         ] ||
-        '상태 미정'
+          '상태 미정'
       )
     );
-
 
     article.appendChild(
       head
     );
-
 
     if (
       report.manager_comment
@@ -1103,7 +967,6 @@
       );
     }
 
-
     if (
       report.next_care_recommendation
     ) {
@@ -1115,11 +978,6 @@
         )
       );
     }
-
-
-    // ----------------------------------------------------------
-    // PUBLIC REPORT ACTIONS
-    // ----------------------------------------------------------
 
     if (
       report.report_status ===
@@ -1135,7 +993,6 @@
           'report-action-row'
         );
 
-
       const openButton =
         make(
           'button',
@@ -1143,10 +1000,8 @@
           '리포트 보기'
         );
 
-
       openButton.type =
         'button';
-
 
       openButton.addEventListener(
         'click',
@@ -1157,7 +1012,6 @@
         }
       );
 
-
       const copyButton =
         make(
           'button',
@@ -1165,10 +1019,8 @@
           '링크 복사'
         );
 
-
       copyButton.type =
         'button';
-
 
       copyButton.addEventListener(
         'click',
@@ -1180,52 +1032,43 @@
         }
       );
 
-
       actions.append(
         openButton,
         copyButton
       );
-
 
       article.appendChild(
         actions
       );
     }
 
-
     return article;
   }
 
 
   // ============================================================
-  // CARE COMPLETION
+  // CARE COMPLETION SELECT
   // ============================================================
 
   function populateCareCompletion(
     visits
   ) {
-    careVisitSelect
-      .replaceChildren();
-
+    careVisitSelect.replaceChildren();
 
     const placeholder =
       document.createElement(
         'option'
       );
 
-
     placeholder.value =
       '';
-
 
     placeholder.textContent =
       '방문 일정을 선택해주세요';
 
-
     careVisitSelect.appendChild(
       placeholder
     );
-
 
     const candidates =
       visits.filter(
@@ -1236,7 +1079,6 @@
             'in_progress'
       );
 
-
     for (
       const visit
       of candidates
@@ -1246,32 +1088,25 @@
           'option'
         );
 
-
       option.value =
         visit.id;
-
 
       option.textContent =
         `${formatDateTime(
           visit.scheduled_at
-        )} · ${
-          visit.care_area ||
-          '케어 공간 미입력'
-        }`;
-
+        )} · ${visit.care_area || '케어 공간 미입력'}`;
 
       careVisitSelect.appendChild(
         option
       );
     }
 
-
     if (
-      candidates.length === 0
+      candidates.length ===
+        0
     ) {
       careCompleteForm.hidden =
         true;
-
 
       setMessage(
         careCompleteMessage,
@@ -1279,11 +1114,9 @@
         true
       );
 
-
     } else {
       careCompleteForm.hidden =
         false;
-
 
       setMessage(
         careCompleteMessage,
@@ -1313,66 +1146,53 @@
       ) ||
       null;
 
-
-    if (!editable) {
+    if (
+      !editable
+    ) {
       reportEditorId.value =
         '';
-
 
       reportManagerComment.value =
         '';
 
-
       reportNextCare.value =
         '';
-
 
       reportEditStatus.textContent =
         '리포트 없음';
 
-
       reportEditStatus.className =
         'status-badge neutral';
-
 
       reportEditorForm.setAttribute(
         'aria-disabled',
         'true'
       );
 
-
       saveReportButton.disabled =
         true;
 
-
       publishReportButton.disabled =
         true;
-
 
       setMessage(
         reportEditorMessage,
         '케어 완료 처리 후 Care Report 초안이 자동 생성됩니다.'
       );
 
-
       return;
     }
 
-
     reportEditorId.value =
       editable.id;
-
 
     reportManagerComment.value =
       editable.manager_comment ||
       '';
 
-
     reportNextCare.value =
-      editable
-        .next_care_recommendation ||
+      editable.next_care_recommendation ||
       '';
-
 
     const label =
       REPORT_LABELS[
@@ -1380,35 +1200,28 @@
       ] ||
       '상태 미정';
 
-
     reportEditStatus.textContent =
       label;
 
-
     reportEditStatus.className =
       `status-badge status-${editable.report_status || 'neutral'}`;
-
 
     reportEditorForm.setAttribute(
       'aria-disabled',
       'false'
     );
 
-
     saveReportButton.disabled =
       false;
-
 
     publishReportButton.disabled =
       false;
 
-
     publishReportButton.textContent =
       editable.report_status ===
-      'published'
+        'published'
         ? '발행 내용 저장'
         : '리포트 발행';
-
 
     setMessage(
       reportEditorMessage,
@@ -1418,7 +1231,7 @@
 
 
   // ============================================================
-  // LOAD CUSTOMER
+  // LOAD CUSTOMER DATA
   // ============================================================
 
   async function loadCustomerData() {
@@ -1426,15 +1239,10 @@
       customerResult,
       diagnosisResult,
       visitResult,
-      reportResult
+      reportResult,
+      confirmedBookingResult
     ] =
       await Promise.all([
-
-
-        // ------------------------------------------------------
-        // CUSTOMER
-        // ------------------------------------------------------
-
         window
           .moohaeSupabase
           .from(
@@ -1449,39 +1257,14 @@
           )
           .maybeSingle(),
 
-
-        // ------------------------------------------------------
-        // MOOHAE CHECK
-        //
-        // V1 + V2 모두 조회
-        // ------------------------------------------------------
-
         window
           .moohaeSupabase
           .from(
             'diagnoses'
           )
-          .select(`
-            id,
-            check_version,
-
-            household,
-            living_spaces,
-            contact_surfaces,
-            management_worries,
-            management_preference,
-            recommended_plan,
-
-            spaces,
-            concerns,
-            difficulties,
-            allergy_concerns,
-            preferred_contact,
-            result_level,
-            result_message,
-
-            created_at
-          `)
+          .select(
+            'id, spaces, concerns, difficulties, allergy_concerns, preferred_contact, result_level, result_message, created_at'
+          )
           .eq(
             'customer_id',
             customerId
@@ -1489,14 +1272,10 @@
           .order(
             'created_at',
             {
-              ascending: false
+              ascending:
+                false
             }
           ),
-
-
-        // ------------------------------------------------------
-        // CARE VISITS
-        // ------------------------------------------------------
 
         window
           .moohaeSupabase
@@ -1513,14 +1292,10 @@
           .order(
             'created_at',
             {
-              ascending: false
+              ascending:
+                false
             }
           ),
-
-
-        // ------------------------------------------------------
-        // REPORTS
-        // ------------------------------------------------------
 
         window
           .moohaeSupabase
@@ -1537,16 +1312,21 @@
           .order(
             'created_at',
             {
-              ascending: false
+              ascending:
+                false
+            }
+          ),
+
+        window
+          .moohaeSupabase
+          .rpc(
+            'admin_get_customer_confirmed_booking',
+            {
+              p_customer_id:
+                customerId
             }
           )
-
       ]);
-
-
-    // ==========================================================
-    // ERROR CHECK
-    // ==========================================================
 
     if (
       customerResult.error ||
@@ -1560,13 +1340,11 @@
       );
     }
 
-
     if (
       diagnosisResult.error
     ) {
       throw diagnosisResult.error;
     }
-
 
     if (
       visitResult.error
@@ -1574,79 +1352,71 @@
       throw visitResult.error;
     }
 
-
     if (
       reportResult.error
     ) {
       throw reportResult.error;
     }
 
-
-    // ==========================================================
-    // DATA
-    // ==========================================================
+    if (
+      confirmedBookingResult.error
+    ) {
+      throw confirmedBookingResult.error;
+    }
 
     const customer =
       customerResult.data;
-
 
     const diagnoses =
       diagnosisResult.data ||
       [];
 
-
     const visits =
       visitResult.data ||
       [];
-
 
     const reports =
       reportResult.data ||
       [];
 
+    const confirmedBooking =
+      Array.isArray(
+        confirmedBookingResult.data
+      )
+        ? confirmedBookingResult.data[0] ||
+          null
+        : confirmedBookingResult.data ||
+          null;
 
     latestDiagnosisId =
       diagnoses[0]?.id ||
       null;
 
-
     populateCareCompletion(
       visits
     );
-
 
     populateReportEditor(
       reports
     );
 
+    applyConfirmedBookingToVisitForm(
+      confirmedBooking,
+      visits
+    );
 
-    // ==========================================================
-    // CUSTOMER HERO
-    // ==========================================================
+    document.getElementById(
+      'customerName'
+    ).textContent =
+      customer.name ||
+      '이름 없음';
 
-    document
-      .getElementById(
-        'customerName'
-      )
-      .textContent =
-        customer.name ||
-        '이름 없음';
-
-
-    document
-      .getElementById(
-        'customerMeta'
-      )
-      .textContent =
-        `${
-          customer.phone ||
-          '연락처 미등록'
-        } · 등록 ${
-          formatDate(
-            customer.created_at
-          )
-        }`;
-
+    document.getElementById(
+      'customerMeta'
+    ).textContent =
+      `${customer.phone || '연락처 미등록'} · 등록 ${formatDate(
+        customer.created_at
+      )}`;
 
     const statusText =
       STATUS_LABELS[
@@ -1654,73 +1424,49 @@
       ] ||
       '상태 미정';
 
-
     const statusBadge =
       document.getElementById(
         'customerStatus'
       );
 
-
     statusBadge.textContent =
       statusText;
-
 
     statusBadge.className =
       `status-badge status-${customer.status || 'neutral'}`;
 
+    document.getElementById(
+      'detailName'
+    ).textContent =
+      customer.name ||
+      '—';
 
-    // ==========================================================
-    // BASIC INFO
-    // ==========================================================
+    document.getElementById(
+      'detailPhone'
+    ).textContent =
+      customer.phone ||
+      '—';
 
-    document
-      .getElementById(
-        'detailName'
-      )
-      .textContent =
-        customer.name ||
-        '—';
+    document.getElementById(
+      'detailStatus'
+    ).textContent =
+      statusText;
 
+    document.getElementById(
+      'detailConsent'
+    ).textContent =
+      customer.privacy_consent
+        ? `동의 · ${formatDate(
+            customer.privacy_consented_at
+          )}`
+        : '미동의';
 
-    document
-      .getElementById(
-        'detailPhone'
-      )
-      .textContent =
-        customer.phone ||
-        '—';
-
-
-    document
-      .getElementById(
-        'detailStatus'
-      )
-      .textContent =
-        statusText;
-
-
-    document
-      .getElementById(
-        'detailConsent'
-      )
-      .textContent =
-        customer.privacy_consent
-          ? `동의 · ${formatDate(
-              customer
-                .privacy_consented_at
-            )}`
-          : '미동의';
-
-
-    document
-      .getElementById(
-        'detailCreatedAt'
-      )
-      .textContent =
-        formatDateTime(
-          customer.created_at
-        );
-
+    document.getElementById(
+      'detailCreatedAt'
+    ).textContent =
+      formatDateTime(
+        customer.created_at
+      );
 
     statusSelect.value =
       ALLOWED_STATUSES.has(
@@ -1729,25 +1475,16 @@
         ? customer.status
         : 'new';
 
-
     notesInput.value =
       customer.notes ||
       '';
-
-
-    // ==========================================================
-    // LATEST MOOHAE CHECK
-    // ==========================================================
 
     const latestDiagnosis =
       document.getElementById(
         'latestDiagnosis'
       );
 
-
-    latestDiagnosis
-      .replaceChildren();
-
+    latestDiagnosis.replaceChildren();
 
     if (
       diagnoses.length
@@ -1759,41 +1496,29 @@
         )
       );
 
-
     } else {
       latestDiagnosis.appendChild(
         make(
           'p',
           'muted-copy',
-          '아직 MOOHAE CHECK 기록이 없습니다.'
+          '아직 온라인 진단 기록이 없습니다.'
         )
       );
     }
-
-
-    // ==========================================================
-    // MOOHAE CHECK HISTORY
-    // ==========================================================
 
     const diagnosisHistory =
       document.getElementById(
         'diagnosisHistory'
       );
 
+    diagnosisHistory.replaceChildren();
 
-    diagnosisHistory
-      .replaceChildren();
-
-
-    document
-      .getElementById(
-        'diagnosisHistoryCount'
-      )
-      .textContent =
-        String(
-          diagnoses.length
-        );
-
+    document.getElementById(
+      'diagnosisHistoryCount'
+    ).textContent =
+      String(
+        diagnoses.length
+      );
 
     if (
       diagnoses.length
@@ -1802,65 +1527,51 @@
         (
           item,
           index
-        ) => {
+        ) =>
           diagnosisHistory.appendChild(
             diagnosisCard(
               item,
-              index === 0
+              index ===
+                0
             )
-          );
-        }
+          )
       );
-
 
     } else {
       diagnosisHistory.appendChild(
         make(
           'p',
           'muted-copy',
-          'MOOHAE CHECK 기록이 없습니다.'
+          '진단 기록이 없습니다.'
         )
       );
     }
-
-
-    // ==========================================================
-    // VISIT HISTORY
-    // ==========================================================
 
     const visitHistory =
       document.getElementById(
         'visitHistory'
       );
 
+    visitHistory.replaceChildren();
 
-    visitHistory
-      .replaceChildren();
-
-
-    document
-      .getElementById(
-        'visitHistoryCount'
-      )
-      .textContent =
-        String(
-          visits.length
-        );
-
+    document.getElementById(
+      'visitHistoryCount'
+    ).textContent =
+      String(
+        visits.length
+      );
 
     if (
       visits.length
     ) {
       visits.forEach(
-        (item) => {
+        (item) =>
           visitHistory.appendChild(
             visitCard(
               item
             )
-          );
-        }
+          )
       );
-
 
     } else {
       visitHistory.appendChild(
@@ -1872,44 +1583,31 @@
       );
     }
 
-
-    // ==========================================================
-    // REPORT HISTORY
-    // ==========================================================
-
     const reportHistory =
       document.getElementById(
         'reportHistory'
       );
 
+    reportHistory.replaceChildren();
 
-    reportHistory
-      .replaceChildren();
-
-
-    document
-      .getElementById(
-        'reportHistoryCount'
-      )
-      .textContent =
-        String(
-          reports.length
-        );
-
+    document.getElementById(
+      'reportHistoryCount'
+    ).textContent =
+      String(
+        reports.length
+      );
 
     if (
       reports.length
     ) {
       reports.forEach(
-        (item) => {
+        (item) =>
           reportHistory.appendChild(
             reportCard(
               item
             )
-          );
-        }
+          )
       );
-
 
     } else {
       reportHistory.appendChild(
@@ -1920,7 +1618,6 @@
         )
       );
     }
-
 
     detailMessage.textContent =
       '고객 데이터가 정상적으로 연결되었습니다.';
@@ -1938,22 +1635,16 @@
     ) => {
       event.preventDefault();
 
-
       setMessage(
         managementMessage,
         ''
       );
 
-
       const status =
         statusSelect.value;
 
-
       const notes =
-        notesInput
-          .value
-          .trim();
-
+        notesInput.value.trim();
 
       if (
         !ALLOWED_STATUSES.has(
@@ -1968,7 +1659,6 @@
         return;
       }
 
-
       if (
         notes.length >
         5000
@@ -1981,14 +1671,12 @@
         return;
       }
 
-
       setBusy(
         saveCustomerButton,
         true,
         '저장 중...',
         '고객 정보 저장'
       );
-
 
       try {
         const {
@@ -2011,11 +1699,11 @@
               }
             );
 
-
-        if (error) {
+        if (
+          error
+        ) {
           throw error;
         }
-
 
         setMessage(
           managementMessage,
@@ -2023,22 +1711,20 @@
           true
         );
 
-
         await loadCustomerData();
 
-
-      } catch (error) {
+      } catch (
+        error
+      ) {
         console.error(
           'MOOHAE customer update error:',
           error
         );
 
-
         setMessage(
           managementMessage,
           '고객 정보를 저장하지 못했습니다.'
         );
-
 
       } finally {
         setBusy(
@@ -2053,7 +1739,7 @@
 
 
   // ============================================================
-  // SCHEDULE VISIT
+  // VISIT SCHEDULE
   // ============================================================
 
   visitForm.addEventListener(
@@ -2063,41 +1749,32 @@
     ) => {
       event.preventDefault();
 
-
       setMessage(
         visitMessage,
         ''
       );
 
-
       const localDateTime =
         visitScheduledAt.value;
 
-
       const careArea =
-        visitCareArea
-          .value
-          .trim();
+        visitCareArea.value.trim();
 
-
-      const careItems =
-        [
-          ...visitForm
-            .querySelectorAll(
-              'input[name="careItem"]:checked'
+      const careItems = [
+        ...visitForm.querySelectorAll(
+          'input[name="careItem"]:checked'
+        )
+      ]
+        .map(
+          (input) =>
+            input.value
+        )
+        .filter(
+          (value) =>
+            ALLOWED_CARE_ITEMS.has(
+              value
             )
-        ]
-          .map(
-            (input) =>
-              input.value
-          )
-          .filter(
-            (value) =>
-              ALLOWED_CARE_ITEMS.has(
-                value
-              )
-          );
-
+        );
 
       if (
         !localDateTime
@@ -2110,12 +1787,10 @@
         return;
       }
 
-
       const date =
         new Date(
           localDateTime
         );
-
 
       if (
         Number.isNaN(
@@ -2130,7 +1805,6 @@
         return;
       }
 
-
       if (
         careArea.length >
         300
@@ -2143,14 +1817,12 @@
         return;
       }
 
-
       setBusy(
         scheduleVisitButton,
         true,
         '등록 중...',
         '방문 일정 등록'
       );
-
 
       try {
         const {
@@ -2179,11 +1851,11 @@
               }
             );
 
-
-        if (error) {
+        if (
+          error
+        ) {
           throw error;
         }
-
 
         setMessage(
           visitMessage,
@@ -2191,25 +1863,22 @@
           true
         );
 
-
         visitForm.reset();
-
 
         await loadCustomerData();
 
-
-      } catch (error) {
+      } catch (
+        error
+      ) {
         console.error(
           'MOOHAE visit schedule error:',
           error
         );
 
-
         setMessage(
           visitMessage,
           '방문 일정을 등록하지 못했습니다.'
         );
-
 
       } finally {
         setBusy(
@@ -2224,7 +1893,7 @@
 
 
   // ============================================================
-  // COMPLETE CARE
+  // CARE COMPLETE
   // ============================================================
 
   careCompleteForm.addEventListener(
@@ -2234,53 +1903,38 @@
     ) => {
       event.preventDefault();
 
-
       setMessage(
         careCompleteMessage,
         ''
       );
 
-
       const visitId =
         careVisitSelect.value;
 
-
       const beforeText =
-        beforeDiagnosisInput
-          .value
-          .trim();
-
+        beforeDiagnosisInput.value.trim();
 
       const afterText =
-        afterDiagnosisInput
-          .value
-          .trim();
-
+        afterDiagnosisInput.value.trim();
 
       const adminMemo =
-        visitAdminMemoInput
-          .value
-          .trim();
+        visitAdminMemoInput.value.trim();
 
-
-      const careItems =
-        [
-          ...careCompleteForm
-            .querySelectorAll(
-              'input[name="completedCareItem"]:checked'
+      const careItems = [
+        ...careCompleteForm.querySelectorAll(
+          'input[name="completedCareItem"]:checked'
+        )
+      ]
+        .map(
+          (input) =>
+            input.value
+        )
+        .filter(
+          (value) =>
+            ALLOWED_CARE_ITEMS.has(
+              value
             )
-        ]
-          .map(
-            (input) =>
-              input.value
-          )
-          .filter(
-            (value) =>
-              ALLOWED_CARE_ITEMS.has(
-                value
-              )
-          );
-
+        );
 
       if (
         !visitId ||
@@ -2296,7 +1950,6 @@
         return;
       }
 
-
       if (
         !beforeText ||
         !afterText
@@ -2308,7 +1961,6 @@
 
         return;
       }
-
 
       if (
         beforeText.length >
@@ -2324,7 +1976,6 @@
         return;
       }
 
-
       if (
         adminMemo.length >
         5000
@@ -2336,7 +1987,6 @@
 
         return;
       }
-
 
       if (
         careItems.length ===
@@ -2350,14 +2000,12 @@
         return;
       }
 
-
       setBusy(
         completeCareButton,
         true,
         '완료 처리 중...',
         '케어 완료 처리'
       );
-
 
       try {
         const {
@@ -2386,14 +2034,13 @@
               }
             );
 
-
-        if (error) {
+        if (
+          error
+        ) {
           throw error;
         }
 
-
         careCompleteForm.reset();
-
 
         setMessage(
           careCompleteMessage,
@@ -2401,22 +2048,20 @@
           true
         );
 
-
         await loadCustomerData();
 
-
-      } catch (error) {
+      } catch (
+        error
+      ) {
         console.error(
           'MOOHAE care complete error:',
           error
         );
 
-
         setMessage(
           careCompleteMessage,
           '케어 완료 처리 중 오류가 발생했습니다.'
         );
-
 
       } finally {
         setBusy(
@@ -2431,7 +2076,7 @@
 
 
   // ============================================================
-  // SAVE REPORT
+  // REPORT SAVE
   // ============================================================
 
   async function saveReport(
@@ -2442,22 +2087,14 @@
       ''
     );
 
-
     const reportId =
       reportEditorId.value;
 
-
     const managerComment =
-      reportManagerComment
-        .value
-        .trim();
-
+      reportManagerComment.value.trim();
 
     const nextCare =
-      reportNextCare
-        .value
-        .trim();
-
+      reportNextCare.value.trim();
 
     if (
       !reportId ||
@@ -2473,7 +2110,6 @@
       return;
     }
 
-
     if (
       managerComment.length >
       5000
@@ -2486,7 +2122,6 @@
       return;
     }
 
-
     if (
       nextCare.length >
       3000
@@ -2498,7 +2133,6 @@
 
       return;
     }
-
 
     if (
       status ===
@@ -2516,13 +2150,11 @@
       return;
     }
 
-
     const targetButton =
       status ===
         'published'
         ? publishReportButton
         : saveReportButton;
-
 
     const normalLabel =
       status ===
@@ -2530,13 +2162,11 @@
         ? '리포트 발행'
         : '임시 저장';
 
-
     const busyLabel =
       status ===
         'published'
         ? '발행 중...'
         : '저장 중...';
-
 
     setBusy(
       targetButton,
@@ -2544,7 +2174,6 @@
       busyLabel,
       normalLabel
     );
-
 
     try {
       const {
@@ -2571,39 +2200,35 @@
             }
           );
 
-
-      if (error) {
+      if (
+        error
+      ) {
         throw error;
       }
 
-
       setMessage(
         reportEditorMessage,
-
         status ===
           'published'
           ? 'Care Report가 발행 상태로 저장되었습니다.'
           : 'Care Report 초안이 저장되었습니다.',
-
         true
       );
 
-
       await loadCustomerData();
 
-
-    } catch (error) {
+    } catch (
+      error
+    ) {
       console.error(
         'MOOHAE report save error:',
         error
       );
 
-
       setMessage(
         reportEditorMessage,
         'Care Report를 저장하지 못했습니다.'
       );
-
 
     } finally {
       setBusy(
@@ -2618,21 +2243,18 @@
 
   saveReportButton.addEventListener(
     'click',
-    () => {
+    () =>
       saveReport(
         'draft'
-      );
-    }
+      )
   );
-
 
   publishReportButton.addEventListener(
     'click',
-    () => {
+    () =>
       saveReport(
         'published'
-      );
-    }
+      )
   );
 
 
@@ -2645,15 +2267,14 @@
       authContext =
         await requireAuthorizedAdmin();
 
-
-      if (!authContext) {
+      if (
+        !authContext
+      ) {
         return;
       }
 
-
       identity.textContent =
         `${authContext.profile.display_name} · ${authContext.profile.role}`;
-
 
       customerId =
         new URLSearchParams(
@@ -2661,7 +2282,6 @@
         ).get(
           'id'
         );
-
 
       if (
         !customerId ||
@@ -2672,28 +2292,24 @@
         detailMessage.textContent =
           '올바르지 않은 고객 주소입니다.';
 
-
         managementForm.hidden =
           true;
-
 
         visitForm.hidden =
           true;
 
-
         return;
       }
 
-
       await loadCustomerData();
 
-
-    } catch (error) {
+    } catch (
+      error
+    ) {
       console.error(
         'MOOHAE customer detail error:',
         error
       );
-
 
       detailMessage.textContent =
         '고객 정보를 불러오는 중 오류가 발생했습니다.';
@@ -2701,23 +2317,17 @@
   }
 
 
-  // ============================================================
-  // LOGOUT
-  // ============================================================
-
   logoutButton.addEventListener(
     'click',
     async () => {
       logoutButton.disabled =
         true;
 
-
       try {
         await window
           .moohaeSupabase
           .auth
           .signOut();
-
 
       } finally {
         window.location.replace(
@@ -2728,10 +2338,5 @@
   );
 
 
-  // ============================================================
-  // START
-  // ============================================================
-
   boot();
-
 })();
