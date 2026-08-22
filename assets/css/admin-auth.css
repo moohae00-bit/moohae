@@ -370,3 +370,224 @@ a{color:inherit;text-decoration:none}
   }
 
 }
+
+/* ============================================================
+   MOOHAE ADMIN — STEP 9D
+   MOBILE FORM STABILITY + CONTACT / ADDRESS ACTIONS
+   ============================================================ */
+
+/* Grid children must be allowed to shrink on narrow screens. */
+.detail-grid > *,
+.detail-card,
+.admin-form,
+.admin-form > label,
+.admin-form > fieldset,
+.info-list > div,
+.info-list dd {
+  min-width: 0;
+}
+
+/* Prevent native controls from expanding beyond the card width. */
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* iOS / Chromium datetime controls can carry an intrinsic minimum width. */
+.admin-form input[type="datetime-local"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-inline-size: 0;
+  inline-size: 100%;
+  max-inline-size: 100%;
+}
+
+/* Visit selector gets a larger touch target. */
+#careVisitSelect {
+  min-height: 56px;
+  padding-left: 14px;
+  padding-right: 38px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+/* ------------------------------------------------------------
+   CONTACT ACTIONS
+   ------------------------------------------------------------ */
+
+.contact-info-cell,
+.address-info-cell {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.contact-number {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.contact-action-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.contact-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-action-primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.contact-action-secondary {
+  background: #fff;
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------
+   ADDRESS
+   ------------------------------------------------------------ */
+
+.address-text {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  font-weight: 650;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+.address-empty {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.address-copy-button {
+  justify-self: start;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.address-copy-button:disabled {
+  opacity: .58;
+  cursor: default;
+}
+
+.clipboard-fallback {
+  position: fixed !important;
+  left: -9999px !important;
+  top: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ------------------------------------------------------------
+   MOBILE
+   ------------------------------------------------------------ */
+
+@media (max-width: 620px) {
+  .detail-shell {
+    width: min(100% - 24px, 1180px);
+  }
+
+  .detail-card {
+    overflow: hidden;
+  }
+
+  .admin-form {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .admin-form input[type="text"],
+  .admin-form input[type="datetime-local"],
+  .admin-form select {
+    min-height: 52px;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 16px; /* avoids iOS input zoom and improves tapping */
+  }
+
+  #visitScheduledAt {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  #careVisitSelect {
+    min-height: 58px;
+    padding-left: 14px;
+    padding-right: 38px;
+    font-size: 16px;
+  }
+
+  .info-list > div {
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .contact-action-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-action {
+    min-height: 44px;
+    padding: 9px 6px;
+    font-size: 10px;
+  }
+
+  .address-copy-button {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 360px) {
+  .info-list > div {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .contact-action-row {
+    grid-template-columns: 1fr;
+  }
+}
+
