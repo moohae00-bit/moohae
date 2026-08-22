@@ -46,8 +46,30 @@
     </form>
   </section>
 
+
+  <section class="booking-panel" id="bookingSection" hidden>
+    <div class="booking-panel-head">
+      <span class="eyebrow">VISIT CARE BOOKING</span>
+      <h3>우리 집을 직접 함께 살펴볼까요?</h3>
+      <p>예약 가능한 날짜와 시간을 선택해주세요. 담당자가 확인한 뒤 최종 일정을 안내드립니다.</p>
+    </div>
+
+    <div id="bookingCalendar" class="public-booking-calendar" aria-live="polite"></div>
+
+    <div class="booking-selection" id="bookingSelection" hidden>
+      <span>선택한 일정</span>
+      <strong id="bookingSelectedSummary">—</strong>
+    </div>
+
+    <button id="bookingSubmitButton" class="btn-primary booking-submit" type="button" disabled>
+      이 일정으로 방문 요청하기
+    </button>
+
+    <p id="bookingMessage" class="booking-public-message" role="status" aria-live="polite"></p>
+  </section>
+
   <div class="result-actions">
     <a href="https://pf.kakao.com/_uRbiX/chat" target="_blank" rel="noopener noreferrer" class="btn-text">카카오 상담 바로가기</a>
     <a href="./care.html" class="btn-text">MOOHAE 365 보기</a>
   </div>
-</section></main><div id="site-footer"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./assets/js/supabase-config.js"></script><script src="./assets/js/site.js"></script><script src="./assets/js/diagnosis.js?v=20260820-2"></script></body></html>
+</section></main><div id="site-footer"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./assets/js/supabase-config.js"></script><script src="./assets/js/site.js"></script><script src="./assets/js/diagnosis.js?v=20260820-2"></script><script src="./assets/js/diagnosis-booking.js?v=20260823-1"></script></body></html>

@@ -32,3 +32,38 @@
 .submit-message.success{color:var(--sage-dark)!important}
 .honeypot{position:absolute!important;left:-99999px!important;opacity:0!important;pointer-events:none!important;width:1px!important;height:1px!important}
 @media(max-width:600px){.lead-form{padding:22px 18px}.lead-form-head h3{font-size:21px}.consent-detail{margin-left:0!important}}
+
+
+/* ============================================================
+   MOOHAE CHECK — PUBLIC VISIT BOOKING
+   ============================================================ */
+.booking-panel{margin-top:30px;padding:28px;border:1px solid var(--line);border-radius:22px;background:#fff;text-align:left}
+.booking-panel[hidden]{display:none!important}
+.booking-panel-head h3{margin:8px 0 10px;font-size:24px;letter-spacing:-.035em}
+.booking-panel-head>p{margin:0;color:var(--gray);font-size:13px;line-height:1.7}
+.public-booking-calendar{display:flex;gap:12px;width:100%;margin-top:22px;padding:2px 2px 12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:thin}
+.public-booking-calendar::-webkit-scrollbar{height:6px}
+.public-booking-calendar::-webkit-scrollbar-track{background:transparent}
+.public-booking-calendar::-webkit-scrollbar-thumb{background:rgba(41,41,39,.16);border-radius:999px}
+.public-booking-day{flex:0 0 205px;min-width:205px;padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--paper);scroll-snap-align:start}
+.public-booking-day-head{display:block;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.public-booking-day-head span{display:block;color:var(--sage-dark);font-size:10px;font-weight:750;letter-spacing:.08em}
+.public-booking-day-head strong{display:block;margin-top:5px;font-size:16px;letter-spacing:-.03em}
+.public-booking-times{display:grid;gap:8px;margin-top:12px}
+.public-booking-time{min-height:42px;padding:0 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);cursor:pointer;font-size:12px;font-weight:700;transition:border-color .18s ease,background .18s ease,transform .18s ease}
+.public-booking-time:hover{border-color:rgba(102,125,101,.55);transform:translateY(-1px)}
+.public-booking-time.selected{border-color:var(--sage-dark);background:var(--sage-soft);color:var(--sage-dark)}
+.public-booking-time:disabled{opacity:.48;cursor:not-allowed;transform:none}
+.booking-selection{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px;padding:14px 16px;border-radius:14px;background:var(--sage-soft)}
+.booking-selection[hidden]{display:none!important}
+.booking-selection span{color:var(--sage-dark);font-size:10px;font-weight:750}
+.booking-selection strong{font-size:13px;text-align:right}
+.booking-submit{width:100%;margin-top:12px;border-radius:14px;cursor:pointer}
+.booking-submit:disabled{opacity:.48;cursor:not-allowed}
+.booking-public-message{min-height:20px!important;margin:10px 0 0!important;color:var(--gray)!important;font-size:11px!important;text-align:center;line-height:1.6!important}
+.booking-public-message.error{color:#a1544e!important}
+.booking-public-message.success{color:var(--sage-dark)!important}
+.booking-complete{padding:22px;border-radius:16px;background:var(--sage-soft);text-align:center}
+.booking-complete strong{display:block;color:var(--ink);font-size:16px}
+.booking-complete p{margin:8px 0 0!important;color:var(--ink-soft)!important;font-size:12px!important;line-height:1.65!important}
+@media(max-width:600px){.booking-panel{padding:22px 18px}.booking-panel-head h3{font-size:21px}.public-booking-calendar{width:calc(100% + 18px);margin-right:-18px;padding-right:18px;scrollbar-width:none}.public-booking-calendar::-webkit-scrollbar{display:none}.public-booking-day{flex:0 0 84%;min-width:84%}.booking-selection{align-items:flex-start;flex-direction:column;gap:5px}.booking-selection strong{text-align:left}}
