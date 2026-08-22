@@ -1,382 +1,13 @@
-*{box-sizing:border-box}
-:root{
-  --bg:#f3f1eb;
-  --paper:#fbfaf7;
-  --ink:#262824;
-  --muted:#7a7c76;
-  --line:rgba(38,40,36,.10);
-  --sage:#70886e;
-  --sage-soft:#e5ece2;
-  --danger:#9a514d;
-}
-html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Pretendard",sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
-button,input{font:inherit}
-button,a{touch-action:manipulation}
-a{color:inherit;text-decoration:none}
-.auth-page{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 78% 15%,rgba(112,136,110,.16),transparent 30%),var(--bg)}
-.auth-shell{width:min(100%,460px)}
-.auth-panel{padding:34px;border:1px solid var(--line);border-radius:28px;background:rgba(251,250,247,.96);box-shadow:0 30px 90px rgba(38,40,36,.08)}
-.auth-brand{display:flex;align-items:center;gap:10px}
-.auth-brand strong{font-size:24px;font-weight:900;letter-spacing:-.06em}
-.auth-brand span,.admin-logo span{padding:5px 8px;border-radius:999px;background:var(--ink);color:#fff;font-size:9px;font-weight:800;letter-spacing:.08em}
-.auth-copy{margin-top:52px}
-.eyebrow{margin:0 0 10px;color:var(--sage);font-size:10px;font-weight:800;letter-spacing:.13em}
-.auth-copy h1,.dashboard-hero h1{margin:0;letter-spacing:-.055em}
-.auth-copy h1{font-size:38px}
-.auth-copy>p:last-child,.dashboard-hero>p:last-child{color:var(--muted);line-height:1.7}
-.auth-form{display:grid;gap:15px;margin-top:32px}
-.auth-form label span{display:block;margin:0 0 7px;font-size:12px;font-weight:700}
-.auth-form input{width:100%;min-height:50px;padding:0 15px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);outline:none}
-.auth-form input:focus{border-color:rgba(112,136,110,.7);box-shadow:0 0 0 4px rgba(112,136,110,.10)}
-.primary-button,.secondary-button{border:0;border-radius:14px;cursor:pointer;font-weight:750}
-.primary-button{min-height:50px;margin-top:3px;background:var(--ink);color:#fff}
-.primary-button:disabled{opacity:.55;cursor:not-allowed}
-.secondary-button{padding:9px 13px;background:#fff;border:1px solid var(--line);color:var(--ink)}
-.form-message{min-height:20px;margin:0;color:var(--danger);font-size:12px;line-height:1.5}
-.form-message.success{color:var(--sage)}
-.auth-footer{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
-.auth-footer a{font-size:12px;font-weight:700}
-.auth-footer p{margin:10px 0 0;color:var(--muted);font-size:10px;line-height:1.5}
-
-.dashboard-page{min-height:100vh}
-.admin-topbar{position:sticky;top:0;z-index:10;min-height:66px;padding:0 max(20px,calc((100vw - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:20px;background:rgba(243,241,235,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.admin-logo{display:flex;align-items:center;gap:9px;font-size:21px;font-weight:900;letter-spacing:-.055em}
-.admin-topbar-actions{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px}
-.dashboard-shell{width:min(1180px,calc(100% - 36px));margin:0 auto;padding:72px 0 110px}
-.dashboard-hero{max-width:720px}
-.dashboard-hero h1{font-size:clamp(42px,7vw,72px);line-height:1.02}
-.dashboard-hero>p:last-child{max-width:560px}
-.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px}
-.metric-card{padding:24px;border:1px solid var(--line);border-radius:22px;background:var(--paper)}
-.metric-card span,.metric-card small{display:block;color:var(--muted);font-size:11px}
-.metric-card strong{display:block;margin:18px 0 12px;font-size:38px;letter-spacing:-.05em}
-.dashboard-card{display:grid;grid-template-columns:1fr .8fr;gap:36px;align-items:end;margin-top:18px;padding:30px;border-radius:24px;background:#2d312c;color:#fff}
-.dashboard-card h2{margin:0;font-size:30px;line-height:1.2;letter-spacing:-.045em}
-.dashboard-message{margin:0;color:rgba(255,255,255,.68);line-height:1.7}
-@media(max-width:760px){
-  .auth-panel{padding:26px 22px;border-radius:22px}
-  .auth-copy{margin-top:40px}
-  .auth-copy h1{font-size:34px}
-  .admin-topbar{padding:0 16px}
-  .admin-topbar-actions span{display:none}
-  .dashboard-shell{width:min(100% - 28px,1180px);padding-top:48px}
-  .metric-grid{grid-template-columns:1fr 1fr}
-  .dashboard-card{grid-template-columns:1fr}
-}
-
-.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
-.dashboard-hero.compact{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:end}
-.customer-section{margin-top:18px;padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--paper)}
-.section-heading{display:flex;justify-content:space-between;gap:28px;align-items:end}
-.section-heading h2,.detail-card h2{margin:0;font-size:28px;letter-spacing:-.04em}
-.customer-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:10px;margin-top:24px}
-.search-box input,.filter-box select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink);padding:0 14px;outline:none}
-.search-box input:focus,.filter-box select:focus{border-color:rgba(112,136,110,.65);box-shadow:0 0 0 4px rgba(112,136,110,.09)}
-.customer-list{margin-top:14px;border-top:1px solid var(--line)}
-.customer-row{display:grid;grid-template-columns:1.1fr 1.4fr .55fr .55fr;gap:18px;align-items:center;padding:18px 4px;border-bottom:1px solid var(--line);transition:opacity .18s ease,transform .18s ease}
-.customer-row:hover{opacity:.72;transform:translateX(3px)}
-.customer-primary strong,.customer-primary span,.customer-result strong,.customer-result span{display:block}
-.customer-primary strong{font-size:15px}
-.customer-primary span,.customer-result span{margin-top:5px;color:var(--muted);font-size:11px}
-.customer-result strong{font-size:12px;letter-spacing:.03em}
-.customer-concern,.chip-line{display:flex;flex-wrap:wrap;gap:6px}
-.mini-chip,.count-pill{display:inline-flex;align-items:center;min-height:25px;padding:4px 9px;border-radius:999px;background:var(--sage-soft);color:#52664f;font-size:10px;font-weight:750}
-.status-badge{display:inline-flex;justify-content:center;align-items:center;min-height:28px;padding:5px 10px;border-radius:999px;font-size:10px;font-weight:800;white-space:nowrap}
-.status-new{background:#eef0eb;color:#61685d}
-.status-consulting{background:#eee8d9;color:#7a6945}
-.status-visit_scheduled,.status-scheduled{background:#e4ebef;color:#526b78}
-.status-care_completed,.status-completed,.status-published{background:#e3eee5;color:#4f6d55}
-.status-follow_up,.status-in_progress{background:#ebe5ef;color:#6a5874}
-.status-closed,.status-cancelled,.status-archived{background:#ecebea;color:#6f6d69}
-.status-draft,.status-neutral,.neutral{background:#efefed;color:#757570}
-.empty-state{padding:56px 20px;text-align:center}
-.empty-state strong{display:block;font-size:18px}
-.empty-state p,.muted-copy{color:var(--muted);font-size:12px;line-height:1.7}
-.detail-shell{padding-top:42px}
-.back-link{display:inline-block;margin-bottom:30px;color:var(--muted);font-size:12px;font-weight:750}
-.customer-detail-hero{display:flex;justify-content:space-between;gap:24px;align-items:end;padding-bottom:30px;border-bottom:1px solid var(--line)}
-.customer-detail-hero h1{margin:0;font-size:clamp(38px,6vw,64px);letter-spacing:-.055em}
-.detail-meta{margin:12px 0 0;color:var(--muted);font-size:13px}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-.detail-card{padding:26px;border:1px solid var(--line);border-radius:24px;background:var(--paper)}
-.wide-card{margin-top:16px}
-.detail-card-head{display:flex;align-items:start;justify-content:space-between;gap:16px;margin-bottom:24px}
-.info-list{margin:0}
-.info-list>div{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
-.info-list>div:last-child{border-bottom:0}
-.info-list dt{color:var(--muted);font-size:11px}
-.info-list dd{margin:0;font-size:13px;font-weight:650}
-.history-list,.timeline-block{display:grid;gap:10px}
-.history-item{padding:18px;border-radius:17px;background:#fff;border:1px solid var(--line)}
-.history-item-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
-.history-item-head>div strong,.history-item-head>div span{display:block}
-.history-item-head>div span{margin-top:5px;color:var(--muted);font-size:10px}
-.history-group{margin-top:14px}
-.history-label{display:block;margin-bottom:7px;color:var(--muted);font-size:10px;font-weight:700}
-.history-copy{margin:14px 0 0;color:#5f615b;font-size:12px;line-height:1.75}
-.compact-history .history-item{padding:16px}
-@media(max-width:860px){
-  .dashboard-hero.compact{grid-template-columns:1fr}
-  .customer-row{grid-template-columns:1fr auto}
-  .customer-concern,.customer-result{grid-column:1/-1}
-  .customer-status{grid-column:2;grid-row:1}
-  .detail-grid{grid-template-columns:1fr}
-}
-@media(max-width:620px){
-  .customer-section,.detail-card{padding:20px;border-radius:20px}
-  .section-heading{display:block}
-  .section-heading .dashboard-message{margin-top:12px}
-  .customer-toolbar{grid-template-columns:1fr}
-  .customer-row{padding:17px 0}
-  .customer-concern{display:none}
-  .customer-result{grid-column:1}
-  .customer-detail-hero{align-items:flex-start}
-  .customer-detail-hero .status-badge{margin-top:6px}
-  .info-list>div{grid-template-columns:100px 1fr}
-}
-
-.operation-grid{margin-top:18px}
-.admin-form{display:grid;gap:14px}
-.admin-form>label>span,.care-item-fieldset legend{display:block;margin-bottom:7px;color:var(--ink);font-size:11px;font-weight:750}
-.admin-form input[type="text"],.admin-form input[type="datetime-local"],.admin-form select,.admin-form textarea{width:100%;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink);outline:none}
-.admin-form input[type="text"],.admin-form input[type="datetime-local"],.admin-form select{min-height:46px;padding:0 13px}
-.admin-form textarea{min-height:130px;padding:13px;resize:vertical;line-height:1.6}
-.admin-form input:focus,.admin-form select:focus,.admin-form textarea:focus{border-color:rgba(112,136,110,.7);box-shadow:0 0 0 4px rgba(112,136,110,.09)}
-.care-item-fieldset{margin:0;padding:0;border:0}
-.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.check-grid label{display:flex;gap:8px;align-items:center;min-height:42px;padding:9px 11px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer}
-.check-grid input{accent-color:var(--sage)}
-.check-grid span{font-size:11px}
-.inline-message{min-height:18px;margin:0;color:var(--danger);font-size:11px;line-height:1.5}
-.inline-message.success{color:var(--sage)}
-@media(max-width:620px){.check-grid{grid-template-columns:1fr}.operation-grid{margin-top:14px}}
-
-.report-action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.report-action-button{width:100%;min-height:46px}
-#reportEditorForm[aria-disabled="true"]{opacity:.58}
-@media(max-width:620px){.report-action-row{grid-template-columns:1fr}}
-
-/* MOOHAE ADMIN — BOOKING MANAGEMENT */
-.booking-section{margin-top:18px;padding:28px;border:1px solid var(--line);border-radius:24px;background:var(--paper)}
-.booking-section-heading{align-items:center}
-.booking-navigation{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
-.booking-nav-button{min-width:76px}
-.booking-range-label{min-width:190px;text-align:center;font-size:12px;letter-spacing:-.02em}
-.booking-message{margin:18px 0 0;color:var(--muted);font-size:12px;line-height:1.6}
-.booking-message.error{color:var(--danger)}
-.booking-calendar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
-.booking-day-card{min-width:0;padding:20px;border:1px solid var(--line);border-radius:20px;background:#fff}
-.booking-day-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:15px;border-bottom:1px solid var(--line)}
-.booking-day-eyebrow{display:block;margin-bottom:5px;color:var(--sage);font-size:9px;font-weight:850;letter-spacing:.12em}
-.booking-day-head h3{margin:0;font-size:20px;letter-spacing:-.04em}
-.booking-day-action{flex:0 0 auto;font-size:11px}
-.booking-slot-list{display:grid;margin-top:6px}
-.booking-slot{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:12px;align-items:center;min-height:78px;padding:13px 0;border-bottom:1px solid var(--line)}
-.booking-slot:last-child{border-bottom:0}
-.booking-slot.has-booking{align-items:start}
-.booking-time{padding-top:2px;font-size:13px}
-.booking-slot-content{min-width:0;display:grid;gap:6px}
-.booking-slot-actions{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}
-.booking-action-button{min-height:36px;margin:0;padding:7px 11px;font-size:10px;white-space:nowrap}
-.booking-customer-link{width:max-content;max-width:100%;font-size:14px;font-weight:800;text-decoration:underline;text-decoration-color:rgba(38,40,36,.22);text-underline-offset:4px}
-.booking-customer-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;color:var(--muted);font-size:10px}
-.booking-plan{display:inline-flex;padding:3px 7px;border-radius:999px;background:var(--sage-soft);color:#52664f;font-weight:800}
-.booking-status{width:max-content;display:inline-flex;align-items:center;min-height:24px;padding:4px 8px;border-radius:999px;font-size:9px;font-weight:850}
-.booking-status-requested{background:#eee8d9;color:#7a6945}
-.booking-status-confirmed{background:#e3eee5;color:#4f6d55}
-.booking-availability{font-size:13px}
-.booking-availability.is-open{color:#52664f}
-.booking-availability.is-closed{color:var(--muted)}
-.booking-slot-note{color:var(--muted);font-size:10px;line-height:1.45}
-.danger-action{color:var(--danger);border-color:rgba(154,81,77,.22)}
-.booking-empty{padding-bottom:24px}
-@media(max-width:900px){.booking-calendar{grid-template-columns:1fr}}
-@media(max-width:620px){
-  .booking-section{padding:20px;border-radius:20px}
-  .booking-section-heading{display:block}
-  .booking-navigation{justify-content:space-between;margin-top:16px}
-  .booking-range-label{order:-1;width:100%;min-width:0;text-align:left}
-  .booking-nav-button{flex:1}
-  .booking-day-card{padding:17px;border-radius:18px}
-  .booking-day-head{align-items:flex-start}
-  .booking-day-action{max-width:48%;white-space:normal;line-height:1.3}
-  .booking-slot{grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:start}
-  .booking-slot-actions{grid-column:2;justify-content:flex-start}
-}
 /* ============================================================
-   MOOHAE ADMIN
-   BOOKING HORIZONTAL SLIDER
+   MOOHAE ADMIN — STEP 9D FIXED
+   MOBILE FORM + CONTACT / ADDRESS
    ============================================================ */
 
 
-/* ------------------------------------------------------------
-   BOOKING CALENDAR
-   기존 GRID → HORIZONTAL SLIDER
-   ------------------------------------------------------------ */
-
-.booking-calendar {
-  display: flex;
-  gap: 14px;
-
-  width: 100%;
-
-  margin-top: 18px;
-  padding-bottom: 12px;
-
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-
-  -webkit-overflow-scrolling: touch;
-
-  scrollbar-width: thin;
-
-  overscroll-behavior-x: contain;
-}
-
-
-/* ------------------------------------------------------------
-   DAY CARD
-   PC
-   ------------------------------------------------------------ */
-
-.booking-day-card {
-  flex: 0 0 340px;
-
-  width: 340px;
-  min-width: 340px;
-
-  padding: 20px;
-
-  border: 1px solid var(--line);
-  border-radius: 20px;
-
-  background: #fff;
-
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
-}
-
-
-/* ------------------------------------------------------------
-   스크롤바
-   ------------------------------------------------------------ */
-
-.booking-calendar::-webkit-scrollbar {
-  height: 6px;
-}
-
-
-.booking-calendar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-
-.booking-calendar::-webkit-scrollbar-thumb {
-  background: rgba(38, 40, 36, 0.18);
-  border-radius: 999px;
-}
-
-
-.booking-calendar::-webkit-scrollbar-thumb:hover {
-  background: rgba(38, 40, 36, 0.30);
-}
-
-
 /* ============================================================
-   TABLET
+   GRID SHRINK SAFETY
    ============================================================ */
 
-@media (max-width: 900px) {
-
-  .booking-calendar {
-    display: flex;
-
-    grid-template-columns: none;
-
-    gap: 12px;
-  }
-
-
-  .booking-day-card {
-    flex: 0 0 320px;
-
-    width: 320px;
-    min-width: 320px;
-  }
-
-}
-
-
-/* ============================================================
-   MOBILE
-   ============================================================ */
-
-@media (max-width: 620px) {
-
-  .booking-calendar {
-    display: flex;
-
-    grid-template-columns: none;
-
-    gap: 12px;
-
-    width: calc(100% + 20px);
-
-    margin-right: -20px;
-
-    padding-right: 20px;
-    padding-bottom: 10px;
-
-    scroll-padding-left: 0;
-  }
-
-
-  /* ----------------------------------------------------------
-     카드 한 장 + 다음 카드 일부 노출
-
-     다음 콘텐츠가 있다는 것을
-     사용자가 자연스럽게 인식하도록 설계
-     ---------------------------------------------------------- */
-
-  .booking-day-card {
-    flex: 0 0 86%;
-
-    width: 86%;
-    min-width: 86%;
-
-    padding: 17px;
-
-    border-radius: 18px;
-
-    scroll-snap-align: start;
-  }
-
-
-  /* ----------------------------------------------------------
-     모바일 스크롤바 숨김
-     터치 슬라이드만 자연스럽게 사용
-     ---------------------------------------------------------- */
-
-  .booking-calendar {
-    scrollbar-width: none;
-  }
-
-
-  .booking-calendar::-webkit-scrollbar {
-    display: none;
-  }
-
-}
-
-/* ============================================================
-   MOOHAE ADMIN — STEP 9D
-   MOBILE FORM STABILITY + CONTACT / ADDRESS ACTIONS
-   ============================================================ */
-
-/* Grid children must be allowed to shrink on narrow screens. */
 .detail-grid > *,
 .detail-card,
 .admin-form,
@@ -387,207 +18,400 @@ a{color:inherit;text-decoration:none}
   min-width: 0;
 }
 
-/* Prevent native controls from expanding beyond the card width. */
-.admin-form input,
+
+/* ============================================================
+   FORM CONTROLS
+   IMPORTANT:
+   checkbox / radio는 절대 여기 포함하지 않는다.
+   ============================================================ */
+
+.admin-form input[type="text"],
+.admin-form input[type="datetime-local"],
 .admin-form select,
 .admin-form textarea {
   display: block;
+
   width: 100%;
   max-width: 100%;
   min-width: 0;
 }
 
-/* iOS / Chromium datetime controls can carry an intrinsic minimum width. */
+
+/* ============================================================
+   DATETIME
+   모바일 브라우저 intrinsic width 방지
+   ============================================================ */
+
 .admin-form input[type="datetime-local"] {
   -webkit-appearance: none;
   appearance: none;
-  min-inline-size: 0;
+
   inline-size: 100%;
   max-inline-size: 100%;
+  min-inline-size: 0;
 }
 
-/* Visit selector gets a larger touch target. */
+
+/* ============================================================
+   CHECKBOX
+   예정 케어 / 실제 진행한 케어
+   ============================================================ */
+
+.care-item-fieldset {
+  min-width: 0;
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+.check-grid label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 0;
+  min-height: 44px;
+
+  padding: 9px 11px;
+
+  border: 1px solid var(--line);
+  border-radius: 12px;
+
+  background: #fff;
+
+  cursor: pointer;
+}
+
+.check-grid input[type="checkbox"] {
+  flex: 0 0 auto;
+
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+
+  margin: 0;
+
+  accent-color: var(--sage);
+}
+
+.check-grid label > span {
+  min-width: 0;
+
+  font-size: 11px;
+  line-height: 1.4;
+
+  overflow-wrap: break-word;
+}
+
+
+/* ============================================================
+   COMPLETE VISIT SELECT
+   ============================================================ */
+
 #careVisitSelect {
   min-height: 56px;
+
   padding-left: 14px;
   padding-right: 38px;
+
   font-size: 13px;
   line-height: 1.35;
 }
 
-/* ------------------------------------------------------------
-   CONTACT ACTIONS
-   ------------------------------------------------------------ */
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
 
 .contact-info-cell,
 .address-info-cell {
   display: grid;
+
   gap: 10px;
+
   min-width: 0;
 }
 
 .contact-number {
   display: block;
+
   min-width: 0;
+
+  line-height: 1.5;
+
   overflow-wrap: anywhere;
 }
 
+
 .contact-action-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
   gap: 8px;
+
   width: 100%;
   min-width: 0;
 }
 
+
 .contact-action {
-  display: inline-flex;
+  display: flex;
+
   align-items: center;
   justify-content: center;
+
   width: 100%;
   min-width: 0;
   min-height: 42px;
-  padding: 9px 10px;
-  border-radius: 12px;
+
+  padding: 9px 8px;
+
   border: 1px solid var(--line);
+  border-radius: 12px;
+
   font-size: 11px;
   font-weight: 800;
-  line-height: 1.2;
+  line-height: 1;
+
   text-align: center;
+
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+  touch-action: manipulation;
 }
+
 
 .contact-action-primary {
   background: var(--ink);
-  color: #fff;
   border-color: var(--ink);
+
+  color: #fff;
 }
+
 
 .contact-action-secondary {
   background: #fff;
+
   color: var(--ink);
 }
 
-/* ------------------------------------------------------------
+
+/* ============================================================
    ADDRESS
-   ------------------------------------------------------------ */
+   ============================================================ */
 
 .address-text {
   display: block;
+
   min-width: 0;
   max-width: 100%;
+
   font-weight: 650;
   line-height: 1.65;
+
   overflow-wrap: anywhere;
   word-break: keep-all;
 }
 
+
 .address-empty {
   color: var(--muted);
+
   font-weight: 500;
 }
 
+
 .address-copy-button {
   justify-self: start;
-  min-height: 38px;
+
+  min-height: 40px;
+
   padding: 8px 12px;
+
   border: 1px solid var(--line);
   border-radius: 11px;
+
   background: #fff;
   color: var(--ink);
+
   font: inherit;
   font-size: 10px;
   font-weight: 800;
+
   cursor: pointer;
+
   touch-action: manipulation;
 }
 
+
 .address-copy-button:disabled {
   opacity: .58;
+
   cursor: default;
 }
 
+
 .clipboard-fallback {
   position: fixed !important;
-  left: -9999px !important;
+
   top: 0 !important;
+  left: -9999px !important;
+
   width: 1px !important;
   height: 1px !important;
+
   opacity: 0 !important;
+
   pointer-events: none !important;
 }
 
-/* ------------------------------------------------------------
+
+/* ============================================================
    MOBILE
-   ------------------------------------------------------------ */
+   ============================================================ */
 
 @media (max-width: 620px) {
+
   .detail-shell {
-    width: min(100% - 24px, 1180px);
+    width: min(
+      100% - 24px,
+      1180px
+    );
   }
 
+
   .detail-card {
+    min-width: 0;
+
     overflow: hidden;
   }
+
 
   .admin-form {
     width: 100%;
     min-width: 0;
   }
 
+
   .admin-form input[type="text"],
   .admin-form input[type="datetime-local"],
   .admin-form select {
     min-height: 52px;
+
     padding-left: 12px;
     padding-right: 12px;
-    font-size: 16px; /* avoids iOS input zoom and improves tapping */
-  }
 
-  #visitScheduledAt {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    overflow: hidden;
-  }
-
-  #careVisitSelect {
-    min-height: 58px;
-    padding-left: 14px;
-    padding-right: 38px;
+    /*
+      iOS 자동 확대 방지 +
+      실제 터치 가독성 개선
+    */
     font-size: 16px;
   }
 
+
+  #visitScheduledAt {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    overflow: hidden;
+  }
+
+
+  #careVisitSelect {
+    min-height: 60px;
+
+    padding-left: 14px;
+    padding-right: 38px;
+
+    font-size: 16px;
+  }
+
+
+  .check-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .check-grid label {
+    min-height: 48px;
+
+    padding:
+      11px
+      12px;
+  }
+
+
+  .check-grid input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+  }
+
+
+  .check-grid label > span {
+    font-size: 12px;
+  }
+
+
   .info-list > div {
-    grid-template-columns: 82px minmax(0, 1fr);
+    grid-template-columns:
+      82px
+      minmax(0, 1fr);
+
     gap: 12px;
   }
 
+
   .contact-action-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
+
   .contact-action {
-    min-height: 44px;
-    padding: 9px 6px;
-    font-size: 10px;
+    min-height: 46px;
+
+    padding:
+      10px
+      5px;
+
+    font-size: 11px;
   }
+
 
   .address-copy-button {
     width: 100%;
+
     min-height: 44px;
   }
 }
 
+
+/* ============================================================
+   VERY SMALL MOBILE
+   ============================================================ */
+
 @media (max-width: 360px) {
+
   .info-list > div {
-    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-columns:
+      72px
+      minmax(0, 1fr);
   }
+
 
   .contact-action-row {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      1fr;
   }
 }
-
