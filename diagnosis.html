@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>무해 우리 집 체크</title><meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests"><meta name="referrer" content="strict-origin-when-cross-origin"><link rel="stylesheet" href="./assets/css/site.css"><link rel="stylesheet" href="./assets/css/diagnosis.css"></head><body data-page="diagnosis"><div id="site-header"></div><main class="page"><section class="intro reveal"><span class="eyebrow">MOOHAE CHECK</span><h1>우리 집은<br>어떻게 관리하면 좋을까요?</h1><p>다섯 가지 질문으로 우리 집의 생활방식과 평소 신경 쓰였던 부분을 살펴보고, 무해에게 어디까지 맡기면 좋을지 확인해보세요.</p></section><div class="progress"><div class="progress-bar" id="progress"></div></div>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>무해 우리 집 체크</title><meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests"><meta name="referrer" content="strict-origin-when-cross-origin"><link rel="stylesheet" href="./assets/css/site.css"><link rel="stylesheet" href="./assets/css/diagnosis.css?v=20260823-4"></head><body data-page="diagnosis"><div id="site-header"></div><main class="page"><section class="intro reveal"><span class="eyebrow">MOOHAE CHECK</span><h1>우리 집은<br>어떻게 관리하면 좋을까요?</h1><p>다섯 가지 질문으로 우리 집의 생활방식과 평소 신경 쓰였던 부분을 살펴보고, 무해에게 어디까지 맡기면 좋을지 확인해보세요.</p></section><div class="progress"><div class="progress-bar" id="progress"></div></div>
 <section class="question active"><span class="question-num">01</span><h2>우리 집에는 누가 함께 생활하고 있나요?</h2><p class="multi-hint">함께 생활하는 구성원을 모두 선택해주세요.</p><div class="options"><button class="option">성인</button><button class="option">아이</button><button class="option">반려동물</button></div></section>
 <section class="question"><span class="question-num">02</span><h2>우리 집에서 가장 많이 생활하는 공간은 어디인가요?</h2><p class="multi-hint">주로 머무는 공간을 모두 선택해주세요.</p><div class="options"><button class="option">침실</button><button class="option">거실</button><button class="option">주방 · 다이닝</button><button class="option">여러 공간에 고르게</button></div></section>
 <section class="question"><span class="question-num">03</span><h2>평소 관리가 가장 신경 쓰이는 곳은 어디인가요?</h2><p class="multi-hint">몸이 자주 닿거나, 어떻게 관리해야 할지 막막했던 곳을 선택해주세요.</p><div class="options"><button class="option">매트리스 · 침구</button><button class="option">소파</button><button class="option">러그 · 카펫</button><button class="option">바닥</button><button class="option">여러 곳이 함께</button></div></section>
@@ -35,9 +35,9 @@
       <div class="consent-box">
         <label class="consent-row">
           <input id="privacyConsent" type="checkbox" required>
-          <span><strong>[필수] 개인정보 수집·이용 동의</strong><small>관리 상담 연락을 위해 이름과 연락처를 수집합니다.</small></span>
+          <span><strong>[필수] 개인정보 수집·이용 동의</strong><small>관리 상담과 방문 예약을 위해 필요한 정보를 수집합니다.</small></span>
         </label>
-        <p class="consent-detail">수집 목적: MOOHAE 365 관리 상담 및 서비스 안내 · 수집 항목: 이름, 연락처 · 보유: 상담 및 서비스 관리 목적이 유지되는 기간 동안 보관 후 파기 · 동의를 거부할 수 있으나 상담 신청은 제한될 수 있습니다.</p>
+        <p class="consent-detail">수집 목적: MOOHAE 365 관리 상담, 서비스 안내 및 방문 예약 · 수집 항목: 이름, 연락처, MOOHAE CHECK 응답, 방문 예약 시 주소 · 보유: 상담 및 서비스 관리 목적이 유지되는 기간 동안 보관 후 파기 · 동의를 거부할 수 있으나 상담 및 방문 예약 신청은 제한될 수 있습니다.</p>
       </div>
 <input id="websiteField" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
 
@@ -61,6 +61,22 @@
       <strong id="bookingSelectedSummary">—</strong>
     </div>
 
+    <div class="booking-address" id="bookingAddressField" hidden>
+      <label class="field-label" for="bookingAddress">
+        <span>방문 주소</span>
+        <input
+          id="bookingAddress"
+          name="bookingAddress"
+          type="text"
+          minlength="5"
+          maxlength="500"
+          autocomplete="street-address"
+          placeholder="방문할 주소와 상세 주소를 입력해주세요"
+        >
+      </label>
+      <p class="booking-address-help">방문 일정 확인을 위해 실제 케어 받을 주소를 입력해주세요.</p>
+    </div>
+
     <button id="bookingSubmitButton" class="btn-primary booking-submit" type="button" disabled>
       이 일정으로 방문 요청하기
     </button>
@@ -72,4 +88,4 @@
     <a href="https://pf.kakao.com/_uRbiX/chat" target="_blank" rel="noopener noreferrer" class="btn-text">카카오 상담 바로가기</a>
     <a href="./care.html" class="btn-text">MOOHAE 365 보기</a>
   </div>
-</section></main><div id="site-footer"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./assets/js/supabase-config.js"></script><script src="./assets/js/site.js"></script><script src="./assets/js/diagnosis.js?v=20260820-2"></script><script src="./assets/js/diagnosis-success-redirect.js?v=20260823-1"></script></body></html>
+</section></main><div id="site-footer"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./assets/js/supabase-config.js"></script><script src="./assets/js/site.js"></script><script src="./assets/js/diagnosis.js?v=20260823-4"></script><script src="./assets/js/diagnosis-success-redirect.js?v=20260823-1"></script></body></html>

@@ -155,3 +155,16 @@
     padding:22px 18px;
   }
 }
+
+
+/* ============================================================
+   MOOHAE CHECK — BOOKING ADDRESS
+   ============================================================ */
+.booking-address{width:100%;margin-top:14px;padding:18px;border:1px solid var(--line);border-radius:16px;background:#fbfaf7}
+.booking-address[hidden]{display:none!important}
+.booking-address .field-label{display:block}
+.booking-address .field-label>span{display:block;margin-bottom:7px;color:var(--ink);font-size:12px;font-weight:700}
+.booking-address input{display:block;width:100%;min-width:0;min-height:50px;padding:0 15px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);outline:none}
+.booking-address input:focus{border-color:var(--sage-dark);box-shadow:0 0 0 4px rgba(102,125,101,.08)}
+.booking-address-help{margin:8px 0 0!important;color:var(--gray-light)!important;font-size:10px!important;line-height:1.6!important}
+@media(max-width:600px){.booking-address{padding:16px 14px}.booking-address input{min-height:52px;font-size:16px}}
