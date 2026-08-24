@@ -226,3 +226,311 @@
     grid-template-columns: 1fr;
   }
 }
+/* ============================================================
+   MOOHAE ADMIN
+   CARE MEDIA
+   CUSTOMER DETAIL ONLY
+   ============================================================ */
+
+
+/* ============================================================
+   MEDIA SECTION
+   ============================================================ */
+
+.care-media-section {
+  min-width: 0;
+
+  padding: 16px;
+
+  border: 1px solid var(--line);
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, .58);
+}
+
+
+.care-media-head {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 12px;
+}
+
+
+.care-media-head strong {
+  display: block;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+.care-media-head p {
+  margin: 5px 0 0;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+
+.care-media-count {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 26px;
+
+  padding: 4px 9px;
+
+  border-radius: 999px;
+
+  background: var(--sage-soft);
+
+  color: #52664f;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+
+/* ============================================================
+   FILE PICKER
+   ============================================================ */
+
+.care-media-picker {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 48px;
+
+  padding: 10px 14px;
+
+  border: 1px dashed rgba(112, 136, 110, .42);
+  border-radius: 13px;
+
+  background: #fff;
+
+  color: var(--ink);
+
+  font-size: 11px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    border-color .18s ease,
+    background .18s ease;
+}
+
+
+.care-media-picker:hover {
+  border-color: var(--sage);
+
+  background: var(--sage-soft);
+}
+
+
+.care-media-input {
+  position: absolute;
+
+  width: 1px !important;
+  height: 1px !important;
+
+  padding: 0 !important;
+  margin: -1px !important;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+
+  opacity: 0;
+}
+
+
+/* ============================================================
+   GALLERY
+   ============================================================ */
+
+.care-media-gallery {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+
+.care-media-card {
+  position: relative;
+
+  min-width: 0;
+
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  border: 1px solid var(--line);
+  border-radius: 12px;
+
+  background: #ecece8;
+}
+
+
+.care-media-card img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+.care-media-delete {
+  position: absolute;
+
+  top: 6px;
+  right: 6px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 28px;
+  height: 28px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: rgba(38, 40, 36, .84);
+
+  color: #fff;
+
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(5px);
+}
+
+
+.care-media-delete:disabled {
+  opacity: .5;
+
+  cursor: default;
+}
+
+
+.care-media-loading {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 10px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+
+  text-align: center;
+}
+
+
+/* ============================================================
+   MESSAGE
+   ============================================================ */
+
+.care-media-message {
+  min-height: 17px;
+
+  margin: 9px 0 0;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+
+.care-media-message.error {
+  color: var(--danger);
+}
+
+
+.care-media-message.success {
+  color: var(--sage);
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 620px) {
+
+  .care-media-section {
+    padding: 14px;
+
+    border-radius: 14px;
+  }
+
+
+  .care-media-picker {
+    min-height: 52px;
+
+    font-size: 12px;
+  }
+
+
+  .care-media-gallery {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 7px;
+  }
+
+
+  .care-media-delete {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+
+@media (max-width: 360px) {
+
+  .care-media-gallery {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}

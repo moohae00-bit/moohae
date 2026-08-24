@@ -565,7 +565,71 @@
             ></textarea>
 
           </label>
+<!-- =======================================================
+     CARE BEFORE MEDIA
+======================================================== -->
 
+<section
+  id="beforeMediaSection"
+  class="care-media-section"
+  aria-labelledby="beforeMediaTitle"
+>
+
+  <div class="care-media-head">
+
+    <div>
+
+      <strong id="beforeMediaTitle">
+        케어 전 사진
+      </strong>
+
+      <p>
+        현장에서 확인한 상태를 사진으로 남겨주세요.
+      </p>
+
+    </div>
+
+    <span
+      id="beforeMediaCount"
+      class="care-media-count"
+    >
+      0 / 10
+    </span>
+
+  </div>
+
+
+  <label class="care-media-picker">
+
+    <input
+      id="beforeMediaInput"
+      class="care-media-input"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      multiple
+    >
+
+    <span>
+      + 사진 추가
+    </span>
+
+  </label>
+
+
+  <div
+    id="beforeMediaGallery"
+    class="care-media-gallery"
+  ></div>
+
+
+  <p
+    id="beforeMediaMessage"
+    class="care-media-message"
+    role="status"
+    aria-live="polite"
+  ></p>
+
+</section>
 
           <label>
 
@@ -581,7 +645,71 @@
             ></textarea>
 
           </label>
+<!-- =======================================================
+     CARE AFTER MEDIA
+======================================================== -->
 
+<section
+  id="afterMediaSection"
+  class="care-media-section"
+  aria-labelledby="afterMediaTitle"
+>
+
+  <div class="care-media-head">
+
+    <div>
+
+      <strong id="afterMediaTitle">
+        케어 후 사진
+      </strong>
+
+      <p>
+        케어 이후 달라진 상태를 사진으로 남겨주세요.
+      </p>
+
+    </div>
+
+    <span
+      id="afterMediaCount"
+      class="care-media-count"
+    >
+      0 / 10
+    </span>
+
+  </div>
+
+
+  <label class="care-media-picker">
+
+    <input
+      id="afterMediaInput"
+      class="care-media-input"
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+      multiple
+    >
+
+    <span>
+      + 사진 추가
+    </span>
+
+  </label>
+
+
+  <div
+    id="afterMediaGallery"
+    class="care-media-gallery"
+  ></div>
+
+
+  <p
+    id="afterMediaMessage"
+    class="care-media-message"
+    role="status"
+    aria-live="polite"
+  ></p>
+
+</section>
 
           <fieldset class="care-item-fieldset">
 
@@ -941,6 +1069,7 @@
 
   <script src="../assets/js/admin-customer-detail.js"></script>
   <script src="../assets/js/admin-customer-contact.js?v=20260823-1"></script>
+  <script src="../assets/js/admin-care-media.js?v=20260824-1"></script>
 
 </body>
 </html>
