@@ -11,7 +11,7 @@
                  object-src 'none';
                  script-src 'self' https://cdn.jsdelivr.net;
                  style-src 'self' 'unsafe-inline';
-                 img-src 'self' data:;
+                 img-src 'self' data: https://*.supabase.co;
                  font-src 'self';
                  connect-src 'self' https://*.supabase.co wss://*.supabase.co;
                  frame-src 'none';
@@ -75,19 +75,58 @@
           </section>
 
           <section id="beforeAfterSection" class="section" hidden>
-            <div class="section-eyebrow">BEFORE &amp; AFTER</div>
-            <h2>눈으로 확인하는<br>오늘의 변화.</h2>
-            <div class="photo-grid">
-              <div id="beforePhotoWrap" class="photo" hidden>
-                <img id="beforeImage" alt="케어 전 이미지">
-                <span class="photo-label">BEFORE</span>
-              </div>
-              <div id="afterPhotoWrap" class="photo" hidden>
-                <img id="afterImage" alt="케어 후 이미지">
-                <span class="photo-label">AFTER</span>
-              </div>
-            </div>
-          </section>
+  <div class="section-eyebrow">BEFORE &amp; AFTER</div>
+
+  <h2>
+    눈으로 확인하는<br>
+    오늘의 변화.
+  </h2>
+
+  <p class="section-description">
+    방문에서 확인한 케어 전과 후의 모습을 기록했습니다.
+  </p>
+
+  <div
+    id="beforeMediaGroup"
+    class="report-media-group"
+    hidden
+  >
+    <div class="report-media-heading">
+      <strong>BEFORE</strong>
+
+      <span id="beforeMediaCount">
+        0 PHOTOS
+      </span>
+    </div>
+
+    <div
+      id="beforeMediaGrid"
+      class="report-media-grid"
+      aria-label="케어 전 사진"
+    ></div>
+  </div>
+
+
+  <div
+    id="afterMediaGroup"
+    class="report-media-group"
+    hidden
+  >
+    <div class="report-media-heading">
+      <strong>AFTER</strong>
+
+      <span id="afterMediaCount">
+        0 PHOTOS
+      </span>
+    </div>
+
+    <div
+      id="afterMediaGrid"
+      class="report-media-grid"
+      aria-label="케어 후 사진"
+    ></div>
+  </div>
+</section>
 
           <section class="section">
             <div class="section-eyebrow">VISIT DIAGNOSIS</div>

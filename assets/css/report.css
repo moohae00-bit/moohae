@@ -16,3 +16,108 @@ body{background:#e8e5df}.report-shell{padding-top:88px}.report-intro{width:min(7
 .edit-badge{display:none;position:fixed;right:18px;bottom:18px;z-index:1200;padding:10px 14px;border-radius:999px;background:var(--ink);color:#fff;font-size:11px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 body.edit-mode .edit-badge{display:block}
 .photo img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+/* ============================================================
+   MOOHAE CARE REPORT
+   BEFORE / AFTER MEDIA GALLERY
+   ============================================================ */
+
+.report-media-group {
+  margin-top: 34px;
+}
+
+.report-media-group + .report-media-group {
+  margin-top: 42px;
+}
+
+.report-media-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.report-media-heading strong {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  color: var(--ink);
+}
+
+.report-media-heading span {
+  color: var(--gray-light);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.report-media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.report-media-grid[data-count="1"] {
+  grid-template-columns: 1fr;
+}
+
+.report-media-grid[data-count="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.report-media-item {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(143, 168, 140, .18),
+      transparent 35%
+    ),
+    #dedbd3;
+}
+
+.report-media-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.report-media-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(41, 41, 39, .06);
+  border-radius: inherit;
+}
+
+@media (max-width: 600px) {
+  .report-media-group {
+    margin-top: 28px;
+  }
+
+  .report-media-group + .report-media-group {
+    margin-top: 34px;
+  }
+
+  .report-media-grid,
+  .report-media-grid[data-count="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .report-media-grid[data-count="1"] {
+    grid-template-columns: 1fr;
+  }
+
+  .report-media-item {
+    border-radius: 14px;
+  }
+}
