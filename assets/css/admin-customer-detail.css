@@ -1,0 +1,228 @@
+/* ============================================================
+   MOOHAE ADMIN
+   CUSTOMER DETAIL ONLY
+
+   이 파일은 customer-detail.html 전용입니다.
+   admin-auth.css 공통 스타일은 수정하지 않습니다.
+   ============================================================ */
+
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+
+.contact-info-cell {
+  display: grid;
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+
+.contact-number {
+  display: block;
+
+  min-width: 0;
+
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* 전화 / 문자 버튼 영역 */
+
+.contact-action-row {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 8px;
+
+  width: 100%;
+  max-width: 280px;
+
+  min-width: 0;
+}
+
+
+.contact-action {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+
+  padding: 9px 12px;
+
+  border: 1px solid var(--line);
+  border-radius: 12px;
+
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+
+  text-align: center;
+
+  white-space: nowrap;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+}
+
+
+.contact-action-primary {
+  background: var(--ink);
+
+  border-color: var(--ink);
+
+  color: #fff;
+}
+
+
+.contact-action-secondary {
+  background: #fff;
+
+  color: var(--ink);
+}
+
+
+/* ============================================================
+   ADDRESS
+   ============================================================ */
+
+.address-info-cell {
+  display: grid;
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+
+.address-text {
+  display: block;
+
+  min-width: 0;
+  max-width: 100%;
+
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.65;
+
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+
+.address-empty {
+  color: var(--muted);
+
+  font-weight: 500;
+}
+
+
+.address-copy-button {
+  justify-self: start;
+
+  min-height: 38px;
+
+  padding: 8px 12px;
+
+  border: 1px solid var(--line);
+  border-radius: 11px;
+
+  background: #fff;
+
+  color: var(--ink);
+
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+}
+
+
+.address-copy-button:disabled {
+  opacity: .55;
+
+  cursor: default;
+}
+
+
+/* ============================================================
+   CLIPBOARD FALLBACK
+   ============================================================ */
+
+.clipboard-fallback {
+  position: fixed !important;
+
+  top: 0 !important;
+  left: -9999px !important;
+
+  width: 1px !important;
+  height: 1px !important;
+
+  opacity: 0 !important;
+
+  pointer-events: none !important;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 620px) {
+
+  .contact-action-row {
+    width: 100%;
+    max-width: none;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .contact-action {
+    min-height: 46px;
+
+    padding:
+      10px
+      6px;
+
+    font-size: 11px;
+  }
+
+
+  .address-copy-button {
+    width: 100%;
+
+    min-height: 44px;
+  }
+}
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 360px) {
+
+  .contact-action-row {
+    grid-template-columns: 1fr;
+  }
+}
