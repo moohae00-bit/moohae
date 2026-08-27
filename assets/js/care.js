@@ -1,207 +1,377 @@
 (() => {
   'use strict';
 
+
   // ============================================================
-  // MOOHAE CARE
+  // MOOHAE CARE V2
   //
-  // 이 파일에서 1회 관리 서비스의
-  // 이름 / 가격 / 기준 / 설명을 관리합니다.
+  // 이 파일만 수정하면
+  // ONE / CORE / CORE+ / PRIVATE의
+  // 이름, 가격, 방문횟수, 구성, 설명이 전체 UI에 반영됩니다.
   //
-  // 앞으로 가격이나 서비스 내용을 변경할 때는
-  // 아래 ONE_TIME_SERVICES만 수정하면 됩니다.
+  // DATA ≠ SCREEN
+  // HTML에 가격을 중복 하드코딩하지 않습니다.
   // ============================================================
 
 
   // ============================================================
-  // ONE-TIME SERVICE DATA
+  // SERVICE DATA
   // ============================================================
 
-  const ONE_TIME_SERVICES = [
-    {
-      id: 'room',
-      name: 'MOOHAE ROOM',
-      koreanName: '룸',
-      price: 35000,
-      unit: '방 1개 기준',
-      description:
-        '하나의 생활공간부터 시작하는 기본 관리'
+  const CARE_CONFIG = {
+
+    one: {
+      label:
+        'MOOHAE ONE',
+
+      items: [
+        {
+          id:
+            'basic',
+
+          code:
+            'ONE · BASIC',
+
+          name:
+            '베이직 CARE',
+
+          price:
+            35000,
+
+          unit:
+            '방 1개 기준',
+
+          description:
+            '하나의 생활공간부터 부담 없이 시작하는 1회 CARE.'
+        },
+
+        {
+          id:
+            'all-in-one',
+
+          code:
+            'ONE · ALL IN ONE',
+
+          name:
+            '올인원 CARE',
+
+          price:
+            55000,
+
+          unit:
+            '방 1개 기준',
+
+          description:
+            '한 공간 안에서 조금 더 넓은 범위를 살펴보는 1회 CARE.'
+        },
+
+        {
+          id:
+            'fabric',
+
+          code:
+            'ONE · FABRIC',
+
+          name:
+            '패브릭 CARE',
+
+          price:
+            58000,
+
+          unit:
+            '패브릭 전체',
+
+          description:
+            '매트리스 · 소파 · 러그 · 카펫 등 생활 패브릭을 집중 CARE.'
+        },
+
+        {
+          id:
+            'living',
+
+          code:
+            'ONE · LIVING',
+
+          name:
+            '리빙 CARE',
+
+          price:
+            100000,
+
+          unit:
+            '거실 + 주방',
+
+          description:
+            '가족의 생활이 가장 많이 이어지는 공용공간을 위한 1회 CARE.'
+        }
+      ]
     },
 
-    {
-      id: 'room-plus',
-      name: 'MOOHAE ROOM+',
-      koreanName: '룸 플러스',
-      price: 55000,
-      unit: '방 1개 기준',
-      description:
-        '생활 접촉면까지 조금 더 세심하게 살피는 공간 관리'
-    },
 
-    {
-      id: 'fabric',
-      name: 'MOOHAE FABRIC',
-      koreanName: '패브릭',
-      price: 58000,
-      unit: '패브릭 전체',
-      description:
-        '매트리스 · 소파 · 러그 · 카펫 등 생활 패브릭 집중 관리'
-    },
+    plans: [
+      {
+        id:
+          'core',
 
-    {
-      id: 'living',
-      name: 'MOOHAE LIVING',
-      koreanName: '리빙',
-      price: 100000,
-      unit: '거실 + 주방',
-      description:
-        '가족의 생활이 가장 많이 이어지는 공용공간 관리'
-    }
-  ];
+        name:
+          'CORE',
+
+        headline:
+          '생활의 핵심을,',
+
+        accent:
+          '1년의 주기로.',
+
+        price:
+          360000,
+
+        priceUnit:
+          '/ 1년',
+
+        visits:
+          3,
+
+        visitLabel:
+          '연 3회 CARE',
+
+        lead:
+          '몸이 자주 닿고 생활이 반복되는 핵심 영역을 1년의 CARE CYCLE 안에서 이어서 관리합니다.',
+
+        includes: [
+          '침구류',
+          '소파',
+          '카펫 · 패브릭',
+          '전체 바닥 CARE'
+        ],
+
+        note:
+          '디테일링은 포함되지 않습니다.'
+      },
+
+
+      {
+        id:
+          'core-plus',
+
+        name:
+          'CORE+',
+
+        headline:
+          '보이지 않는 곳까지,',
+
+        accent:
+          '집 전체로.',
+
+        price:
+          640000,
+
+        priceUnit:
+          '/ 1년',
+
+        visits:
+          4,
+
+        visitLabel:
+          '연 4회 CARE',
+
+        lead:
+          'CORE의 생활 핵심 CARE에 벽 · 천장 · 디테일링까지 더해 관리 범위를 집 전체로 확장합니다.',
+
+        includes: [
+          'CORE의 모든 CARE',
+          '벽지',
+          '천장',
+          '디테일링'
+        ],
+
+        note:
+          'CORE와 CORE+의 차이는 방문시간이 아니라 관리 범위입니다.'
+      },
+
+
+      {
+        id:
+          'private',
+
+        name:
+          'PRIVATE',
+
+        headline:
+          '소수의 집을 위한',
+
+        accent:
+          '전담 CARE.',
+
+        price:
+          900000,
+
+        priceUnit:
+          '/ 1년',
+
+        visits:
+          null,
+
+        visitLabel:
+          '전담 CARE CYCLE',
+
+        lead:
+          '단순한 상위 요금제가 아니라, 전담관리가 필요한 소수의 HOUSE를 위한 제한형 CARE입니다.',
+
+        includes: [
+          '전담관리',
+          'HOUSE HISTORY 기반 관리',
+          '우선 CHECK 영역 연속 관리',
+          '고객별 CARE CYCLE 설계'
+        ],
+
+        note:
+          '세부 방문횟수와 구성은 HOUSE 상태와 운영 기준에 따라 별도 설계합니다.',
+
+        limited:
+          '파트너 1명당 최대 5가구'
+      }
+    ]
+  };
 
 
   // ============================================================
-  // PRICE FORMATTER
-  //
-  // 35000 → 35,000원
+  // FORMAT
   // ============================================================
 
-  function formatPrice(price) {
+  function formatPrice(
+    value
+  ) {
+
     if (
-      typeof price !== 'number' ||
-      !Number.isFinite(price)
+      typeof value !==
+        'number' ||
+
+      !Number.isFinite(
+        value
+      )
     ) {
-      return '';
+
+      return '가격 별도 안내';
     }
 
-    return `${price.toLocaleString('ko-KR')}원`;
+
+    return (
+      `${value.toLocaleString(
+        'ko-KR'
+      )}원`
+    );
   }
 
 
   // ============================================================
-  // SAFE DOM ELEMENT CREATOR
+  // SAFE DOM
   // ============================================================
 
-  function createElement(
+  function make(
     tag,
     className = '',
     text = ''
   ) {
-    const element =
-      document.createElement(tag);
 
-    if (className) {
-      element.className =
+    const node =
+      document.createElement(
+        tag
+      );
+
+
+    if (
+      className
+    ) {
+
+      node.className =
         className;
     }
 
+
     if (
-      typeof text === 'string' &&
+      typeof text ===
+        'string' &&
+
       text
     ) {
-      element.textContent =
+
+      node.textContent =
         text;
     }
 
-    return element;
+
+    return node;
   }
 
 
   // ============================================================
-  // CREATE ONE-TIME SERVICE CARD
+  // ONE
   // ============================================================
 
-  function createServiceCard(service) {
+  function createOneCard(
+    service
+  ) {
+
     const card =
-      createElement(
+      make(
         'article',
-        'one-time-card'
+        'one-service-card reveal'
       );
+
 
     card.dataset.serviceId =
       service.id;
 
 
-    // ----------------------------------------------------------
-    // SERVICE NAME
-    // ----------------------------------------------------------
+    card.appendChild(
 
-    const top =
-      createElement(
-        'div',
-        'one-time-card-top'
-      );
-
-    const name =
-      createElement(
-        'p',
-        'one-time-name',
-        service.name
-      );
-
-    const koreanName =
-      createElement(
-        'p',
-        'one-time-korean-name',
-        service.koreanName
-      );
-
-    top.append(
-      name,
-      koreanName
+      make(
+        'span',
+        'service-code',
+        service.code
+      )
     );
 
-    card.appendChild(top);
+
+    card.appendChild(
+
+      make(
+        'h3',
+        '',
+        service.name
+      )
+    );
 
 
-    // ----------------------------------------------------------
-    // PRICE
-    // ----------------------------------------------------------
+    card.appendChild(
 
-    const priceBlock =
-      createElement(
+      make(
         'div',
-        'one-time-price-block'
-      );
-
-    const price =
-      createElement(
-        'strong',
-        'one-time-price',
+        'one-service-price',
         formatPrice(
           service.price
         )
-      );
+      )
+    );
 
-    const unit =
-      createElement(
+
+    card.appendChild(
+
+      make(
         'span',
-        'one-time-unit',
+        'one-service-unit',
         service.unit
-      );
-
-    priceBlock.append(
-      price,
-      unit
+      )
     );
+
 
     card.appendChild(
-      priceBlock
-    );
 
-
-    // ----------------------------------------------------------
-    // DESCRIPTION
-    // ----------------------------------------------------------
-
-    const description =
-      createElement(
+      make(
         'p',
-        'one-time-description',
+        'one-service-description',
         service.description
-      );
-
-    card.appendChild(
-      description
+      )
     );
 
 
@@ -209,29 +379,32 @@
   }
 
 
-  // ============================================================
-  // RENDER ONE-TIME SERVICES
-  //
-  // care.html:
-  // id="oneTimeServiceGrid"
-  // ============================================================
+  function renderOneServices() {
 
-  function renderOneTimeServices() {
     const container =
       document.getElementById(
-        'oneTimeServiceGrid'
+        'oneServiceGrid'
       );
 
-    if (!container) {
+
+    if (
+      !container
+    ) {
+
       return;
     }
 
+
     container.replaceChildren();
 
-    ONE_TIME_SERVICES.forEach(
+
+    CARE_CONFIG.one.items.forEach(
+
       (service) => {
+
         container.appendChild(
-          createServiceCard(
+
+          createOneCard(
             service
           )
         );
@@ -241,25 +414,259 @@
 
 
   // ============================================================
-  // GENERIC MOBILE SLIDER
-  //
-  // 실제 가로 스와이프와 카드 스냅은 CSS가 담당합니다.
-  //
-  // JS 역할:
-  // 1. 현재 카드 확인
-  // 2. 하단 점 인디케이터 업데이트
-  // 3. 점을 누르면 해당 카드로 이동
-  //
-  // JS에 문제가 생겨도 CSS 스와이프는 계속 사용할 수 있습니다.
+  // PLAN STORY
   // ============================================================
 
-  function setupSlider({
-    slider,
-    cardSelector,
-    dotsContainer,
-    labelPrefix
-  }) {
-    if (!slider) {
+  function createPlanSection(
+    plan
+  ) {
+
+    const section =
+      make(
+        'section',
+        `plan-story plan-${plan.id}`
+      );
+
+
+    section.id =
+      `plan-${plan.id}`;
+
+
+    const inner =
+      make(
+        'div',
+        'plan-story-inner'
+      );
+
+
+    const copy =
+      make(
+        'div',
+        'plan-copy reveal'
+      );
+
+
+    copy.appendChild(
+
+      make(
+        'p',
+        'plan-name',
+        plan.name
+      )
+    );
+
+
+    const title =
+      make(
+        'h2'
+      );
+
+
+    title.appendChild(
+      document.createTextNode(
+        plan.headline
+      )
+    );
+
+
+    title.appendChild(
+
+      make(
+        'span',
+        '',
+        plan.accent
+      )
+    );
+
+
+    copy.appendChild(
+      title
+    );
+
+
+    copy.appendChild(
+
+      make(
+        'p',
+        'plan-lead',
+        plan.lead
+      )
+    );
+
+
+    const panel =
+      make(
+        'div',
+        'plan-panel reveal'
+      );
+
+
+    const price =
+      make(
+        'div',
+        'plan-price'
+      );
+
+
+    price.appendChild(
+      document.createTextNode(
+        formatPrice(
+          plan.price
+        )
+      )
+    );
+
+
+    price.appendChild(
+
+      make(
+        'small',
+        '',
+        plan.priceUnit
+      )
+    );
+
+
+    panel.appendChild(
+      price
+    );
+
+
+    panel.appendChild(
+
+      make(
+        'div',
+        'plan-visits',
+        plan.visitLabel
+      )
+    );
+
+
+    const list =
+      make(
+        'ul',
+        'plan-list'
+      );
+
+
+    plan.includes.forEach(
+
+      (item) => {
+
+        list.appendChild(
+
+          make(
+            'li',
+            '',
+            item
+          )
+        );
+      }
+    );
+
+
+    panel.appendChild(
+      list
+    );
+
+
+    if (
+      plan.limited
+    ) {
+
+      panel.appendChild(
+
+        make(
+          'div',
+          'private-note',
+          plan.limited
+        )
+      );
+    }
+
+
+    panel.appendChild(
+
+      make(
+        'p',
+        'plan-note',
+        plan.note
+      )
+    );
+
+
+    inner.append(
+      copy,
+      panel
+    );
+
+
+    section.appendChild(
+      inner
+    );
+
+
+    return section;
+  }
+
+
+  function renderPlans() {
+
+    const container =
+      document.getElementById(
+        'planStoryContainer'
+      );
+
+
+    if (
+      !container
+    ) {
+
+      return;
+    }
+
+
+    container.replaceChildren();
+
+
+    CARE_CONFIG.plans.forEach(
+
+      (plan) => {
+
+        container.appendChild(
+
+          createPlanSection(
+            plan
+          )
+        );
+      }
+    );
+  }
+
+
+  // ============================================================
+  // MOBILE SLIDER
+  // ============================================================
+
+  function setupSlider() {
+
+    const slider =
+      document.getElementById(
+        'oneServiceGrid'
+      );
+
+
+    const dotsContainer =
+      document.getElementById(
+        'oneSliderDots'
+      );
+
+
+    if (
+      !slider ||
+      !dotsContainer
+    ) {
+
       return;
     }
 
@@ -267,211 +674,172 @@
     const cards =
       [
         ...slider.querySelectorAll(
-          cardSelector
+          '.one-service-card'
         )
       ];
 
 
     if (
-      cards.length === 0
+      cards.length ===
+        0
     ) {
+
       return;
     }
 
 
-    let dots = [];
+    dotsContainer.replaceChildren();
 
 
-    // ==========================================================
-    // CREATE DOTS
-    // ==========================================================
+    const dots =
+      cards.map(
 
-    if (dotsContainer) {
-      dotsContainer.replaceChildren();
-
-
-      dots =
-        cards.map(
-          (_, index) => {
-            const dot =
-              document.createElement(
-                'button'
-              );
-
-
-            dot.type =
-              'button';
-
-
-            dot.className =
-              'slider-dot';
-
-
-            dot.setAttribute(
-              'aria-label',
-              `${labelPrefix} ${index + 1} 보기`
-            );
-
-
-            if (
-              index === 0
-            ) {
-              dot.classList.add(
-                'active'
-              );
-            }
-
-
-            dot.addEventListener(
-              'click',
-              () => {
-                scrollToCard(
-                  slider,
-                  cards[index]
-                );
-              }
-            );
-
-
-            dotsContainer.appendChild(
-              dot
-            );
-
-
-            return dot;
-          }
-        );
-    }
-
-
-    // ==========================================================
-    // SCROLL TO CARD
-    // ==========================================================
-
-    function scrollToCard(
-      container,
-      card
-    ) {
-      const containerRect =
-        container.getBoundingClientRect();
-
-
-      const cardRect =
-        card.getBoundingClientRect();
-
-
-      const target =
-        container.scrollLeft +
-        (
-          cardRect.left -
-          containerRect.left
-        );
-
-
-      container.scrollTo({
-        left: target,
-        behavior: 'smooth'
-      });
-    }
-
-
-    // ==========================================================
-    // FIND ACTIVE CARD
-    // ==========================================================
-
-    function getActiveIndex() {
-      const sliderRect =
-        slider.getBoundingClientRect();
-
-
-      const sliderCenter =
-        sliderRect.left +
-        (
-          sliderRect.width / 2
-        );
-
-
-      let closestIndex =
-        0;
-
-
-      let closestDistance =
-        Infinity;
-
-
-      cards.forEach(
         (
           card,
           index
         ) => {
+
+          const dot =
+            make(
+              'button',
+              'slider-dot'
+            );
+
+
+          dot.type =
+            'button';
+
+
+          dot.setAttribute(
+            'aria-label',
+            `MOOHAE ONE ${index + 1} 보기`
+          );
+
+
+          if (
+            index ===
+            0
+          ) {
+
+            dot.classList.add(
+              'active'
+            );
+          }
+
+
+          dot.addEventListener(
+
+            'click',
+
+            () => {
+
+              slider.scrollTo({
+                left:
+                  card.offsetLeft -
+                  slider.offsetLeft,
+
+                behavior:
+                  'smooth'
+              });
+            }
+          );
+
+
+          dotsContainer.appendChild(
+            dot
+          );
+
+
+          return dot;
+        }
+      );
+
+
+    let ticking =
+      false;
+
+
+    function updateDots() {
+
+      const sliderRect =
+        slider.getBoundingClientRect();
+
+
+      const center =
+        sliderRect.left +
+        sliderRect.width /
+        2;
+
+
+      let activeIndex =
+        0;
+
+
+      let minDistance =
+        Infinity;
+
+
+      cards.forEach(
+
+        (
+          card,
+          index
+        ) => {
+
           const rect =
             card.getBoundingClientRect();
 
 
           const cardCenter =
             rect.left +
-            (
-              rect.width / 2
-            );
+            rect.width /
+            2;
 
 
           const distance =
             Math.abs(
-              sliderCenter -
+              center -
               cardCenter
             );
 
 
           if (
             distance <
-            closestDistance
+            minDistance
           ) {
-            closestDistance =
+
+            minDistance =
               distance;
 
 
-            closestIndex =
+            activeIndex =
               index;
           }
         }
       );
 
 
-      return closestIndex;
-    }
-
-
-    // ==========================================================
-    // UPDATE DOT
-    // ==========================================================
-
-    function updateActiveDot() {
-      if (
-        dots.length === 0
-      ) {
-        return;
-      }
-
-
-      const activeIndex =
-        getActiveIndex();
-
-
       dots.forEach(
+
         (
           dot,
           index
         ) => {
+
+          const active =
+            index ===
+            activeIndex;
+
+
           dot.classList.toggle(
             'active',
-            index ===
-              activeIndex
+            active
           );
 
 
           dot.setAttribute(
             'aria-current',
-            index === activeIndex
+            active
               ? 'true'
               : 'false'
           );
@@ -480,18 +848,16 @@
     }
 
 
-    // ==========================================================
-    // SCROLL PERFORMANCE CONTROL
-    // ==========================================================
-
-    let ticking =
-      false;
-
-
     slider.addEventListener(
+
       'scroll',
+
       () => {
-        if (ticking) {
+
+        if (
+          ticking
+        ) {
+
           return;
         }
 
@@ -501,98 +867,123 @@
 
 
         window.requestAnimationFrame(
+
           () => {
-            updateActiveDot();
+
+            updateDots();
+
 
             ticking =
               false;
           }
         );
       },
+
       {
-        passive: true
+        passive:
+          true
       }
     );
 
-
-    // ==========================================================
-    // RESIZE
-    // ==========================================================
 
     window.addEventListener(
       'resize',
-      () => {
-        updateActiveDot();
-      },
+      updateDots,
       {
-        passive: true
+        passive:
+          true
       }
     );
 
 
-    updateActiveDot();
+    updateDots();
   }
 
 
   // ============================================================
-  // ONE-TIME CARE MOBILE SLIDER
+  // REVEAL
+  //
+  // site.js가 기존 .reveal을 처리하지만,
+  // JS에서 동적으로 만든 ONE / PLAN 요소는
+  // site.js 실행 이후 생성되므로 별도 observer가 필요합니다.
   // ============================================================
 
-  function setupOneTimeServiceSlider() {
-    const slider =
-      document.getElementById(
-        'oneTimeServiceGrid'
+  function setupDynamicReveal() {
+
+    const nodes =
+      document.querySelectorAll(
+        '.care-page .reveal:not(.in-view)'
       );
 
 
-    const dotsContainer =
-      document.getElementById(
-        'oneTimeSliderDots'
+    if (
+      !('IntersectionObserver' in window)
+    ) {
+
+      nodes.forEach(
+
+        (node) => {
+
+          node.classList.add(
+            'in-view'
+          );
+        }
       );
 
 
-    setupSlider({
-      slider,
-
-      cardSelector:
-        '.one-time-card',
-
-      dotsContainer,
-
-      labelPrefix:
-        '1회 관리 서비스'
-    });
-  }
+      return;
+    }
 
 
-  // ============================================================
-  // MOOHAE 365 MOBILE SLIDER
-  // ============================================================
+    const observer =
+      new IntersectionObserver(
 
-  function setupPlanSlider() {
-    const slider =
-      document.querySelector(
-        '.plan-grid'
+        (
+          entries
+        ) => {
+
+          entries.forEach(
+
+            (entry) => {
+
+              if (
+                entry.isIntersecting
+              ) {
+
+                entry.target
+                  .classList
+                  .add(
+                    'in-view'
+                  );
+
+
+                observer.unobserve(
+                  entry.target
+                );
+              }
+            }
+          );
+        },
+
+        {
+          threshold:
+            0.1,
+
+          rootMargin:
+            '0px 0px -5% 0px'
+        }
       );
 
 
-    const dotsContainer =
-      document.getElementById(
-        'planSliderDots'
-      );
+    nodes.forEach(
 
+      (node) => {
 
-    setupSlider({
-      slider,
-
-      cardSelector:
-        '.plan-card',
-
-      dotsContainer,
-
-      labelPrefix:
-        'MOOHAE 365 플랜'
-    });
+        observer.observe(
+          node
+        );
+      }
+    );
   }
 
 
@@ -602,17 +993,13 @@
 
   function init() {
 
-    // 1회 관리 서비스 생성
-    renderOneTimeServices();
+    renderOneServices();
 
+    renderPlans();
 
-    // 서비스 카드가 DOM에 만들어진 뒤
-    // 슬라이더를 연결해야 합니다.
-    setupOneTimeServiceSlider();
+    setupSlider();
 
-
-    // MOOHAE 365
-    setupPlanSlider();
+    setupDynamicReveal();
   }
 
 
@@ -624,15 +1011,18 @@
     document.readyState ===
     'loading'
   ) {
+
     document.addEventListener(
       'DOMContentLoaded',
       init,
       {
-        once: true
+        once:
+          true
       }
     );
 
   } else {
+
     init();
   }
 
