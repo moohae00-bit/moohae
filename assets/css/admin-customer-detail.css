@@ -803,3 +803,125 @@
   }
 }
 
+/* =========================================================
+   MOOHAE CUSTOMER DETAIL
+   FIXED FIELD CARE CTA
+   ========================================================= */
+
+.customer-detail-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+/* 현장 CARE 시작 버튼 */
+#openHouseCareButton {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 1000;
+
+  width: min(720px, calc(100% - 48px));
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px 24px;
+
+  border: 0;
+  border-radius: 16px;
+
+  background: #24251f;
+  color: #ffffff;
+
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+
+  box-sizing: border-box;
+
+  transform: translateX(-50%);
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+
+/* hidden 속성이 JS에서 적용되면 반드시 숨김 */
+#openHouseCareButton[hidden] {
+  display: none !important;
+}
+
+
+#openHouseCareButton:hover {
+  transform:
+    translateX(-50%)
+    translateY(-2px);
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.16);
+}
+
+
+#openHouseCareButton:active {
+  transform:
+    translateX(-50%)
+    translateY(0);
+}
+
+
+#openHouseCareButton:focus-visible {
+  outline: 3px solid rgba(36, 37, 31, 0.22);
+  outline-offset: 3px;
+}
+
+
+/* 버튼이 마지막 콘텐츠를 가리지 않도록 하단 공간 확보 */
+body {
+  padding-bottom: 110px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  #openHouseCareButton {
+    bottom:
+      max(
+        16px,
+        env(safe-area-inset-bottom)
+      );
+
+    width: calc(100% - 32px);
+    min-height: 56px;
+
+    padding: 15px 20px;
+
+    border-radius: 14px;
+
+    font-size: 15px;
+  }
+
+
+  body {
+    padding-bottom:
+      calc(
+        96px +
+        env(safe-area-inset-bottom)
+      );
+  }
+
+}
