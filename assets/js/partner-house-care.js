@@ -51,112 +51,213 @@
   // ============================================================
 
   const partnerIdentity =
-    document.getElementById('partnerIdentity');
+    document.getElementById(
+      'partnerIdentity'
+    );
+
 
   const logoutButton =
-    document.getElementById('logoutButton');
+    document.getElementById(
+      'logoutButton'
+    );
+
 
   const pageLoading =
-    document.getElementById('pageLoading');
+    document.getElementById(
+      'pageLoading'
+    );
+
 
   const pageError =
-    document.getElementById('pageError');
+    document.getElementById(
+      'pageError'
+    );
+
 
   const pageErrorMessage =
-    document.getElementById('pageErrorMessage');
+    document.getElementById(
+      'pageErrorMessage'
+    );
+
 
   const partnerContent =
-    document.getElementById('partnerContent');
+    document.getElementById(
+      'partnerContent'
+    );
+
 
   const houseNumber =
-    document.getElementById('houseNumber');
+    document.getElementById(
+      'houseNumber'
+    );
+
 
   const planBadge =
-    document.getElementById('planBadge');
+    document.getElementById(
+      'planBadge'
+    );
+
 
   const houseAddress =
-    document.getElementById('houseAddress');
+    document.getElementById(
+      'houseAddress'
+    );
+
 
   const careCycle =
-    document.getElementById('careCycle');
+    document.getElementById(
+      'careCycle'
+    );
+
 
   const nextCareDate =
-    document.getElementById('nextCareDate');
+    document.getElementById(
+      'nextCareDate'
+    );
+
 
   const visitSchedule =
-    document.getElementById('visitSchedule');
+    document.getElementById(
+      'visitSchedule'
+    );
+
 
   const visitArea =
-    document.getElementById('visitArea');
+    document.getElementById(
+      'visitArea'
+    );
+
 
   const lastRecordCount =
-    document.getElementById('lastRecordCount');
+    document.getElementById(
+      'lastRecordCount'
+    );
+
 
   const lastRecordList =
-    document.getElementById('lastRecordList');
+    document.getElementById(
+      'lastRecordList'
+    );
+
 
   const priorityList =
-    document.getElementById('priorityList');
+    document.getElementById(
+      'priorityList'
+    );
+
 
   const startCheckButton =
-    document.getElementById('startCheckButton');
+    document.getElementById(
+      'startCheckButton'
+    );
+
 
   const checkObjectList =
-    document.getElementById('checkObjectList');
+    document.getElementById(
+      'checkObjectList'
+    );
+
 
   const goCareButton =
-    document.getElementById('goCareButton');
+    document.getElementById(
+      'goCareButton'
+    );
+
 
   const checkMessage =
-    document.getElementById('checkMessage');
+    document.getElementById(
+      'checkMessage'
+    );
+
 
   const careObjectList =
-    document.getElementById('careObjectList');
+    document.getElementById(
+      'careObjectList'
+    );
+
 
   const emptyCareState =
-    document.getElementById('emptyCareState');
+    document.getElementById(
+      'emptyCareState'
+    );
+
 
   const goProofButton =
-    document.getElementById('goProofButton');
+    document.getElementById(
+      'goProofButton'
+    );
+
 
   const careMessage =
-    document.getElementById('careMessage');
+    document.getElementById(
+      'careMessage'
+    );
+
 
   const careVisitSelect =
-    document.getElementById('careVisitSelect');
+    document.getElementById(
+      'careVisitSelect'
+    );
+
 
   const nextPriorityList =
-    document.getElementById('nextPriorityList');
+    document.getElementById(
+      'nextPriorityList'
+    );
+
 
   const partnerFinalNote =
-    document.getElementById('partnerFinalNote');
+    document.getElementById(
+      'partnerFinalNote'
+    );
+
 
   const completeVisitButton =
-    document.getElementById('completeVisitButton');
+    document.getElementById(
+      'completeVisitButton'
+    );
+
 
   const proofMessage =
-    document.getElementById('proofMessage');
+    document.getElementById(
+      'proofMessage'
+    );
 
 
   // ============================================================
   // STATE
   // ============================================================
 
-  let authContext = null;
+  let authContext =
+    null;
 
-  let customerId = null;
 
-  let houseId = null;
+  let customerId =
+    null;
 
-  let houseCustomerId = null;
 
-  let snapshot = null;
+  let houseId =
+    null;
 
-  let currentVisit = null;
 
-  let currentRecords = new Map();
+  let houseCustomerId =
+    null;
 
-  let latestRecords = new Map();
+
+  let snapshot =
+    null;
+
+
+  let currentVisit =
+    null;
+
+
+  let currentRecords =
+    new Map();
+
+
+  let latestRecords =
+    new Map();
 
 
   // ============================================================
@@ -168,18 +269,30 @@
     className = '',
     text = ''
   ) {
-    const node =
-      document.createElement(tag);
 
-    if (className) {
+    const node =
+      document.createElement(
+        tag
+      );
+
+
+    if (
+      className
+    ) {
+
       node.className =
         className;
     }
 
-    if (text) {
+
+    if (
+      text
+    ) {
+
       node.textContent =
         text;
     }
+
 
     return node;
   }
@@ -190,12 +303,18 @@
     text,
     ok = false
   ) {
-    if (!node) {
+
+    if (
+      !node
+    ) {
+
       return;
     }
 
+
     node.textContent =
       text;
+
 
     node.classList.toggle(
       'success',
@@ -207,128 +326,208 @@
   function formatDate(
     value
   ) {
-    if (!value) {
+
+    if (
+      !value
+    ) {
+
       return '미정';
     }
 
+
     const date =
-      new Date(value);
+      new Date(
+        value
+      );
+
 
     if (
       Number.isNaN(
         date.getTime()
       )
     ) {
+
       return '미정';
     }
+
 
     return new Intl.DateTimeFormat(
       'ko-KR',
       {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
+        year:
+          'numeric',
+
+        month:
+          '2-digit',
+
+        day:
+          '2-digit'
       }
-    ).format(date);
+    ).format(
+      date
+    );
   }
 
 
   function formatDateTime(
     value
   ) {
-    if (!value) {
+
+    if (
+      !value
+    ) {
+
       return '일정 미정';
     }
 
+
     const date =
-      new Date(value);
+      new Date(
+        value
+      );
+
 
     if (
       Number.isNaN(
         date.getTime()
       )
     ) {
+
       return '일정 미정';
     }
+
 
     return new Intl.DateTimeFormat(
       'ko-KR',
       {
-        month: '2-digit',
-        day: '2-digit',
-        weekday: 'short',
-        hour: '2-digit',
-        minute: '2-digit'
+        month:
+          '2-digit',
+
+        day:
+          '2-digit',
+
+        weekday:
+          'short',
+
+        hour:
+          '2-digit',
+
+        minute:
+          '2-digit'
       }
-    ).format(date);
+    ).format(
+      date
+    );
   }
 
 
   function formatHouseNumber(
     value
   ) {
+
     const number =
-      Number(value);
+      Number(
+        value
+      );
+
 
     if (
-      !Number.isFinite(number) ||
+      !Number.isFinite(
+        number
+      ) ||
       number < 1
     ) {
+
       return 'HOUSE #—';
     }
 
-    return `HOUSE #${String(number).padStart(5, '0')}`;
+
+    return (
+      `HOUSE #${String(
+        number
+      ).padStart(
+        5,
+        '0'
+      )}`
+    );
   }
 
 
   function getStatePresentation(
     record
   ) {
-    if (!record) {
+
+    if (
+      !record
+    ) {
+
       return {
-        className: 'state-gray',
-        label: '기록 없음'
+        className:
+          'state-gray',
+
+        label:
+          '기록 없음'
       };
     }
+
 
     if (
       record.result ===
       'CARE_COMPLETED'
     ) {
+
       return {
-        className: 'state-green',
-        label: 'CARE 완료'
+        className:
+          'state-green',
+
+        label:
+          'CARE 완료'
       };
     }
+
 
     if (
       record.condition_status ===
       'CARE_RECOMMENDED'
     ) {
+
       return {
-        className: 'state-orange',
-        label: 'CARE 권장'
+        className:
+          'state-orange',
+
+        label:
+          'CARE 권장'
       };
     }
+
 
     if (
       record.condition_status ===
       'WATCH'
     ) {
+
       return {
-        className: 'state-amber',
-        label: '관찰'
+        className:
+          'state-amber',
+
+        label:
+          '관찰'
       };
     }
+
 
     if (
       record.result ===
         'CHECK_COMPLETED' ||
+
       record.condition_status ===
         'MAINTAIN'
     ) {
+
       return {
-        className: 'state-blue',
+        className:
+          'state-blue',
+
         label:
           record.condition_status ===
             'MAINTAIN'
@@ -337,21 +536,31 @@
       };
     }
 
+
     if (
       record.action ===
         'NONE' ||
+
       record.result ===
         'NONE'
     ) {
+
       return {
-        className: 'state-gray',
-        label: '미진행'
+        className:
+          'state-gray',
+
+        label:
+          '미진행'
       };
     }
 
+
     return {
-      className: 'state-gray',
-      label: '기록 중'
+      className:
+        'state-gray',
+
+      label:
+        '기록 중'
     };
   }
 
@@ -359,20 +568,33 @@
   function getObject(
     objectId
   ) {
+
     return (
-      snapshot?.objects || []
+      snapshot?.objects ||
+      []
     ).find(
+
       (object) =>
-        object.id === objectId
-    ) || null;
+        object.id ===
+        objectId
+
+    ) ||
+    null;
   }
 
 
   function normalizeArray(
     value
   ) {
-    return Array.isArray(value)
-      ? value.map(String)
+
+    return Array.isArray(
+      value
+    )
+
+      ? value.map(
+          String
+        )
+
       : [];
   }
 
@@ -382,13 +604,19 @@
   // ============================================================
 
   async function requireAuthorizedStaff() {
+
     if (
-      !window.moohaeSupabaseConfigReady ||
-      !window.moohaeSupabase
+      !window
+        .moohaeSupabaseConfigReady ||
+
+      !window
+        .moohaeSupabase
     ) {
+
       window.location.replace(
         './login.html'
       );
+
 
       return null;
     }
@@ -408,21 +636,28 @@
       error ||
       !data?.user
     ) {
+
       window.location.replace(
         './login.html'
       );
+
 
       return null;
     }
 
 
     const {
-      data: profile,
-      error: profileError
+      data:
+        profile,
+
+      error:
+        profileError
     } =
       await window
         .moohaeSupabase
-        .from('admin_profiles')
+        .from(
+          'admin_profiles'
+        )
         .select(
           'display_name, role, is_active'
         )
@@ -434,31 +669,46 @@
 
 
     const allowed =
+
       !profileError &&
+
       profile &&
-      profile.is_active === true &&
+
+      profile.is_active ===
+        true &&
+
       (
-        profile.role === 'admin' ||
-        profile.role === 'manager'
+        profile.role ===
+          'admin' ||
+
+        profile.role ===
+          'manager'
       );
 
 
-    if (!allowed) {
+    if (
+      !allowed
+    ) {
+
       await window
         .moohaeSupabase
         .auth
         .signOut();
 
+
       window.location.replace(
         './login.html'
       );
+
 
       return null;
     }
 
 
     return {
-      user: data.user,
+      user:
+        data.user,
+
       profile
     };
   }
@@ -474,6 +724,7 @@
   // ============================================================
 
   async function resolveHouse() {
+
     const params =
       new URLSearchParams(
         window.location.search
@@ -481,25 +732,38 @@
 
 
     const houseParam =
-      params.get('house');
+      params.get(
+        'house'
+      );
 
 
     const customerParam =
-      params.get('id') ||
-      params.get('customer');
+
+      params.get(
+        'id'
+      ) ||
+
+      params.get(
+        'customer'
+      );
 
 
     if (
       houseParam &&
-      UUID_PATTERN.test(houseParam)
+      UUID_PATTERN.test(
+        houseParam
+      )
     ) {
+
       const {
         data,
         error
       } =
         await window
           .moohaeSupabase
-          .from('houses')
+          .from(
+            'houses'
+          )
           .select(
             'id, customer_id, is_primary, status'
           )
@@ -514,9 +778,13 @@
         error ||
         !data
       ) {
+
         throw (
           error ||
-          new Error('HOUSE_NOT_FOUND')
+
+          new Error(
+            'HOUSE_NOT_FOUND'
+          )
         );
       }
 
@@ -524,11 +792,14 @@
       houseId =
         data.id;
 
+
       houseCustomerId =
         data.customer_id;
 
+
       customerId =
         data.customer_id;
+
 
       return;
     }
@@ -536,10 +807,12 @@
 
     if (
       !customerParam ||
+
       !UUID_PATTERN.test(
         customerParam
       )
     ) {
+
       throw new Error(
         'INVALID_ROUTE'
       );
@@ -556,7 +829,9 @@
     } =
       await window
         .moohaeSupabase
-        .from('houses')
+        .from(
+          'houses'
+        )
         .select(
           'id, customer_id, is_primary, status'
         )
@@ -575,15 +850,20 @@
       error ||
       !data
     ) {
+
       throw (
         error ||
-        new Error('HOUSE_NOT_FOUND')
+
+        new Error(
+          'HOUSE_NOT_FOUND'
+        )
       );
     }
 
 
     houseId =
       data.id;
+
 
     houseCustomerId =
       data.customer_id;
@@ -595,6 +875,7 @@
   // ============================================================
 
   async function loadSnapshot() {
+
     const {
       data,
       error
@@ -610,15 +891,22 @@
         );
 
 
-    if (error) {
+    if (
+      error
+    ) {
+
       throw error;
     }
 
 
     if (
       !data?.house ||
-      !Array.isArray(data.objects)
+
+      !Array.isArray(
+        data.objects
+      )
     ) {
+
       throw new Error(
         'INVALID_HOUSE_SNAPSHOT'
       );
@@ -635,11 +923,14 @@
 
     for (
       const record
-      of data.latest_records || []
+      of data.latest_records ||
+      []
     ) {
+
       if (
         record?.object_id
       ) {
+
         latestRecords.set(
           record.object_id,
           record
@@ -654,13 +945,16 @@
   // ============================================================
 
   async function loadCurrentVisit() {
+
     const {
       data,
       error
     } =
       await window
         .moohaeSupabase
-        .from('care_visits')
+        .from(
+          'care_visits'
+        )
         .select(
           `
             id,
@@ -687,35 +981,55 @@
         .order(
           'scheduled_at',
           {
-            ascending: true,
-            nullsFirst: false
+            ascending:
+              true,
+
+            nullsFirst:
+              false
           }
         )
-        .limit(20);
+        .limit(
+          20
+        );
 
 
-    if (error) {
+    if (
+      error
+    ) {
+
       throw error;
     }
 
 
     const visits =
-      Array.isArray(data)
+      Array.isArray(
+        data
+      )
+
         ? data
+
         : [];
 
 
     currentVisit =
+
       visits.find(
+
         (visit) =>
           visit.visit_status ===
           'in_progress'
+
       ) ||
+
       visits[0] ||
+
       null;
 
 
-    if (!currentVisit) {
+    if (
+      !currentVisit
+    ) {
+
       throw new Error(
         'NO_ACTIVE_VISIT'
       );
@@ -751,10 +1065,12 @@
 
 
     careVisitSelect.dispatchEvent(
+
       new Event(
         'change',
         {
-          bubbles: true
+          bubbles:
+            true
         }
       )
     );
@@ -766,13 +1082,16 @@
   // ============================================================
 
   async function loadCurrentRecords() {
+
     const {
       data,
       error
     } =
       await window
         .moohaeSupabase
-        .from('care_records')
+        .from(
+          'care_records'
+        )
         .select(
           `
             id,
@@ -795,7 +1114,10 @@
         );
 
 
-    if (error) {
+    if (
+      error
+    ) {
+
       throw error;
     }
 
@@ -806,8 +1128,10 @@
 
     for (
       const record
-      of data || []
+      of data ||
+      []
     ) {
+
       currentRecords.set(
         record.object_id,
         record
@@ -821,6 +1145,7 @@
   // ============================================================
 
   function renderHouseSummary() {
+
     const house =
       snapshot.house;
 
@@ -832,11 +1157,14 @@
 
 
     planBadge.textContent =
+
       house.plan_code
+
         ? house.plan_code.replace(
             '_PLUS',
             '+'
           )
+
         : '플랜 미설정';
 
 
@@ -848,7 +1176,8 @@
     const current =
       Number(
         house.cycle_current
-      ) || 0;
+      ) ||
+      0;
 
 
     const total =
@@ -858,10 +1187,30 @@
 
 
     careCycle.textContent =
-      Number.isFinite(total) &&
+
+      Number.isFinite(
+        total
+      ) &&
       total > 0
-        ? `CARE ${String(current).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
-        : `CARE ${String(current).padStart(2, '0')}`;
+
+        ? `CARE ${String(
+            current
+          ).padStart(
+            2,
+            '0'
+          )} / ${String(
+            total
+          ).padStart(
+            2,
+            '0'
+          )}`
+
+        : `CARE ${String(
+            current
+          ).padStart(
+            2,
+            '0'
+          )}`;
 
 
     nextCareDate.textContent =
@@ -887,17 +1236,25 @@
   // ============================================================
 
   function renderLastRecords() {
+
     lastRecordList.replaceChildren();
 
 
     const records =
-      [...latestRecords.values()]
+      [
+        ...latestRecords.values()
+      ]
         .sort(
+
           (a, b) =>
+
             (
               a.object_display_order ||
               0
-            ) -
+            )
+
+            -
+
             (
               b.object_display_order ||
               0
@@ -912,15 +1269,19 @@
 
 
     if (
-      records.length === 0
+      records.length ===
+      0
     ) {
+
       lastRecordList.appendChild(
+
         make(
           'p',
           'record-state',
           '아직 HOUSE CARE 기록이 없습니다.'
         )
       );
+
 
       return;
     }
@@ -930,6 +1291,7 @@
       const record
       of records
     ) {
+
       const row =
         make(
           'div',
@@ -945,12 +1307,14 @@
 
 
       main.append(
+
         make(
           'strong',
           '',
           record.object_name ||
           '관리 대상'
         ),
+
         make(
           'span',
           '',
@@ -992,17 +1356,24 @@
   // ============================================================
 
   function getPriorityObjects() {
+
     const objects =
-      snapshot.objects || [];
+      snapshot.objects ||
+      [];
 
 
-    return [...objects]
+    return [
+      ...objects
+    ]
       .sort(
+
         (a, b) => {
+
           const aRecord =
             latestRecords.get(
               a.id
             );
+
 
           const bRecord =
             latestRecords.get(
@@ -1011,46 +1382,75 @@
 
 
           const weight =
-            (record) => {
+            (
+              record
+            ) => {
+
               if (
                 record?.next_action ===
                 'NEXT_CARE'
               ) {
+
                 return 0;
               }
+
 
               if (
                 record?.next_action ===
                 'NEXT_CHECK'
               ) {
+
                 return 1;
               }
 
-              if (!record) {
+
+              if (
+                !record
+              ) {
+
                 return 2;
               }
+
 
               return 3;
             };
 
 
           const diff =
-            weight(aRecord) -
-            weight(bRecord);
+
+            weight(
+              aRecord
+            )
+
+            -
+
+            weight(
+              bRecord
+            );
 
 
-          if (diff !== 0) {
+          if (
+            diff !==
+            0
+          ) {
+
             return diff;
           }
 
 
           return (
-            a.display_order ||
-            0
-          ) -
-          (
-            b.display_order ||
-            0
+
+            (
+              a.display_order ||
+              0
+            )
+
+            -
+
+            (
+              b.display_order ||
+              0
+            )
           );
         }
       )
@@ -1062,6 +1462,7 @@
 
 
   function renderPriority() {
+
     priorityList.replaceChildren();
 
 
@@ -1073,6 +1474,7 @@
       const object
       of priorities
     ) {
+
       const record =
         latestRecords.get(
           object.id
@@ -1086,20 +1488,26 @@
 
 
       item.append(
+
         make(
           'strong',
           '',
           object.object_name
         ),
+
         make(
           'span',
           '',
           record?.next_action ===
             'NEXT_CARE'
+
             ? '다음 CARE'
+
             : record?.next_action ===
                 'NEXT_CHECK'
+
                 ? '다음 CHECK'
+
                 : '첫 기록'
         )
       );
@@ -1119,18 +1527,23 @@
   function goToStep(
     step
   ) {
+
     document
       .querySelectorAll(
         '.partner-step'
       )
       .forEach(
+
         (section) => {
+
           const active =
             section.dataset.step ===
             step;
 
+
           section.hidden =
             !active;
+
 
           section.classList.toggle(
             'is-active',
@@ -1145,11 +1558,15 @@
         '.step-button'
       )
       .forEach(
+
         (button) => {
+
           button.classList.toggle(
+
             'is-active',
+
             button.dataset.stepTarget ===
-            step
+              step
           );
         }
       );
@@ -1159,6 +1576,7 @@
       step ===
       'care'
     ) {
+
       renderCareObjects();
     }
 
@@ -1167,13 +1585,17 @@
       step ===
       'proof'
     ) {
+
       renderNextPriority();
     }
 
 
     window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
+      top:
+        0,
+
+      behavior:
+        'smooth'
     });
   }
 
@@ -1188,6 +1610,7 @@
     group,
     selectedValue
   ) {
+
     const button =
       make(
         'button',
@@ -1212,6 +1635,7 @@
       selectedValue ===
       value
     ) {
+
       button.classList.add(
         'is-selected'
       );
@@ -1219,8 +1643,11 @@
 
 
     button.addEventListener(
+
       'click',
+
       () => {
+
         const container =
           button.closest(
             '.choice-grid'
@@ -1232,7 +1659,9 @@
             '.choice-button'
           )
           .forEach(
+
             (item) => {
+
               item.classList.remove(
                 'is-selected'
               );
@@ -1255,10 +1684,13 @@
     card,
     group
   ) {
+
     return (
+
       card.querySelector(
         `.choice-button[data-choice-group="${group}"].is-selected`
       )?.dataset.value ||
+
       ''
     );
   }
@@ -1269,17 +1701,25 @@
   // ============================================================
 
   function renderCheckObjects() {
+
     checkObjectList.replaceChildren();
 
 
     const objects =
-      [...(snapshot.objects || [])]
+      [
+        ...(snapshot.objects || [])
+      ]
         .sort(
+
           (a, b) =>
+
             (
               a.display_order ||
               0
-            ) -
+            )
+
+            -
+
             (
               b.display_order ||
               0
@@ -1291,6 +1731,7 @@
       const object
       of objects
     ) {
+
       const record =
         currentRecords.get(
           object.id
@@ -1322,11 +1763,13 @@
 
 
       title.append(
+
         make(
           'strong',
           '',
           object.object_name
         ),
+
         make(
           'span',
           'object-space',
@@ -1335,7 +1778,10 @@
       );
 
 
-      if (record) {
+      if (
+        record
+      ) {
+
         const state =
           getStatePresentation(
             record
@@ -1343,7 +1789,9 @@
 
 
         head.append(
+
           title,
+
           make(
             'span',
             `state-pill ${state.className}`,
@@ -1352,8 +1800,11 @@
         );
 
       } else {
+
         head.append(
+
           title,
+
           make(
             'span',
             'state-pill state-gray',
@@ -1378,6 +1829,7 @@
 
 
       actionBlock.appendChild(
+
         make(
           'div',
           'choice-label',
@@ -1394,18 +1846,21 @@
 
 
       actionGrid.append(
+
         createChoiceButton(
           'CARE',
           'CARE',
           'action',
           record?.action
         ),
+
         createChoiceButton(
           'CHECK',
           'CHECK',
           'action',
           record?.action
         ),
+
         createChoiceButton(
           'NONE',
           'NONE',
@@ -1430,6 +1885,7 @@
 
 
       conditionBlock.appendChild(
+
         make(
           'div',
           'choice-label',
@@ -1446,18 +1902,21 @@
 
 
       conditionGrid.append(
+
         createChoiceButton(
           '유지',
           'MAINTAIN',
           'condition',
           record?.condition_status
         ),
+
         createChoiceButton(
           '관찰',
           'WATCH',
           'condition',
           record?.condition_status
         ),
+
         createChoiceButton(
           'CARE 권장',
           'CARE_RECOMMENDED',
@@ -1482,6 +1941,7 @@
 
 
       nextBlock.appendChild(
+
         make(
           'div',
           'choice-label',
@@ -1498,25 +1958,30 @@
 
 
       nextGrid.append(
+
         createChoiceButton(
           'NEXT CHECK',
           'NEXT_CHECK',
           'next',
           record?.next_action
         ),
+
         createChoiceButton(
           'NEXT CARE',
           'NEXT_CARE',
           'next',
           record?.next_action
         ),
+
         createChoiceButton(
           '없음',
           'NONE_NEXT',
           'next',
           record?.next_action ===
             'NONE'
+
             ? 'NONE_NEXT'
+
             : ''
         )
       );
@@ -1532,7 +1997,9 @@
           'button',
           'object-save-button',
           record
+
             ? '기록 업데이트'
+
             : '기록 저장'
         );
 
@@ -1549,8 +2016,11 @@
 
 
       save.addEventListener(
+
         'click',
+
         async () => {
+
           await saveCheckRecord(
             object,
             card,
@@ -1587,6 +2057,17 @@
     button,
     message
   ) {
+
+    // ----------------------------------------------------------
+    // 기존 성공/오류 메시지 초기화
+    // ----------------------------------------------------------
+
+    setMessage(
+      checkMessage,
+      ''
+    );
+
+
     const action =
       getSelectedChoice(
         card,
@@ -1609,13 +2090,18 @@
 
 
     if (
-      !ACTIONS.has(action)
+      !ACTIONS.has(
+        action
+      )
     ) {
+
       message.textContent =
         'ACTION을 선택해주세요.';
 
+
       message.className =
         'record-state error';
+
 
       return;
     }
@@ -1624,15 +2110,19 @@
     if (
       action !==
         'NONE' &&
+
       !CONDITIONS.has(
         condition
       )
     ) {
+
       message.textContent =
         'STATUS를 선택해주세요.';
 
+
       message.className =
         'record-state error';
+
 
       return;
     }
@@ -1642,17 +2132,23 @@
       action ===
       'NONE'
     ) {
+
       condition =
         null;
+
 
       next =
         'NONE';
 
     } else {
+
       next =
+
         next ===
           'NONE_NEXT'
+
           ? 'NONE'
+
           : next;
 
 
@@ -1661,11 +2157,14 @@
           next
         )
       ) {
+
         message.textContent =
           'NEXT를 선택해주세요.';
 
+
         message.className =
           'record-state error';
+
 
         return;
       }
@@ -1679,12 +2178,17 @@
 
 
     const result =
+
       action ===
         'CHECK'
+
         ? 'CHECK_COMPLETED'
+
         : action ===
             'NONE'
+
             ? 'NONE'
+
             : null;
 
 
@@ -1695,11 +2199,13 @@
     message.textContent =
       '저장 중...';
 
+
     message.className =
       'record-state';
 
 
     try {
+
       const {
         error
       } =
@@ -1741,7 +2247,10 @@
           );
 
 
-      if (error) {
+      if (
+        error
+      ) {
+
         throw error;
       }
 
@@ -1749,14 +2258,25 @@
       await loadCurrentRecords();
 
 
-      message.textContent =
+      // --------------------------------------------------------
+      // 중요:
+      // 카드 자체는 다시 렌더링되므로
+      // 성공 메시지는 공용 CHECK 메시지 영역에 표시한다.
+      // --------------------------------------------------------
+
+      setMessage(
+
+        checkMessage,
+
         action ===
           'CARE'
-          ? 'CHECK 저장 · CARE 단계에서 완료합니다.'
-          : '기록이 저장되었습니다.';
 
-      message.className =
-        'record-state success';
+          ? `${object.object_name} · CHECK 저장 완료. CARE 단계에서 완료해주세요.`
+
+          : `${object.object_name} · 기록이 저장되었습니다.`,
+
+        true
+      );
 
 
       renderCheckObjects();
@@ -1764,19 +2284,28 @@
     } catch (
       error
     ) {
+
       console.error(
         'MOOHAE partner CHECK save error:',
         error
       );
 
 
+      setMessage(
+        checkMessage,
+        `${object.object_name} · 기록을 저장하지 못했습니다.`
+      );
+
+
       message.textContent =
-        '기록을 저장하지 못했습니다.';
+        '';
+
 
       message.className =
         'record-state error';
 
     } finally {
+
       button.disabled =
         false;
     }
@@ -1788,12 +2317,16 @@
   // ============================================================
 
   function renderCareObjects() {
+
     careObjectList.replaceChildren();
 
 
     const careRecords =
-      [...currentRecords.values()]
+      [
+        ...currentRecords.values()
+      ]
         .filter(
+
           (record) =>
             record.action ===
             'CARE'
@@ -1809,6 +2342,7 @@
       careRecords.length ===
       0
     ) {
+
       return;
     }
 
@@ -1817,13 +2351,17 @@
       const record
       of careRecords
     ) {
+
       const object =
         getObject(
           record.object_id
         );
 
 
-      if (!object) {
+      if (
+        !object
+      ) {
+
         continue;
       }
 
@@ -1849,11 +2387,13 @@
 
 
       title.append(
+
         make(
           'strong',
           '',
           object.object_name
         ),
+
         make(
           'span',
           'object-space',
@@ -1869,7 +2409,9 @@
 
 
       head.append(
+
         title,
+
         make(
           'span',
           `state-pill ${state.className}`,
@@ -1891,6 +2433,7 @@
 
       const completed =
         new Set(
+
           normalizeArray(
             record.dod_completed
           )
@@ -1908,7 +2451,9 @@
         required.length ===
         0
       ) {
+
         list.appendChild(
+
           make(
             'div',
             'empty-block',
@@ -1917,10 +2462,12 @@
         );
 
       } else {
+
         for (
           const item
           of required
         ) {
+
           const label =
             make(
               'label',
@@ -1937,8 +2484,10 @@
           input.type =
             'checkbox';
 
+
           input.value =
             item;
+
 
           input.checked =
             completed.has(
@@ -1947,7 +2496,9 @@
 
 
           label.append(
+
             input,
+
             make(
               'span',
               '',
@@ -1969,7 +2520,9 @@
           'care-complete-button',
           record.result ===
             'CARE_COMPLETED'
+
             ? 'CARE COMPLETE · 저장됨'
+
             : 'CARE COMPLETE'
         );
 
@@ -1980,21 +2533,26 @@
 
       const updateButtonState =
         () => {
+
           const checked =
             [
               ...list.querySelectorAll(
                 'input[type="checkbox"]:checked'
               )
             ].map(
+
               (input) =>
                 input.value
             );
 
 
           complete.disabled =
-            required.length > 0 &&
+
+            required.length >
+              0 &&
+
             checked.length !==
-            required.length;
+              required.length;
         };
 
 
@@ -2015,14 +2573,18 @@
 
 
       complete.addEventListener(
+
         'click',
+
         async () => {
+
           const checked =
             [
               ...list.querySelectorAll(
                 'input[type="checkbox"]:checked'
               )
             ].map(
+
               (input) =>
                 input.value
             );
@@ -2064,6 +2626,13 @@
     button,
     message
   ) {
+
+    setMessage(
+      careMessage,
+      ''
+    );
+
+
     button.disabled =
       true;
 
@@ -2071,11 +2640,13 @@
     message.textContent =
       '완료 기록 중...';
 
+
     message.className =
       'record-state';
 
 
     try {
+
       const {
         error
       } =
@@ -2115,7 +2686,10 @@
           );
 
 
-      if (error) {
+      if (
+        error
+      ) {
+
         throw error;
       }
 
@@ -2125,7 +2699,7 @@
 
       setMessage(
         careMessage,
-        `${object.object_name} CARE 완료가 기록되었습니다.`,
+        `${object.object_name} · CARE 완료가 기록되었습니다.`,
         true
       );
 
@@ -2135,26 +2709,39 @@
     } catch (
       error
     ) {
+
       console.error(
         'MOOHAE partner CARE complete error:',
         error
       );
 
 
-      message.textContent =
+      setMessage(
+
+        careMessage,
+
         String(
           error?.message ||
           ''
         ).includes(
           'Definition of Done'
         )
-          ? '완료 기준을 모두 체크해주세요.'
-          : 'CARE 완료를 저장하지 못했습니다.';
+
+          ? `${object.object_name} · 완료 기준을 모두 체크해주세요.`
+
+          : `${object.object_name} · CARE 완료를 저장하지 못했습니다.`
+      );
+
+
+      message.textContent =
+        '';
+
 
       message.className =
         'record-state error';
 
     } finally {
+
       button.disabled =
         false;
     }
@@ -2166,15 +2753,21 @@
   // ============================================================
 
   function renderNextPriority() {
+
     nextPriorityList.replaceChildren();
 
 
     const nextRecords =
-      [...currentRecords.values()]
+      [
+        ...currentRecords.values()
+      ]
         .filter(
+
           (record) =>
+
             record.next_action ===
               'NEXT_CHECK' ||
+
             record.next_action ===
               'NEXT_CARE'
         );
@@ -2184,13 +2777,16 @@
       nextRecords.length ===
       0
     ) {
+
       nextPriorityList.appendChild(
+
         make(
           'span',
           'next-chip',
           '다음 우선 항목 없음'
         )
       );
+
 
       return;
     }
@@ -2200,30 +2796,39 @@
       const record
       of nextRecords
     ) {
+
       const object =
         getObject(
           record.object_id
         );
 
 
-      if (!object) {
+      if (
+        !object
+      ) {
+
         continue;
       }
 
 
       nextPriorityList.appendChild(
+
         make(
           'span',
           `next-chip ${
             record.next_action ===
               'NEXT_CARE'
+
               ? 'is-care'
+
               : ''
           }`,
           `${object.object_name} · ${
             record.next_action ===
               'NEXT_CARE'
+
               ? 'NEXT CARE'
+
               : 'NEXT CHECK'
           }`
         )
@@ -2237,20 +2842,25 @@
   // ============================================================
 
   function validateRecordsForCompletion() {
+
     const records =
-      [...currentRecords.values()];
+      [
+        ...currentRecords.values()
+      ];
 
 
     if (
       records.length ===
       0
     ) {
+
       return 'CHECK 기록이 없습니다.';
     }
 
 
     const careRecords =
       records.filter(
+
         (record) =>
           record.action ===
           'CARE'
@@ -2261,6 +2871,7 @@
       careRecords.length ===
       0
     ) {
+
       return '오늘 CARE 완료 항목이 최소 1개 필요합니다.';
     }
 
@@ -2269,12 +2880,15 @@
       const record
       of records
     ) {
+
       if (
         record.action ===
           'CARE' &&
+
         record.result !==
           'CARE_COMPLETED'
       ) {
+
         return 'CARE 항목 중 완료되지 않은 기록이 있습니다.';
       }
 
@@ -2282,9 +2896,11 @@
       if (
         record.action ===
           'CHECK' &&
+
         record.result !==
           'CHECK_COMPLETED'
       ) {
+
         return 'CHECK 항목 중 완료되지 않은 기록이 있습니다.';
       }
 
@@ -2292,9 +2908,11 @@
       if (
         record.action ===
           'NONE' &&
+
         record.result !==
           'NONE'
       ) {
+
         return '미진행 항목 기록을 다시 확인해주세요.';
       }
     }
@@ -2309,6 +2927,7 @@
   // ============================================================
 
   async function validateProofMedia() {
+
     const {
       data,
       error
@@ -2324,30 +2943,41 @@
         );
 
 
-    if (error) {
+    if (
+      error
+    ) {
+
       throw error;
     }
 
 
     const rows =
-      Array.isArray(data)
+      Array.isArray(
+        data
+      )
+
         ? data
+
         : [];
 
 
     const beforeCount =
       rows.filter(
+
         (row) =>
           row.media_type ===
           'before'
+
       ).length;
 
 
     const afterCount =
       rows.filter(
+
         (row) =>
           row.media_type ===
           'after'
+
       ).length;
 
 
@@ -2363,6 +2993,7 @@
   // ============================================================
 
   async function completeVisit() {
+
     setMessage(
       proofMessage,
       ''
@@ -2373,11 +3004,15 @@
       validateRecordsForCompletion();
 
 
-    if (recordError) {
+    if (
+      recordError
+    ) {
+
       setMessage(
         proofMessage,
         recordError
       );
+
 
       return;
     }
@@ -2392,14 +3027,19 @@
 
 
     try {
+
       const proof =
         await validateProofMedia();
 
 
       if (
-        proof.beforeCount < 1 ||
-        proof.afterCount < 1
+        proof.beforeCount <
+          1 ||
+
+        proof.afterCount <
+          1
       ) {
+
         throw new Error(
           'PROOF_REQUIRED'
         );
@@ -2433,7 +3073,10 @@
           );
 
 
-      if (error) {
+      if (
+        error
+      ) {
+
         throw error;
       }
 
@@ -2452,10 +3095,10 @@
       completeVisitButton.disabled =
         true;
 
-
     } catch (
       error
     ) {
+
       console.error(
         'MOOHAE partner visit completion error:',
         error
@@ -2463,10 +3106,14 @@
 
 
       setMessage(
+
         proofMessage,
+
         error?.message ===
           'PROOF_REQUIRED'
+
           ? 'BEFORE와 AFTER 대표 사진을 각각 1장 이상 남겨주세요.'
+
           : 'CARE 완료 처리에 실패했습니다. 기록을 다시 확인해주세요.'
       );
 
@@ -2486,12 +3133,17 @@
   // ============================================================
 
   async function boot() {
+
     try {
+
       authContext =
         await requireAuthorizedStaff();
 
 
-      if (!authContext) {
+      if (
+        !authContext
+      ) {
+
         return;
       }
 
@@ -2528,16 +3180,18 @@
       pageLoading.hidden =
         true;
 
+
       pageError.hidden =
         true;
+
 
       partnerContent.hidden =
         false;
 
-
     } catch (
       error
     ) {
+
       console.error(
         'MOOHAE partner HOUSE boot error:',
         error
@@ -2547,8 +3201,10 @@
       pageLoading.hidden =
         true;
 
+
       partnerContent.hidden =
         true;
+
 
       pageError.hidden =
         false;
@@ -2558,19 +3214,25 @@
         error?.message ===
         'NO_ACTIVE_VISIT'
       ) {
+
         pageErrorMessage.textContent =
           '진행할 방문 일정이 없습니다. 고객 상세에서 방문 일정을 먼저 등록해주세요.';
 
       } else if (
+
         error?.message ===
           'INVALID_ROUTE' ||
+
         error?.message ===
           'HOUSE_NOT_FOUND'
+
       ) {
+
         pageErrorMessage.textContent =
           '고객 또는 HOUSE 주소가 올바르지 않습니다.';
 
       } else {
+
         pageErrorMessage.textContent =
           'HOUSE 데이터를 불러오지 못했습니다. 잠시 후 다시 확인해주세요.';
       }
@@ -2587,10 +3249,15 @@
       '.step-button'
     )
     .forEach(
+
       (button) => {
+
         button.addEventListener(
+
           'click',
+
           () => {
+
             goToStep(
               button.dataset.stepTarget
             );
@@ -2601,8 +3268,11 @@
 
 
   startCheckButton.addEventListener(
+
     'click',
+
     () => {
+
       goToStep(
         'check'
       );
@@ -2611,20 +3281,27 @@
 
 
   goCareButton.addEventListener(
+
     'click',
+
     () => {
+
       const records =
-        [...currentRecords.values()];
+        [
+          ...currentRecords.values()
+        ];
 
 
       if (
         records.length ===
         0
       ) {
+
         setMessage(
           checkMessage,
           '최소 1개 이상의 CHECK 기록을 저장해주세요.'
         );
+
 
         return;
       }
@@ -2638,17 +3315,24 @@
 
 
   goProofButton.addEventListener(
+
     'click',
+
     () => {
+
       const error =
         validateRecordsForCompletion();
 
 
-      if (error) {
+      if (
+        error
+      ) {
+
         setMessage(
           careMessage,
           error
         );
+
 
         return;
       }
@@ -2672,19 +3356,24 @@
   // ============================================================
 
   logoutButton.addEventListener(
+
     'click',
+
     async () => {
+
       logoutButton.disabled =
         true;
 
 
       try {
+
         await window
           .moohaeSupabase
           .auth
           .signOut();
 
       } finally {
+
         window.location.replace(
           './login.html'
         );
