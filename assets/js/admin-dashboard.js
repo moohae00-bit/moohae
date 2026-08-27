@@ -7,7 +7,8 @@
   //
   // CHECK V2 READY
   //
-  // - 고객 목록
+  // - 활성 고객 / 삭제 고객 분리
+  // - 삭제 고객 복구
   // - V2 Home Profile 요약
   // - 고객 검색
   // - 예약 관리
@@ -62,6 +63,42 @@
   const statusFilter =
     document.getElementById(
       'statusFilter'
+    );
+
+
+  const activeCustomersTab =
+    document.getElementById(
+      'activeCustomersTab'
+    );
+
+
+  const deletedCustomersTab =
+    document.getElementById(
+      'deletedCustomersTab'
+    );
+
+
+  const activeCustomersTabCount =
+    document.getElementById(
+      'activeCustomersTabCount'
+    );
+
+
+  const deletedCustomersTabCount =
+    document.getElementById(
+      'deletedCustomersTabCount'
+    );
+
+
+  const emptyCustomersTitle =
+    document.getElementById(
+      'emptyCustomersTitle'
+    );
+
+
+  const emptyCustomersText =
+    document.getElementById(
+      'emptyCustomersText'
     );
 
 
@@ -176,6 +213,14 @@
 
   let customers =
     [];
+
+
+  let deletedCustomers =
+    [];
+
+
+  let currentCustomerView =
+    'active';
 
 
   let latestDiagnosisByCustomer =
@@ -533,11 +578,8 @@
 
       const dayButton =
         make(
-
           'button',
-
           'secondary-button booking-day-action',
-
           allClosed
             ? '빈 시간 전체 열기'
             : '빈 시간 전체 마감'
@@ -580,7 +622,6 @@
         );
 
 
-
       for (
         const row
         of slots
@@ -588,20 +629,15 @@
 
         const slot =
           make(
-
             'div',
-
             `booking-slot${row.booking_id ? ' has-booking' : ''}`
           );
 
 
         const time =
           make(
-
             'strong',
-
             'booking-time',
-
             bookingTime(
               row.booking_time
             )
@@ -622,21 +658,14 @@
           );
 
 
-        // ======================================================
-        // ACTIVE BOOKING
-        // ======================================================
-
         if (
           row.booking_id
         ) {
 
           const link =
             make(
-
               'a',
-
               'booking-customer-link',
-
               row.customer_name ||
                 '이름 없음'
             );
@@ -658,11 +687,8 @@
           meta.appendChild(
 
             make(
-
               'span',
-
               '',
-
               row.customer_phone ||
                 '연락처 미등록'
             )
@@ -676,11 +702,8 @@
             meta.appendChild(
 
               make(
-
                 'span',
-
                 'booking-plan',
-
                 row.recommended_plan
               )
             );
@@ -698,17 +721,11 @@
 
 
           content.append(
-
             link,
-
             meta,
-
             make(
-
               'span',
-
               `booking-status booking-status-${row.booking_status}`,
-
               label
             )
           );
@@ -721,11 +738,8 @@
 
             const confirm =
               make(
-
                 'button',
-
                 'primary-button booking-action-button',
-
                 '예약 확정'
               );
 
@@ -750,11 +764,8 @@
 
           const cancel =
             make(
-
               'button',
-
               'secondary-button booking-action-button danger-action',
-
               '예약 취소'
             );
 
@@ -775,11 +786,6 @@
             cancel
           );
 
-
-        // ======================================================
-        // EMPTY SLOT
-        // ======================================================
-
         } else {
 
           const closed =
@@ -790,34 +796,25 @@
           content.append(
 
             make(
-
               'strong',
-
               `booking-availability ${
                 closed
                   ? 'is-closed'
                   : 'is-open'
               }`,
-
               closed
                 ? '관리자 마감'
                 : '예약 가능'
             ),
 
-
             make(
-
               'span',
-
               'booking-slot-note',
-
               closed
-
                 ? (
                     row.admin_note ||
                     '현재 고객에게 노출되지 않는 시간입니다.'
                   )
-
                 : '고객이 선택할 수 있는 시간입니다.'
             )
           );
@@ -825,11 +822,8 @@
 
           const toggle =
             make(
-
               'button',
-
               'secondary-button booking-action-button',
-
               closed
                 ? '열기'
                 : '마감'
@@ -896,11 +890,8 @@
 
     const end =
       bookingAddDays(
-
         bookingStartDate,
-
-        BOOKING_DAYS -
-          1
+        BOOKING_DAYS - 1
       );
 
 
@@ -926,11 +917,8 @@
         await window
           .moohaeSupabase
           .rpc(
-
             'admin_get_booking_calendar',
-
             {
-
               p_start_date:
                 bookingIsoDate(
                   bookingStartDate
@@ -951,7 +939,6 @@
 
 
       renderBookingCalendar(
-
         Array.isArray(
           data
         )
@@ -964,15 +951,12 @@
         '예약 가능 시간과 접수된 예약을 최신 상태로 확인했습니다.'
       );
 
-
     } catch (
       error
     ) {
 
       console.error(
-
         'MOOHAE booking calendar error:',
-
         error
       );
 
@@ -985,9 +969,7 @@
 
 
       setBookingMessage(
-
         '예약 데이터를 불러오지 못했습니다. 관리자 권한과 RPC 상태를 확인해주세요.',
-
         true
       );
     }
@@ -1038,31 +1020,23 @@
 
       await loadBookingCalendar();
 
-
     } catch (
       error
     ) {
 
       console.error(
-
         `MOOHAE ${rpc} error:`,
-
         error
       );
 
 
       setBookingMessage(
-
         error?.message ===
           'slot_has_active_booking'
-
           ? '활성 예약이 있는 시간은 마감할 수 없습니다.'
-
           : '처리 중 오류가 발생했습니다.',
-
         true
       );
-
 
     } finally {
 
@@ -1099,11 +1073,6 @@
       button.dataset.bookingAction;
 
 
-
-    // ----------------------------------------------------------
-    // OPEN / CLOSE SLOT
-    // ----------------------------------------------------------
-
     if (
       action ===
         'open-slot' ||
@@ -1112,13 +1081,9 @@
     ) {
 
       await bookingMutation(
-
         button,
-
         'admin_set_booking_slot',
-
         {
-
           p_booking_date:
             button.dataset.bookingDate,
 
@@ -1130,27 +1095,16 @@
             'open-slot',
 
           p_admin_note:
-
             action ===
               'close-slot'
-
               ? '관리자 예약 마감'
-
               : null
         },
-
         action ===
           'open-slot'
-
           ? '해당 시간을 다시 열었습니다.'
-
           : '해당 시간을 마감했습니다.'
       );
-
-
-    // ----------------------------------------------------------
-    // OPEN / CLOSE DAY
-    // ----------------------------------------------------------
 
     } else if (
       action ===
@@ -1163,13 +1117,9 @@
 
 
       await bookingMutation(
-
         button,
-
         'admin_set_booking_day',
-
         {
-
           p_booking_date:
             button.dataset.bookingDate,
 
@@ -1177,25 +1127,14 @@
             open,
 
           p_admin_note:
-
             open
-
               ? null
-
               : '관리자 하루 마감'
         },
-
         open
-
           ? '해당 날짜의 빈 시간을 다시 열었습니다.'
-
           : '해당 날짜의 빈 시간을 모두 마감했습니다.'
       );
-
-
-    // ----------------------------------------------------------
-    // CONFIRM BOOKING
-    // ----------------------------------------------------------
 
     } else if (
       action ===
@@ -1203,13 +1142,9 @@
     ) {
 
       await bookingMutation(
-
         button,
-
         'admin_update_booking_status',
-
         {
-
           p_booking_id:
             button.dataset.bookingId,
 
@@ -1219,14 +1154,8 @@
           p_admin_note:
             null
         },
-
         '예약을 확정했습니다.'
       );
-
-
-    // ----------------------------------------------------------
-    // CANCEL BOOKING
-    // ----------------------------------------------------------
 
     } else if (
       action ===
@@ -1244,13 +1173,9 @@
 
 
       await bookingMutation(
-
         button,
-
         'admin_update_booking_status',
-
         {
-
           p_booking_id:
             button.dataset.bookingId,
 
@@ -1260,7 +1185,6 @@
           p_admin_note:
             '관리자 예약 취소'
         },
-
         '예약을 취소했습니다.'
       );
     }
@@ -1313,13 +1237,11 @@
 
 
     const {
-
       data:
         profile,
 
       error:
         profileError
-
     } =
       await window
         .moohaeSupabase
@@ -1374,7 +1296,6 @@
 
 
     return {
-
       user:
         data.user,
 
@@ -1390,7 +1311,8 @@
 
   async function loadCount(
     tableName,
-    target
+    target,
+    configureQuery = null
   ) {
 
     if (
@@ -1401,11 +1323,8 @@
     }
 
 
-    const {
-      count,
-      error
-    } =
-      await window
+    let query =
+      window
         .moohaeSupabase
         .from(
           tableName
@@ -1420,6 +1339,25 @@
               true
           }
         );
+
+
+    if (
+      typeof configureQuery ===
+      'function'
+    ) {
+
+      query =
+        configureQuery(
+          query
+        );
+    }
+
+
+    const {
+      count,
+      error
+    } =
+      await query;
 
 
     target.textContent =
@@ -1450,7 +1388,6 @@
     return Array.isArray(
       value
     )
-
       ? value
           .map(
             (item) =>
@@ -1461,10 +1398,8 @@
           .join(
             ' '
           )
-
       : '';
   }
-
 
 
   function getCustomerProfileChips(
@@ -1484,10 +1419,6 @@
         diagnosis.check_version
       ) >= 2;
 
-
-    // ==========================================================
-    // CURRENT V2
-    // ==========================================================
 
     if (
       isV2
@@ -1511,9 +1442,7 @@
         Array.isArray(
           diagnosis.living_spaces
         )
-
           ? diagnosis.living_spaces
-
           : [];
 
 
@@ -1521,9 +1450,7 @@
         Array.isArray(
           diagnosis.contact_surfaces
         )
-
           ? diagnosis.contact_surfaces
-
           : [];
 
 
@@ -1578,12 +1505,6 @@
     }
 
 
-    // ==========================================================
-    // LEGACY
-    //
-    // 알레르기 데이터는 사용하지 않는다.
-    // ==========================================================
-
     const legacy =
       [];
 
@@ -1630,121 +1551,161 @@
 
   async function loadCustomers() {
 
-    const {
+    const [
+      activeCustomerResult,
+      deletedCustomerResult,
+      diagnosisResult
+    ] =
+      await Promise.all([
 
-      data:
-        customerRows,
+        window
+          .moohaeSupabase
+          .from(
+            'customers'
+          )
+          .select(
+            `
+              id,
+              name,
+              phone,
+              status,
+              privacy_consent,
+              created_at,
+              deleted_at,
+              deleted_by,
+              delete_reason,
+              row_version
+            `
+          )
+          .is(
+            'deleted_at',
+            null
+          )
+          .order(
+            'created_at',
+            {
+              ascending:
+                false
+            }
+          )
+          .limit(
+            200
+          ),
 
-      error:
-        customerError
 
-    } =
-      await window
-        .moohaeSupabase
-        .from(
-          'customers'
-        )
-        .select(
-          `
-            id,
-            name,
-            phone,
-            status,
-            privacy_consent,
-            created_at
-          `
-        )
-        .order(
-          'created_at',
-          {
-            ascending:
-              false
-          }
-        )
-        .limit(
-          200
-        );
+        window
+          .moohaeSupabase
+          .from(
+            'customers'
+          )
+          .select(
+            `
+              id,
+              name,
+              phone,
+              status,
+              privacy_consent,
+              created_at,
+              deleted_at,
+              deleted_by,
+              delete_reason,
+              row_version
+            `
+          )
+          .not(
+            'deleted_at',
+            'is',
+            null
+          )
+          .order(
+            'deleted_at',
+            {
+              ascending:
+                false
+            }
+          )
+          .limit(
+            200
+          ),
+
+
+        window
+          .moohaeSupabase
+          .from(
+            'diagnoses'
+          )
+          .select(
+            `
+              id,
+              customer_id,
+
+              check_version,
+              recommended_plan,
+
+              household,
+              living_spaces,
+              contact_surfaces,
+              management_worries,
+              management_preference,
+
+              spaces,
+              concerns,
+
+              result_level,
+              created_at
+            `
+          )
+          .order(
+            'created_at',
+            {
+              ascending:
+                false
+            }
+          )
+          .limit(
+            500
+          )
+      ]);
 
 
     if (
-      customerError
+      activeCustomerResult.error
     ) {
 
-      throw customerError;
+      throw activeCustomerResult.error;
+    }
+
+
+    if (
+      deletedCustomerResult.error
+    ) {
+
+      throw deletedCustomerResult.error;
+    }
+
+
+    if (
+      diagnosisResult.error
+    ) {
+
+      throw diagnosisResult.error;
     }
 
 
     customers =
       Array.isArray(
-        customerRows
+        activeCustomerResult.data
       )
-
-        ? customerRows
-
+        ? activeCustomerResult.data
         : [];
 
 
-
-    // ==========================================================
-    // LATEST CHECK
-    //
-    // V2 + legacy 최소 필드
-    // allergy_concerns는 조회하지 않는다.
-    // ==========================================================
-
-    const {
-
-      data:
-        diagnosisRows,
-
-      error:
-        diagnosisError
-
-    } =
-      await window
-        .moohaeSupabase
-        .from(
-          'diagnoses'
-        )
-        .select(
-          `
-            id,
-            customer_id,
-
-            check_version,
-            recommended_plan,
-
-            household,
-            living_spaces,
-            contact_surfaces,
-            management_worries,
-            management_preference,
-
-            spaces,
-            concerns,
-
-            result_level,
-            created_at
-          `
-        )
-        .order(
-          'created_at',
-          {
-            ascending:
-              false
-          }
-        )
-        .limit(
-          500
-        );
-
-
-    if (
-      diagnosisError
-    ) {
-
-      throw diagnosisError;
-    }
+    deletedCustomers =
+      Array.isArray(
+        deletedCustomerResult.data
+      )
+        ? deletedCustomerResult.data
+        : [];
 
 
     latestDiagnosisByCustomer =
@@ -1753,7 +1714,7 @@
 
     for (
       const diagnosis
-      of diagnosisRows ||
+      of diagnosisResult.data ||
       []
     ) {
 
@@ -1764,12 +1725,191 @@
       ) {
 
         latestDiagnosisByCustomer.set(
-
           diagnosis.customer_id,
-
           diagnosis
         );
       }
+    }
+
+
+    activeCustomersTabCount.textContent =
+      String(
+        customers.length
+      );
+
+
+    deletedCustomersTabCount.textContent =
+      String(
+        deletedCustomers.length
+      );
+  }
+
+
+
+  // ============================================================
+  // CUSTOMER VIEW
+  // ============================================================
+
+  function setCustomerView(
+    view
+  ) {
+
+    currentCustomerView =
+      view ===
+        'deleted'
+        ? 'deleted'
+        : 'active';
+
+
+    const deleted =
+      currentCustomerView ===
+      'deleted';
+
+
+    activeCustomersTab.classList.toggle(
+      'is-active',
+      !deleted
+    );
+
+
+    deletedCustomersTab.classList.toggle(
+      'is-active',
+      deleted
+    );
+
+
+    activeCustomersTab.setAttribute(
+      'aria-selected',
+      String(
+        !deleted
+      )
+    );
+
+
+    deletedCustomersTab.setAttribute(
+      'aria-selected',
+      String(
+        deleted
+      )
+    );
+
+
+    statusFilter.disabled =
+      deleted;
+
+
+    renderCustomers();
+  }
+
+
+
+  // ============================================================
+  // RESTORE CUSTOMER
+  // ============================================================
+
+  async function restoreCustomer(
+    customer,
+    button
+  ) {
+
+    if (
+      !customer?.id
+    ) {
+
+      return;
+    }
+
+
+    const confirmed =
+      window.confirm(
+        `${customer.name || '이름 없음'} 고객을 복구할까요?\n\n기존 MOOHAE CHECK · 방문 CARE · Care Report 기록은 그대로 유지됩니다.`
+      );
+
+
+    if (
+      !confirmed
+    ) {
+
+      return;
+    }
+
+
+    const originalLabel =
+      button.textContent;
+
+
+    button.disabled =
+      true;
+
+
+    button.textContent =
+      '복구 중...';
+
+
+    try {
+
+      const {
+        error
+      } =
+        await window
+          .moohaeSupabase
+          .rpc(
+            'admin_restore_customer',
+            {
+              p_customer_id:
+                customer.id
+            }
+          );
+
+
+      if (
+        error
+      ) {
+
+        throw error;
+      }
+
+
+      dashboardMessage.textContent =
+        `${customer.name || '고객'} 고객을 복구했습니다.`;
+
+
+      await loadCustomers();
+
+
+      await loadCount(
+        'customers',
+        countTargets.customers,
+        (query) =>
+          query.is(
+            'deleted_at',
+            null
+          )
+      );
+
+
+      renderCustomers();
+
+    } catch (
+      error
+    ) {
+
+      console.error(
+        'MOOHAE customer restore error:',
+        error
+      );
+
+
+      dashboardMessage.textContent =
+        '고객을 복구하지 못했습니다. 관리자 권한과 복구 RPC를 확인해주세요.';
+
+
+      button.disabled =
+        false;
+
+
+      button.textContent =
+        originalLabel;
     }
   }
 
@@ -1792,24 +1932,27 @@
       statusFilter.value;
 
 
+    const source =
+      currentCustomerView ===
+        'deleted'
+        ? deletedCustomers
+        : customers;
 
-    // ==========================================================
-    // FILTER
-    // ==========================================================
 
     const filtered =
-      customers.filter(
+      source.filter(
 
         (customer) => {
 
           if (
+            currentCustomerView ===
+              'active' &&
 
             selectedStatus !==
               'all' &&
 
             customer.status !==
               selectedStatus
-
           ) {
 
             return false;
@@ -1843,6 +1986,9 @@
             ] ||
               '',
 
+            customer.delete_reason ||
+              '',
+
             diagnosis?.recommended_plan ||
               '',
 
@@ -1869,7 +2015,6 @@
               diagnosis?.management_preference
             ),
 
-            // legacy 검색 호환
             arrayText(
               diagnosis?.spaces
             ),
@@ -1892,11 +2037,6 @@
       );
 
 
-
-    // ==========================================================
-    // EMPTY
-    // ==========================================================
-
     customerList.replaceChildren();
 
 
@@ -1905,15 +2045,183 @@
       0;
 
 
+    if (
+      filtered.length ===
+      0
+    ) {
 
-    // ==========================================================
-    // CUSTOMER CARDS
-    // ==========================================================
+      if (
+        currentCustomerView ===
+          'deleted'
+      ) {
+
+        emptyCustomersTitle.textContent =
+          '삭제된 고객이 없습니다.';
+
+
+        emptyCustomersText.textContent =
+          '삭제 처리한 고객은 복구 가능한 상태로 이곳에 표시됩니다.';
+
+      } else {
+
+        emptyCustomersTitle.textContent =
+          '아직 등록된 고객이 없습니다.';
+
+
+        emptyCustomersText.textContent =
+          '무료 진단이 접수되면 고객이 자동으로 이곳에 표시됩니다.';
+      }
+
+
+      return;
+    }
+
 
     for (
       const customer
       of filtered
     ) {
+
+      if (
+        currentCustomerView ===
+        'deleted'
+      ) {
+
+        const row =
+          make(
+            'article',
+            'customer-row is-deleted'
+          );
+
+
+        const profile =
+          make(
+            'div',
+            'customer-primary'
+          );
+
+
+        profile.append(
+          make(
+            'strong',
+            '',
+            customer.name ||
+              '이름 없음'
+          ),
+
+          make(
+            'span',
+            '',
+            customer.phone ||
+              '연락처 미등록'
+          )
+        );
+
+
+        const deletedMeta =
+          make(
+            'div',
+            'deleted-customer-meta'
+          );
+
+
+        deletedMeta.append(
+          make(
+            'strong',
+            '',
+            `삭제 ${formatDate(
+              customer.deleted_at
+            )}`
+          ),
+
+          make(
+            'span',
+            '',
+            `등록 ${formatDate(
+              customer.created_at
+            )}`
+          )
+        );
+
+
+        const reason =
+          make(
+            'div',
+            'deleted-customer-reason',
+            customer.delete_reason ||
+              '삭제 사유 미기록'
+          );
+
+
+        const actions =
+          make(
+            'div',
+            'deleted-customer-actions'
+          );
+
+
+        const detailLink =
+          make(
+            'a',
+            'secondary-button customer-row-action',
+            '기록 보기'
+          );
+
+
+        detailLink.href =
+          `./customer-detail.html?id=${encodeURIComponent(
+            customer.id
+          )}`;
+
+
+        const restoreButton =
+          make(
+            'button',
+            'secondary-button customer-row-action restore-customer-button',
+            '복구'
+          );
+
+
+        restoreButton.type =
+          'button';
+
+
+        restoreButton.addEventListener(
+
+          'click',
+
+          () => {
+
+            restoreCustomer(
+              customer,
+              restoreButton
+            );
+          }
+        );
+
+
+        actions.append(
+          detailLink,
+          restoreButton
+        );
+
+
+        row.append(
+          profile,
+          deletedMeta,
+          reason,
+          actions
+        );
+
+
+        customerList.appendChild(
+          row
+        );
+
+
+        continue;
+      }
+
 
       const diagnosis =
         latestDiagnosisByCustomer.get(
@@ -1934,11 +2242,6 @@
         )}`;
 
 
-
-      // --------------------------------------------------------
-      // PROFILE
-      // --------------------------------------------------------
-
       const profile =
         make(
           'div',
@@ -1947,13 +2250,9 @@
 
 
       profile.appendChild(
-
         make(
-
           'strong',
-
           '',
-
           customer.name ||
             '이름 없음'
         )
@@ -1961,23 +2260,14 @@
 
 
       profile.appendChild(
-
         make(
-
           'span',
-
           '',
-
           customer.phone ||
             '연락처 미등록'
         )
       );
 
-
-
-      // --------------------------------------------------------
-      // HOME PROFILE SUMMARY
-      // --------------------------------------------------------
 
       const concern =
         make(
@@ -2002,7 +2292,6 @@
         ) {
 
           concern.appendChild(
-
             make(
               'span',
               'mini-chip',
@@ -2013,11 +2302,9 @@
           );
         }
 
-
       } else {
 
         concern.appendChild(
-
           make(
             'span',
             'muted-copy',
@@ -2026,11 +2313,6 @@
         );
       }
 
-
-
-      // --------------------------------------------------------
-      // RESULT
-      // --------------------------------------------------------
 
       const result =
         make(
@@ -2049,7 +2331,6 @@
 
 
       result.appendChild(
-
         make(
           'strong',
           '',
@@ -2059,27 +2340,16 @@
 
 
       result.appendChild(
-
         make(
-
           'span',
-
           '',
-
           formatDate(
-
             diagnosis?.created_at ||
-
             customer.created_at
           )
         )
       );
 
-
-
-      // --------------------------------------------------------
-      // STATUS
-      // --------------------------------------------------------
 
       const statusWrap =
         make(
@@ -2090,11 +2360,8 @@
 
       const status =
         make(
-
           'span',
-
           `status-badge status-${customer.status || 'neutral'}`,
-
           STATUS_LABELS[
             customer.status
           ] ||
@@ -2107,19 +2374,10 @@
       );
 
 
-
-      // --------------------------------------------------------
-      // APPEND
-      // --------------------------------------------------------
-
       link.append(
-
         profile,
-
         concern,
-
         result,
-
         statusWrap
       );
 
@@ -2156,13 +2414,17 @@
         `${auth.profile.display_name} · ${auth.profile.role}`;
 
 
-
       const countErrors =
         await Promise.all([
 
           loadCount(
             'customers',
-            countTargets.customers
+            countTargets.customers,
+            (query) =>
+              query.is(
+                'deleted_at',
+                null
+              )
           ),
 
           loadCount(
@@ -2182,17 +2444,13 @@
         ]);
 
 
-
       await Promise.all([
-
         loadCustomers(),
-
         loadBookingCalendar()
       ]);
 
 
       renderCustomers();
-
 
 
       dashboardMessage.textContent =
@@ -2205,15 +2463,12 @@
 
           : '관리자 인증과 고객 데이터 접근 권한이 정상적으로 확인되었습니다.';
 
-
     } catch (
       error
     ) {
 
       console.error(
-
         'MOOHAE dashboard error:',
-
         error
       );
 
@@ -2237,18 +2492,40 @@
   // ============================================================
 
   customerSearch.addEventListener(
-
     'input',
-
     renderCustomers
   );
 
 
   statusFilter.addEventListener(
-
     'change',
-
     renderCustomers
+  );
+
+
+  activeCustomersTab.addEventListener(
+
+    'click',
+
+    () => {
+
+      setCustomerView(
+        'active'
+      );
+    }
+  );
+
+
+  deletedCustomersTab.addEventListener(
+
+    'click',
+
+    () => {
+
+      setCustomerView(
+        'deleted'
+      );
+    }
   );
 
 
@@ -2258,9 +2535,7 @@
   // ============================================================
 
   bookingCalendar.addEventListener(
-
     'click',
-
     handleBookingAction
   );
 
@@ -2273,9 +2548,7 @@
 
       bookingStartDate =
         bookingAddDays(
-
           bookingStartDate,
-
           -BOOKING_PAGE_STEP
         );
 
@@ -2293,9 +2566,7 @@
 
       bookingStartDate =
         bookingAddDays(
-
           bookingStartDate,
-
           BOOKING_PAGE_STEP
         );
 
@@ -2326,7 +2597,6 @@
           .moohaeSupabase
           .auth
           .signOut();
-
 
       } finally {
 

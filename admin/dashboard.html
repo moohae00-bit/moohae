@@ -6,55 +6,296 @@
   <meta name="robots" content="noindex,nofollow">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; upgrade-insecure-requests">
   <meta name="referrer" content="no-referrer">
+
   <title>m∞hae Admin</title>
+
   <link rel="stylesheet" href="../assets/css/admin-auth.css">
 </head>
+
 <body class="dashboard-page">
+
 <header class="admin-topbar">
   <a class="admin-logo" href="./dashboard.html">m∞hae <span>ADMIN</span></a>
-  <div class="admin-topbar-actions"><span id="adminIdentity">확인 중...</span><button id="logoutButton" class="secondary-button" type="button">로그아웃</button></div>
+
+  <div class="admin-topbar-actions">
+    <span id="adminIdentity">확인 중...</span>
+
+    <button id="logoutButton" class="secondary-button" type="button">
+      로그아웃
+    </button>
+  </div>
 </header>
+
+
 <main class="dashboard-shell">
+
   <section class="dashboard-hero compact">
-    <div><p class="eyebrow">MOOHAE OPERATIONS</p><h1>고객과 케어 흐름을<br>한곳에서 관리합니다.</h1></div>
-    <p>진단에서 예약, 방문, Care Report까지 고객 한 명의 기록이 자연스럽게 이어지도록 관리합니다.</p>
+    <div>
+      <p class="eyebrow">MOOHAE OPERATIONS</p>
+
+      <h1>
+        고객과 케어 흐름을<br>
+        한곳에서 관리합니다.
+      </h1>
+    </div>
+
+    <p>
+      진단에서 예약, 방문, Care Report까지 고객 한 명의 기록이
+      자연스럽게 이어지도록 관리합니다.
+    </p>
   </section>
+
+
   <section class="metric-grid" aria-label="운영 현황">
-    <article class="metric-card"><span>고객</span><strong id="customerCount">—</strong><small>전체 고객</small></article>
-    <article class="metric-card"><span>온라인 진단</span><strong id="diagnosisCount">—</strong><small>누적 진단</small></article>
-    <article class="metric-card"><span>방문 케어</span><strong id="visitCount">—</strong><small>방문 기록</small></article>
-    <article class="metric-card"><span>Care Report</span><strong id="reportCount">—</strong><small>생성 리포트</small></article>
+
+    <article class="metric-card">
+      <span>고객</span>
+      <strong id="customerCount">—</strong>
+      <small>활성 고객</small>
+    </article>
+
+    <article class="metric-card">
+      <span>온라인 진단</span>
+      <strong id="diagnosisCount">—</strong>
+      <small>누적 진단</small>
+    </article>
+
+    <article class="metric-card">
+      <span>방문 케어</span>
+      <strong id="visitCount">—</strong>
+      <small>방문 기록</small>
+    </article>
+
+    <article class="metric-card">
+      <span>Care Report</span>
+      <strong id="reportCount">—</strong>
+      <small>생성 리포트</small>
+    </article>
+
   </section>
+
+
   <section class="booking-section" aria-labelledby="bookingHeading">
+
     <div class="section-heading booking-section-heading">
-      <div><p class="eyebrow">BOOKING</p><h2 id="bookingHeading">예약 관리</h2></div>
-      <div class="booking-navigation" aria-label="예약 기간 이동">
-        <button id="bookingPrevButton" class="secondary-button booking-nav-button" type="button">← 이전</button>
-        <strong id="bookingRangeLabel" class="booking-range-label">예약 일정을 확인하고 있습니다.</strong>
-        <button id="bookingNextButton" class="secondary-button booking-nav-button" type="button">다음 →</button>
+
+      <div>
+        <p class="eyebrow">BOOKING</p>
+        <h2 id="bookingHeading">예약 관리</h2>
       </div>
+
+      <div class="booking-navigation" aria-label="예약 기간 이동">
+
+        <button
+          id="bookingPrevButton"
+          class="secondary-button booking-nav-button"
+          type="button"
+        >
+          ← 이전
+        </button>
+
+        <strong
+          id="bookingRangeLabel"
+          class="booking-range-label"
+        >
+          예약 일정을 확인하고 있습니다.
+        </strong>
+
+        <button
+          id="bookingNextButton"
+          class="secondary-button booking-nav-button"
+          type="button"
+        >
+          다음 →
+        </button>
+
+      </div>
+
     </div>
-    <p id="bookingMessage" class="booking-message" role="status" aria-live="polite">예약 데이터를 확인하고 있습니다.</p>
-    <div id="bookingCalendar" class="booking-calendar" aria-live="polite"></div>
-    <div id="emptyBookings" class="empty-state booking-empty" hidden><strong>표시할 예약 슬롯이 없습니다.</strong><p>선택한 기간에 운영 가능한 평일이 있는지 확인해주세요.</p></div>
+
+
+    <p
+      id="bookingMessage"
+      class="booking-message"
+      role="status"
+      aria-live="polite"
+    >
+      예약 데이터를 확인하고 있습니다.
+    </p>
+
+
+    <div
+      id="bookingCalendar"
+      class="booking-calendar"
+      aria-live="polite"
+    ></div>
+
+
+    <div
+      id="emptyBookings"
+      class="empty-state booking-empty"
+      hidden
+    >
+      <strong>표시할 예약 슬롯이 없습니다.</strong>
+
+      <p>
+        선택한 기간에 운영 가능한 평일이 있는지 확인해주세요.
+      </p>
+    </div>
+
   </section>
+
+
   <section class="customer-section">
+
     <div class="section-heading">
-      <div><p class="eyebrow">CUSTOMERS</p><h2>고객 목록</h2></div>
-      <p id="dashboardMessage" class="dashboard-message" role="status" aria-live="polite">고객 데이터를 확인하고 있습니다.</p>
+
+      <div>
+        <p class="eyebrow">CUSTOMERS</p>
+        <h2>고객 목록</h2>
+      </div>
+
+      <p
+        id="dashboardMessage"
+        class="dashboard-message"
+        role="status"
+        aria-live="polite"
+      >
+        고객 데이터를 확인하고 있습니다.
+      </p>
+
     </div>
-    <div class="customer-toolbar" aria-label="고객 검색 및 필터">
-      <label class="search-box"><span class="sr-only">고객 검색</span><input id="customerSearch" type="search" autocomplete="off" placeholder="이름, 연락처, 알레르기 관련 고민 검색"></label>
-      <label class="filter-box"><span class="sr-only">상태 필터</span><select id="statusFilter">
-        <option value="all">전체 상태</option><option value="new">신규 문의</option><option value="consulting">상담 중</option><option value="visit_scheduled">방문 예정</option><option value="care_completed">케어 완료</option><option value="follow_up">재관리 대상</option><option value="closed">종료</option>
-      </select></label>
+
+
+    <div
+      class="customer-view-tabs"
+      role="tablist"
+      aria-label="고객 목록 구분"
+    >
+
+      <button
+        id="activeCustomersTab"
+        class="customer-view-tab is-active"
+        type="button"
+        role="tab"
+        aria-selected="true"
+        data-customer-view="active"
+      >
+        현재 고객
+        <span id="activeCustomersTabCount">0</span>
+      </button>
+
+
+      <button
+        id="deletedCustomersTab"
+        class="customer-view-tab"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        data-customer-view="deleted"
+      >
+        삭제된 고객
+        <span id="deletedCustomersTabCount">0</span>
+      </button>
+
     </div>
-    <div id="customerList" class="customer-list" aria-live="polite"></div>
-    <div id="emptyCustomers" class="empty-state" hidden><strong>아직 등록된 고객이 없습니다.</strong><p>무료 진단이 접수되면 고객이 자동으로 이곳에 표시됩니다.</p></div>
+
+
+    <div
+      class="customer-toolbar"
+      aria-label="고객 검색 및 필터"
+    >
+
+      <label class="search-box">
+
+        <span class="sr-only">
+          고객 검색
+        </span>
+
+        <input
+          id="customerSearch"
+          type="search"
+          autocomplete="off"
+          placeholder="이름, 연락처, Home Profile 검색"
+        >
+
+      </label>
+
+
+      <label class="filter-box">
+
+        <span class="sr-only">
+          상태 필터
+        </span>
+
+        <select id="statusFilter">
+
+          <option value="all">
+            전체 상태
+          </option>
+
+          <option value="new">
+            신규 문의
+          </option>
+
+          <option value="consulting">
+            상담 중
+          </option>
+
+          <option value="visit_scheduled">
+            방문 예정
+          </option>
+
+          <option value="care_completed">
+            케어 완료
+          </option>
+
+          <option value="follow_up">
+            재관리 대상
+          </option>
+
+          <option value="closed">
+            종료
+          </option>
+
+        </select>
+
+      </label>
+
+    </div>
+
+
+    <div
+      id="customerList"
+      class="customer-list"
+      aria-live="polite"
+    ></div>
+
+
+    <div
+      id="emptyCustomers"
+      class="empty-state"
+      hidden
+    >
+
+      <strong id="emptyCustomersTitle">
+        아직 등록된 고객이 없습니다.
+      </strong>
+
+      <p id="emptyCustomersText">
+        무료 진단이 접수되면 고객이 자동으로 이곳에 표시됩니다.
+      </p>
+
+    </div>
+
   </section>
+
 </main>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../assets/js/supabase-config.js"></script>
 <script src="../assets/js/admin-dashboard.js"></script>
+
 </body>
 </html>
