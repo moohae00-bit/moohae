@@ -132,6 +132,28 @@
 
 
     <!-- =======================================================
+         DELETED CUSTOMER NOTICE
+    ======================================================== -->
+
+    <section
+      id="deletedCustomerNotice"
+      class="deleted-customer-notice"
+      hidden
+      aria-live="polite"
+    >
+
+      <div>
+        <p class="eyebrow">CUSTOMER ARCHIVED</p>
+        <h2>삭제 처리된 고객입니다.</h2>
+        <p id="deletedCustomerMeta" class="muted-copy">
+          이 고객은 수정하거나 새 일정을 등록할 수 없습니다.
+        </p>
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
          BASIC INFO / LATEST HOME PROFILE
     ======================================================== -->
 
@@ -266,6 +288,65 @@
           class="admin-form"
           novalidate
         >
+
+          <input
+            id="customerRowVersion"
+            type="hidden"
+            value=""
+          >
+
+
+          <label>
+
+            <span>
+              이름
+            </span>
+
+            <input
+              id="customerNameInput"
+              type="text"
+              maxlength="100"
+              autocomplete="name"
+              required
+            >
+
+          </label>
+
+
+          <label>
+
+            <span>
+              연락처
+            </span>
+
+            <input
+              id="customerPhoneInput"
+              type="tel"
+              maxlength="50"
+              autocomplete="tel"
+              inputmode="tel"
+              placeholder="예: 010-1234-5678"
+            >
+
+          </label>
+
+
+          <label>
+
+            <span>
+              주소
+            </span>
+
+            <textarea
+              id="customerAddressInput"
+              maxlength="500"
+              rows="3"
+              autocomplete="street-address"
+              placeholder="고객 방문 주소를 입력하세요."
+            ></textarea>
+
+          </label>
+
 
           <label>
 
@@ -1049,6 +1130,62 @@
     </section>
 
 
+    <!-- =======================================================
+         CUSTOMER SAFETY
+    ======================================================== -->
+
+    <section class="detail-card wide-card customer-safety-card">
+
+      <div class="detail-card-head">
+
+        <div>
+
+          <p class="eyebrow">
+            CUSTOMER SAFETY
+          </p>
+
+          <h2>
+            고객 삭제
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="customer-safety-copy">
+
+        <p>
+          삭제 시 고객 정보는 일반 운영 대상에서 제외되지만,
+          MOOHAE CHECK · 방문 CARE · Care Report 기록은 보존됩니다.
+        </p>
+
+        <p class="muted-copy">
+          실수로 삭제한 고객은 이후 ‘삭제된 고객’ 목록에서 복구할 수 있습니다.
+        </p>
+
+      </div>
+
+
+      <button
+        id="openDeleteCustomerButton"
+        class="danger-button"
+        type="button"
+      >
+        고객 삭제
+      </button>
+
+
+      <p
+        id="deleteCustomerMessage"
+        class="inline-message"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+    </section>
+
+
     <p
       id="detailMessage"
       class="dashboard-message"
@@ -1057,6 +1194,136 @@
     ></p>
 
   </main>
+
+
+  <!-- =========================================================
+       CUSTOMER DELETE DIALOG
+  ========================================================== -->
+
+  <dialog
+    id="deleteCustomerDialog"
+    class="customer-delete-dialog"
+    aria-labelledby="deleteCustomerDialogTitle"
+  >
+
+    <form
+      id="deleteCustomerForm"
+      class="customer-delete-form"
+      method="dialog"
+      novalidate
+    >
+
+      <div class="customer-delete-dialog-head">
+
+        <div>
+
+          <p class="eyebrow">
+            DELETE CUSTOMER
+          </p>
+
+          <h2 id="deleteCustomerDialogTitle">
+            고객을 삭제하시겠어요?
+          </h2>
+
+        </div>
+
+        <button
+          id="closeDeleteCustomerDialogButton"
+          class="dialog-close-button"
+          type="button"
+          aria-label="삭제 창 닫기"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <p
+        id="deleteCustomerTarget"
+        class="customer-delete-target"
+      >
+        —
+      </p>
+
+
+      <p class="customer-delete-warning">
+        실제 데이터는 영구 삭제하지 않습니다.
+        고객은 운영 목록에서 제외되고 기존 기록은 그대로 보존됩니다.
+      </p>
+
+
+      <label>
+
+        <span>
+          삭제 사유
+        </span>
+
+        <textarea
+          id="deleteCustomerReason"
+          maxlength="500"
+          rows="4"
+          placeholder="예: 중복 등록, 고객 요청, 테스트 데이터"
+          required
+        ></textarea>
+
+      </label>
+
+
+      <label>
+
+        <span>
+          확인 문구
+        </span>
+
+        <input
+          id="deleteCustomerConfirmInput"
+          type="text"
+          maxlength="20"
+          autocomplete="off"
+          placeholder="삭제"
+          required
+        >
+
+      </label>
+
+
+      <p class="muted-copy">
+        안전을 위해 확인란에 <strong>삭제</strong>라고 입력해야 합니다.
+      </p>
+
+
+      <div class="customer-delete-action-row">
+
+        <button
+          id="cancelDeleteCustomerButton"
+          class="secondary-button"
+          type="button"
+        >
+          취소
+        </button>
+
+        <button
+          id="confirmDeleteCustomerButton"
+          class="danger-button"
+          type="submit"
+        >
+          삭제 처리
+        </button>
+
+      </div>
+
+
+      <p
+        id="deleteDialogMessage"
+        class="inline-message"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+    </form>
+
+  </dialog>
 
 
   <!-- =========================================================

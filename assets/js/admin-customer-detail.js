@@ -10,17 +10,22 @@
   //
   // 주요 기능
   // 1. 관리자 인증
-  // 2. 고객 기본정보
+  // 2. 고객 기본정보 수정
   // 3. MOOHAE CHECK V1 / V2 구분
   // 4. V2 Home Profile 표시
   // 5. 확정 예약 → 방문일시 자동 반영
   // 6. 방문 일정 등록
   // 7. 방문 케어 완료
   // 8. Care Report 작성 / 발행
+  // 9. row_version 동시 수정 충돌 방지
+  // 10. 고객 Soft Delete
   //
   // 중요:
   // allergy_concerns는 신규 관리자 화면에서 사용하지 않는다.
   // 기존 DB 데이터는 삭제하지 않고 그대로 보존한다.
+  //
+  // 고객 실제 DELETE는 절대 실행하지 않는다.
+  // 삭제는 admin_soft_delete_customer RPC만 사용한다.
   // ============================================================
 
 
@@ -78,6 +83,108 @@
   const managementMessage =
     document.getElementById(
       'customerManagementMessage'
+    );
+
+
+  const customerNameInput =
+    document.getElementById(
+      'customerNameInput'
+    );
+
+
+  const customerPhoneInput =
+    document.getElementById(
+      'customerPhoneInput'
+    );
+
+
+  const customerAddressInput =
+    document.getElementById(
+      'customerAddressInput'
+    );
+
+
+  const customerRowVersion =
+    document.getElementById(
+      'customerRowVersion'
+    );
+
+
+  const deletedCustomerNotice =
+    document.getElementById(
+      'deletedCustomerNotice'
+    );
+
+
+  const deletedCustomerMeta =
+    document.getElementById(
+      'deletedCustomerMeta'
+    );
+
+
+  const openDeleteCustomerButton =
+    document.getElementById(
+      'openDeleteCustomerButton'
+    );
+
+
+  const deleteCustomerMessage =
+    document.getElementById(
+      'deleteCustomerMessage'
+    );
+
+
+  const deleteCustomerDialog =
+    document.getElementById(
+      'deleteCustomerDialog'
+    );
+
+
+  const deleteCustomerForm =
+    document.getElementById(
+      'deleteCustomerForm'
+    );
+
+
+  const deleteCustomerTarget =
+    document.getElementById(
+      'deleteCustomerTarget'
+    );
+
+
+  const deleteCustomerReason =
+    document.getElementById(
+      'deleteCustomerReason'
+    );
+
+
+  const deleteCustomerConfirmInput =
+    document.getElementById(
+      'deleteCustomerConfirmInput'
+    );
+
+
+  const closeDeleteCustomerDialogButton =
+    document.getElementById(
+      'closeDeleteCustomerDialogButton'
+    );
+
+
+  const cancelDeleteCustomerButton =
+    document.getElementById(
+      'cancelDeleteCustomerButton'
+    );
+
+
+  const confirmDeleteCustomerButton =
+    document.getElementById(
+      'confirmDeleteCustomerButton'
+    );
+
+
+  const deleteDialogMessage =
+    document.getElementById(
+      'deleteDialogMessage'
     );
 
 
@@ -311,6 +418,14 @@
     null;
 
 
+  let currentCustomer =
+    null;
+
+
+  let currentCustomerDeleted =
+    false;
+
+
 
   // ============================================================
   // BASIC HELPERS
@@ -398,6 +513,134 @@
       busy
         ? busyLabel
         : normalLabel;
+  };
+
+
+  const setFormDisabled = (
+    form,
+    disabled
+  ) => {
+
+    if (
+      !form
+    ) {
+
+      return;
+    }
+
+
+    form
+      .querySelectorAll(
+        'input, select, textarea, button'
+      )
+      .forEach(
+        (control) => {
+
+          control.disabled =
+            disabled;
+        }
+      );
+  };
+
+
+  const applyDeletedCustomerState = (
+    customer
+  ) => {
+
+    currentCustomerDeleted =
+      Boolean(
+        customer?.deleted_at
+      );
+
+
+    if (
+      deletedCustomerNotice
+    ) {
+
+      deletedCustomerNotice.hidden =
+        !currentCustomerDeleted;
+    }
+
+
+    if (
+      openDeleteCustomerButton
+    ) {
+
+      openDeleteCustomerButton.hidden =
+        currentCustomerDeleted;
+
+      openDeleteCustomerButton.disabled =
+        currentCustomerDeleted;
+    }
+
+
+    if (
+      currentCustomerDeleted
+    ) {
+
+      const deletedAt =
+        formatDateTime(
+          customer.deleted_at
+        );
+
+
+      if (
+        deletedCustomerMeta
+      ) {
+
+        deletedCustomerMeta.textContent =
+          `삭제 처리 ${deletedAt} · 사유: ${customer.delete_reason || '사유 미기록'}`;
+      }
+
+
+      setFormDisabled(
+        managementForm,
+        true
+      );
+
+
+      setFormDisabled(
+        visitForm,
+        true
+      );
+
+
+      setFormDisabled(
+        careCompleteForm,
+        true
+      );
+
+
+      setFormDisabled(
+        reportEditorForm,
+        true
+      );
+
+
+      setMessage(
+        deleteCustomerMessage,
+        '삭제된 고객입니다. 복구 후 다시 수정할 수 있습니다.'
+      );
+
+    } else {
+
+      setFormDisabled(
+        managementForm,
+        false
+      );
+
+
+      setFormDisabled(
+        visitForm,
+        false
+      );
+
+
+      setMessage(
+        deleteCustomerMessage,
+        ''
+      );
+    }
   };
 
 
@@ -555,7 +798,6 @@
   };
 
 
-
   const visitMatchesConfirmedBooking = (
     visit,
     booking
@@ -661,7 +903,6 @@
         bookingTime
     );
   };
-
 
 
   const applyConfirmedBookingToVisitForm = (
@@ -799,7 +1040,6 @@
   }
 
 
-
   async function copyPublicReportLink(
     publicToken,
     button
@@ -816,9 +1056,7 @@
     ) {
 
       setMessage(
-
         detailMessage,
-
         '고객용 리포트 링크를 만들 수 없습니다.'
       );
 
@@ -843,34 +1081,25 @@
 
 
       setMessage(
-
         detailMessage,
-
         '고객용 Care Report 링크가 복사되었습니다.',
-
         true
       );
-
 
     } catch (
       error
     ) {
 
       console.error(
-
         'MOOHAE report link copy error:',
-
         error
       );
 
 
       setMessage(
-
         detailMessage,
-
         '링크를 복사하지 못했습니다. 리포트 보기 버튼으로 열어주세요.'
       );
-
 
     } finally {
 
@@ -888,7 +1117,6 @@
   }
 
 
-
   function openPublicReport(
     publicToken
   ) {
@@ -904,9 +1132,7 @@
     ) {
 
       setMessage(
-
         detailMessage,
-
         '고객용 리포트 링크를 만들 수 없습니다.'
       );
 
@@ -916,11 +1142,8 @@
 
 
     window.open(
-
       url,
-
       '_blank',
-
       'noopener,noreferrer'
     );
   }
@@ -1099,17 +1322,6 @@
 
   // ============================================================
   // DIAGNOSIS CARD
-  //
-  // V2:
-  // household
-  // living_spaces
-  // contact_surfaces
-  // management_worries
-  // management_preference
-  //
-  // V1:
-  // 과거 데이터 보존
-  // allergy_concerns는 UI에서 표시하지 않음
   // ============================================================
 
   function diagnosisCard(
@@ -1204,10 +1416,6 @@
       header
     );
 
-
-    // ==========================================================
-    // V2
-    // ==========================================================
 
     if (
       isV2
@@ -1339,11 +1547,6 @@
         );
       }
 
-
-    // ==========================================================
-    // LEGACY V1
-    // ==========================================================
-
     } else {
 
       const legacyBlock =
@@ -1441,10 +1644,6 @@
       }
     }
 
-
-    // ==========================================================
-    // RESULT MESSAGE
-    // ==========================================================
 
     if (
       diagnosis.result_message
@@ -1887,7 +2086,6 @@
         true
       );
 
-
     } else {
 
       careCompleteForm.hidden =
@@ -2075,11 +2273,17 @@
               id,
               name,
               phone,
+              address,
               status,
               privacy_consent,
               privacy_consented_at,
               notes,
-              created_at
+              created_at,
+              updated_at,
+              deleted_at,
+              deleted_by,
+              delete_reason,
+              row_version
             `
           )
           .eq(
@@ -2091,9 +2295,6 @@
 
         // ------------------------------------------------------
         // DIAGNOSIS
-        //
-        // V1 + V2를 함께 조회하되
-        // allergy_concerns는 더 이상 조회하지 않는다.
         // ------------------------------------------------------
 
         window
@@ -2295,6 +2496,10 @@
       customerResult.data;
 
 
+    currentCustomer =
+      customer;
+
+
     const diagnoses =
       diagnosisResult.data ||
       [];
@@ -2348,11 +2553,26 @@
 
 
     applyConfirmedBookingToVisitForm(
-
       confirmedBooking,
-
       visits
     );
+
+
+    if (
+      customer.deleted_at
+    ) {
+
+      setFormDisabled(
+        careCompleteForm,
+        true
+      );
+
+
+      setFormDisabled(
+        reportEditorForm,
+        true
+      );
+    }
 
 
 
@@ -2381,7 +2601,6 @@
         )}`;
 
 
-
     const statusText =
       STATUS_LABELS[
         customer.status
@@ -2396,11 +2615,15 @@
 
 
     statusBadge.textContent =
-      statusText;
+      customer.deleted_at
+        ? '삭제됨'
+        : statusText;
 
 
     statusBadge.className =
-      `status-badge status-${customer.status || 'neutral'}`;
+      customer.deleted_at
+        ? 'status-badge status-deleted'
+        : `status-badge status-${customer.status || 'neutral'}`;
 
 
 
@@ -2425,6 +2648,16 @@
       .textContent =
 
         customer.phone ||
+        '—';
+
+
+    document
+      .getElementById(
+        'detailAddress'
+      )
+      .textContent =
+
+        customer.address ||
         '—';
 
 
@@ -2467,6 +2700,28 @@
     // CUSTOMER MANAGEMENT
     // ==========================================================
 
+    customerNameInput.value =
+      customer.name ||
+      '';
+
+
+    customerPhoneInput.value =
+      customer.phone ||
+      '';
+
+
+    customerAddressInput.value =
+      customer.address ||
+      '';
+
+
+    customerRowVersion.value =
+      String(
+        customer.row_version ||
+        1
+      );
+
+
     statusSelect.value =
 
       ALLOWED_STATUSES.has(
@@ -2481,6 +2736,11 @@
     notesInput.value =
       customer.notes ||
       '';
+
+
+    applyDeletedCustomerState(
+      customer
+    );
 
 
 
@@ -2508,7 +2768,6 @@
           true
         )
       );
-
 
     } else {
 
@@ -2570,7 +2829,6 @@
         }
       );
 
-
     } else {
 
       diagnosisHistory.appendChild(
@@ -2625,7 +2883,6 @@
           );
         }
       );
-
 
     } else {
 
@@ -2682,7 +2939,6 @@
         }
       );
 
-
     } else {
 
       reportHistory.appendChild(
@@ -2723,12 +2979,112 @@
       );
 
 
+      if (
+        currentCustomerDeleted
+      ) {
+
+        setMessage(
+          managementMessage,
+          '삭제된 고객은 수정할 수 없습니다. 먼저 복구해주세요.'
+        );
+
+
+        return;
+      }
+
+
+      const name =
+        customerNameInput
+          .value
+          .trim();
+
+
+      const phone =
+        customerPhoneInput
+          .value
+          .trim();
+
+
+      const address =
+        customerAddressInput
+          .value
+          .trim();
+
+
       const status =
         statusSelect.value;
 
 
       const notes =
         notesInput.value.trim();
+
+
+      const expectedVersion =
+        Number(
+          customerRowVersion.value
+        );
+
+
+      if (
+        !name
+      ) {
+
+        setMessage(
+          managementMessage,
+          '고객 이름을 입력해주세요.'
+        );
+
+
+        customerNameInput.focus();
+
+
+        return;
+      }
+
+
+      if (
+        name.length >
+        100
+      ) {
+
+        setMessage(
+          managementMessage,
+          '고객 이름은 100자 이내로 입력해주세요.'
+        );
+
+
+        return;
+      }
+
+
+      if (
+        phone.length >
+        50
+      ) {
+
+        setMessage(
+          managementMessage,
+          '연락처는 50자 이내로 입력해주세요.'
+        );
+
+
+        return;
+      }
+
+
+      if (
+        address.length >
+        500
+      ) {
+
+        setMessage(
+          managementMessage,
+          '주소는 500자 이내로 입력해주세요.'
+        );
+
+
+        return;
+      }
 
 
       if (
@@ -2738,9 +3094,7 @@
       ) {
 
         setMessage(
-
           managementMessage,
-
           '고객 상태를 확인해주세요.'
         );
 
@@ -2755,9 +3109,7 @@
       ) {
 
         setMessage(
-
           managementMessage,
-
           '운영 메모는 5,000자 이내로 작성해주세요.'
         );
 
@@ -2766,14 +3118,28 @@
       }
 
 
+      if (
+        !Number.isSafeInteger(
+          expectedVersion
+        ) ||
+        expectedVersion <
+          1
+      ) {
+
+        setMessage(
+          managementMessage,
+          '고객 버전 정보를 확인할 수 없습니다. 페이지를 새로고침해주세요.'
+        );
+
+
+        return;
+      }
+
+
       setBusy(
-
         saveCustomerButton,
-
         true,
-
         '저장 중...',
-
         '고객 정보 저장'
       );
 
@@ -2781,25 +3147,40 @@
       try {
 
         const {
+          data,
           error
         } =
           await window
             .moohaeSupabase
             .rpc(
 
-              'admin_update_customer',
+              'admin_update_customer_v2',
 
               {
 
                 p_customer_id:
                   customerId,
 
+                p_name:
+                  name,
+
+                p_phone:
+                  phone ||
+                  null,
+
+                p_address:
+                  address ||
+                  null,
+
                 p_status:
                   status,
 
                 p_notes:
                   notes ||
-                  null
+                  null,
+
+                p_expected_version:
+                  expectedVersion
               }
             );
 
@@ -2808,53 +3189,85 @@
           error
         ) {
 
+          if (
+            error.code ===
+              '40001' ||
+
+            String(
+              error.message ||
+              ''
+            ).includes(
+              'Customer data has changed'
+            )
+          ) {
+
+            throw new Error(
+              'STALE_CUSTOMER_VERSION'
+            );
+          }
+
+
           throw error;
         }
 
 
+        if (
+          data?.row_version
+        ) {
+
+          customerRowVersion.value =
+            String(
+              data.row_version
+            );
+        }
+
+
         setMessage(
-
           managementMessage,
-
           '고객 정보가 저장되었습니다.',
-
           true
         );
 
 
         await loadCustomerData();
 
-
       } catch (
         error
       ) {
 
         console.error(
-
           'MOOHAE customer update error:',
-
           error
         );
 
 
-        setMessage(
+        if (
+          error?.message ===
+          'STALE_CUSTOMER_VERSION'
+        ) {
 
-          managementMessage,
+          setMessage(
+            managementMessage,
+            '다른 화면에서 고객 정보가 먼저 수정되었습니다. 최신 정보를 다시 불러옵니다.'
+          );
 
-          '고객 정보를 저장하지 못했습니다.'
-        );
 
+          await loadCustomerData();
+
+        } else {
+
+          setMessage(
+            managementMessage,
+            '고객 정보를 저장하지 못했습니다.'
+          );
+        }
 
       } finally {
 
         setBusy(
-
           saveCustomerButton,
-
           false,
-
           '저장 중...',
-
           '고객 정보 저장'
         );
       }
@@ -2882,6 +3295,20 @@
         visitMessage,
         ''
       );
+
+
+      if (
+        currentCustomerDeleted
+      ) {
+
+        setMessage(
+          visitMessage,
+          '삭제된 고객은 방문 일정을 등록할 수 없습니다.'
+        );
+
+
+        return;
+      }
 
 
       const localDateTime =
@@ -2916,9 +3343,7 @@
       ) {
 
         setMessage(
-
           visitMessage,
-
           '방문 일시를 선택해주세요.'
         );
 
@@ -2940,9 +3365,7 @@
       ) {
 
         setMessage(
-
           visitMessage,
-
           '방문 일시를 다시 확인해주세요.'
         );
 
@@ -2957,9 +3380,7 @@
       ) {
 
         setMessage(
-
           visitMessage,
-
           '케어 공간은 300자 이내로 입력해주세요.'
         );
 
@@ -2969,13 +3390,9 @@
 
 
       setBusy(
-
         scheduleVisitButton,
-
         true,
-
         '등록 중...',
-
         '방문 일정 등록'
       );
 
@@ -3021,11 +3438,8 @@
 
 
         setMessage(
-
           visitMessage,
-
           '방문 일정이 등록되었습니다.',
-
           true
         );
 
@@ -3035,37 +3449,27 @@
 
         await loadCustomerData();
 
-
       } catch (
         error
       ) {
 
         console.error(
-
           'MOOHAE visit schedule error:',
-
           error
         );
 
 
         setMessage(
-
           visitMessage,
-
           '방문 일정을 등록하지 못했습니다.'
         );
-
 
       } finally {
 
         setBusy(
-
           scheduleVisitButton,
-
           false,
-
           '등록 중...',
-
           '방문 일정 등록'
         );
       }
@@ -3093,6 +3497,20 @@
         careCompleteMessage,
         ''
       );
+
+
+      if (
+        currentCustomerDeleted
+      ) {
+
+        setMessage(
+          careCompleteMessage,
+          '삭제된 고객은 CARE 완료 처리를 할 수 없습니다.'
+        );
+
+
+        return;
+      }
 
 
       const visitId =
@@ -3144,9 +3562,7 @@
       ) {
 
         setMessage(
-
           careCompleteMessage,
-
           '완료할 방문 일정을 선택해주세요.'
         );
 
@@ -3161,9 +3577,7 @@
       ) {
 
         setMessage(
-
           careCompleteMessage,
-
           '케어 전·후 상태를 모두 입력해주세요.'
         );
 
@@ -3175,14 +3589,13 @@
       if (
         beforeText.length >
           3000 ||
+
         afterText.length >
           3000
       ) {
 
         setMessage(
-
           careCompleteMessage,
-
           '케어 전·후 상태는 각각 3,000자 이내로 작성해주세요.'
         );
 
@@ -3197,9 +3610,7 @@
       ) {
 
         setMessage(
-
           careCompleteMessage,
-
           '관리자 메모는 5,000자 이내로 작성해주세요.'
         );
 
@@ -3214,9 +3625,7 @@
       ) {
 
         setMessage(
-
           careCompleteMessage,
-
           '실제 진행한 케어를 한 개 이상 선택해주세요.'
         );
 
@@ -3226,13 +3635,9 @@
 
 
       setBusy(
-
         completeCareButton,
-
         true,
-
         '완료 처리 중...',
-
         '케어 완료 처리'
       );
 
@@ -3281,48 +3686,35 @@
 
 
         setMessage(
-
           careCompleteMessage,
-
           '케어 완료 처리와 Care Report 초안 생성이 완료되었습니다.',
-
           true
         );
 
 
         await loadCustomerData();
 
-
       } catch (
         error
       ) {
 
         console.error(
-
           'MOOHAE care complete error:',
-
           error
         );
 
 
         setMessage(
-
           careCompleteMessage,
-
           '케어 완료 처리 중 오류가 발생했습니다.'
         );
-
 
       } finally {
 
         setBusy(
-
           completeCareButton,
-
           false,
-
           '완료 처리 중...',
-
           '케어 완료 처리'
         );
       }
@@ -3343,6 +3735,20 @@
       reportEditorMessage,
       ''
     );
+
+
+    if (
+      currentCustomerDeleted
+    ) {
+
+      setMessage(
+        reportEditorMessage,
+        '삭제된 고객은 Care Report를 수정할 수 없습니다.'
+      );
+
+
+      return;
+    }
 
 
     const reportId =
@@ -3369,9 +3775,7 @@
     ) {
 
       setMessage(
-
         reportEditorMessage,
-
         '저장할 Care Report가 없습니다.'
       );
 
@@ -3386,9 +3790,7 @@
     ) {
 
       setMessage(
-
         reportEditorMessage,
-
         '담당자 코멘트는 5,000자 이내로 작성해주세요.'
       );
 
@@ -3403,9 +3805,7 @@
     ) {
 
       setMessage(
-
         reportEditorMessage,
-
         '다음 케어 권장사항은 3,000자 이내로 작성해주세요.'
       );
 
@@ -3427,9 +3827,7 @@
     ) {
 
       setMessage(
-
         reportEditorMessage,
-
         '리포트 발행 전 코멘트와 다음 케어 권장사항을 모두 작성해주세요.'
       );
 
@@ -3469,13 +3867,9 @@
 
 
     setBusy(
-
       targetButton,
-
       true,
-
       busyLabel,
-
       normalLabel
     );
 
@@ -3535,42 +3929,31 @@
 
       await loadCustomerData();
 
-
     } catch (
       error
     ) {
 
       console.error(
-
         'MOOHAE report save error:',
-
         error
       );
 
 
       setMessage(
-
         reportEditorMessage,
-
         'Care Report를 저장하지 못했습니다.'
       );
-
 
     } finally {
 
       setBusy(
-
         targetButton,
-
         false,
-
         busyLabel,
-
         normalLabel
       );
     }
   }
-
 
 
   saveReportButton.addEventListener(
@@ -3595,6 +3978,279 @@
       saveReport(
         'published'
       );
+    }
+  );
+
+
+
+  // ============================================================
+  // CUSTOMER SOFT DELETE
+  // ============================================================
+
+  function closeDeleteDialog() {
+
+    if (
+      deleteCustomerDialog?.open
+    ) {
+
+      deleteCustomerDialog.close();
+    }
+
+
+    deleteCustomerForm?.reset();
+
+
+    setMessage(
+      deleteDialogMessage,
+      ''
+    );
+  }
+
+
+  openDeleteCustomerButton.addEventListener(
+
+    'click',
+
+    () => {
+
+      if (
+        !currentCustomer ||
+        currentCustomerDeleted
+      ) {
+
+        return;
+      }
+
+
+      deleteCustomerTarget.textContent =
+        `${currentCustomer.name || '이름 없음'} 고객을 삭제 처리합니다.`;
+
+
+      deleteCustomerForm.reset();
+
+
+      setMessage(
+        deleteDialogMessage,
+        ''
+      );
+
+
+      deleteCustomerDialog.showModal();
+
+
+      window.setTimeout(
+
+        () => {
+
+          deleteCustomerReason.focus();
+        },
+
+        0
+      );
+    }
+  );
+
+
+  closeDeleteCustomerDialogButton.addEventListener(
+
+    'click',
+
+    closeDeleteDialog
+  );
+
+
+  cancelDeleteCustomerButton.addEventListener(
+
+    'click',
+
+    closeDeleteDialog
+  );
+
+
+  deleteCustomerDialog.addEventListener(
+
+    'cancel',
+
+    (
+      event
+    ) => {
+
+      event.preventDefault();
+
+
+      closeDeleteDialog();
+    }
+  );
+
+
+  deleteCustomerForm.addEventListener(
+
+    'submit',
+
+    async (
+      event
+    ) => {
+
+      event.preventDefault();
+
+
+      setMessage(
+        deleteDialogMessage,
+        ''
+      );
+
+
+      if (
+        currentCustomerDeleted
+      ) {
+
+        setMessage(
+          deleteDialogMessage,
+          '이미 삭제 처리된 고객입니다.'
+        );
+
+
+        return;
+      }
+
+
+      const reason =
+        deleteCustomerReason
+          .value
+          .trim();
+
+
+      const confirmText =
+        deleteCustomerConfirmInput
+          .value
+          .trim();
+
+
+      if (
+        reason.length <
+        2
+      ) {
+
+        setMessage(
+          deleteDialogMessage,
+          '삭제 사유를 2자 이상 입력해주세요.'
+        );
+
+
+        deleteCustomerReason.focus();
+
+
+        return;
+      }
+
+
+      if (
+        reason.length >
+        500
+      ) {
+
+        setMessage(
+          deleteDialogMessage,
+          '삭제 사유는 500자 이내로 입력해주세요.'
+        );
+
+
+        return;
+      }
+
+
+      if (
+        confirmText !==
+        '삭제'
+      ) {
+
+        setMessage(
+          deleteDialogMessage,
+          '확인란에 “삭제”라고 정확히 입력해주세요.'
+        );
+
+
+        deleteCustomerConfirmInput.focus();
+
+
+        return;
+      }
+
+
+      setBusy(
+        confirmDeleteCustomerButton,
+        true,
+        '처리 중...',
+        '삭제 처리'
+      );
+
+
+      try {
+
+        const {
+          error
+        } =
+          await window
+            .moohaeSupabase
+            .rpc(
+
+              'admin_soft_delete_customer',
+
+              {
+
+                p_customer_id:
+                  customerId,
+
+                p_reason:
+                  reason
+              }
+            );
+
+
+        if (
+          error
+        ) {
+
+          throw error;
+        }
+
+
+        closeDeleteDialog();
+
+
+        setMessage(
+          detailMessage,
+          '고객이 안전하게 삭제 처리되었습니다. 기존 CHECK · CARE · REPORT 기록은 보존됩니다.',
+          true
+        );
+
+
+        await loadCustomerData();
+
+      } catch (
+        error
+      ) {
+
+        console.error(
+          'MOOHAE customer soft delete error:',
+          error
+        );
+
+
+        setMessage(
+          deleteDialogMessage,
+          '고객을 삭제 처리하지 못했습니다.'
+        );
+
+      } finally {
+
+        setBusy(
+          confirmDeleteCustomerButton,
+          false,
+          '처리 중...',
+          '삭제 처리'
+        );
+      }
     }
   );
 
@@ -3660,15 +4316,12 @@
 
       await loadCustomerData();
 
-
     } catch (
       error
     ) {
 
       console.error(
-
         'MOOHAE customer detail error:',
-
         error
       );
 
@@ -3700,7 +4353,6 @@
           .moohaeSupabase
           .auth
           .signOut();
-
 
       } finally {
 

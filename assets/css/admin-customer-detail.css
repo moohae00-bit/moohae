@@ -534,3 +534,272 @@
       repeat(2, minmax(0, 1fr));
   }
 }
+
+/* ============================================================
+   CUSTOMER MANAGEMENT V2
+   ============================================================ */
+
+.deleted-customer-notice {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+
+  margin-bottom: 18px;
+  padding: 18px 20px;
+
+  border: 1px solid rgba(154, 92, 92, .22);
+  border-radius: 16px;
+
+  background: rgba(154, 92, 92, .07);
+}
+
+.deleted-customer-notice[hidden] {
+  display: none !important;
+}
+
+.deleted-customer-notice h2 {
+  margin: 2px 0 6px;
+
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.status-deleted {
+  background: rgba(154, 92, 92, .10);
+
+  color: var(--danger);
+}
+
+.customer-safety-card {
+  border-color: rgba(154, 92, 92, .20);
+}
+
+.customer-safety-copy {
+  display: grid;
+  gap: 6px;
+
+  margin-bottom: 16px;
+}
+
+.customer-safety-copy p {
+  margin: 0;
+
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.danger-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 44px;
+
+  padding: 10px 16px;
+
+  border: 1px solid rgba(154, 92, 92, .32);
+  border-radius: 12px;
+
+  background: rgba(154, 92, 92, .08);
+
+  color: var(--danger);
+
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.danger-button:hover {
+  background: rgba(154, 92, 92, .13);
+}
+
+.danger-button:disabled {
+  opacity: .48;
+  cursor: default;
+}
+
+
+/* ============================================================
+   DELETE DIALOG
+   ============================================================ */
+
+.customer-delete-dialog {
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+
+  padding: 0;
+
+  border: 1px solid var(--line);
+  border-radius: 20px;
+
+  background: #fff;
+
+  color: var(--ink);
+
+  box-shadow:
+    0 24px 70px rgba(25, 27, 23, .20);
+}
+
+.customer-delete-dialog::backdrop {
+  background: rgba(25, 27, 23, .44);
+  backdrop-filter: blur(4px);
+}
+
+.customer-delete-form {
+  display: grid;
+  gap: 16px;
+
+  padding: 22px;
+}
+
+.customer-delete-dialog-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.customer-delete-dialog-head h2 {
+  margin: 2px 0 0;
+
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.dialog-close-button {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  padding: 0;
+
+  border: 1px solid var(--line);
+  border-radius: 999px;
+
+  background: #fff;
+
+  color: var(--ink);
+
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.customer-delete-target {
+  margin: 0;
+
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.6;
+}
+
+.customer-delete-warning {
+  margin: 0;
+  padding: 13px 14px;
+
+  border-radius: 12px;
+
+  background: rgba(154, 92, 92, .07);
+
+  color: var(--ink);
+
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.customer-delete-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.customer-delete-form label > span {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.customer-delete-form input,
+.customer-delete-form textarea {
+  width: 100%;
+  min-width: 0;
+
+  padding: 11px 12px;
+
+  border: 1px solid var(--line);
+  border-radius: 12px;
+
+  background: #fff;
+
+  color: var(--ink);
+
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+
+  resize: vertical;
+}
+
+.customer-delete-form input:focus,
+.customer-delete-form textarea:focus {
+  outline: 2px solid rgba(112, 136, 110, .18);
+  outline-offset: 2px;
+  border-color: var(--sage);
+}
+
+.customer-delete-action-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.customer-delete-action-row > button {
+  width: 100%;
+}
+
+
+/* ============================================================
+   MOBILE - CUSTOMER MANAGEMENT V2
+   ============================================================ */
+
+@media (max-width: 620px) {
+
+  .deleted-customer-notice {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .danger-button {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .customer-delete-dialog {
+    width: calc(100vw - 20px);
+    max-height: calc(100vh - 20px);
+
+    border-radius: 16px;
+  }
+
+  .customer-delete-form {
+    padding: 18px;
+  }
+
+  .customer-delete-action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-delete-action-row .danger-button {
+    order: 1;
+  }
+}
+
