@@ -2,186 +2,616 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="MOOHAE CARE — 확인하고, CARE하고, 보여주고, 기록하고, 다음 CARE로 이어지는 생활환경 관리.">
-  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <meta
+    name="description"
+    content="MOOHAE CARE — 눈에 보이지 않는 곳을 CARE합니다."
+  >
+
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
   <title>MOOHAE CARE</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
-  <link rel="stylesheet" href="./assets/css/site.css">
-  <link rel="stylesheet" href="./assets/css/care.css">
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/site.css"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/care.css"
+  >
 </head>
+
 <body data-page="care" class="care-page">
+
   <div id="site-header"></div>
+
   <main>
-    <section class="care-hero" aria-labelledby="careHeroTitle">
-      <div class="care-hero-media" aria-hidden="true"></div>
+
+    <!-- HERO -->
+    <section class="care-hero">
+
+      <div
+        class="care-hero-media"
+        aria-hidden="true"
+      ></div>
+
       <div class="care-hero-overlay"></div>
+
       <div class="care-hero-content reveal">
-        <p class="care-kicker">MOOHAE CARE</p>
-        <h1 id="careHeroTitle">집도,<span>관리주기가 필요합니다.</span></h1>
-        <p class="care-hero-copy">한 번 하고 끝나는 관리보다, 집의 상태를 기억하고 다음 CARE로 이어지는 관리를 지향합니다.</p>
-        <div class="care-hero-actions">
-          <a class="care-primary-cta" href="./diagnosis.html">우리 집 CHECK 시작하기</a>
-          <a class="care-text-link" href="#one">CARE 보기</a>
-        </div>
-      </div>
-    </section>
 
-    <section id="one" class="story-section story-light one-section">
-      <div class="story-wrap">
-        <div class="story-heading reveal">
-          <p class="care-kicker">한 번의 CARE</p>
-          <h2>필요한 순간,<span>한 번.</span></h2>
-          <p>MOOHAE를 처음 경험하거나 필요한 시점에 이용하는 1회 CARE입니다. 침구류, 소파, 카펫·러그, 패브릭, 바닥처럼 생활에서 자주 닿는 영역부터 필요한 범위만 선택해 시작할 수 있습니다.</p>
-        </div>
-        <div id="oneServiceGrid" class="one-service-grid" aria-label="MOOHAE ONE 서비스"></div>
-        <div id="oneSliderDots" class="slider-dots" aria-label="MOOHAE ONE 서비스 페이지"></div>
-        <p class="one-helper reveal">ONE의 세부 구성과 가격은 이용 범위에 따라 달라질 수 있습니다.</p>
-      </div>
-    </section>
+        <p class="care-kicker">
+          MOOHAE CARE
+        </p>
 
-    <section class="story-section story-quiet why-section">
-      <div class="story-wrap narrow">
-        <div class="story-heading centered reveal">
-          <p class="care-kicker">왜 관리주기가 필요한가</p>
-          <h2>한 번의 CARE만으로<span>집의 상태를 기억할 수는 없습니다.</span></h2>
-          <p>생활환경은 다시 사용되고, 다시 쌓이고, 다시 달라집니다. 그래서 MOOHAE는 한 번의 결과보다 다음 관리로 이어지는 흐름을 설계합니다.</p>
-        </div>
-      </div>
-    </section>
+        <h1>
+          눈에 보이지 않는 곳을
+          <span>CARE합니다.</span>
+        </h1>
 
-    <section class="story-section cycle-section">
-      <div class="story-wrap">
-        <div class="story-heading reveal">
-          <p class="care-kicker">관리의 흐름</p>
-          <h2>한 번의 CARE가,<span>다음 CARE로 이어집니다.</span></h2>
-          <p>오늘 무엇을 확인했고, 무엇을 CARE했고, 어떤 결과가 있었는지 기록해 다음 CARE의 기준으로 이어갑니다.</p>
-        </div>
-        <div class="cycle-flow reveal" aria-label="MOOHAE CARE CYCLE">
-          <div class="cycle-step"><span>01</span><strong>CHECK</strong><p>오늘 상태를 확인합니다.</p></div><i aria-hidden="true">→</i>
-          <div class="cycle-step"><span>02</span><strong>CARE</strong><p>필요한 곳을 실제로 CARE합니다.</p></div><i aria-hidden="true">→</i>
-          <div class="cycle-step"><span>03</span><strong>PROOF</strong><p>결과를 눈으로 확인합니다.</p></div><i aria-hidden="true">→</i>
-          <div class="cycle-step"><span>04</span><strong>HISTORY</strong><p>HOUSE 기록으로 남깁니다.</p></div><i aria-hidden="true">→</i>
-          <div class="cycle-step"><span>05</span><strong>NEXT</strong><p>다음 관리로 이어갑니다.</p></div>
-        </div>
-        <p class="cycle-signature reveal">기록을 통해 이어지는 CARE.</p>
-      </div>
-    </section>
+        <p class="care-hero-plan">
+          ONE · CORE · CORE+ · PRIVATE
+        </p>
 
-    <section class="story-section compare-section">
-      <div class="story-wrap">
-        <div class="story-heading centered reveal">
-          <p class="care-kicker">관리 범위의 차이</p>
-          <h2>CORE와 CORE+,<span>차이는 관리 범위입니다.</span></h2>
-          <p>생활의 핵심만 관리할지, 벽·천장·디테일링까지 집 전체로 넓힐지 선택합니다.</p>
-        </div>
-        <div class="compare-grid reveal">
-          <article class="compare-card"><span>CORE</span><strong>생활의 핵심</strong><p>침구류 · 소파 · 카펫·패브릭 · 전체 바닥</p></article>
-          <div class="compare-arrow" aria-hidden="true">→</div>
-          <article class="compare-card featured"><span>CORE+</span><strong>집 전체로</strong><p>CORE + 벽 · 천장 · 디테일링</p></article>
-        </div>
       </div>
+
     </section>
 
 
+    <!-- ONE -->
+    <section
+      id="one"
+      class="one-section"
+    >
 
-    <section id="choose-care" class="story-section choose-section">
-      <div class="story-wrap">
-        <div class="story-heading centered reveal">
-          <p class="care-kicker">MOOHAE CARE PLAN</p>
-          <h2>당신의 집에 맞는<span>CARE를 선택하세요.</span></h2>
-          <p>가격보다 먼저 관리 범위를 보고, 우리 집에 필요한 CARE CYCLE을 선택할 수 있도록 구성했습니다.</p>
-        </div>
-        <div id="chooseCareGrid" class="choose-care-grid" aria-label="MOOHAE CARE PLAN 선택"></div>
-        <div class="choose-helper reveal">
-          <p>어떤 CARE가 맞는지 모르겠다면 먼저 CHECK하세요.</p>
-          <a class="care-primary-cta" href="./diagnosis.html">우리 집 CHECK 시작하기</a>
-        </div>
+      <div class="one-media"></div>
+
+      <div class="care-wrap one-content reveal">
+
+        <p class="care-kicker">
+          MOOHAE ONE
+        </p>
+
+        <h2>
+          한 번의 CARE.
+          <span>집은 달라집니다.</span>
+        </h2>
+
+        <p class="care-copy">
+          침구부터 소파,
+          패브릭 그리고 바닥까지.
+          <br>
+          우리 집에 필요한 CARE를
+          한 번에 경험해보세요.
+        </p>
+
+        <p class="care-label">
+          ONE CARE · ONE HOME
+        </p>
+
+        <a
+          class="care-button"
+          href="./diagnosis.html"
+        >
+          ONE 시작하기
+        </a>
+
       </div>
+
     </section>
 
-    <section class="story-section proof-section">
-      <div class="story-wrap proof-layout">
-        <div class="story-heading reveal">
-          <p class="care-kicker">결과 확인</p>
-          <h2>했다는 말보다,<span>달라진 것을 보여드립니다.</span></h2>
-          <p>BEFORE / AFTER, CARE 결과, 포집 결과, 오늘 실제 CARE가 완료된 영역을 통해 결과를 확인할 수 있습니다.</p>
-        </div>
-        <div class="proof-visual reveal" aria-label="CARE 결과 예시">
-          <article><span>BEFORE</span><div class="proof-photo proof-before"></div></article>
-          <article><span>AFTER</span><div class="proof-photo proof-after"></div></article>
-        </div>
+
+    <!-- STATEMENT -->
+    <section class="statement-section">
+
+      <div class="care-wrap narrow reveal">
+
+        <h2>
+          매일 닿지만,
+          <span>
+            매일 관리할 수는
+            없으니까.
+          </span>
+        </h2>
+
+        <p class="care-copy">
+          눈에 보이는 곳보다
+          <br>
+          보이지 않는 곳을 먼저 봅니다.
+        </p>
+
+        <p class="statement-signature">
+          보이지 않는 곳까지.
+          <br>
+          더 무해하게.
+        </p>
+
       </div>
-      <div class="story-wrap narrow"><p class="proof-signature reveal">보이지 않는 CARE를<span>보이는 경험으로.</span></p></div>
+
     </section>
 
-    <section class="story-section distinction-section">
-      <div class="story-wrap narrow">
-        <div class="story-heading centered reveal">
-          <p class="care-kicker">CARE와 CHECK의 차이</p>
-          <h2>확인한 것과,<span>CARE한 것을 구분합니다.</span></h2>
-          <p>실제로 CARE한 영역과 상태만 확인한 영역을 고객이 한눈에 구분할 수 있도록 기록합니다.</p>
-        </div>
-        <div class="state-legend reveal">
-          <div><span class="state-icon care-state">✓</span><strong>CARE 완료</strong><p>해당 영역을 실제로 CARE했습니다.</p></div>
-          <div><span class="state-icon check-state">○</span><strong>CHECK 완료</strong><p>상태를 확인했지만 이번 방문에서는 CARE하지 않았습니다.</p></div>
-          <div><span class="state-icon none-state">—</span><strong>미진행</strong><p>이번 방문에서는 확인하거나 CARE하지 않은 영역입니다.</p></div>
-        </div>
-      </div>
-    </section>
 
-    <section class="story-section history-section">
-      <div class="story-wrap">
-        <div class="story-heading reveal">
-          <p class="care-kicker">관리 기록</p>
-          <h2>관리가 지나가도,<span>HOUSE 기록은 남습니다.</span></h2>
-          <p>지난 CARE가 오늘의 기준이 되고, 오늘의 기록이 다음 CARE의 시작점이 됩니다.</p>
-        </div>
-        <div class="history-flow reveal">
-          <article><span>지난 기록</span><strong>지난 CARE</strong></article><i aria-hidden="true">→</i>
-          <article><span>오늘</span><strong>오늘 CARE</strong></article><i aria-hidden="true">→</i>
-          <article><span>결과</span><strong>PROOF</strong></article><i aria-hidden="true">→</i>
-          <article><span>다음</span><strong>다음 CARE</strong></article>
-        </div>
-        <p class="history-signature reveal">무해가 우리 집을 기억하고 있다.</p>
-      </div>
-    </section>
+    <!-- FLOW -->
+    <section class="flow-section">
 
-    <section class="story-section myhome-section">
-      <div class="story-wrap myhome-layout">
-        <div class="story-heading reveal">
-          <p class="care-kicker">MY HOME</p>
-          <h2>우리 집,<span>어디까지 관리됐지?</span></h2>
-          <p>TODAY · PROOF · HISTORY · NEXT · CARE CYCLE을 한 곳에서 확인할 수 있는 고객 경험으로 이어집니다.
+      <div class="care-wrap">
+
+        <div class="flow-heading reveal">
+
+          <p class="care-kicker">
+            ONE CARE FLOW
           </p>
-          <p class="myhome-emphasis">연 3회, 연 4회라는 숫자보다 우리 집의 CARE 기록이 이렇게 쌓인다는 경험이 더 중요합니다.</p>
+
+          <h2>
+            우리 집에서
+            <span>가장 필요한 곳부터.</span>
+          </h2>
+
         </div>
-        <div class="myhome-preview reveal" aria-label="MY HOME 예시">
-          <div class="myhome-top"><div><span>MY HOME</span><strong>우리 집 CARE 기록</strong></div><em>CARE 02 / 04</em></div>
-          <div class="myhome-cycle"><span class="done">01</span><span class="current">02</span><span>03</span><span>04</span></div>
-          <section><h3>침실</h3><div class="myhome-row"><span>매트리스</span><strong>마지막 CARE 08.25</strong></div><div class="myhome-row"><span>침구</span><strong>마지막 CARE 08.25</strong></div></section>
-          <section><h3>거실</h3><div class="myhome-row"><span>소파</span><strong>마지막 CHECK 08.25</strong></div><div class="myhome-row"><span>카펫</span><strong>마지막 CARE 04.12</strong></div></section>
-          <section><h3>NEXT</h3><div class="myhome-row"><span>다음 CARE</span><strong>12월 예정</strong></div></section>
+
+
+        <div class="flow-list">
+
+          <article class="flow-item reveal">
+
+            <span class="flow-number">
+              01
+            </span>
+
+            <div>
+              <strong>CHECK</strong>
+              <p>
+                우리 집의 상태를 확인합니다.
+              </p>
+            </div>
+
+          </article>
+
+
+          <article class="flow-item reveal">
+
+            <span class="flow-number">
+              02
+            </span>
+
+            <div>
+              <strong>PRIORITY</strong>
+              <p>
+                오늘 가장 필요한 CARE를
+                결정합니다.
+              </p>
+            </div>
+
+          </article>
+
+
+          <article class="flow-item reveal">
+
+            <span class="flow-number">
+              03
+            </span>
+
+            <div>
+              <strong>CARE</strong>
+              <p>
+                필요한 곳에 집중합니다.
+              </p>
+            </div>
+
+          </article>
+
         </div>
+
       </div>
+
     </section>
 
-    <section class="story-section brand-statement">
-      <div class="story-wrap narrow"><div class="brand-lines reveal"><p>눈에 보이지 않는 곳을 CARE합니다.</p><p>기록을 통해 이어지는 CARE.</p><p>우리 집을 기억하는 CARE.</p></div></div>
+
+    <!-- BEDDING -->
+    <section
+      class="visual-section bedding-section"
+      aria-label="BEDDING CARE"
+    >
+
+      <div class="visual-overlay"></div>
+
+      <div class="visual-content reveal">
+
+        <p class="visual-kicker">
+          BEDDING
+        </p>
+
+        <h2>
+          하루의 가장 긴 시간을
+          <span>보내는 곳.</span>
+        </h2>
+
+        <p>
+          매트리스 · 이불 · 베개
+        </p>
+
+      </div>
+
     </section>
 
-    <section class="final-care">
-      <div class="final-care-inner reveal">
-        <p class="care-kicker">MOOHAE CHECK</p>
-        <h2>우리 집에 필요한<span>CARE부터.</span></h2>
-        <p>어떤 플랜이 맞는지 먼저 정할 필요는 없습니다. 지금 우리 집에서 무엇을 확인해야 하는지부터 시작해보세요.</p>
-        <div class="final-care-actions"><a class="care-primary-cta" href="./diagnosis.html">우리 집 CHECK 시작하기</a><a class="care-text-link" href="#one">ONE 다시 보기</a></div>
+
+    <!-- SOFA -->
+    <section
+      class="visual-section sofa-section"
+      aria-label="SOFA CARE"
+    >
+
+      <div class="visual-overlay"></div>
+
+      <div class="visual-content reveal">
+
+        <p class="visual-kicker">
+          SOFA
+        </p>
+
+        <h2>
+          가장 많은 생활이
+          <span>머무는 곳.</span>
+        </h2>
+
+        <p>
+          소파 · 패브릭 가구
+        </p>
+
       </div>
+
     </section>
+
+
+    <!-- FABRIC -->
+    <section
+      class="visual-section fabric-section"
+      aria-label="FABRIC CARE"
+    >
+
+      <div class="visual-overlay"></div>
+
+      <div class="visual-content reveal">
+
+        <p class="visual-kicker">
+          FABRIC
+        </p>
+
+        <h2>
+          먼지가 머무르기
+          <span>쉬운 곳까지.</span>
+        </h2>
+
+        <p>
+          카펫 · 러그 · 패브릭
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- FLOOR -->
+    <section
+      class="visual-section floor-section"
+      aria-label="FLOOR CARE"
+    >
+
+      <div class="visual-overlay"></div>
+
+      <div class="visual-content reveal">
+
+        <p class="visual-kicker">
+          FLOOR
+        </p>
+
+        <h2>
+          집 전체를
+          <span>연결하는 곳.</span>
+        </h2>
+
+        <p>
+          전체 바닥 CARE
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- PROOF -->
+    <section class="proof-section">
+
+      <div class="care-wrap proof-layout">
+
+        <div class="proof-copy reveal">
+
+          <p class="care-kicker">
+            PROOF
+          </p>
+
+          <h2>
+            했다는 말보다,
+            <span>
+              달라진 것을
+              보여드립니다.
+            </span>
+          </h2>
+
+          <div
+            class="proof-image"
+            role="img"
+            aria-label="MOOHAE CARE 결과"
+          ></div>
+
+
+          <div
+            class="proof-flow"
+            aria-label="MOOHAE CARE 과정"
+          >
+
+            <span>CHECK</span>
+            <i>→</i>
+            <span>CARE</span>
+            <i>→</i>
+            <span>PROOF</span>
+
+          </div>
+
+
+          <p class="proof-signature">
+            보이지 않는 CARE를
+            <span>보이는 경험으로.</span>
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CARE CYCLE -->
+    <section class="cycle-section">
+
+      <div class="care-wrap">
+
+        <div class="cycle-heading reveal">
+
+          <p class="care-kicker">
+            CARE CYCLE
+          </p>
+
+          <h2>
+            먼저 ONE으로.
+            <span>
+              필요하다면,
+              CARE는 이어집니다.
+            </span>
+          </h2>
+
+        </div>
+
+
+        <div class="plan-list">
+
+
+          <article class="plan-item reveal">
+
+            <div class="plan-head">
+
+              <p class="plan-name">
+                ONE
+              </p>
+
+              <p class="plan-description">
+                필요할 때, 한 번.
+              </p>
+
+            </div>
+
+          </article>
+
+
+          <article class="plan-item reveal">
+
+            <div class="plan-head">
+
+              <p class="plan-name">
+                CORE
+              </p>
+
+              <p class="plan-description">
+                생활의 핵심을
+                1년의 주기로.
+              </p>
+
+            </div>
+
+            <p class="plan-meta">
+              3 CARES / YEAR
+            </p>
+
+            <div
+              class="care-cycle"
+              aria-label="CORE 연 3회 CARE"
+            >
+              <span class="active"></span>
+              <i></i>
+              <span></span>
+              <i></i>
+              <span></span>
+            </div>
+
+            <p class="plan-scope">
+              침구류 · 소파 · 카펫·패브릭 · 전체 바닥
+            </p>
+
+          </article>
+
+
+          <article class="plan-item reveal">
+
+            <div class="plan-head">
+
+              <p class="plan-name">
+                CORE+
+              </p>
+
+              <p class="plan-description">
+                생활의 핵심에서,
+                공간 전체로.
+              </p>
+
+            </div>
+
+            <p class="plan-meta">
+              4 CARES / YEAR
+            </p>
+
+            <div
+              class="care-cycle four"
+              aria-label="CORE+ 연 4회 CARE"
+            >
+              <span class="active"></span>
+              <i></i>
+              <span></span>
+              <i></i>
+              <span></span>
+              <i></i>
+              <span></span>
+            </div>
+
+            <p class="plan-scope">
+              CORE + 벽 · 천장 · 디테일링
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- PRIVATE -->
+    <section class="private-section">
+
+      <div class="care-wrap narrow reveal">
+
+        <p class="private-kicker">
+          PRIVATE
+        </p>
+
+        <h2>
+          더 많은 집을
+          <span>맡기지 않습니다.</span>
+        </h2>
+
+        <div class="private-number">
+          5
+        </div>
+
+        <p class="private-label">
+          HOMES MAXIMUM
+        </p>
+
+        <p class="private-copy">
+          한 파트너가 최대 5가구.
+          <br>
+          우리 집을 알고,
+          기록을 기억하고,
+          <br>
+          다음 CARE까지 이어갑니다.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- FINAL -->
+    <section class="final-section">
+
+      <div class="final-overlay"></div>
+
+      <div class="care-wrap final-content reveal">
+
+        <p class="care-kicker">
+          MOOHAE ONE
+        </p>
+
+        <h2>
+          우리 집을 위한
+          <span>한 번의 MOOHAE.</span>
+        </h2>
+
+        <p>
+          필요한 곳을 확인하고,
+          <br>
+          집중해서 CARE하고,
+          <br>
+          그 결과까지 확인합니다.
+        </p>
+
+        <strong>
+          필요할 때, 한 번.
+          <br>
+          제대로.
+        </strong>
+
+        <a
+          class="care-button"
+          href="./diagnosis.html"
+        >
+          ONE 시작하기
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- BRAND -->
+    <section class="brand-ending">
+
+      <div class="reveal">
+
+        <p>
+          MOOHAE
+        </p>
+
+        <span>
+          더 무해하게.
+        </span>
+
+      </div>
+
+    </section>
+
   </main>
 
+
   <div id="site-footer"></div>
+
+
   <script src="./assets/js/site.js"></script>
   <script src="./assets/js/care.js"></script>
+
 </body>
 </html>
