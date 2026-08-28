@@ -6,17 +6,49 @@
   // MOOHAE ADMIN
   // REPORT EDITOR AUTO FOCUS
   //
-  // 목적:
-  // Partner View에서 CARE 완료 후
-  // customer-detail.html?focus=report 로 이동했을 때,
-  // Care Report 초안이 실제 DOM에 로드된 뒤
-  // 작성 영역으로 안전하게 이동한다.
+  // Partner View 완료 흐름:
+  //
+  // house-care.html
+  //      ↓
+  // CARE COMPLETE
+  //      ↓
+  // partner_complete_house_visit()
+  //      ↓
+  // Report Draft 생성
+  //      ↓
+  // customer-detail.html?id=...&focus=report
+  //      ↓
+  // admin-customer-detail.js 데이터 로딩
+  //      ↓
+  // Report Editor 준비 확인
+  //      ↓
+  // 자동 이동
   //
   // DB WRITE 없음
-  // 개인정보 URL 추가 없음
-  // report public token 사용 없음
+  // PUBLIC TOKEN 사용 없음
+  // 개인정보 추가 없음
   // ============================================================
 
+
+  // ============================================================
+  // CONSTANTS
+  // ============================================================
+
+  const UUID_PATTERN =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+
+  const CHECK_INTERVAL_MS =
+    150;
+
+
+  const MAX_WAIT_MS =
+    10000;
+
+
+  // ============================================================
+  // ROUTE
+  // ============================================================
 
   const params =
     new URLSearchParams(
@@ -24,20 +56,24 @@
     );
 
 
-  const shouldFocusReport =
+  const focusMode =
     params.get(
       'focus'
-    ) ===
-    'report';
+    );
 
 
   if (
-    !shouldFocusReport
+    focusMode !==
+    'report'
   ) {
 
     return;
   }
 
+
+  // ============================================================
+  // DOM
+  // ============================================================
 
   const reportEditorForm =
     document.getElementById(
@@ -57,28 +93,46 @@
     );
 
 
+  const reportEditStatus =
+    document.getElementById(
+      'reportEditStatus'
+    );
+
+
+  const reportEditorMessage =
+    document.getElementById(
+      'reportEditorMessage'
+    );
+
+
+  // ============================================================
+  // DOM SAFETY
+  // ============================================================
+
   if (
     !reportEditorForm ||
-    !reportEditorId
+    !reportEditorId ||
+    !reportManagerComment
   ) {
 
-    console.warn(
-      'MOOHAE report focus: report editor not found.'
+    console.error(
+      'MOOHAE REPORT FOCUS: Report Editor DOM을 찾지 못했습니다.'
     );
+
 
     return;
   }
 
 
-  const UUID_PATTERN =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
+  // ============================================================
+  // STATE
+  // ============================================================
 
   let completed =
     false;
 
 
-  let observer =
+  let intervalId =
     null;
 
 
@@ -87,71 +141,64 @@
 
 
   // ============================================================
-  // CLEAN URL
+  // CLEAN FOCUS PARAMETER
+  //
+  // 성공 후 ?focus=report 제거.
+  //
+  // 고객이 새로고침할 때마다
+  // 자동으로 Report까지 내려가는 것을 방지한다.
   // ============================================================
 
   function cleanFocusParameter() {
 
-    const url =
-      new URL(
-        window.location.href
+    try {
+
+      const url =
+        new URL(
+          window.location.href
+        );
+
+
+      url.searchParams.delete(
+        'focus'
       );
 
 
-    url.searchParams.delete(
-      'focus'
-    );
+      window.history.replaceState(
+        window.history.state,
+        '',
+        `${url.pathname}${url.search}${url.hash}`
+      );
 
+    } catch (
+      error
+    ) {
 
-    window.history.replaceState(
-      {},
-      '',
-      `${url.pathname}${url.search}${url.hash}`
-    );
+      console.warn(
+        'MOOHAE REPORT FOCUS: URL 정리 실패',
+        error
+      );
+    }
   }
 
 
   // ============================================================
-  // MOVE
+  // STOP
   // ============================================================
 
-  function moveToReportEditor() {
+  function stopWatcher() {
 
     if (
-      completed
+      intervalId
     ) {
 
-      return true;
-    }
+      window.clearInterval(
+        intervalId
+      );
 
 
-    const reportId =
-      String(
-        reportEditorId.value ||
-        ''
-      ).trim();
-
-
-    // 초안이 실제 생성/조회되기 전이면 기다린다.
-    if (
-      !UUID_PATTERN.test(
-        reportId
-      )
-    ) {
-
-      return false;
-    }
-
-
-    completed =
-      true;
-
-
-    if (
-      observer
-    ) {
-
-      observer.disconnect();
+      intervalId =
+        null;
     }
 
 
@@ -162,8 +209,83 @@
       window.clearTimeout(
         timeoutId
       );
+
+
+      timeoutId =
+        null;
+    }
+  }
+
+
+  // ============================================================
+  // REPORT READY?
+  // ============================================================
+
+  function isReportReady() {
+
+    const reportId =
+      String(
+        reportEditorId.value ||
+        ''
+      ).trim();
+
+
+    if (
+      !UUID_PATTERN.test(
+        reportId
+      )
+    ) {
+
+      return false;
     }
 
+
+    /*
+     * admin-customer-detail.js가
+     * Report Editor를 활성화했는지 추가 검증.
+     */
+
+    if (
+      reportEditorForm.getAttribute(
+        'aria-disabled'
+      ) ===
+      'true'
+    ) {
+
+      return false;
+    }
+
+
+    return true;
+  }
+
+
+  // ============================================================
+  // MOVE TO REPORT
+  // ============================================================
+
+  function moveToReport() {
+
+    if (
+      completed ||
+      !isReportReady()
+    ) {
+
+      return false;
+    }
+
+
+    completed =
+      true;
+
+
+    stopWatcher();
+
+
+    /*
+     * FORM 자체보다 바깥 detail-card를 기준으로 이동해야
+     * 제목 "Care Report 작성"까지 함께 화면에 보인다.
+     */
 
     const reportCard =
       reportEditorForm.closest(
@@ -172,16 +294,15 @@
       reportEditorForm;
 
 
-    // ----------------------------------------------------------
-    // URL의 일회성 focus 파라미터 제거
-    // 새로고침할 때마다 강제로 스크롤되는 것을 방지
-    // ----------------------------------------------------------
-
+    // URL 플래그는 일회성으로 소비
     cleanFocusParameter();
 
 
     // ----------------------------------------------------------
-    // 렌더링 완료 후 이동
+    // Render cycle 2번 확보
+    //
+    // 고객 상세의 다른 DOM 렌더링이 모두 끝난 다음
+    // 최종 위치를 계산한다.
     // ----------------------------------------------------------
 
     window.requestAnimationFrame(
@@ -199,11 +320,33 @@
             });
 
 
+            // --------------------------------------------------
+            // 사용자에게 현재 상태도 명확하게 전달
+            // --------------------------------------------------
+
+            if (
+              reportEditorMessage &&
+              !reportEditorMessage.textContent.trim()
+            ) {
+
+              reportEditorMessage.textContent =
+                'CARE 기록이 연결되었습니다. 리포트를 작성하고 발행해주세요.';
+
+
+              reportEditorMessage.classList.add(
+                'success'
+              );
+            }
+
+
+            // --------------------------------------------------
+            // 스크롤 종료 후 담당자 코멘트 입력 준비
+            // --------------------------------------------------
+
             window.setTimeout(
               () => {
 
                 if (
-                  reportManagerComment &&
                   !reportManagerComment.disabled
                 ) {
 
@@ -227,11 +370,11 @@
 
 
   // ============================================================
-  // INITIAL CHECK
+  // FIRST CHECK
   // ============================================================
 
   if (
-    moveToReportEditor()
+    moveToReport()
   ) {
 
     return;
@@ -239,83 +382,34 @@
 
 
   // ============================================================
-  // WAIT FOR admin-customer-detail.js
+  // WAIT FOR CUSTOMER DATA
   //
-  // populateReportEditor()가 reportEditorId.value를 설정하는
-  // 시점을 감시한다.
-  // ============================================================
-
-  observer =
-    new MutationObserver(
-      () => {
-
-        moveToReportEditor();
-      }
-    );
-
-
-  /*
-   * hidden input의 value 프로퍼티 변경은
-   * MutationObserver만으로 항상 잡히지 않을 수 있으므로
-   * form과 status 영역 변화도 함께 감시하고
-   * 아래 polling을 보조적으로 사용한다.
-   */
-
-  observer.observe(
-    reportEditorForm,
-    {
-      subtree:
-        true,
-
-      childList:
-        true,
-
-      attributes:
-        true
-    }
-  );
-
-
-  // ============================================================
-  // SHORT POLLING FALLBACK
+  // admin-customer-detail.js의
+  // loadCustomerData()
+  //      ↓
+  // populateReportEditor()
+  //      ↓
+  // reportEditorId.value 설정
   //
-  // 최대 약 8초만 확인.
-  // 무한 polling 없음.
+  // 위 과정이 끝날 때까지만 짧게 확인.
   // ============================================================
 
-  let attempts =
-    0;
-
-
-  const maxAttempts =
-    40;
-
-
-  const intervalId =
+  intervalId =
     window.setInterval(
       () => {
 
-        attempts +=
-          1;
-
-
-        if (
-          moveToReportEditor() ||
-          attempts >= maxAttempts
-        ) {
-
-          window.clearInterval(
-            intervalId
-          );
-        }
+        moveToReport();
 
       },
-      200
+      CHECK_INTERVAL_MS
     );
 
 
   // ============================================================
-  // FAIL-SAFE
+  // FAIL SAFE
+  //
+  // 무한 polling 금지.
+  // 최대 10초.
   // ============================================================
 
   timeoutId =
@@ -330,31 +424,63 @@
         }
 
 
-        if (
-          observer
-        ) {
-
-          observer.disconnect();
-        }
+        stopWatcher();
 
 
-        window.clearInterval(
-          intervalId
+        console.warn(
+          'MOOHAE REPORT FOCUS: Report Draft가 제한 시간 안에 준비되지 않았습니다.'
         );
 
 
         /*
-         * 리포트가 늦게 생성됐거나 조회에 실패했더라도
-         * 사용자에게 오류 페이지를 띄우지는 않는다.
+         * 자동 이동 실패가 Report 작성 기능 자체를 막아서는 안 된다.
          * 고객 상세 화면에 그대로 머문다.
          */
 
-        console.warn(
-          'MOOHAE report focus: report draft was not ready within the expected time.'
-        );
+        if (
+          reportEditorMessage
+        ) {
+
+          const current =
+            reportEditorMessage.textContent.trim();
+
+
+          if (
+            !current
+          ) {
+
+            reportEditorMessage.textContent =
+              'CARE는 완료되었지만 리포트 자동 연결을 확인하지 못했습니다. 페이지를 새로고침해 다시 확인해주세요.';
+          }
+        }
+
+
+        /*
+         * 실패 시 focus=report는 남긴다.
+         *
+         * 사용자가 새로고침하면 다시 한 번 연결을 시도할 수 있다.
+         */
 
       },
-      8500
+      MAX_WAIT_MS
     );
+
+
+  // ============================================================
+  // CLEANUP
+  // ============================================================
+
+  window.addEventListener(
+    'pagehide',
+    () => {
+
+      stopWatcher();
+
+    },
+    {
+      once:
+        true
+    }
+  );
 
 })();
