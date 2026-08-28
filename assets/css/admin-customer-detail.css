@@ -1,9 +1,12 @@
 /* ============================================================
    MOOHAE ADMIN
-   CUSTOMER DETAIL V3
+   CUSTOMER DETAIL V4
 
-   admin-auth.css = 공통 관리자 스타일
-   이 파일 = customer-detail.html 전용
+   목적
+   - 관리자 5 STEP 운영 흐름
+   - CTA 레이아웃 통일
+   - 모바일 우선
+   - 기존 JS / RPC 동작 변경 없음
    ============================================================ */
 
 
@@ -319,10 +322,13 @@
     relative;
 
   margin-top:
-    16px;
+    18px;
 
   padding:
     30px;
+
+  overflow:
+    hidden;
 }
 
 
@@ -342,7 +348,7 @@
     start;
 
   margin-bottom:
-    28px;
+    30px;
 }
 
 
@@ -419,6 +425,9 @@
   margin:
     9px 0 0;
 
+  max-width:
+    700px;
+
   color:
     var(--muted);
 
@@ -448,7 +457,7 @@
     30px;
 
   padding:
-    5px 10px;
+    5px 11px;
 
   border-radius:
     999px;
@@ -498,19 +507,42 @@
 
 
 /* ============================================================
-   WORKFLOW FORM
+   WORKFLOW CONTENT WIDTH
    ============================================================ */
 
-.workflow-form {
+.workflow-form,
+.booking-request-card,
+.booking-request-note,
+.workflow-care-action,
+.publish-action-box {
+  width:
+    calc(
+      100% - 70px
+    );
+
   max-width:
-    720px;
+    none;
 
   margin-left:
     70px;
 }
 
 
-.workflow-form .primary-button {
+/* ============================================================
+   WORKFLOW FORM
+   ============================================================ */
+
+.workflow-form {
+  display:
+    grid;
+
+  gap:
+    16px;
+}
+
+
+.workflow-form .primary-button,
+.workflow-form .secondary-button {
   width:
     100%;
 }
@@ -535,6 +567,76 @@
 
 
 /* ============================================================
+   BUTTON SYSTEM
+   ============================================================ */
+
+.workflow-card .primary-button,
+.workflow-card .secondary-button,
+.workflow-card .house-care-button,
+.workflow-card .publish-report-button,
+.workflow-card .report-save-button {
+  min-height:
+    54px;
+
+  border-radius:
+    15px;
+
+  font-size:
+    13px;
+
+  font-weight:
+    850;
+
+  letter-spacing:
+    -.01em;
+
+  transition:
+    transform .18s ease,
+    opacity .18s ease,
+    box-shadow .18s ease;
+}
+
+
+.workflow-card .primary-button:hover,
+.workflow-card .house-care-button:hover,
+.workflow-card .publish-report-button:hover {
+  transform:
+    translateY(
+      -1px
+    );
+}
+
+
+.workflow-card button:disabled,
+.workflow-card a[aria-disabled="true"] {
+  opacity:
+    .46;
+
+  cursor:
+    default;
+
+  transform:
+    none;
+}
+
+
+/* ============================================================
+   STEP 01 BUTTON
+   ============================================================ */
+
+#saveCustomerButton {
+  margin-top:
+    6px;
+
+  background:
+    var(--ink);
+
+  color:
+    #fff;
+}
+
+
+/* ============================================================
    CUSTOMER BOOKING REQUEST
    ============================================================ */
 
@@ -551,11 +653,8 @@
   gap:
     18px;
 
-  max-width:
-    720px;
-
-  margin:
-    0 0 8px 70px;
+  margin-bottom:
+    8px;
 
   padding:
     18px;
@@ -676,11 +775,11 @@
 
 
 .booking-request-note {
-  max-width:
-    720px;
+  margin-top:
+    0;
 
-  margin:
-    0 0 22px 70px;
+  margin-bottom:
+    22px;
 
   color:
     var(--muted);
@@ -694,7 +793,42 @@
 
 
 /* ============================================================
-   STEP 03 CARE
+   STEP 02
+   VISIT SCHEDULE BUTTON
+   ============================================================ */
+
+#scheduleVisitButton {
+  width:
+    100%;
+
+  min-height:
+    56px;
+
+  margin-top:
+    8px;
+
+  border:
+    0;
+
+  border-radius:
+    16px;
+
+  background:
+    var(--ink);
+
+  color:
+    #fff;
+
+  font-size:
+    13px;
+
+  font-weight:
+    850;
+}
+
+
+/* ============================================================
+   STEP 03 · CARE
    ============================================================ */
 
 .workflow-care-card {
@@ -708,52 +842,52 @@
 }
 
 
-.workflow-care-action,
-.publish-action-box {
+.workflow-care-action {
   display:
-    flex;
+    grid;
 
-  align-items:
-    center;
-
-  justify-content:
-    space-between;
+  grid-template-columns:
+    1fr;
 
   gap:
-    24px;
-
-  margin-left:
-    70px;
+    20px;
 
   padding:
-    20px;
+    24px;
 
   border:
     1px solid
     var(--line);
 
   border-radius:
-    17px;
+    18px;
 
   background:
     #fff;
 }
 
 
-.workflow-care-action strong,
-.publish-action-box strong {
+.workflow-care-action > div {
+  min-width:
+    0;
+}
+
+
+.workflow-care-action strong {
   display:
     block;
 
   font-size:
-    14px;
+    15px;
+
+  line-height:
+    1.4;
 }
 
 
-.workflow-care-action p,
-.publish-action-box p {
+.workflow-care-action p {
   margin:
-    6px 0 0;
+    7px 0 0;
 
   color:
     var(--muted);
@@ -762,32 +896,75 @@
     10px;
 
   line-height:
-    1.6;
+    1.65;
 }
 
 
+/* ------------------------------------------------------------
+   현장 CARE 시작 버튼
+
+   기존 오른쪽 작은 버튼 제거
+   설명 아래 FULL WIDTH CTA
+   ------------------------------------------------------------ */
+
 .house-care-button {
-  flex:
-    0 0 auto;
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  width:
+    100%;
 
   min-width:
-    180px;
+    0;
+
+  min-height:
+    58px;
 
   margin:
     0;
+
+  padding:
+    0 20px;
+
+  border:
+    0;
+
+  border-radius:
+    16px;
+
+  background:
+    var(--ink);
+
+  color:
+    #fff;
+
+  font-size:
+    14px;
+
+  font-weight:
+    850;
+
+  text-align:
+    center;
+
+  white-space:
+    nowrap;
 }
 
 
 /* ============================================================
-   REPORT
+   STEP 04 · REPORT EDITOR
    ============================================================ */
 
-.report-save-button {
-  width:
-    100%;
-
-  min-height:
-    48px;
+#reportEditorForm {
+  gap:
+    18px;
 }
 
 
@@ -797,17 +974,37 @@
 }
 
 
-.publish-report-button {
-  flex:
-    0 0 auto;
+.report-save-button {
+  width:
+    100%;
 
-  min-width:
-    170px;
+  min-height:
+    54px;
 
-  margin:
-    0;
+  margin-top:
+    4px;
+
+  border:
+    1px solid
+    var(--line);
+
+  background:
+    #fff;
+
+  color:
+    var(--ink);
 }
 
+
+.report-save-button:hover:not(:disabled) {
+  background:
+    #f7f6f2;
+}
+
+
+/* ============================================================
+   STEP 05 · REPORT PUBLISH
+   ============================================================ */
 
 .workflow-publish-card {
   border-color:
@@ -817,6 +1014,98 @@
       110,
       .18
     );
+}
+
+
+.publish-action-box {
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr;
+
+  gap:
+    20px;
+
+  padding:
+    24px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:
+    18px;
+
+  background:
+    #fff;
+}
+
+
+.publish-action-box strong {
+  display:
+    block;
+
+  font-size:
+    15px;
+}
+
+
+.publish-action-box p {
+  margin:
+    7px 0 0;
+
+  color:
+    var(--muted);
+
+  font-size:
+    10px;
+
+  line-height:
+    1.65;
+}
+
+
+.publish-report-button {
+  width:
+    100%;
+
+  min-width:
+    0;
+
+  min-height:
+    58px;
+
+  margin:
+    0;
+
+  border:
+    0;
+
+  border-radius:
+    16px;
+
+  background:
+    var(--ink);
+
+  color:
+    #fff;
+
+  font-size:
+    14px;
+
+  font-weight:
+    850;
+}
+
+
+/* ============================================================
+   INLINE MESSAGE
+   ============================================================ */
+
+.workflow-card .inline-message {
+  margin-top:
+    2px;
 }
 
 
@@ -1270,6 +1559,58 @@
 
 
 /* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (
+  max-width:
+    900px
+) {
+
+  .workflow-card {
+    padding:
+      26px 22px;
+  }
+
+
+  .workflow-card-head {
+    grid-template-columns:
+      48px
+      minmax(0, 1fr)
+      auto;
+
+    gap:
+      15px;
+  }
+
+
+  .workflow-step-number {
+    width:
+      48px;
+
+    height:
+      48px;
+  }
+
+
+  .workflow-form,
+  .booking-request-card,
+  .booking-request-note,
+  .workflow-care-action,
+  .publish-action-box {
+    width:
+      calc(
+        100% - 63px
+      );
+
+    margin-left:
+      63px;
+  }
+
+}
+
+
+/* ============================================================
    MOBILE
    ============================================================ */
 
@@ -1281,6 +1622,9 @@
   .workflow-card {
     padding:
       22px 18px;
+
+    border-radius:
+      20px;
   }
 
 
@@ -1291,6 +1635,9 @@
 
     gap:
       13px;
+
+    margin-bottom:
+      24px;
   }
 
 
@@ -1329,6 +1676,9 @@
   .booking-request-note,
   .workflow-care-action,
   .publish-action-box {
+    width:
+      100%;
+
     margin-left:
       0;
   }
@@ -1342,13 +1692,16 @@
 
   .workflow-care-action,
   .publish-action-box {
-    display:
-      grid;
+    padding:
+      20px;
   }
 
 
   .house-care-button,
-  .publish-report-button {
+  .publish-report-button,
+  #scheduleVisitButton,
+  #saveCustomerButton,
+  .report-save-button {
     width:
       100%;
 
@@ -1367,6 +1720,10 @@
 
 }
 
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
 
 @media (
   max-width:
@@ -1399,6 +1756,23 @@
   .report-history-actions {
     grid-template-columns:
       1fr;
+  }
+
+
+  .workflow-care-action strong,
+  .publish-action-box strong {
+    font-size:
+      14px;
+  }
+
+
+  .house-care-button,
+  .publish-report-button {
+    min-height:
+      56px;
+
+    font-size:
+      13px;
   }
 
 }
