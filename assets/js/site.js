@@ -5,19 +5,23 @@
   // ============================================================
   // MOOHAE GLOBAL SITE UI
   //
-  // 공개 페이지 공통 Header / Footer / Mobile Menu
+  // PUBLIC NAVIGATION
   //
-  // 공개 NAVIGATION:
-  // - 처음으로
-  // - 관리하다
-  // - 확인하다
-  // - 상담
+  // 처음으로
+  // 관리하다
+  // 확인하다
+  // 상담
   //
-  // 중요:
-  // report.html은 삭제하지 않는다.
-  // 고객 리포트는 전용 링크 / CARE 완료 후 경로로만 접근한다.
+  // report.html은 공개 NAV에 노출하지 않는다.
+  //
+  // LOGO
+  // assets/images/moohae-logo.webp
   // ============================================================
 
+
+  // ============================================================
+  // PAGE
+  // ============================================================
 
   const page =
     document.body.dataset.page ||
@@ -40,11 +44,11 @@
   // SAFE DOM HELPER
   // ============================================================
 
-  const make = (
+  function make(
     tag,
     attrs = {},
     text = ''
-  ) => {
+  ) {
 
     const node =
       document.createElement(
@@ -55,26 +59,30 @@
     Object.entries(
       attrs
     ).forEach(
-      (
-        [
-          key,
-          value
-        ]
-      ) => {
+      ([key, value]) => {
 
         if (
-          key ===
-          'class'
+          value === null ||
+          value === undefined
+        ) {
+
+          return;
+        }
+
+
+        if (
+          key === 'class'
         ) {
 
           node.className =
             value;
 
+
         } else {
 
           node.setAttribute(
             key,
-            value
+            String(value)
           );
         }
       }
@@ -91,7 +99,7 @@
 
 
     return node;
-  };
+  }
 
 
   // ============================================================
@@ -99,8 +107,7 @@
   // ============================================================
 
   function createLogo(
-    className =
-      'logo'
+    className = 'logo'
   ) {
 
     const link =
@@ -127,13 +134,7 @@
             './assets/images/moohae-logo.webp',
 
           alt:
-            'MOOHAE · 더 무해하게.',
-
-          width:
-            '850',
-
-          height:
-            '500',
+            'MOOHAE',
 
           loading:
             'eager',
@@ -154,9 +155,7 @@
 
 
   // ============================================================
-  // PUBLIC NAVIGATION DATA
-  //
-  // report는 공개 메뉴에서 제거
+  // PUBLIC NAVIGATION
   // ============================================================
 
   const navigationItems = [
@@ -245,7 +244,7 @@
 
 
     // ----------------------------------------------------------
-    // DESKTOP MENU
+    // DESKTOP NAV
     // ----------------------------------------------------------
 
     const menu =
@@ -259,9 +258,12 @@
 
 
     navigationItems.forEach(
-      (
-        item
-      ) => {
+      (item) => {
+
+        const isActive =
+          page ===
+          item.key;
+
 
         const link =
           make(
@@ -271,8 +273,7 @@
                 item.href,
 
               class:
-                page ===
-                  item.key
+                isActive
                   ? 'active'
                   : ''
             },
@@ -281,8 +282,7 @@
 
 
         if (
-          page ===
-          item.key
+          isActive
         ) {
 
           link.setAttribute(
@@ -305,11 +305,10 @@
 
 
     // ----------------------------------------------------------
-    // CONSULT CTA
+    // CONSULT
     // ----------------------------------------------------------
 
-    inner.appendChild(
-
+    const consult =
       make(
         'a',
         {
@@ -326,12 +325,16 @@
             'nav-cta'
         },
         '상담'
-      )
+      );
+
+
+    inner.appendChild(
+      consult
     );
 
 
     // ----------------------------------------------------------
-    // MOBILE BUTTON
+    // MOBILE MENU BUTTON
     // ----------------------------------------------------------
 
     const toggle =
@@ -355,9 +358,22 @@
 
           'aria-controls':
             'mobilePanel'
-        },
-        '☰'
+        }
       );
+
+
+    for (
+      let index = 0;
+      index < 3;
+      index += 1
+    ) {
+
+      toggle.appendChild(
+        make(
+          'span'
+        )
+      );
+    }
 
 
     inner.appendChild(
@@ -393,9 +409,12 @@
 
 
     navigationItems.forEach(
-      (
-        item
-      ) => {
+      (item) => {
+
+        const isActive =
+          page ===
+          item.key;
+
 
         const link =
           make(
@@ -405,8 +424,7 @@
                 item.href,
 
               class:
-                page ===
-                  item.key
+                isActive
                   ? 'active'
                   : ''
             },
@@ -415,8 +433,7 @@
 
 
         if (
-          page ===
-          item.key
+          isActive
         ) {
 
           link.setAttribute(
@@ -434,7 +451,6 @@
 
 
     panel.appendChild(
-
       make(
         'a',
         {
@@ -464,15 +480,14 @@
     // NAV SCROLL STATE
     // ==========================================================
 
-    const updateNav =
-      () => {
+    function updateNav() {
 
-        nav.classList.toggle(
-          'scrolled',
-          window.scrollY >
-            20
-        );
-      };
+      nav.classList.toggle(
+        'scrolled',
+        window.scrollY >
+          16
+      );
+    }
 
 
     window.addEventListener(
@@ -492,6 +507,31 @@
     // MOBILE MENU
     // ==========================================================
 
+    function closeMobileMenu() {
+
+      panel.classList.remove(
+        'open'
+      );
+
+
+      toggle.classList.remove(
+        'open'
+      );
+
+
+      toggle.setAttribute(
+        'aria-expanded',
+        'false'
+      );
+
+
+      toggle.setAttribute(
+        'aria-label',
+        '메뉴 열기'
+      );
+    }
+
+
     toggle.addEventListener(
       'click',
       () => {
@@ -502,11 +542,15 @@
           );
 
 
+        toggle.classList.toggle(
+          'open',
+          open
+        );
+
+
         toggle.setAttribute(
           'aria-expanded',
-          String(
-            open
-          )
+          String(open)
         );
 
 
@@ -525,33 +569,52 @@
         'a'
       )
       .forEach(
-        (
-          link
-        ) => {
+        (link) => {
 
           link.addEventListener(
             'click',
-            () => {
-
-              panel.classList.remove(
-                'open'
-              );
-
-
-              toggle.setAttribute(
-                'aria-expanded',
-                'false'
-              );
-
-
-              toggle.setAttribute(
-                'aria-label',
-                '메뉴 열기'
-              );
-            }
+            closeMobileMenu
           );
         }
       );
+
+
+    // ESC
+
+    document.addEventListener(
+      'keydown',
+      (event) => {
+
+        if (
+          event.key ===
+          'Escape'
+        ) {
+
+          closeMobileMenu();
+        }
+      }
+    );
+
+
+    // DESKTOP 전환 시 MOBILE PANEL 정리
+
+    window.addEventListener(
+      'resize',
+      () => {
+
+        if (
+          window.innerWidth >
+          768
+        ) {
+
+          closeMobileMenu();
+        }
+      },
+      {
+        passive:
+          true
+      }
+    );
   }
 
 
@@ -573,19 +636,14 @@
       );
 
 
-    const footerLogo =
+    footerElement.appendChild(
       createLogo(
         'footer-logo'
-      );
-
-
-    footerElement.appendChild(
-      footerLogo
+      )
     );
 
 
     footerElement.appendChild(
-
       make(
         'p',
         {
@@ -598,7 +656,6 @@
 
 
     footerElement.appendChild(
-
       make(
         'p',
         {
@@ -611,7 +668,6 @@
 
 
     footerElement.appendChild(
-
       make(
         'p',
         {
@@ -647,9 +703,7 @@
   ) {
 
     revealNodes.forEach(
-      (
-        node
-      ) => {
+      (node) => {
 
         node.classList.add(
           'in-view'
@@ -662,14 +716,10 @@
 
     const observer =
       new IntersectionObserver(
-        (
-          entries
-        ) => {
+        (entries) => {
 
           entries.forEach(
-            (
-              entry
-            ) => {
+            (entry) => {
 
               if (
                 !entry.isIntersecting
@@ -704,9 +754,7 @@
 
 
     revealNodes.forEach(
-      (
-        node
-      ) => {
+      (node) => {
 
         observer.observe(
           node
