@@ -23,7 +23,6 @@ async function completeVisit() {
       recordError
     );
 
-
     return;
   }
 
@@ -59,6 +58,10 @@ async function completeVisit() {
         .trim();
 
 
+    // --------------------------------------------------------
+    // 서버에서 최종 완료 처리
+    // --------------------------------------------------------
+
     const {
       error
     } =
@@ -74,8 +77,7 @@ async function completeVisit() {
               currentVisit.id,
 
             p_partner_note:
-              note ||
-              null
+              note || null
           }
         );
 
@@ -89,12 +91,12 @@ async function completeVisit() {
 
 
     // --------------------------------------------------------
-    // CARE 완료 성공
+    // 서버 처리가 성공한 경우에만 화면 전환
     // --------------------------------------------------------
 
     setMessage(
       proofMessage,
-      'CARE 완료 · Care Report 작성 화면으로 이동합니다.',
+      'CARE 완료 · 리포트 작성 화면으로 이동합니다.',
       true
     );
 
@@ -108,39 +110,62 @@ async function completeVisit() {
 
 
     // --------------------------------------------------------
-    // 고객 상세의 Care Report 작성 영역으로 자동 이동
-    //
-    // replace 사용:
-    // 완료된 Partner 화면으로 뒤로 돌아가
-    // 실수로 다시 완료 처리하는 것을 방지
+    // CUSTOMER UUID 검증
     // --------------------------------------------------------
 
-    const reportEditorUrl =
+    if (
+      !customerId ||
+      !UUID_PATTERN.test(
+        customerId
+      )
+    ) {
+
+      throw new Error(
+        'INVALID_CUSTOMER_ID_AFTER_COMPLETE'
+      );
+    }
+
+
+    // --------------------------------------------------------
+    // 고객 상세 → Care Report 작성 화면으로 이동
+    //
+    // focus=report:
+    // 고객 상세 데이터 로딩이 끝난 뒤
+    // 리포트 작성 영역으로 이동시키기 위한 플래그
+    //
+    // replace:
+    // 완료된 Partner View로 뒤로 돌아가
+    // 중복 완료를 누르는 실수를 줄인다.
+    // --------------------------------------------------------
+
+    const nextUrl =
       new URL(
         './customer-detail.html',
         window.location.href
       );
 
 
-    reportEditorUrl.searchParams.set(
+    nextUrl.searchParams.set(
       'id',
       customerId
     );
 
 
-    reportEditorUrl.hash =
-      'reportEditorForm';
+    nextUrl.searchParams.set(
+      'focus',
+      'report'
+    );
 
 
     window.setTimeout(
       () => {
 
         window.location.replace(
-          reportEditorUrl.toString()
+          nextUrl.toString()
         );
 
       },
-      700
+      650
     );
 
 
@@ -154,17 +179,52 @@ async function completeVisit() {
     );
 
 
-    setMessage(
-
-      proofMessage,
-
+    if (
       error?.message ===
-        'PROOF_REQUIRED'
+      'PROOF_REQUIRED'
+    ) {
 
-        ? 'BEFORE와 AFTER 대표 사진을 각각 1장 이상 남겨주세요.'
+      setMessage(
+        proofMessage,
+        'BEFORE와 AFTER 대표 사진을 각각 1장 이상 남겨주세요.'
+      );
 
-        : 'CARE 완료 처리에 실패했습니다. 기록을 다시 확인해주세요.'
-    );
+
+    } else if (
+      error?.message ===
+      'INVALID_CUSTOMER_ID_AFTER_COMPLETE'
+    ) {
+
+      /*
+       * 서버의 CARE 완료 자체는 이미 성공했을 수 있으므로
+       * 완료 RPC를 다시 실행시키지 않는다.
+       */
+
+      setMessage(
+        proofMessage,
+        'CARE는 완료되었습니다. 고객 상세 화면 이동 정보만 확인하지 못했습니다. 고객 목록에서 해당 고객을 다시 열어주세요.',
+        true
+      );
+
+
+      completeVisitButton.textContent =
+        'CARE COMPLETED';
+
+
+      completeVisitButton.disabled =
+        true;
+
+
+      return;
+
+
+    } else {
+
+      setMessage(
+        proofMessage,
+        'CARE 완료 처리에 실패했습니다. 기록을 다시 확인해주세요.'
+      );
+    }
 
 
     completeVisitButton.disabled =
