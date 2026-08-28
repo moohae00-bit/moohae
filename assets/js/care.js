@@ -3,118 +3,94 @@
 
 
   // ============================================================
-  // MOOHAE CARE V2
-  //
-  // 이 파일만 수정하면
-  // ONE / CORE / CORE+ / PRIVATE의
-  // 이름, 가격, 방문횟수, 구성, 설명이 전체 UI에 반영됩니다.
-  //
-  // DATA ≠ SCREEN
-  // HTML에 가격을 중복 하드코딩하지 않습니다.
-  // ============================================================
-
-
-  // ============================================================
-  // SERVICE DATA
+  // MOOHAE CARE V3
+  // 서비스명 / 가격 / 방문횟수 / 구성 / 설명은
+  // 이 CARE_CONFIG 한 곳에서 관리합니다.
   // ============================================================
 
   const CARE_CONFIG = {
 
     one: {
-      label:
-        'MOOHAE ONE',
 
       items: [
+
         {
-          id:
-            'basic',
+          id: 'basic',
 
-          code:
-            'ONE · BASIC',
+          code: 'ONE · BASIC',
 
-          name:
-            '베이직 CARE',
+          name: '베이직 CARE',
 
-          price:
-            35000,
+          scope: '방 1개 기준 · 생활 핵심 영역',
 
-          unit:
-            '방 1개 기준',
+          price: 35000,
 
           description:
             '하나의 생활공간부터 부담 없이 시작하는 1회 CARE.'
         },
 
+
         {
-          id:
-            'all-in-one',
+          id: 'all-in-one',
 
-          code:
-            'ONE · ALL IN ONE',
+          code: 'ONE · ALL IN ONE',
 
-          name:
-            '올인원 CARE',
+          name: '올인원 CARE',
 
-          price:
-            55000,
+          scope: '방 1개 기준 · 확장 CARE',
 
-          unit:
-            '방 1개 기준',
+          price: 55000,
 
           description:
             '한 공간 안에서 조금 더 넓은 범위를 살펴보는 1회 CARE.'
         },
 
+
         {
-          id:
-            'fabric',
+          id: 'fabric',
 
-          code:
-            'ONE · FABRIC',
+          code: 'ONE · FABRIC',
 
-          name:
-            '패브릭 CARE',
+          name: '패브릭 CARE',
 
-          price:
-            58000,
+          scope:
+            '매트리스 · 소파 · 러그 · 카펫',
 
-          unit:
-            '패브릭 전체',
+          price: 58000,
 
           description:
-            '매트리스 · 소파 · 러그 · 카펫 등 생활 패브릭을 집중 CARE.'
+            '생활 속 패브릭을 집중적으로 확인하고 CARE합니다.'
         },
 
+
         {
-          id:
-            'living',
+          id: 'living',
 
-          code:
-            'ONE · LIVING',
+          code: 'ONE · LIVING',
 
-          name:
-            '리빙 CARE',
+          name: '리빙 CARE',
 
-          price:
-            100000,
+          scope: '거실 + 주방',
 
-          unit:
-            '거실 + 주방',
+          price: 100000,
 
           description:
             '가족의 생활이 가장 많이 이어지는 공용공간을 위한 1회 CARE.'
         }
+
       ]
+
     },
 
 
     plans: [
-      {
-        id:
-          'core',
 
-        name:
-          'CORE',
+      {
+        id: 'core',
+
+        className: 'core',
+
+        name: 'CORE',
 
         headline:
           '생활의 핵심을,',
@@ -122,20 +98,13 @@
         accent:
           '1년의 주기로.',
 
-        price:
-          360000,
+        price: 360000,
 
         priceUnit:
           '/ 1년',
 
-        visits:
-          3,
-
         visitLabel:
           '연 3회 CARE',
-
-        lead:
-          '몸이 자주 닿고 생활이 반복되는 핵심 영역을 1년의 CARE CYCLE 안에서 이어서 관리합니다.',
 
         includes: [
           '침구류',
@@ -150,7 +119,9 @@
 
 
       {
-        id:
+        id: 'core-plus',
+
+        className:
           'core-plus',
 
         name:
@@ -168,14 +139,8 @@
         priceUnit:
           '/ 1년',
 
-        visits:
-          4,
-
         visitLabel:
           '연 4회 CARE',
-
-        lead:
-          'CORE의 생활 핵심 CARE에 벽 · 천장 · 디테일링까지 더해 관리 범위를 집 전체로 확장합니다.',
 
         includes: [
           'CORE의 모든 CARE',
@@ -185,12 +150,15 @@
         ],
 
         note:
-          'CORE와 CORE+의 차이는 방문시간이 아니라 관리 범위입니다.'
+          'CORE보다 관리 범위를 집 전체로 확장합니다.'
       },
 
 
       {
         id:
+          'private',
+
+        className:
           'private',
 
         name:
@@ -208,14 +176,8 @@
         priceUnit:
           '/ 1년',
 
-        visits:
-          null,
-
         visitLabel:
-          '전담 CARE CYCLE',
-
-        lead:
-          '단순한 상위 요금제가 아니라, 전담관리가 필요한 소수의 HOUSE를 위한 제한형 CARE입니다.',
+          '전담관리',
 
         includes: [
           '전담관리',
@@ -225,42 +187,15 @@
         ],
 
         note:
-          '세부 방문횟수와 구성은 HOUSE 상태와 운영 기준에 따라 별도 설계합니다.',
+          '세부 방문횟수와 서비스 구성은 HOUSE 상태와 운영 기준에 따라 별도 설계합니다.',
 
         limited:
           '파트너 1명당 최대 5가구'
       }
+
     ]
+
   };
-
-
-  // ============================================================
-  // FORMAT
-  // ============================================================
-
-  function formatPrice(
-    value
-  ) {
-
-    if (
-      typeof value !==
-        'number' ||
-
-      !Number.isFinite(
-        value
-      )
-    ) {
-
-      return '가격 별도 안내';
-    }
-
-
-    return (
-      `${value.toLocaleString(
-        'ko-KR'
-      )}원`
-    );
-  }
 
 
   // ============================================================
@@ -301,6 +236,31 @@
 
 
     return node;
+  }
+
+
+  function formatPrice(
+    value
+  ) {
+
+    if (
+      typeof value !==
+        'number' ||
+
+      !Number.isFinite(
+        value
+      )
+    ) {
+
+      return '가격 별도 안내';
+    }
+
+
+    return (
+      `${value.toLocaleString(
+        'ko-KR'
+      )}원`
+    );
   }
 
 
@@ -346,11 +306,9 @@
     card.appendChild(
 
       make(
-        'div',
-        'one-service-price',
-        formatPrice(
-          service.price
-        )
+        'p',
+        'one-service-scope',
+        service.scope
       )
     );
 
@@ -358,9 +316,11 @@
     card.appendChild(
 
       make(
-        'span',
-        'one-service-unit',
-        service.unit
+        'div',
+        'one-service-price',
+        `1회 CARE · ${formatPrice(
+          service.price
+        )}`
       )
     );
 
@@ -398,59 +358,52 @@
     container.replaceChildren();
 
 
-    CARE_CONFIG.one.items.forEach(
+    CARE_CONFIG
+      .one
+      .items
+      .forEach(
 
-      (service) => {
+        (
+          service
+        ) => {
 
-        container.appendChild(
+          container.appendChild(
 
-          createOneCard(
-            service
-          )
-        );
-      }
-    );
+            createOneCard(
+              service
+            )
+          );
+        }
+      );
   }
 
 
   // ============================================================
-  // PLAN STORY
+  // CHOOSE YOUR CARE
   // ============================================================
 
-  function createPlanSection(
+  function createChooseCard(
     plan
   ) {
 
-    const section =
+    const card =
       make(
-        'section',
-        `plan-story plan-${plan.id}`
+
+        'article',
+
+        `choose-card ${plan.className} reveal`
       );
 
 
-    section.id =
-      `plan-${plan.id}`;
+    card.dataset.planId =
+      plan.id;
 
 
-    const inner =
-      make(
-        'div',
-        'plan-story-inner'
-      );
-
-
-    const copy =
-      make(
-        'div',
-        'plan-copy reveal'
-      );
-
-
-    copy.appendChild(
+    card.appendChild(
 
       make(
         'p',
-        'plan-name',
+        'choose-name',
         plan.name
       )
     );
@@ -458,11 +411,12 @@
 
     const title =
       make(
-        'h2'
+        'h3'
       );
 
 
     title.appendChild(
+
       document.createTextNode(
         plan.headline
       )
@@ -479,37 +433,69 @@
     );
 
 
-    copy.appendChild(
+    card.appendChild(
       title
     );
 
 
-    copy.appendChild(
+    card.appendChild(
 
       make(
         'p',
-        'plan-lead',
-        plan.lead
+        'choose-visits',
+        plan.visitLabel
       )
     );
 
 
-    const panel =
+    const list =
+      make(
+        'ul',
+        'choose-list'
+      );
+
+
+    plan.includes.forEach(
+
+      (
+        item
+      ) => {
+
+        list.appendChild(
+
+          make(
+            'li',
+            '',
+            item
+          )
+        );
+      }
+    );
+
+
+    card.appendChild(
+      list
+    );
+
+
+    const bottom =
       make(
         'div',
-        'plan-panel reveal'
+        'choose-bottom'
       );
 
 
     const price =
       make(
         'div',
-        'plan-price'
+        'choose-price'
       );
 
 
     price.appendChild(
+
       document.createTextNode(
+
         formatPrice(
           plan.price
         )
@@ -527,46 +513,8 @@
     );
 
 
-    panel.appendChild(
+    bottom.appendChild(
       price
-    );
-
-
-    panel.appendChild(
-
-      make(
-        'div',
-        'plan-visits',
-        plan.visitLabel
-      )
-    );
-
-
-    const list =
-      make(
-        'ul',
-        'plan-list'
-      );
-
-
-    plan.includes.forEach(
-
-      (item) => {
-
-        list.appendChild(
-
-          make(
-            'li',
-            '',
-            item
-          )
-        );
-      }
-    );
-
-
-    panel.appendChild(
-      list
     );
 
 
@@ -574,47 +522,41 @@
       plan.limited
     ) {
 
-      panel.appendChild(
+      bottom.appendChild(
 
         make(
           'div',
-          'private-note',
+          'choose-limited',
           plan.limited
         )
       );
     }
 
 
-    panel.appendChild(
+    bottom.appendChild(
 
       make(
         'p',
-        'plan-note',
+        'choose-note',
         plan.note
       )
     );
 
 
-    inner.append(
-      copy,
-      panel
+    card.appendChild(
+      bottom
     );
 
 
-    section.appendChild(
-      inner
-    );
-
-
-    return section;
+    return card;
   }
 
 
-  function renderPlans() {
+  function renderChooseCare() {
 
     const container =
       document.getElementById(
-        'planStoryContainer'
+        'chooseCareGrid'
       );
 
 
@@ -629,23 +571,27 @@
     container.replaceChildren();
 
 
-    CARE_CONFIG.plans.forEach(
+    CARE_CONFIG
+      .plans
+      .forEach(
 
-      (plan) => {
+        (
+          plan
+        ) => {
 
-        container.appendChild(
+          container.appendChild(
 
-          createPlanSection(
-            plan
-          )
-        );
-      }
-    );
+            createChooseCard(
+              plan
+            )
+          );
+        }
+      );
   }
 
 
   // ============================================================
-  // MOBILE SLIDER
+  // MOBILE ONE SLIDER
   // ============================================================
 
   function setupSlider() {
@@ -681,7 +627,7 @@
 
     if (
       cards.length ===
-        0
+      0
     ) {
 
       return;
@@ -734,6 +680,7 @@
             () => {
 
               slider.scrollTo({
+
                 left:
                   card.offsetLeft -
                   slider.offsetLeft,
@@ -887,8 +834,11 @@
 
 
     window.addEventListener(
+
       'resize',
+
       updateDots,
+
       {
         passive:
           true
@@ -902,10 +852,6 @@
 
   // ============================================================
   // REVEAL
-  //
-  // site.js가 기존 .reveal을 처리하지만,
-  // JS에서 동적으로 만든 ONE / PLAN 요소는
-  // site.js 실행 이후 생성되므로 별도 observer가 필요합니다.
   // ============================================================
 
   function setupDynamicReveal() {
@@ -917,12 +863,17 @@
 
 
     if (
-      !('IntersectionObserver' in window)
+      !(
+        'IntersectionObserver'
+        in window
+      )
     ) {
 
       nodes.forEach(
 
-        (node) => {
+        (
+          node
+        ) => {
 
           node.classList.add(
             'in-view'
@@ -944,23 +895,29 @@
 
           entries.forEach(
 
-            (entry) => {
+            (
+              entry
+            ) => {
 
               if (
-                entry.isIntersecting
+                !entry.isIntersecting
               ) {
 
-                entry.target
-                  .classList
-                  .add(
-                    'in-view'
-                  );
-
-
-                observer.unobserve(
-                  entry.target
-                );
+                return;
               }
+
+
+              entry
+                .target
+                .classList
+                .add(
+                  'in-view'
+                );
+
+
+              observer.unobserve(
+                entry.target
+              );
             }
           );
         },
@@ -977,7 +934,9 @@
 
     nodes.forEach(
 
-      (node) => {
+      (
+        node
+      ) => {
 
         observer.observe(
           node
@@ -995,7 +954,7 @@
 
     renderOneServices();
 
-    renderPlans();
+    renderChooseCare();
 
     setupSlider();
 
@@ -1013,8 +972,11 @@
   ) {
 
     document.addEventListener(
+
       'DOMContentLoaded',
+
       init,
+
       {
         once:
           true
