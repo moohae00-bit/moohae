@@ -229,17 +229,7 @@
   background: var(--care-paper);
 }
 
-.one-media {
-  width: 100%;
-  height: 68vh;
 
-  min-height: 520px;
-
-  background:
-    url("../images/care/bedding.webp")
-    center center / cover
-    no-repeat;
-}
 
 .one-content {
   padding-top: 110px;
