@@ -26,7 +26,9 @@
 }
 
 
-/* BASE */
+/* =========================================================
+   BASE
+   ========================================================= */
 
 .care-page {
   overflow-x: hidden;
@@ -123,7 +125,10 @@
 }
 
 
-/* HERO */
+/* =========================================================
+   HERO
+   hero.webp
+   ========================================================= */
 
 .care-hero {
   position: relative;
@@ -143,7 +148,7 @@
   inset: 0;
 
   background:
-    url("../images/care/hero.jpg")
+    url("../images/care/hero.webp")
     center center / cover
     no-repeat;
 
@@ -215,7 +220,10 @@
 }
 
 
-/* ONE */
+/* =========================================================
+   ONE
+   bedding.webp
+   ========================================================= */
 
 .one-section {
   background: var(--care-paper);
@@ -228,7 +236,7 @@
   min-height: 520px;
 
   background:
-    url("../images/care/bedding.jpg")
+    url("../images/care/bedding.webp")
     center center / cover
     no-repeat;
 }
@@ -271,7 +279,9 @@
 }
 
 
-/* STATEMENT */
+/* =========================================================
+   STATEMENT
+   ========================================================= */
 
 .statement-section {
   padding: 170px 0;
@@ -298,7 +308,9 @@
 }
 
 
-/* FLOW */
+/* =========================================================
+   FLOW
+   ========================================================= */
 
 .flow-section {
   padding: 150px 0;
@@ -361,7 +373,9 @@
 }
 
 
-/* VISUAL CARE SECTIONS */
+/* =========================================================
+   VISUAL CARE SECTIONS
+   ========================================================= */
 
 .visual-section {
   position: relative;
@@ -376,25 +390,38 @@
   background-repeat: no-repeat;
 }
 
+
+/* BEDDING */
+
 .bedding-section {
   background-image:
-    url("../images/care/bedding.jpg");
+    url("../images/care/bedding.webp");
 }
+
+
+/* SOFA */
 
 .sofa-section {
   background-image:
-    url("../images/care/sofa.jpg");
+    url("../images/care/sofa.webp");
 }
+
+
+/* FABRIC */
 
 .fabric-section {
   background-image:
-    url("../images/care/fabric.jpg");
+    url("../images/care/fabric.webp");
 }
+
+
+/* FLOOR */
 
 .floor-section {
   background-image:
-    url("../images/care/floor.jpg");
+    url("../images/care/floor.webp");
 }
+
 
 .visual-overlay {
   position: absolute;
@@ -467,7 +494,10 @@
 }
 
 
-/* PROOF */
+/* =========================================================
+   PROOF
+   proof.webp
+   ========================================================= */
 
 .proof-section {
   padding: 150px 0;
@@ -489,8 +519,8 @@
   border-radius: 32px;
 
   background:
-    url("../images/care/proof.jpg")
-    center / cover
+    url("../images/care/proof.webp")
+    center center / cover
     no-repeat;
 
   box-shadow:
@@ -550,7 +580,9 @@
 }
 
 
-/* CARE CYCLE */
+/* =========================================================
+   CARE CYCLE
+   ========================================================= */
 
 .cycle-section {
   padding: 160px 0;
@@ -680,7 +712,9 @@
 }
 
 
-/* PRIVATE */
+/* =========================================================
+   PRIVATE
+   ========================================================= */
 
 .private-section {
   min-height: 88svh;
@@ -748,7 +782,10 @@
 }
 
 
-/* FINAL */
+/* =========================================================
+   FINAL
+   final.webp
+   ========================================================= */
 
 .final-section {
   position: relative;
@@ -759,8 +796,8 @@
   align-items: center;
 
   background:
-    url("../images/care/final.jpg")
-    center / cover
+    url("../images/care/final.webp")
+    center center / cover
     no-repeat;
 }
 
@@ -811,7 +848,9 @@
 }
 
 
-/* BRAND ENDING */
+/* =========================================================
+   BRAND ENDING
+   ========================================================= */
 
 .brand-ending {
   padding: 100px 24px;
@@ -841,7 +880,9 @@
 }
 
 
-/* REVEAL */
+/* =========================================================
+   REVEAL
+   ========================================================= */
 
 .care-page .reveal {
   opacity: 0;
@@ -866,7 +907,9 @@
 }
 
 
-/* TABLET */
+/* =========================================================
+   TABLET
+   ========================================================= */
 
 @media (max-width: 980px) {
 
@@ -883,7 +926,9 @@
 }
 
 
-/* MOBILE */
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media (max-width: 700px) {
 
@@ -900,7 +945,7 @@
   }
 
   .care-hero-media {
-    background-position: center;
+    background-position: center center;
   }
 
   .care-hero-content {
@@ -954,7 +999,7 @@
 
     min-height: 390px;
 
-    background-position: center;
+    background-position: center center;
   }
 
   .one-content {
@@ -1132,7 +1177,9 @@
 }
 
 
-/* ACCESSIBILITY */
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
