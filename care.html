@@ -6,18 +6,25 @@
   <meta name="description" content="MOOHAE CARE — 보이는 것 너머를 CARE하고, 오늘의 기록을 다음 CARE로 이어갑니다.">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>MOOHAE CARE</title>
+
   <link rel="stylesheet" href="./assets/css/site.css">
-  <link rel="stylesheet" href="./assets/css/care.css?v=20260830-4">
+  <link rel="stylesheet" href="./assets/css/care.css?v=20260830-6">
 </head>
+
 <body data-page="care" class="care-page">
   <div id="site-header"></div>
+
   <main>
     <section class="care-section care-discover-section" id="discover" aria-labelledby="discoverTitle">
       <div class="care-wrap care-section-head reveal">
         <p class="care-kicker">MOOHAE CARE</p>
-        <h1 class="care-main-title" id="discoverTitle">내게 맞는 <strong>MOOHAE CARE</strong></h1>
+        <h1 class="care-main-title" id="discoverTitle">
+          내게 맞는
+          <strong>MOOHAE CARE</strong>
+        </h1>
         <p class="care-section-copy">우리 집에 맞는 CARE를 찾아보세요.</p>
       </div>
+
       <div class="care-wide-scroll-shell">
         <div class="care-object-track" id="careObjectTrack" aria-label="MOOHAE CARE 서비스 탐색"></div>
       </div>
@@ -26,8 +33,12 @@
     <section class="care-section care-need-section" id="need" aria-labelledby="needTitle">
       <div class="care-wrap care-section-head reveal">
         <p class="care-kicker">LIVING ENVIRONMENT</p>
-        <h2 class="care-section-title" id="needTitle">보이는 것 <strong>너머까지.</strong></h2>
+        <h2 class="care-section-title" id="needTitle">
+          보이는 것
+          <strong>너머까지.</strong>
+        </h2>
       </div>
+
       <div class="care-wide-scroll-shell">
         <div class="editorial-track" id="needTrack" aria-label="생활환경 CARE가 필요한 이유"></div>
       </div>
@@ -36,32 +47,41 @@
     <section class="care-section care-flow-section" id="care-flow" aria-labelledby="flowTitle">
       <div class="care-wrap care-section-head reveal">
         <p class="care-kicker">MOOHAE CARE FLOW</p>
-        <h2 class="care-section-title" id="flowTitle">한 번의 CARE, <strong>그 다음까지.</strong></h2>
+        <h2 class="care-section-title" id="flowTitle">
+          한 번의 CARE,
+          <strong>그 다음까지.</strong>
+        </h2>
       </div>
+
       <div class="care-wide-scroll-shell">
         <div class="flow-card-track" id="flowTrack" aria-label="MOOHAE CARE 진행 방식"></div>
       </div>
+
       <div class="care-wrap care-flow-ending reveal">
         <p>기록을 통해 <strong>이어지는 CARE.</strong></p>
       </div>
-      <div class="care-wrap proof-ui reveal" aria-label="MOOHAE PROOF 예시">
+
+      <div class="care-wrap proof-ui reveal" id="proof" aria-labelledby="proofTitle">
         <div class="proof-ui-head">
           <p class="care-kicker">PROOF</p>
-          <h3>했다는 말보다, <strong>달라진 것을 보여드립니다.</strong></h3>
+          <h3 id="proofTitle">
+            했다는 말보다,
+            <strong>달라진 것을 보여드립니다.</strong>
+          </h3>
         </div>
-        <div class="proof-ui-flow" aria-label="BEFORE AFTER 확인 흐름">
-          <div class="proof-ui-card"><span>BEFORE</span><strong>CARE 전</strong><small>시작 전 상태를 확인합니다.</small></div>
-          <div class="proof-ui-arrow" aria-hidden="true">→</div>
-          <div class="proof-ui-card is-after"><span>AFTER</span><strong>CARE 후</strong><small>완료된 결과를 함께 확인합니다.</small></div>
-        </div>
+        <div class="proof-compare" id="proofCompare" aria-label="CARE 전후 비교"></div>
       </div>
     </section>
 
     <section class="care-section care-plan-section" id="care-plan" aria-labelledby="planTitle">
       <div class="care-wrap care-section-head reveal">
         <p class="care-kicker">MOOHAE CARE PLAN</p>
-        <h2 class="care-section-title" id="planTitle">우리 집의 1년을 <strong>CARE합니다.</strong></h2>
+        <h2 class="care-section-title" id="planTitle">
+          우리 집의 1년을
+          <strong>CARE합니다.</strong>
+        </h2>
       </div>
+
       <div class="care-wide-scroll-shell">
         <div class="service-card-track" id="carePlanTrack" aria-label="MOOHAE CARE PLAN"></div>
       </div>
@@ -70,10 +90,14 @@
     <section class="care-section care-one-section" id="moohae-one" aria-labelledby="oneTitle">
       <div class="care-wrap care-section-head reveal">
         <p class="care-kicker">MOOHAE ONE</p>
-        <h2 class="care-section-title" id="oneTitle">필요한 곳부터, <strong>한 번.</strong></h2>
+        <h2 class="care-section-title" id="oneTitle">
+          필요한 곳부터,
+          <strong>한 번.</strong>
+        </h2>
       </div>
+
       <div class="care-wide-scroll-shell">
-        <div class="service-card-track one-card-track" id="oneTrack" aria-label="MOOHAE ONE"></div>
+        <div class="one-product-track" id="oneTrack" aria-label="MOOHAE ONE 서비스"></div>
       </div>
     </section>
 
@@ -84,16 +108,58 @@
           <h2 id="myHomeTitle">우리 집을 <strong>기억하는 CARE.</strong></h2>
           <p>한 번의 CARE가<br>다음 CARE로 이어집니다.</p>
         </div>
+
         <div class="myhome-app reveal" aria-label="MOOHAE MY HOME 예시">
-          <div class="myhome-app-top"><div><span>MOOHAE MY HOME</span><strong>CARE 02 / 04</strong></div><span class="myhome-plan-badge">CORE+</span></div>
-          <div class="myhome-cycle" aria-label="CORE+ CARE CYCLE 진행상태">
-            <div class="myhome-cycle-line"><span class="cycle-done" aria-label="CARE 01 완료">✓</span><i></i><span class="cycle-current" aria-label="CARE 02 현재">02</span><i></i><span aria-label="CARE 03 예정">03</span><i></i><span aria-label="CARE 04 예정">04</span></div>
-            <div class="myhome-cycle-labels" aria-hidden="true"><span>CARE 01</span><span>CARE 02</span><span>CARE 03</span><span>CARE 04</span></div>
+          <div class="myhome-app-top">
+            <div>
+              <span>MOOHAE MY HOME</span>
+              <strong>CARE 02 / 04</strong>
+            </div>
+            <span class="myhome-plan-badge">CORE+</span>
           </div>
-          <div class="myhome-space"><p>침실</p><div class="myhome-row"><div><strong>매트리스</strong><small>마지막 CARE 08.25</small></div><span class="care-action care-action-complete">✓ CARE 완료</span></div><div class="myhome-row"><div><strong>침구</strong><small>마지막 CARE 08.25</small></div><span class="care-action care-action-complete">✓ CARE 완료</span></div></div>
-          <div class="myhome-space"><p>거실</p><div class="myhome-row"><div><strong>소파</strong><small>마지막 CHECK 08.25</small></div><span class="care-action care-action-check">○ CHECK 완료</span></div><div class="myhome-row"><div><strong>카펫</strong><small>마지막 CARE 04.12</small></div><span class="care-action care-action-complete">✓ CARE 완료</span></div></div>
+
+          <div class="myhome-cycle" aria-label="CORE+ CARE CYCLE 진행상태">
+            <div class="myhome-cycle-line">
+              <span class="cycle-done" aria-label="CARE 01 완료">✓</span><i></i>
+              <span class="cycle-current" aria-label="CARE 02 현재">02</span><i></i>
+              <span aria-label="CARE 03 예정">03</span><i></i>
+              <span aria-label="CARE 04 예정">04</span>
+            </div>
+            <div class="myhome-cycle-labels" aria-hidden="true">
+              <span>CARE 01</span><span>CARE 02</span><span>CARE 03</span><span>CARE 04</span>
+            </div>
+          </div>
+
+          <div class="myhome-space">
+            <p>침실</p>
+            <div class="myhome-row">
+              <div><strong>매트리스</strong><small>마지막 CARE 08.25</small></div>
+              <span class="care-action care-action-complete">✓ CARE 완료</span>
+            </div>
+            <div class="myhome-row">
+              <div><strong>침구</strong><small>마지막 CARE 08.25</small></div>
+              <span class="care-action care-action-complete">✓ CARE 완료</span>
+            </div>
+          </div>
+
+          <div class="myhome-space">
+            <p>거실</p>
+            <div class="myhome-row">
+              <div><strong>소파</strong><small>마지막 CHECK 08.25</small></div>
+              <span class="care-action care-action-check">○ CHECK 완료</span>
+            </div>
+            <div class="myhome-row">
+              <div><strong>카펫</strong><small>마지막 CARE 04.12</small></div>
+              <span class="care-action care-action-complete">✓ CARE 완료</span>
+            </div>
+          </div>
+
           <div class="myhome-next"><span>NEXT CARE</span><strong>12월</strong></div>
-          <div class="myhome-legend" aria-label="기록 상태 안내"><span>✓ CARE 완료 · 실제 CARE</span><span>○ CHECK 완료 · 상태 확인</span><span>– 미진행 · 이번 방문 미진행</span></div>
+          <div class="myhome-legend" aria-label="기록 상태 안내">
+            <span>✓ CARE 완료 · 실제 CARE</span>
+            <span>○ CHECK 완료 · 상태 확인</span>
+            <span>– 미진행 · 이번 방문 미진행</span>
+          </div>
         </div>
       </div>
     </section>
@@ -108,8 +174,10 @@
       </div>
     </section>
   </main>
+
   <div id="site-footer"></div>
+
   <script src="./assets/js/site.js"></script>
-  <script src="./assets/js/care.js?v=20260830-4"></script>
+  <script src="./assets/js/care.js?v=20260830-6"></script>
 </body>
 </html>
