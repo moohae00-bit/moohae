@@ -55,7 +55,7 @@
         'CORE+',
 
       image:
-        `${IMAGE_BASE}02_core_plus.webp`,
+        `${IMAGE_BASE}core_plus.png`,
 
       alt:
         'MOOHAE CORE+ 집 전체 CARE',
@@ -72,7 +72,7 @@
         'CORE',
 
       image:
-        `${IMAGE_BASE}03_core.webp`,
+        `${IMAGE_BASE}core.png`,
 
       alt:
         'MOOHAE CORE 생활 핵심 CARE',
@@ -89,7 +89,7 @@
         'ONE ROOM',
 
       image:
-        `${IMAGE_BASE}04_one_room.webp`,
+        `${IMAGE_BASE}one_room.png`,
 
       alt:
         'MOOHAE ONE ROOM 방 하나 CARE',
@@ -106,7 +106,7 @@
         'ONE CARE',
 
       image:
-        `${IMAGE_BASE}05_one_care.webp`,
+        `${IMAGE_BASE}one_care.png`,
 
       alt:
         'MOOHAE ONE CARE 개별 CARE',
