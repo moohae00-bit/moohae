@@ -3,17 +3,16 @@
 
 
   // ============================================================
-  // MOOHAE CARE V6
+  // MOOHAE CARE V7
   //
-  // CENTRAL DATA
+  // 핵심 원칙
   //
-  // 이미지 경로
-  // 서비스명
-  // 가격
-  // 방문횟수
-  // 카피
-  //
-  // 모두 이 파일에서 관리한다.
+  // - 일반 사진 사용하지 않음
+  // - 상단 서비스 오브젝트 5개만 이미지 사용
+  // - 오브젝트는 투명 배경 WebP
+  // - 텍스트 / 가격 / 설명은 DOM으로 출력
+  // - 서비스 데이터는 이 파일 한 곳에서 관리
+  // - CSS scroll-snap 기반 가로 탐색
   // ============================================================
 
 
@@ -22,198 +21,113 @@
 
 
   // ============================================================
-  // ASSET DATA
+  // TOP OBJECT ASSETS
+  //
+  // 현재 페이지에서 사용하는 이미지는 아래 5개뿐이다.
+  //
+  // 06 ~ 15 이미지는 현재 CARE 페이지에서 사용하지 않는다.
   // ============================================================
 
-  const CARE_ASSETS = {
+  const CARE_OBJECTS = [
 
+    {
+      key:
+        'private',
 
-    services: {
+      name:
+        'PRIVATE',
 
-      private: {
-        name:
-          'PRIVATE',
+      image:
+        `${IMAGE_BASE}01_private.webp`,
 
-        image:
-          `${IMAGE_BASE}01_private.webp`,
+      alt:
+        'MOOHAE PRIVATE 전담 CARE',
 
-        alt:
-          'MOOHAE PRIVATE 전담 CARE',
-
-        target:
-          'plan-private'
-      },
-
-
-      corePlus: {
-        name:
-          'CORE+',
-
-        image:
-          `${IMAGE_BASE}02_core_plus.webp`,
-
-        alt:
-          'MOOHAE CORE+ 집 전체 CARE',
-
-        target:
-          'plan-core-plus'
-      },
-
-
-      core: {
-        name:
-          'CORE',
-
-        image:
-          `${IMAGE_BASE}03_core.webp`,
-
-        alt:
-          'MOOHAE CORE 생활 핵심 CARE',
-
-        target:
-          'plan-core'
-      },
-
-
-      oneRoom: {
-        name:
-          'ONE ROOM',
-
-        image:
-          `${IMAGE_BASE}04_one_room.webp`,
-
-        alt:
-          'MOOHAE ONE ROOM 방 하나 CARE',
-
-        target:
-          'one-room'
-      },
-
-
-      oneCare: {
-        name:
-          'ONE CARE',
-
-        image:
-          `${IMAGE_BASE}05_one_care.webp`,
-
-        alt:
-          'MOOHAE ONE CARE 개별 CARE',
-
-        target:
-          'one-care'
-      }
-
+      target:
+        'plan-private'
     },
 
+    {
+      key:
+        'corePlus',
 
-    oneCareItems: [
+      name:
+        'CORE+',
 
-      {
-        name:
-          'SOFA',
+      image:
+        `${IMAGE_BASE}02_core_plus.webp`,
 
-        price:
-          '49,000원~',
+      alt:
+        'MOOHAE CORE+ 집 전체 CARE',
 
-        image:
-          `${IMAGE_BASE}06_sofa.webp`,
+      target:
+        'plan-core-plus'
+    },
 
-        alt:
-          'MOOHAE 소파 CARE'
-      },
+    {
+      key:
+        'core',
 
+      name:
+        'CORE',
 
-      {
-        name:
-          'MATTRESS',
+      image:
+        `${IMAGE_BASE}03_core.webp`,
 
-        price:
-          '39,000원~',
+      alt:
+        'MOOHAE CORE 생활 핵심 CARE',
 
-        image:
-          `${IMAGE_BASE}07_mattress.webp`,
+      target:
+        'plan-core'
+    },
 
-        alt:
-          'MOOHAE 매트리스 CARE'
-      },
+    {
+      key:
+        'oneRoom',
 
+      name:
+        'ONE ROOM',
 
-      {
-        name:
-          'BEDDING',
+      image:
+        `${IMAGE_BASE}04_one_room.webp`,
 
-        price:
-          '29,000원~',
+      alt:
+        'MOOHAE ONE ROOM 방 하나 CARE',
 
-        image:
-          `${IMAGE_BASE}08_bedding.webp`,
+      target:
+        'one-room'
+    },
 
-        alt:
-          'MOOHAE 침구 CARE'
-      },
+    {
+      key:
+        'oneCare',
 
+      name:
+        'ONE CARE',
 
-      {
-        name:
-          'RUG',
+      image:
+        `${IMAGE_BASE}05_one_care.webp`,
 
-        price:
-          '29,000원~',
+      alt:
+        'MOOHAE ONE CARE 개별 CARE',
 
-        image:
-          `${IMAGE_BASE}09_rug.webp`,
-
-        alt:
-          'MOOHAE 러그 CARE'
-      },
-
-
-      {
-        name:
-          'FLOOR',
-
-        price:
-          '39,000원~',
-
-        image:
-          `${IMAGE_BASE}10_floor.webp`,
-
-        alt:
-          'MOOHAE 바닥 CARE'
-      }
-
-    ],
-
-
-    sections: {
-
-      bedroom:
-        `${IMAGE_BASE}11_bedroom.webp`,
-
-      livingroom:
-        `${IMAGE_BASE}12_livingroom.webp`,
-
-      wholeSpace:
-        `${IMAGE_BASE}13_whole_space.webp`,
-
-      proof:
-        `${IMAGE_BASE}14_proof_care.webp`,
-
-      myHome:
-        `${IMAGE_BASE}15_my_home.webp`
-
+      target:
+        'one-care'
     }
 
-  };
+  ];
 
 
   // ============================================================
-  // CONTENT DATA
+  // CONTENT
   // ============================================================
 
   const CARE_CONTENT = {
 
+
+    // ----------------------------------------------------------
+    // WHY
+    // ----------------------------------------------------------
 
     why: [
 
@@ -221,41 +135,21 @@
         number:
           '01',
 
-        image:
-          CARE_ASSETS.sections.bedroom,
-
-        alt:
-          '정돈된 침실과 침구',
-
         copy:
           '깨끗해 보여도,\n보이지 않는 곳은\n남아 있습니다.'
       },
-
 
       {
         number:
           '02',
 
-        image:
-          CARE_ASSETS.sections.livingroom,
-
-        alt:
-          '소파와 러그가 있는 생활 공간',
-
         copy:
           '매일 닿지만,\n매일 관리하기는\n어렵습니다.'
       },
 
-
       {
         number:
           '03',
-
-        image:
-          CARE_ASSETS.sections.wholeSpace,
-
-        alt:
-          '바닥부터 벽과 천장까지 연결된 생활 공간',
 
         copy:
           '우리가 생활하는 공간은\n서로 떨어져 있지\n않습니다.'
@@ -263,6 +157,10 @@
 
     ],
 
+
+    // ----------------------------------------------------------
+    // METHOD
+    // ----------------------------------------------------------
 
     method: [
 
@@ -277,7 +175,6 @@
           '먼저,\n확인합니다.'
       },
 
-
       {
         number:
           '02',
@@ -289,7 +186,6 @@
           '필요한 곳을\nCARE합니다.'
       },
 
-
       {
         number:
           '03',
@@ -298,15 +194,8 @@
           'PROOF',
 
         copy:
-          '달라진 것을\n보여드립니다.',
-
-        image:
-          CARE_ASSETS.sections.proof,
-
-        alt:
-          'MOOHAE CARE 결과 확인'
+          '달라진 것을\n보여드립니다.'
       },
-
 
       {
         number:
@@ -318,7 +207,6 @@
         copy:
           '오늘의 CARE를\n기록합니다.'
       },
-
 
       {
         number:
@@ -334,6 +222,10 @@
     ],
 
 
+    // ----------------------------------------------------------
+    // CARE PLAN
+    // ----------------------------------------------------------
+
     plans: [
 
       {
@@ -342,12 +234,6 @@
 
         name:
           'PRIVATE',
-
-        image:
-          CARE_ASSETS.services.private.image,
-
-        imageAlt:
-          CARE_ASSETS.services.private.alt,
 
         copy:
           '우리 집을 위한\n전담 CARE.',
@@ -372,19 +258,12 @@
           '단순 방문 횟수가 아닌, 우리 집을 이해하는 전담관리 서비스입니다.'
       },
 
-
       {
         id:
           'plan-core-plus',
 
         name:
           'CORE+',
-
-        image:
-          CARE_ASSETS.services.corePlus.image,
-
-        imageAlt:
-          CARE_ASSETS.services.corePlus.alt,
 
         copy:
           '집 전체를\n더 깊이 CARE.',
@@ -412,19 +291,12 @@
           '생활의 핵심에서 벽과 천장, 디테일링까지 CARE 범위를 확장합니다.'
       },
 
-
       {
         id:
           'plan-core',
 
         name:
           'CORE',
-
-        image:
-          CARE_ASSETS.services.core.image,
-
-        imageAlt:
-          CARE_ASSETS.services.core.alt,
 
         copy:
           '생활의 핵심을\n1년의 주기로.',
@@ -452,6 +324,10 @@
     ],
 
 
+    // ----------------------------------------------------------
+    // MOOHAE ONE
+    // ----------------------------------------------------------
+
     one: [
 
       {
@@ -460,12 +336,6 @@
 
         name:
           'ONE ROOM',
-
-        image:
-          CARE_ASSETS.services.oneRoom.image,
-
-        imageAlt:
-          CARE_ASSETS.services.oneRoom.alt,
 
         copy:
           '방 하나를\n한 번에.',
@@ -487,19 +357,12 @@
           'MOOHAE ONE의 대표 서비스입니다.'
       },
 
-
       {
         id:
           'one-care',
 
         name:
           'ONE CARE',
-
-        image:
-          CARE_ASSETS.services.oneCare.image,
-
-        imageAlt:
-          CARE_ASSETS.services.oneCare.alt,
 
         copy:
           '필요한 곳만,\n하나씩.',
@@ -517,8 +380,49 @@
         note:
           '크기와 관리 범위에 따라 금액이 달라질 수 있습니다.',
 
-        items:
-          CARE_ASSETS.oneCareItems
+        items: [
+
+          {
+            name:
+              'SOFA',
+
+            price:
+              '49,000원~'
+          },
+
+          {
+            name:
+              'MATTRESS',
+
+            price:
+              '39,000원~'
+          },
+
+          {
+            name:
+              'BEDDING',
+
+            price:
+              '29,000원~'
+          },
+
+          {
+            name:
+              'RUG',
+
+            price:
+              '29,000원~'
+          },
+
+          {
+            name:
+              'FLOOR',
+
+            price:
+              '39,000원~'
+          }
+
+        ]
       }
 
     ]
@@ -527,7 +431,7 @@
 
 
   // ============================================================
-  // DOM HELPER
+  // SAFE DOM
   // ============================================================
 
   function make(
@@ -537,7 +441,9 @@
   ) {
 
     const node =
-      document.createElement(tag);
+      document.createElement(
+        tag
+      );
 
 
     if (
@@ -562,64 +468,24 @@
   }
 
 
-  function createImage(
-    src,
-    alt,
-    options = {}
-  ) {
-
-    const image =
-      document.createElement(
-        'img'
-      );
-
-
-    image.src =
-      src;
-
-
-    image.alt =
-      alt || '';
-
-
-    image.decoding =
-      'async';
-
-
-    image.loading =
-      options.eager
-        ? 'eager'
-        : 'lazy';
-
-
-    if (
-      options.eager
-    ) {
-
-      image.fetchPriority =
-        'high';
-    }
-
-
-    return image;
-  }
-
-
   function appendMultilineText(
     parent,
-    text
+    value
   ) {
 
     const parts =
       String(
-        text || ''
+        value || ''
       ).split(
         '\n'
       );
 
 
     parts.forEach(
-      (part, index) => {
+      (
+        part,
+        index
+      ) => {
 
         if (
           index > 0
@@ -643,8 +509,50 @@
   }
 
 
+  function createObjectImage(
+    item,
+    eager
+  ) {
+
+    const image =
+      document.createElement(
+        'img'
+      );
+
+
+    image.src =
+      item.image;
+
+
+    image.alt =
+      item.alt;
+
+
+    image.decoding =
+      'async';
+
+
+    image.loading =
+      eager
+        ? 'eager'
+        : 'lazy';
+
+
+    if (
+      eager
+    ) {
+
+      image.fetchPriority =
+        'high';
+    }
+
+
+    return image;
+  }
+
+
   // ============================================================
-  // TOP SERVICE OBJECTS
+  // TOP OBJECTS
   // ============================================================
 
   function renderCareObjects() {
@@ -666,14 +574,11 @@
     track.replaceChildren();
 
 
-    const services =
-      Object.values(
-        CARE_ASSETS.services
-      );
-
-
-    services.forEach(
-      (service, index) => {
+    CARE_OBJECTS.forEach(
+      (
+        item,
+        index
+      ) => {
 
         const button =
           make(
@@ -687,30 +592,26 @@
 
 
         button.dataset.target =
-          service.target;
+          item.target;
 
 
         button.setAttribute(
           'aria-label',
-          `${service.name} 서비스로 이동`
+          `${item.name} 서비스 보기`
         );
 
 
         const media =
           make(
             'span',
-            'care-object-image'
+            'care-object-media'
           );
 
 
         media.appendChild(
-          createImage(
-            service.image,
-            service.alt,
-            {
-              eager:
-                index < 3
-            }
+          createObjectImage(
+            item,
+            index < 3
           )
         );
 
@@ -724,7 +625,7 @@
           make(
             'strong',
             '',
-            service.name
+            item.name
           )
         );
 
@@ -760,75 +661,47 @@
     track.replaceChildren();
 
 
-    CARE_CONTENT
-      .why
-      .forEach(
-        (item) => {
+    CARE_CONTENT.why.forEach(
+      (item) => {
 
-          const card =
-            make(
-              'article',
-              'story-card reveal'
-            );
-
-
-          const media =
-            make(
-              'div',
-              'story-card-image'
-            );
-
-
-          media.appendChild(
-            createImage(
-              item.image,
-              item.alt
-            )
+        const card =
+          make(
+            'article',
+            'why-card reveal'
           );
 
 
-          const copy =
-            make(
-              'div',
-              'story-card-copy'
-            );
+        card.appendChild(
+          make(
+            'span',
+            'why-card-number',
+            item.number
+          )
+        );
 
 
-          copy.appendChild(
-            make(
-              'span',
-              '',
-              item.number
-            )
+        const heading =
+          make(
+            'h3'
           );
 
 
-          const heading =
-            make('h3');
+        appendMultilineText(
+          heading,
+          item.copy
+        );
 
 
-          appendMultilineText(
-            heading,
-            item.copy
-          );
+        card.appendChild(
+          heading
+        );
 
 
-          copy.appendChild(
-            heading
-          );
-
-
-          card.append(
-            media,
-            copy
-          );
-
-
-          track.appendChild(
-            card
-          );
-        }
-      );
+        track.appendChild(
+          card
+        );
+      }
+    );
   }
 
 
@@ -855,153 +728,84 @@
     track.replaceChildren();
 
 
-    CARE_CONTENT
-      .method
-      .forEach(
-        (item) => {
+    CARE_CONTENT.method.forEach(
+      (item) => {
 
-          const card =
-            make(
-              'article',
-              item.image
-                ? 'method-card has-image reveal'
-                : 'method-card reveal'
-            );
-
-
-          if (
-            item.image
-          ) {
-
-            const media =
-              make(
-                'div',
-                'method-image'
-              );
-
-
-            media.appendChild(
-              createImage(
-                item.image,
-                item.alt
-              )
-            );
-
-
-            card.appendChild(
-              media
-            );
-          }
-
-
-          const content =
-            item.image
-              ? make(
-                  'div',
-                  'method-content'
-                )
-              : card;
-
-
-          content.appendChild(
-            make(
-              'span',
-              'method-number',
-              item.number
-            )
+        const card =
+          make(
+            'article',
+            'method-card reveal'
           );
 
 
-          content.appendChild(
-            make(
-              'p',
-              'method-code',
-              item.code
-            )
+        card.appendChild(
+          make(
+            'span',
+            'method-number',
+            item.number
+          )
+        );
+
+
+        card.appendChild(
+          make(
+            'p',
+            'method-code',
+            item.code
+          )
+        );
+
+
+        const heading =
+          make(
+            'h3'
           );
 
 
-          const heading =
-            make('h3');
+        appendMultilineText(
+          heading,
+          item.copy
+        );
 
 
-          appendMultilineText(
-            heading,
-            item.copy
-          );
+        card.appendChild(
+          heading
+        );
 
 
-          content.appendChild(
-            heading
-          );
-
-
-          if (
-            item.image
-          ) {
-
-            card.appendChild(
-              content
-            );
-          }
-
-
-          track.appendChild(
-            card
-          );
-        }
-      );
+        track.appendChild(
+          card
+        );
+      }
+    );
   }
 
 
   // ============================================================
-  // ONE CARE ITEMS
+  // ONE CARE DETAIL
   // ============================================================
 
-  function createOneCareItems(
+  function createOneCareDetailList(
     items
   ) {
 
-    const grid =
+    const list =
       make(
-        'div',
-        'one-care-grid'
+        'ul',
+        'one-detail-list'
       );
 
 
     items.forEach(
       (item) => {
 
-        const card =
+        const row =
           make(
-            'div',
-            'one-care-item'
+            'li'
           );
 
 
-        const media =
-          make(
-            'div',
-            'one-care-item-image'
-          );
-
-
-        media.appendChild(
-          createImage(
-            item.image,
-            item.alt
-          )
-        );
-
-
-        const copy =
-          make(
-            'div',
-            'one-care-item-copy'
-          );
-
-
-        copy.appendChild(
+        row.appendChild(
           make(
             'strong',
             '',
@@ -1010,7 +814,7 @@
         );
 
 
-        copy.appendChild(
+        row.appendChild(
           make(
             'span',
             '',
@@ -1019,20 +823,14 @@
         );
 
 
-        card.append(
-          media,
-          copy
-        );
-
-
-        grid.appendChild(
-          card
+        list.appendChild(
+          row
         );
       }
     );
 
 
-    return grid;
+    return list;
   }
 
 
@@ -1060,34 +858,9 @@
       -1;
 
 
-    // IMAGE
-
-    if (
-      service.image
-    ) {
-
-      const media =
-        make(
-          'div',
-          'service-card-media'
-        );
-
-
-      media.appendChild(
-        createImage(
-          service.image,
-          service.imageAlt
-        )
-      );
-
-
-      card.appendChild(
-        media
-      );
-    }
-
-
-    // TOP
+    // ----------------------------------------------------------
+    // HEAD
+    // ----------------------------------------------------------
 
     const top =
       make(
@@ -1124,10 +897,14 @@
     );
 
 
+    // ----------------------------------------------------------
     // COPY
+    // ----------------------------------------------------------
 
     const heading =
-      make('h3');
+      make(
+        'h3'
+      );
 
 
     appendMultilineText(
@@ -1141,7 +918,9 @@
     );
 
 
+    // ----------------------------------------------------------
     // PRICE
+    // ----------------------------------------------------------
 
     const price =
       make(
@@ -1184,42 +963,39 @@
     );
 
 
+    // ----------------------------------------------------------
     // FEATURES
+    // ----------------------------------------------------------
 
-    if (
-      Array.isArray(
-        service.features
-      )
-    ) {
+    const featureList =
+      make(
+        'ul',
+        'service-feature-list'
+      );
 
-      const list =
-        make(
-          'ul',
-          'service-feature-list'
+
+    service.features.forEach(
+      (feature) => {
+
+        featureList.appendChild(
+          make(
+            'li',
+            '',
+            feature
+          )
         );
+      }
+    );
 
 
-      service.features.forEach(
-        (feature) => {
-
-          list.appendChild(
-            make(
-              'li',
-              '',
-              feature
-            )
-          );
-        }
-      );
+    card.appendChild(
+      featureList
+    );
 
 
-      card.appendChild(
-        list
-      );
-    }
-
-
-    // ONE CARE EXPANDABLE
+    // ----------------------------------------------------------
+    // ONE CARE DETAIL
+    // ----------------------------------------------------------
 
     if (
       options.expandable &&
@@ -1245,25 +1021,21 @@
       );
 
 
-      const label =
+      button.appendChild(
         make(
           'span',
           '',
           '개별 CARE 보기'
-        );
+        )
+      );
 
 
-      const icon =
+      button.appendChild(
         make(
           'span',
           '',
           '+'
-        );
-
-
-      button.append(
-        label,
-        icon
+        )
       );
 
 
@@ -1282,7 +1054,7 @@
 
 
       inner.appendChild(
-        createOneCareItems(
+        createOneCareDetailList(
           service.items
         )
       );
@@ -1297,7 +1069,7 @@
         'click',
         () => {
 
-          const open =
+          const isOpen =
             button.getAttribute(
               'aria-expanded'
             ) ===
@@ -1307,14 +1079,14 @@
           button.setAttribute(
             'aria-expanded',
             String(
-              !open
+              !isOpen
             )
           );
 
 
           panel.classList.toggle(
             'open',
-            !open
+            !isOpen
           );
         }
       );
@@ -1327,7 +1099,9 @@
     }
 
 
+    // ----------------------------------------------------------
     // NOTE
+    // ----------------------------------------------------------
 
     if (
       service.note
@@ -1348,7 +1122,7 @@
 
 
   // ============================================================
-  // SERVICES
+  // RENDER SERVICES
   // ============================================================
 
   function renderServices() {
@@ -1372,18 +1146,16 @@
       planTrack.replaceChildren();
 
 
-      CARE_CONTENT
-        .plans
-        .forEach(
-          (service) => {
+      CARE_CONTENT.plans.forEach(
+        (service) => {
 
-            planTrack.appendChild(
-              createServiceCard(
-                service
-              )
-            );
-          }
-        );
+          planTrack.appendChild(
+            createServiceCard(
+              service
+            )
+          );
+        }
+      );
     }
 
 
@@ -1394,142 +1166,64 @@
       oneTrack.replaceChildren();
 
 
-      CARE_CONTENT
-        .one
-        .forEach(
-          (service) => {
+      CARE_CONTENT.one.forEach(
+        (service) => {
 
-            oneTrack.appendChild(
-              createServiceCard(
-                service,
-                {
-                  expandable:
-                    service.id ===
-                    'one-care'
-                }
-              )
-            );
-          }
-        );
-    }
-  }
-
-
-  // ============================================================
-  // MY HOME IMAGE
-  // ============================================================
-
-  function renderMyHomeImage() {
-
-    const image =
-      document.getElementById(
-        'myHomeImage'
-      );
-
-
-    if (
-      !image
-    ) {
-
-      return;
-    }
-
-
-    image.src =
-      CARE_ASSETS.sections.myHome;
-  }
-
-
-  // ============================================================
-  // REVEAL
-  // ============================================================
-
-  function setupReveal() {
-
-    const elements =
-      document.querySelectorAll(
-        '.care-page .reveal'
-      );
-
-
-    if (
-      !elements.length
-    ) {
-
-      return;
-    }
-
-
-    if (
-      !(
-        'IntersectionObserver'
-        in window
-      )
-    ) {
-
-      elements.forEach(
-        (element) => {
-
-          element.classList.add(
-            'in-view'
-          );
-        }
-      );
-
-
-      return;
-    }
-
-
-    const observer =
-      new IntersectionObserver(
-        (entries) => {
-
-          entries.forEach(
-            (entry) => {
-
-              if (
-                !entry.isIntersecting
-              ) {
-
-                return;
+          oneTrack.appendChild(
+            createServiceCard(
+              service,
+              {
+                expandable:
+                  service.id ===
+                  'one-care'
               }
-
-
-              entry.target.classList.add(
-                'in-view'
-              );
-
-
-              observer.unobserve(
-                entry.target
-              );
-            }
+            )
           );
-        },
-        {
-          threshold:
-            0.10,
-
-          rootMargin:
-            '0px 0px -5% 0px'
         }
       );
-
-
-    elements.forEach(
-      (element) => {
-
-        observer.observe(
-          element
-        );
-      }
-    );
+    }
   }
 
 
   // ============================================================
-  // SERVICE OBJECT NAVIGATION
+  // SELECT OBJECT
+  // ============================================================
+
+  function selectObject(
+    selectedButton
+  ) {
+
+    document
+      .querySelectorAll(
+        '.care-object-button'
+      )
+      .forEach(
+        (button) => {
+
+          const selected =
+            button ===
+            selectedButton;
+
+
+          button.classList.toggle(
+            'is-selected',
+            selected
+          );
+
+
+          button.setAttribute(
+            'aria-pressed',
+            String(
+              selected
+            )
+          );
+        }
+      );
+  }
+
+
+  // ============================================================
+  // TOP OBJECT NAVIGATION
   // ============================================================
 
   function setupObjectNavigation() {
@@ -1543,9 +1237,20 @@
     buttons.forEach(
       (button) => {
 
+        button.setAttribute(
+          'aria-pressed',
+          'false'
+        );
+
+
         button.addEventListener(
           'click',
           () => {
+
+            selectObject(
+              button
+            );
+
 
             const targetId =
               String(
@@ -1586,6 +1291,10 @@
   }
 
 
+  // ============================================================
+  // MOVE TO SERVICE CARD
+  // ============================================================
+
   function moveToServiceCard(
     card
   ) {
@@ -1613,7 +1322,9 @@
     ) {
 
       const sectionTop =
-        section.getBoundingClientRect().top +
+        section
+          .getBoundingClientRect()
+          .top +
         window.scrollY -
         headerOffset;
 
@@ -1688,6 +1399,97 @@
 
 
   // ============================================================
+  // REVEAL
+  // ============================================================
+
+  function setupReveal() {
+
+    const elements =
+      document.querySelectorAll(
+        '.care-page .reveal'
+      );
+
+
+    if (
+      !elements.length
+    ) {
+
+      return;
+    }
+
+
+    if (
+      !(
+        'IntersectionObserver'
+        in window
+      )
+    ) {
+
+      elements.forEach(
+        (element) => {
+
+          element.classList.add(
+            'in-view'
+          );
+        }
+      );
+
+
+      return;
+    }
+
+
+    const observer =
+      new IntersectionObserver(
+        (entries) => {
+
+          entries.forEach(
+            (entry) => {
+
+              if (
+                !entry.isIntersecting
+              ) {
+
+                return;
+              }
+
+
+              entry
+                .target
+                .classList
+                .add(
+                  'in-view'
+                );
+
+
+              observer.unobserve(
+                entry.target
+              );
+            }
+          );
+        },
+        {
+          threshold:
+            0.1,
+
+          rootMargin:
+            '0px 0px -5% 0px'
+        }
+      );
+
+
+    elements.forEach(
+      (element) => {
+
+        observer.observe(
+          element
+        );
+      }
+    );
+  }
+
+
+  // ============================================================
   // INIT
   // ============================================================
 
@@ -1700,8 +1502,6 @@
     renderMethod();
 
     renderServices();
-
-    renderMyHomeImage();
 
     setupReveal();
 
@@ -1718,7 +1518,8 @@
       'DOMContentLoaded',
       init,
       {
-        once: true
+        once:
+          true
       }
     );
 
