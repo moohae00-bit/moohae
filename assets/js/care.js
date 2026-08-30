@@ -38,7 +38,7 @@
         'PRIVATE',
 
       image:
-        `${IMAGE_BASE}01_private.webp`,
+        `${IMAGE_BASE}private.png`,
 
       alt:
         'MOOHAE PRIVATE 전담 CARE',
