@@ -1,18 +1,22 @@
 (() => {
   'use strict';
 
+
   // ============================================================
   // MOOHAE CARE
-  // BRAND SECTIONS FINAL
+  // NATIVE SWIPE UNIFIED VERSION
   //
-  // 관리 위치
-  // - 이미지 경로
-  // - 서비스명
-  // - 가격
-  // - 방문 횟수
-  // - CARE PLAN 구성
-  // - LIVING / FLOW 메시지
-  // - 가로 스와이프 감속값
+  // 가로 스와이프 원칙
+  //
+  // - MOOHAE CARE 상단과 동일한 native touch scroll 사용
+  // - LIVING / FLOW / CARE PLAN / ONE 모두 동일
+  // - dragResistance 사용하지 않음
+  // - pointermove 인위적 감속 사용하지 않음
+  // - 브라우저 기본 momentum 사용
+  // - CSS scroll-snap만 사용
+  //
+  // 상단 오브젝트를 클릭했을 때 특정 카드로 이동하는 기능은
+  // 사용자 손가락 스와이프와 별개이므로 부드러운 자동 이동 유지
   // ============================================================
 
 
@@ -25,34 +29,8 @@
 
 
   // ============================================================
-  // MOTION
-  //
-  // dragResistance
-  // 1.0 = 손가락 이동량과 동일
-  // 0.48 = 손가락 이동량의 48%만 이동
-  //
-  // 숫자를 더 낮추면 더 천천히 움직인다.
-  // 예: 0.40
+  // ACCESSIBILITY
   // ============================================================
-
-  const MOTION = {
-
-    navigationDuration:
-      900,
-
-    snapDuration:
-      760,
-
-    navigationDelay:
-      330,
-
-    dragResistance:
-      0.48,
-
-    dragThreshold:
-      7
-  };
-
 
   const prefersReducedMotion =
     window.matchMedia(
@@ -153,6 +131,10 @@
         alt:
           'MOOHAE ONE CARE 개별 CARE',
 
+        /*
+         * ONE CARE 단일 카드 대신
+         * 개별 CARE 첫 상품인 MATTRESS로 이동
+         */
         target:
           'one-mattress'
       }
@@ -356,11 +338,8 @@
     // ----------------------------------------------------------
     // CARE PLAN
     //
-    // 중요:
-    // 침구/소파/벽/천장 등의 구성은
-    // 기본 카드에 중복 출력하지 않는다.
-    //
-    // details에서만 노출.
+    // 서비스 구성은 기본 카드에 중복 노출하지 않는다.
+    // details = 자세히 보기 내부에만 출력
     // ----------------------------------------------------------
 
     plans: [
@@ -609,10 +588,6 @@
 
   // ============================================================
   // SVG OBJECT SYSTEM
-  //
-  // 작은 아이콘이 아니라
-  // 카드 안에서 하나의 시각 요소로 느껴지는
-  // MOOHAE soft object illustration.
   // ============================================================
 
   const SVG_NS =
@@ -1291,6 +1266,66 @@
 
 
   // ============================================================
+  // NATIVE SWIPE NORMALIZATION
+  //
+  // 이전 버전에서 LIVING / FLOW / PLAN / ONE에 붙었던
+  // calm-horizontal-track의 강제 touch-action 및
+  // JS 감속 시스템을 제거한다.
+  //
+  // 결과:
+  //
+  // careObjectTrack
+  // needTrack
+  // flowTrack
+  // carePlanTrack
+  // oneTrack
+  //
+  // 모두 동일한 브라우저 native swipe 사용.
+  // ============================================================
+
+  function normalizeNativeHorizontalTracks() {
+
+    const tracks =
+      document.querySelectorAll(
+        [
+          '#careObjectTrack',
+          '#needTrack',
+          '#flowTrack',
+          '#carePlanTrack',
+          '#oneTrack'
+        ].join(',')
+      );
+
+
+    tracks.forEach(
+      (
+        track
+      ) => {
+
+        /*
+         * 기존 HTML에 클래스가 남아 있어도
+         * 제거해서 상단 CARE와 동일한 상태로 만든다.
+         */
+
+        track.classList.remove(
+          'calm-horizontal-track'
+        );
+
+
+        /*
+         * 기존 CSS나 캐시에서 touch-action 값이 남는 경우에도
+         * 브라우저 native 터치 스크롤을 사용할 수 있도록 한다.
+         */
+
+        track.style.touchAction =
+          'auto';
+
+      }
+    );
+  }
+
+
+  // ============================================================
   // TOP SERVICE OBJECTS
   // ============================================================
 
@@ -1618,7 +1653,8 @@
 
       },
       {
-        once: true
+        once:
+          true
       }
     );
 
@@ -1954,20 +1990,11 @@
 
 
     /*
-     * 서비스 구성:
+     * 침구 / 소파 / 벽 / 천장 등 구성은
+     * 기본 카드에 다시 표시하지 않는다.
      *
-     * 침구
-     * 소파
-     * 벽
-     * 천장
-     * 바닥
-     *
-     * 등의 범위는 기본 카드에서는 출력하지 않는다.
-     *
-     * "자세히 보기"를 열었을 때만
-     * details가 나타난다.
+     * 자세히 보기 내부에서만 표시.
      */
-
 
     card.appendChild(
       createDetailPanel(
@@ -2133,648 +2160,7 @@
 
 
   // ============================================================
-  // CUSTOM SLOW HORIZONTAL MOTION
-  // ============================================================
-
-  const activeAnimations =
-    new WeakMap();
-
-
-  function easeInOutQuint(
-    progress
-  ) {
-
-    return progress < 0.5
-
-      ? (
-          16 *
-          Math.pow(
-            progress,
-            5
-          )
-        )
-
-      : (
-          1 -
-          Math.pow(
-            -2 *
-            progress +
-            2,
-            5
-          ) /
-          2
-        );
-  }
-
-
-  function animateScrollLeft(
-    element,
-    targetLeft,
-    duration =
-      MOTION.snapDuration
-  ) {
-
-    if (
-      !element
-    ) {
-
-      return;
-    }
-
-
-    const previousFrame =
-      activeAnimations.get(
-        element
-      );
-
-
-    if (
-      previousFrame
-    ) {
-
-      cancelAnimationFrame(
-        previousFrame
-      );
-
-
-      activeAnimations.delete(
-        element
-      );
-    }
-
-
-    if (
-      prefersReducedMotion.matches
-    ) {
-
-      element.scrollLeft =
-        targetLeft;
-
-      return;
-    }
-
-
-    const startLeft =
-      element.scrollLeft;
-
-
-    const distance =
-      targetLeft -
-      startLeft;
-
-
-    if (
-      Math.abs(
-        distance
-      ) < 1
-    ) {
-
-      element.scrollLeft =
-        targetLeft;
-
-      return;
-    }
-
-
-    const startTime =
-      performance.now();
-
-
-    function frame(
-      now
-    ) {
-
-      const progress =
-        Math.min(
-          (
-            now -
-            startTime
-          ) /
-          duration,
-          1
-        );
-
-
-      const eased =
-        easeInOutQuint(
-          progress
-        );
-
-
-      element.scrollLeft =
-        startLeft +
-        distance *
-        eased;
-
-
-      if (
-        progress <
-        1
-      ) {
-
-        const frameId =
-          requestAnimationFrame(
-            frame
-          );
-
-
-        activeAnimations.set(
-          element,
-          frameId
-        );
-
-      } else {
-
-        element.scrollLeft =
-          targetLeft;
-
-
-        activeAnimations.delete(
-          element
-        );
-
-      }
-
-    }
-
-
-    const frameId =
-      requestAnimationFrame(
-        frame
-      );
-
-
-    activeAnimations.set(
-      element,
-      frameId
-    );
-  }
-
-
-  // ============================================================
-  // NEAREST CARD
-  // ============================================================
-
-  function getTrackCards(
-    track
-  ) {
-
-    return Array.from(
-      track.children
-    ).filter(
-      (
-        child
-      ) =>
-
-        child.matches(
-          '.editorial-card, .flow-card, .service-card, .one-product-card'
-        )
-
-    );
-  }
-
-
-  function getNearestCardTarget(
-    track
-  ) {
-
-    const cards =
-      getTrackCards(
-        track
-      );
-
-
-    if (
-      !cards.length
-    ) {
-
-      return track.scrollLeft;
-    }
-
-
-    const viewportCenter =
-      track.scrollLeft +
-      track.clientWidth /
-      2;
-
-
-    let bestCard =
-      cards[0];
-
-
-    let bestDistance =
-      Infinity;
-
-
-    cards.forEach(
-      (
-        card
-      ) => {
-
-        const cardCenter =
-          card.offsetLeft +
-          card.offsetWidth /
-          2;
-
-
-        const distance =
-          Math.abs(
-            cardCenter -
-            viewportCenter
-          );
-
-
-        if (
-          distance <
-          bestDistance
-        ) {
-
-          bestDistance =
-            distance;
-
-
-          bestCard =
-            card;
-        }
-
-      }
-    );
-
-
-    return Math.max(
-      0,
-
-      bestCard.offsetLeft -
-      (
-        track.clientWidth -
-        bestCard.clientWidth
-      ) /
-      2
-    );
-  }
-
-
-  function settleTrack(
-    track
-  ) {
-
-    animateScrollLeft(
-
-      track,
-
-      getNearestCardTarget(
-        track
-      ),
-
-      MOTION.snapDuration
-
-    );
-  }
-
-
-  // ============================================================
-  // SLOW TOUCH DRAG
-  //
-  // 기존 문제:
-  //
-  // 브라우저 native momentum scroll이
-  // 손가락을 놓은 후 너무 멀리 이동함.
-  //
-  // 이번 방식:
-  //
-  // 손가락 수평 이동량 × 0.48
-  //
-  // 즉 손가락을 100px 움직여도
-  // 카드 트랙은 약 48px만 이동.
-  //
-  // 이후 가까운 카드로 760ms에 걸쳐 정착.
-  //
-  // 세로 페이지 스크롤은 그대로 유지.
-  // ============================================================
-
-  function setupCalmHorizontalTrack(
-    track
-  ) {
-
-    if (
-      !track
-    ) {
-
-      return;
-    }
-
-
-    const coarsePointer =
-      window.matchMedia(
-        '(pointer: coarse)'
-      ).matches;
-
-
-    if (
-      !coarsePointer
-    ) {
-
-      return;
-    }
-
-
-    let pointerId =
-      null;
-
-
-    let startX =
-      0;
-
-
-    let startY =
-      0;
-
-
-    let startScrollLeft =
-      0;
-
-
-    let horizontalIntent =
-      false;
-
-
-    let moved =
-      false;
-
-
-    // ----------------------------------------------------------
-    // POINTER DOWN
-    // ----------------------------------------------------------
-
-    function onPointerDown(
-      event
-    ) {
-
-      if (
-        event.pointerType !==
-          'touch' &&
-
-        event.pointerType !==
-          'pen'
-      ) {
-
-        return;
-      }
-
-
-      pointerId =
-        event.pointerId;
-
-
-      startX =
-        event.clientX;
-
-
-      startY =
-        event.clientY;
-
-
-      startScrollLeft =
-        track.scrollLeft;
-
-
-      horizontalIntent =
-        false;
-
-
-      moved =
-        false;
-    }
-
-
-    // ----------------------------------------------------------
-    // POINTER MOVE
-    // ----------------------------------------------------------
-
-    function onPointerMove(
-      event
-    ) {
-
-      if (
-        event.pointerId !==
-        pointerId
-      ) {
-
-        return;
-      }
-
-
-      const deltaX =
-        event.clientX -
-        startX;
-
-
-      const deltaY =
-        event.clientY -
-        startY;
-
-
-      if (
-        !horizontalIntent
-      ) {
-
-        const absX =
-          Math.abs(
-            deltaX
-          );
-
-
-        const absY =
-          Math.abs(
-            deltaY
-          );
-
-
-        if (
-          absX <
-            MOTION.dragThreshold &&
-
-          absY <
-            MOTION.dragThreshold
-        ) {
-
-          return;
-        }
-
-
-        /*
-         * 세로 움직임이 더 크면
-         * 페이지 스크롤로 판단.
-         */
-
-        if (
-          absY >
-          absX
-        ) {
-
-          pointerId =
-            null;
-
-
-          return;
-        }
-
-
-        horizontalIntent =
-          true;
-
-
-        try {
-
-          track.setPointerCapture(
-            event.pointerId
-          );
-
-        } catch (
-          error
-        ) {
-
-          // 브라우저별 안전 fallback.
-
-        }
-
-      }
-
-
-      if (
-        !horizontalIntent
-      ) {
-
-        return;
-      }
-
-
-      moved =
-        true;
-
-
-      event.preventDefault();
-
-
-      /*
-       * 실제 감속 핵심.
-       */
-
-      track.scrollLeft =
-        startScrollLeft -
-        deltaX *
-        MOTION.dragResistance;
-    }
-
-
-    // ----------------------------------------------------------
-    // FINISH
-    // ----------------------------------------------------------
-
-    function finishPointer(
-      event
-    ) {
-
-      if (
-        pointerId ===
-          null ||
-
-        event.pointerId !==
-          pointerId
-      ) {
-
-        return;
-      }
-
-
-      if (
-        horizontalIntent
-      ) {
-
-        try {
-
-          track.releasePointerCapture(
-            event.pointerId
-          );
-
-        } catch (
-          error
-        ) {
-
-          // 안전 fallback.
-
-        }
-
-      }
-
-
-      pointerId =
-        null;
-
-
-      if (
-        moved
-      ) {
-
-        settleTrack(
-          track
-        );
-      }
-
-
-      horizontalIntent =
-        false;
-
-
-      moved =
-        false;
-    }
-
-
-    track.addEventListener(
-      'pointerdown',
-      onPointerDown
-    );
-
-
-    track.addEventListener(
-      'pointermove',
-      onPointerMove,
-      {
-        passive:
-          false
-      }
-    );
-
-
-    track.addEventListener(
-      'pointerup',
-      finishPointer
-    );
-
-
-    track.addEventListener(
-      'pointercancel',
-      finishPointer
-    );
-
-  }
-
-
-  function setupCalmHorizontalScrolling() {
-
-    document
-      .querySelectorAll(
-        '.calm-horizontal-track'
-      )
-      .forEach(
-        setupCalmHorizontalTrack
-      );
-  }
-
-
-  // ============================================================
-  // TOP OBJECT NAVIGATION
+  // OBJECT SELECTION
   // ============================================================
 
   function selectObject(
@@ -2813,6 +2199,15 @@
   }
 
 
+  // ============================================================
+  // CLICK NAVIGATION
+  //
+  // 손가락 스와이프에는 개입하지 않는다.
+  //
+  // 상단 PRIVATE / CORE+ / CORE / ONE ROOM / ONE CARE를
+  // 눌렀을 때만 native smooth scroll 사용.
+  // ============================================================
+
   function highlightCard(
     card
   ) {
@@ -2846,8 +2241,48 @@
         );
 
       },
-      920
+      850
     );
+  }
+
+
+  function centerCardInTrack(
+    track,
+    card
+  ) {
+
+    if (
+      !track ||
+      !card
+    ) {
+
+      return;
+    }
+
+
+    const targetLeft =
+      card.offsetLeft -
+      (
+        track.clientWidth -
+        card.clientWidth
+      ) /
+      2;
+
+
+    track.scrollTo({
+
+      left:
+        Math.max(
+          0,
+          targetLeft
+        ),
+
+      behavior:
+        prefersReducedMotion.matches
+          ? 'auto'
+          : 'smooth'
+
+    });
   }
 
 
@@ -2897,12 +2332,19 @@
 
 
       window.scrollTo({
-        top,
+
+        top:
+
+          Math.max(
+            0,
+            top
+          ),
 
         behavior:
           prefersReducedMotion.matches
             ? 'auto'
             : 'smooth'
+
       });
     }
 
@@ -2910,32 +2352,10 @@
     window.setTimeout(
       () => {
 
-        if (
-          track
-        ) {
-
-          const targetLeft =
-            card.offsetLeft -
-            (
-              track.clientWidth -
-              card.clientWidth
-            ) /
-            2;
-
-
-          animateScrollLeft(
-
-            track,
-
-            Math.max(
-              0,
-              targetLeft
-            ),
-
-            MOTION.navigationDuration
-
-          );
-        }
+        centerCardInTrack(
+          track,
+          card
+        );
 
 
         highlightCard(
@@ -2946,7 +2366,7 @@
 
       prefersReducedMotion.matches
         ? 0
-        : MOTION.navigationDelay
+        : 280
     );
   }
 
@@ -3134,9 +2554,15 @@
     renderOneProducts();
 
 
-    setupObjectNavigation();
+    /*
+     * 모든 카드 렌더링 이후
+     * 가로 스크롤을 상단 CARE와 동일한 native 방식으로 통일.
+     */
 
-    setupCalmHorizontalScrolling();
+    normalizeNativeHorizontalTracks();
+
+
+    setupObjectNavigation();
 
     setupReveal();
   }
