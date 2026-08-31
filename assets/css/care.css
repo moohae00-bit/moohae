@@ -15,3 +15,99 @@
 @media(max-width:390px){.care-main-title,.care-section-title{font-size:37px}.care-object-button{flex-basis:45%;min-width:138px}.editorial-card,.flow-card,.service-card{flex-basis:87%}.one-product-card{flex-basis:85%}.myhome-row{align-items:flex-start;padding:13px 0}}
 @media(max-width:360px){.care-wrap{width:calc(100% - 36px)}.care-object-track,.editorial-track,.flow-card-track,.service-card-track,.one-product-track{padding-left:18px;padding-right:18px;scroll-padding-inline:18px}.care-main-title,.care-section-title{font-size:35px}.care-object-button{min-width:132px}.editorial-card,.flow-card,.service-card,.one-product-card{flex-basis:86%}.editorial-card h3{font-size:31px}.flow-card h3{font-size:30px}.service-card h3{font-size:34px}.care-final-content h2{font-size:37px}}
 .care-object-button:focus-visible,.service-detail-button:focus-visible,.care-final-button:focus-visible{outline:2px solid var(--sage-dark);outline-offset:4px}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.care-page .reveal{opacity:1;filter:none;transform:none;transition:none}.care-object-media img,.service-card,.one-product-card{transition:none}.service-card.care-card-highlight,.one-product-card.care-card-highlight{animation:none}}
+
+/* =========================================================
+   MOOHAE CARE
+   SECTION CARD COLOR RHYTHM
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   01. TOP CARE OBJECT
+   CORE만 아주 약한 warm background
+   --------------------------------------------------------- */
+
+#careObjectTrack .care-object-button:nth-child(3) {
+  background:
+    var(--moohae-card-warm, #f3eee4);
+}
+
+
+/* ---------------------------------------------------------
+   02. LIVING ENVIRONMENT
+   SPACE 카드 강조
+   --------------------------------------------------------- */
+
+#needTrack .editorial-card:nth-child(3) {
+  background:
+    var(--moohae-card-sage, #e9eee8);
+}
+
+
+/* ---------------------------------------------------------
+   03. CARE FLOW
+   HISTORY 카드 강조
+   --------------------------------------------------------- */
+
+#flowTrack .flow-card:nth-child(4) {
+  background:
+    var(--moohae-card-warm, #f3eee4);
+}
+
+
+/* ---------------------------------------------------------
+   04. CARE PLAN
+   PRIVATE 카드 강조
+   --------------------------------------------------------- */
+
+#carePlanTrack .service-card:nth-child(1) {
+  background:
+    var(--moohae-card-ivory, #f7f3ea);
+}
+
+
+/* ---------------------------------------------------------
+   05. MOOHAE ONE
+   ONE ROOM 카드 강조
+   --------------------------------------------------------- */
+
+#oneTrack .one-product-card:nth-child(1) {
+  background:
+    var(--moohae-card-sage, #e9eee8);
+}
+
+
+/* ---------------------------------------------------------
+   COLORED CARD DETAIL
+   색이 들어가도 border/shadow를 강하게 만들지 않는다.
+   --------------------------------------------------------- */
+
+#needTrack .editorial-card:nth-child(3),
+#flowTrack .flow-card:nth-child(4),
+#carePlanTrack .service-card:nth-child(1),
+#oneTrack .one-product-card:nth-child(1) {
+  border-color:
+    rgba(63, 70, 62, 0.045);
+
+  box-shadow:
+    0 16px 42px rgba(45, 49, 43, 0.045);
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+   색상 카드를 더 진하게 만들지 않는다.
+   작은 화면에서도 동일한 MOOHAE 톤 유지.
+   --------------------------------------------------------- */
+
+@media (max-width: 767px) {
+
+  #needTrack .editorial-card:nth-child(3),
+  #flowTrack .flow-card:nth-child(4),
+  #carePlanTrack .service-card:nth-child(1),
+  #oneTrack .one-product-card:nth-child(1) {
+    box-shadow:
+      0 12px 32px rgba(45, 49, 43, 0.04);
+  }
+
+}
