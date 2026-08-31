@@ -3,16 +3,16 @@
 
   // ============================================================
   // MOOHAE CARE
-  // FINAL INTEGRATED VERSION
+  // BRAND SECTIONS FINAL
   //
-  // 주요 관리 항목:
+  // 관리 위치
+  // - 이미지 경로
   // - 서비스명
   // - 가격
   // - 방문 횟수
-  // - 카피
-  // - 이미지 경로
-  //
-  // 가능한 한 이 파일 상단 데이터 객체에서 관리합니다.
+  // - CARE PLAN 구성
+  // - LIVING / FLOW 메시지
+  // - 가로 스와이프 감속값
   // ============================================================
 
 
@@ -26,12 +26,31 @@
 
   // ============================================================
   // MOTION
+  //
+  // dragResistance
+  // 1.0 = 손가락 이동량과 동일
+  // 0.48 = 손가락 이동량의 48%만 이동
+  //
+  // 숫자를 더 낮추면 더 천천히 움직인다.
+  // 예: 0.40
   // ============================================================
 
   const MOTION = {
-    horizontalDuration: 650,
-    verticalDelay: 320,
-    highlightDuration: 820
+
+    navigationDuration:
+      900,
+
+    snapDuration:
+      760,
+
+    navigationDelay:
+      330,
+
+    dragResistance:
+      0.48,
+
+    dragThreshold:
+      7
   };
 
 
@@ -48,9 +67,13 @@
   const CARE_ASSETS = {
 
     objects: [
+
       {
-        key: 'private',
-        name: 'PRIVATE',
+        key:
+          'private',
+
+        name:
+          'PRIVATE',
 
         image:
           `${IMAGE_BASE}01_private.webp`,
@@ -62,9 +85,13 @@
           'plan-private'
       },
 
+
       {
-        key: 'corePlus',
-        name: 'CORE+',
+        key:
+          'corePlus',
+
+        name:
+          'CORE+',
 
         image:
           `${IMAGE_BASE}02_core_plus.webp`,
@@ -76,9 +103,13 @@
           'plan-core-plus'
       },
 
+
       {
-        key: 'core',
-        name: 'CORE',
+        key:
+          'core',
+
+        name:
+          'CORE',
 
         image:
           `${IMAGE_BASE}03_core.webp`,
@@ -90,9 +121,13 @@
           'plan-core'
       },
 
+
       {
-        key: 'oneRoom',
-        name: 'ONE ROOM',
+        key:
+          'oneRoom',
+
+        name:
+          'ONE ROOM',
 
         image:
           `${IMAGE_BASE}04_one_room.webp`,
@@ -104,9 +139,13 @@
           'one-room'
       },
 
+
       {
-        key: 'oneCare',
-        name: 'ONE CARE',
+        key:
+          'oneCare',
+
+        name:
+          'ONE CARE',
 
         image:
           `${IMAGE_BASE}05_one_care.webp`,
@@ -117,12 +156,14 @@
         target:
           'one-mattress'
       }
+
     ],
 
 
     proof: {
 
       before: {
+
         image:
           `${IMAGE_BASE}16_proof_before.webp`,
 
@@ -132,67 +173,85 @@
 
 
       after: {
+
         image:
           `${IMAGE_BASE}17_proof_after.webp`,
 
         alt:
           'CARE 후 포집 결과가 확인되는 물 필터'
       }
+
     }
+
   };
 
 
   // ============================================================
-  // PAGE CONTENT
+  // CONTENT
   // ============================================================
 
   const CARE_CONTENT = {
+
 
     // ----------------------------------------------------------
     // LIVING ENVIRONMENT
     // ----------------------------------------------------------
 
     need: [
-      {
-        number: '01',
 
-        icon: 'sofa',
+      {
+        label:
+          '01 · FABRIC',
+
+        object:
+          'livingSofa',
 
         copy:
           '보이지 않아도,\n남아 있습니다.',
 
-        accentLine: 1,
+        accentLine:
+          1,
 
-        note:
-          '침구 · 소파 · 러그'
+        body:
+          '매일 사용하는 소파와 패브릭 깊은 곳까지.'
       },
 
-      {
-        number: '02',
 
-        icon: 'bedding',
+      {
+        label:
+          '02 · DAILY',
+
+        object:
+          'livingBedding',
 
         copy:
           '매일 닿지만,\n매일 관리하기는 어렵습니다.',
 
-        accentLine: 1,
+        accentLine:
+          1,
 
-        note: ''
+        body:
+          '침구는 매일 피부와 가장 가까이 머무는 공간입니다.'
       },
 
-      {
-        number: '03',
 
-        icon: 'space',
+      {
+        label:
+          '03 · SPACE',
+
+        object:
+          'livingSpace',
 
         copy:
-          '공간은\n서로 이어져 있습니다.',
+          '집은,\n하나의 공간으로 이어집니다.',
 
-        accentLine: 1,
+        accentLine:
+          1,
 
-        note:
+        body:
           '바닥에서 가구와 패브릭까지.'
       }
+
     ],
 
 
@@ -201,60 +260,111 @@
     // ----------------------------------------------------------
 
     flow: [
+
       {
-        number: '01',
-        code: 'CHECK',
-        icon: 'check',
+        label:
+          '01 · CHECK',
+
+        object:
+          'flowCheck',
 
         copy:
-          '먼저,\n확인합니다.'
+          '먼저,\n확인합니다.',
+
+        accentLine:
+          1,
+
+        body:
+          '무엇을 해야 하는지보다, 무엇이 필요한지부터.'
       },
 
+
       {
-        number: '02',
-        code: 'CARE',
-        icon: 'care',
+        label:
+          '02 · CARE',
+
+        object:
+          'flowCare',
 
         copy:
-          '필요한 곳을\nCARE합니다.'
+          '필요한 곳에,\n필요한 CARE를.',
+
+        accentLine:
+          1,
+
+        body:
+          '모든 곳을 하는 것이 아니라 필요한 곳을 제대로.'
       },
 
+
       {
-        number: '03',
-        code: 'PROOF',
-        icon: 'proof',
+        label:
+          '03 · PROOF',
+
+        object:
+          'flowProof',
 
         copy:
-          '달라진 것을\n보여드립니다.'
+          '했다는 말보다,\n달라진 것을.',
+
+        accentLine:
+          1,
+
+        body:
+          ''
       },
 
+
       {
-        number: '04',
-        code: 'HISTORY',
-        icon: 'history',
+        label:
+          '04 · HISTORY',
+
+        object:
+          'flowHistory',
 
         copy:
-          '오늘의 CARE를\n기록합니다.'
+          '오늘의 CARE는,\n기록으로 남습니다.',
+
+        accentLine:
+          1,
+
+        body:
+          '우리 집의 다음 CARE를 위한 기록.'
       },
 
+
       {
-        number: '05',
-        code: 'NEXT',
-        icon: 'next',
+        label:
+          '05 · NEXT CARE',
+
+        object:
+          'flowNext',
 
         copy:
-          '다음 CARE로\n이어갑니다.'
+          '다음 CARE는,\n오늘의 기록에서 시작됩니다.',
+
+        accentLine:
+          1,
+
+        body:
+          ''
       }
+
     ],
 
 
     // ----------------------------------------------------------
     // CARE PLAN
+    //
+    // 중요:
+    // 침구/소파/벽/천장 등의 구성은
+    // 기본 카드에 중복 출력하지 않는다.
+    //
+    // details에서만 노출.
     // ----------------------------------------------------------
 
     plans: [
 
-      // PRIVATE
       {
         id:
           'plan-private',
@@ -277,9 +387,6 @@
         summary:
           '우리 집의 기록과 생활 흐름을 이해하는 전담관리.',
 
-        scope:
-          '전담 파트너 · 집별 CARE 설계 · CARE HISTORY',
-
         details: [
           '전담 파트너',
           '집별 CARE 설계',
@@ -291,7 +398,6 @@
       },
 
 
-      // CORE+
       {
         id:
           'plan-core-plus',
@@ -314,9 +420,6 @@
         summary:
           '생활의 핵심에서 벽과 천장, 디테일링까지.',
 
-        scope:
-          '침구 · 소파 · 패브릭 · 바닥 + 벽 · 천장 · 디테일링',
-
         details: [
           '침구류',
           '소파',
@@ -332,7 +435,6 @@
       },
 
 
-      // CORE
       {
         id:
           'plan-core',
@@ -355,9 +457,6 @@
         summary:
           '가장 자주 생활하고 접촉하는 핵심 영역을 주기적으로.',
 
-        scope:
-          '침구 · 소파 · 카펫·패브릭 · 전체 바닥',
-
         details: [
           '침구류',
           '소파',
@@ -368,6 +467,7 @@
         note:
           '디테일링은 포함되지 않습니다.'
       }
+
     ],
 
 
@@ -377,7 +477,6 @@
 
     one: [
 
-      // ONE ROOM
       {
         id:
           'one-room',
@@ -399,7 +498,6 @@
       },
 
 
-      // MATTRESS
       {
         id:
           'one-mattress',
@@ -421,7 +519,6 @@
       },
 
 
-      // SOFA
       {
         id:
           'one-sofa',
@@ -443,7 +540,6 @@
       },
 
 
-      // BEDDING
       {
         id:
           'one-bedding',
@@ -465,7 +561,6 @@
       },
 
 
-      // RUG
       {
         id:
           'one-rug',
@@ -487,7 +582,6 @@
       },
 
 
-      // FLOOR
       {
         id:
           'one-floor',
@@ -507,7 +601,448 @@
         alt:
           'MOOHAE 바닥 CARE 오브젝트'
       }
+
     ]
+
+  };
+
+
+  // ============================================================
+  // SVG OBJECT SYSTEM
+  //
+  // 작은 아이콘이 아니라
+  // 카드 안에서 하나의 시각 요소로 느껴지는
+  // MOOHAE soft object illustration.
+  // ============================================================
+
+  const SVG_NS =
+    'http://www.w3.org/2000/svg';
+
+
+  const OBJECTS = {
+
+
+    // ----------------------------------------------------------
+    // LIVING · SOFA
+    // ----------------------------------------------------------
+
+    livingSofa: [
+
+      [
+        'rect',
+        'object-warm',
+        {
+          x: 22,
+          y: 58,
+          width: 96,
+          height: 54,
+          rx: 18
+        }
+      ],
+
+      [
+        'path',
+        'object-fill',
+        {
+          d:
+            'M31 64V46c0-10 8-18 18-18h43c10 0 18 8 18 18v18'
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M70 30v31M22 78h96M31 112v12M109 112v12'
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M38 85c18 5 46 5 64 0'
+        }
+      ]
+
+    ],
+
+
+    // ----------------------------------------------------------
+    // LIVING · BEDDING
+    // ----------------------------------------------------------
+
+    livingBedding: [
+
+      [
+        'rect',
+        'object-warm',
+        {
+          x: 20,
+          y: 48,
+          width: 102,
+          height: 64,
+          rx: 14
+        }
+      ],
+
+      [
+        'path',
+        'object-fill',
+        {
+          d:
+            'M26 70h90v38H26z'
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M20 72h102M31 48v-9c0-7 6-13 13-13h23c7 0 13 6 13 13v9'
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M31 112v12M112 112v12M74 82c13 4 25 4 36 0'
+        }
+      ]
+
+    ],
+
+
+    // ----------------------------------------------------------
+    // LIVING · SPACE
+    // ----------------------------------------------------------
+
+    livingSpace: [
+
+      [
+        'path',
+        'object-warm',
+        {
+          d:
+            'M15 109h112v14H15z'
+        }
+      ],
+
+      [
+        'rect',
+        'object-fill',
+        {
+          x: 25,
+          y: 61,
+          width: 50,
+          height: 48,
+          rx: 11
+        }
+      ],
+
+      [
+        'rect',
+        'object-warm',
+        {
+          x: 84,
+          y: 45,
+          width: 32,
+          height: 64,
+          rx: 6
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M25 77h50M50 61v48M91 45V32M108 45V32M18 122c25-7 82-7 106 0'
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M26 109v10M72 109v10M86 109v10M114 109v10'
+        }
+      ]
+
+    ],
+
+
+    // ----------------------------------------------------------
+    // FLOW · CHECK
+    // ----------------------------------------------------------
+
+    flowCheck: [
+
+      [
+        'path',
+        'object-warm',
+        {
+          d:
+            'M30 104V47c0-8 6-14 14-14h46c8 0 14 6 14 14v57z'
+        }
+      ],
+
+      [
+        'circle',
+        'object-fill',
+        {
+          cx: 71,
+          cy: 67,
+          r: 22
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M87 83l24 24M52 67l12 12 24-28'
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M22 111h94'
+        }
+      ]
+
+    ],
+
+
+    // ----------------------------------------------------------
+    // FLOW · CARE
+    // ----------------------------------------------------------
+
+    flowCare: [
+
+      [
+        'rect',
+        'object-warm',
+        {
+          x: 20,
+          y: 68,
+          width: 104,
+          height: 43,
+          rx: 13
+        }
+      ],
+
+      [
+        'path',
+        'object-fill',
+        {
+          d:
+            'M32 72V53c0-9 7-16 16-16h46c9 0 16 7 16 16v19'
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M70 38v34M20 84h104M31 111v11M113 111v11'
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M45 31c5-9 13-15 24-18M95 27c-8-7-17-11-29-11'
+        }
+      ]
+
+    ],
+
+
+    // ----------------------------------------------------------
+    // FLOW · PROOF
+    // ----------------------------------------------------------
+
+    flowProof: [
+
+      [
+        'rect',
+        'object-warm',
+        {
+          x: 17,
+          y: 37,
+          width: 48,
+          height: 72,
+          rx: 9
+        }
+      ],
+
+      [
+        'rect',
+        'object-fill',
+        {
+          x: 78,
+          y: 37,
+          width: 48,
+          height: 72,
+          rx: 9
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M65 72h13M71 66l7 6-7 6'
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M28 87l10-10 10 8 8-13M91 83l8 8 16-21'
+        }
+      ]
+
+    ],
+
+
+    // ----------------------------------------------------------
+    // FLOW · HISTORY
+    // ----------------------------------------------------------
+
+    flowHistory: [
+
+      [
+        'rect',
+        'object-warm',
+        {
+          x: 28,
+          y: 23,
+          width: 86,
+          height: 94,
+          rx: 13
+        }
+      ],
+
+      [
+        'rect',
+        'object-fill',
+        {
+          x: 39,
+          y: 38,
+          width: 64,
+          height: 20,
+          rx: 6
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M42 73h56M42 87h42M42 101h50'
+        }
+      ],
+
+      [
+        'circle',
+        'object-line',
+        {
+          cx: 34,
+          cy: 73,
+          r: 3
+        }
+      ],
+
+      [
+        'circle',
+        'object-line',
+        {
+          cx: 34,
+          cy: 87,
+          r: 3
+        }
+      ],
+
+      [
+        'circle',
+        'object-line',
+        {
+          cx: 34,
+          cy: 101,
+          r: 3
+        }
+      ]
+
+    ],
+
+
+    // ----------------------------------------------------------
+    // FLOW · NEXT
+    // ----------------------------------------------------------
+
+    flowNext: [
+
+      [
+        'rect',
+        'object-warm',
+        {
+          x: 22,
+          y: 35,
+          width: 98,
+          height: 82,
+          rx: 14
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M22 59h98M42 26v20M100 26v20'
+        }
+      ],
+
+      [
+        'circle',
+        'object-fill',
+        {
+          cx: 72,
+          cy: 87,
+          r: 18
+        }
+      ],
+
+      [
+        'path',
+        'object-line',
+        {
+          d:
+            'M64 87h18M76 80l7 7-7 7'
+        }
+      ]
+
+    ]
+
   };
 
 
@@ -530,6 +1065,7 @@
     if (
       className
     ) {
+
       node.className =
         className;
     }
@@ -538,6 +1074,7 @@
     if (
       text
     ) {
+
       node.textContent =
         text;
     }
@@ -556,7 +1093,9 @@
     String(
       value || ''
     )
-      .split('\n')
+      .split(
+        '\n'
+      )
       .forEach(
         (
           line,
@@ -566,6 +1105,7 @@
           if (
             index > 0
           ) {
+
             parent.appendChild(
               document.createElement(
                 'br'
@@ -595,6 +1135,7 @@
               )
             );
           }
+
         }
       );
   }
@@ -633,6 +1174,7 @@
     if (
       eager
     ) {
+
       image.fetchPriority =
         'high';
     }
@@ -642,313 +1184,15 @@
   }
 
 
-  // ============================================================
-  // SOFT MINIMAL SVG ICON SYSTEM
-  // ============================================================
-
-  const SVG_NS =
-    'http://www.w3.org/2000/svg';
-
-
-  const ICONS = {
-
-    sofa: [
-      [
-        'path',
-        {
-          d:
-            'M10 24v-6.5A3.5 3.5 0 0 1 13.5 14h21A3.5 3.5 0 0 1 38 17.5V24'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M8 23h32a3 3 0 0 1 3 3v9H5v-9a3 3 0 0 1 3-3Z'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M9 35v4M39 35v4'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M24 14v9'
-        }
-      ]
-    ],
-
-
-    bedding: [
-      [
-        'path',
-        {
-          d:
-            'M8 18h32v19H8z'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M8 25h32'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M12 18v-4a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v4'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M8 37v3M40 37v3'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M27 27c3 1 6 1 9 0'
-        }
-      ]
-    ],
-
-
-    space: [
-      [
-        'path',
-        {
-          d:
-            'M7 35h34'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M10 35V20h13v15'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M28 35V16h10v19'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M13 20l3-4 4 4'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M5 40c8-3 30-3 38 0'
-        }
-      ]
-    ],
-
-
-    check: [
-      [
-        'circle',
-        {
-          cx: '21',
-          cy: '21',
-          r: '10'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'm28 28 9 9'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M17 21l3 3 6-7'
-        }
-      ]
-    ],
-
-
-    care: [
-      [
-        'path',
-        {
-          d:
-            'M11 33c5-8 10-13 18-18'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M24 14l7-3 6 6-3 7'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M10 34c4 2 8 4 13 4'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M31 28c-2 3-4 6-8 8'
-        }
-      ]
-    ],
-
-
-    proof: [
-      [
-        'rect',
-        {
-          x: '7',
-          y: '11',
-          width: '34',
-          height: '26',
-          rx: '3'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M24 11v26'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'm29 27 3 3 6-7'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M12 28l5-5 4 4'
-        }
-      ]
-    ],
-
-
-    history: [
-      [
-        'path',
-        {
-          d:
-            'M14 8h20v32H14z'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M19 16h10M19 22h10M19 28h7'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M10 13h4M10 20h4M10 27h4'
-        }
-      ]
-    ],
-
-
-    next: [
-      [
-        'rect',
-        {
-          x: '8',
-          y: '12',
-          width: '32',
-          height: '28',
-          rx: '4'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M8 20h32M15 8v8M33 8v8'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'M18 29h9'
-        }
-      ],
-
-      [
-        'path',
-        {
-          d:
-            'm25 25 4 4-4 4'
-        }
-      ]
-    ]
-  };
-
-
-  function createSoftIcon(
-    iconName,
+  function createBrandObject(
+    objectName,
     extraClass = ''
   ) {
 
     const wrapper =
       make(
-        'span',
-        `care-soft-icon${
+        'div',
+        `brand-object${
           extraClass
             ? ` ${extraClass}`
             : ''
@@ -971,7 +1215,7 @@
 
     svg.setAttribute(
       'viewBox',
-      '0 0 48 48'
+      '0 0 144 144'
     );
 
 
@@ -982,8 +1226,8 @@
 
 
     const parts =
-      ICONS[
-        iconName
+      OBJECTS[
+        objectName
       ] || [];
 
 
@@ -991,6 +1235,7 @@
       (
         [
           tag,
+          className,
           attrs
         ]
       ) => {
@@ -1014,7 +1259,9 @@
 
             element.setAttribute(
               key,
-              value
+              String(
+                value
+              )
             );
           }
         );
@@ -1022,13 +1269,14 @@
 
         element.setAttribute(
           'class',
-          'icon-stroke'
+          className
         );
 
 
         svg.appendChild(
           element
         );
+
       }
     );
 
@@ -1057,6 +1305,7 @@
     if (
       !track
     ) {
+
       return;
     }
 
@@ -1127,6 +1376,7 @@
         track.appendChild(
           button
         );
+
       }
     );
   }
@@ -1147,6 +1397,7 @@
     if (
       !track
     ) {
+
       return;
     }
 
@@ -1168,17 +1419,9 @@
 
         card.appendChild(
           make(
-            'span',
-            'editorial-number',
-            item.number
-          )
-        );
-
-
-        card.appendChild(
-          createSoftIcon(
-            item.icon,
-            'editorial-icon'
+            'p',
+            'editorial-label',
+            item.label
           )
         );
 
@@ -1202,22 +1445,31 @@
 
 
         if (
-          item.note
+          item.body
         ) {
 
           card.appendChild(
             make(
-              'small',
-              '',
-              item.note
+              'p',
+              'editorial-body',
+              item.body
             )
           );
         }
 
 
+        card.appendChild(
+          createBrandObject(
+            item.object,
+            'editorial-object'
+          )
+        );
+
+
         track.appendChild(
           card
         );
+
       }
     );
   }
@@ -1238,6 +1490,7 @@
     if (
       !track
     ) {
+
       return;
     }
 
@@ -1259,26 +1512,9 @@
 
         card.appendChild(
           make(
-            'span',
-            'flow-number',
-            item.number
-          )
-        );
-
-
-        card.appendChild(
-          createSoftIcon(
-            item.icon,
-            'flow-icon'
-          )
-        );
-
-
-        card.appendChild(
-          make(
             'p',
-            'flow-code',
-            item.code
+            'flow-label',
+            item.label
           )
         );
 
@@ -1291,7 +1527,8 @@
 
         appendMultilineText(
           heading,
-          item.copy
+          item.copy,
+          item.accentLine
         );
 
 
@@ -1300,9 +1537,32 @@
         );
 
 
+        if (
+          item.body
+        ) {
+
+          card.appendChild(
+            make(
+              'p',
+              'flow-body',
+              item.body
+            )
+          );
+        }
+
+
+        card.appendChild(
+          createBrandObject(
+            item.object,
+            'flow-object'
+          )
+        );
+
+
         track.appendChild(
           card
         );
+
       }
     );
   }
@@ -1397,6 +1657,7 @@
     if (
       !compare
     ) {
+
       return;
     }
 
@@ -1415,12 +1676,13 @@
         CARE_ASSETS.proof.after,
         'CARE 후 포집 결과'
       )
+
     );
   }
 
 
   // ============================================================
-  // CARE PLAN DETAIL PANEL
+  // CARE PLAN DETAIL
   // ============================================================
 
   function createDetailPanel(
@@ -1452,17 +1714,20 @@
 
 
     button.append(
+
       make(
         'span',
         '',
         '자세히 보기'
       ),
 
+
       make(
         'span',
         '',
         '+'
       )
+
     );
 
 
@@ -1499,6 +1764,7 @@
             detail
           )
         );
+
       }
     );
 
@@ -1534,7 +1800,8 @@
         const open =
           button.getAttribute(
             'aria-expanded'
-          ) === 'true';
+          ) ===
+          'true';
 
 
         button.setAttribute(
@@ -1549,6 +1816,7 @@
           'open',
           !open
         );
+
       }
     );
 
@@ -1685,18 +1953,20 @@
     }
 
 
-    if (
-      service.scope
-    ) {
-
-      card.appendChild(
-        make(
-          'p',
-          'service-scope',
-          service.scope
-        )
-      );
-    }
+    /*
+     * 서비스 구성:
+     *
+     * 침구
+     * 소파
+     * 벽
+     * 천장
+     * 바닥
+     *
+     * 등의 범위는 기본 카드에서는 출력하지 않는다.
+     *
+     * "자세히 보기"를 열었을 때만
+     * details가 나타난다.
+     */
 
 
     card.appendChild(
@@ -1721,6 +1991,7 @@
     if (
       !track
     ) {
+
       return;
     }
 
@@ -1738,13 +2009,14 @@
             service
           )
         );
+
       }
     );
   }
 
 
   // ============================================================
-  // MOOHAE ONE PRODUCT CARD
+  // MOOHAE ONE
   // ============================================================
 
   function createOneProductCard(
@@ -1836,6 +2108,7 @@
     if (
       !track
     ) {
+
       return;
     }
 
@@ -1853,13 +2126,655 @@
             service
           )
         );
+
       }
     );
   }
 
 
   // ============================================================
-  // OBJECT SELECTION
+  // CUSTOM SLOW HORIZONTAL MOTION
+  // ============================================================
+
+  const activeAnimations =
+    new WeakMap();
+
+
+  function easeInOutQuint(
+    progress
+  ) {
+
+    return progress < 0.5
+
+      ? (
+          16 *
+          Math.pow(
+            progress,
+            5
+          )
+        )
+
+      : (
+          1 -
+          Math.pow(
+            -2 *
+            progress +
+            2,
+            5
+          ) /
+          2
+        );
+  }
+
+
+  function animateScrollLeft(
+    element,
+    targetLeft,
+    duration =
+      MOTION.snapDuration
+  ) {
+
+    if (
+      !element
+    ) {
+
+      return;
+    }
+
+
+    const previousFrame =
+      activeAnimations.get(
+        element
+      );
+
+
+    if (
+      previousFrame
+    ) {
+
+      cancelAnimationFrame(
+        previousFrame
+      );
+
+
+      activeAnimations.delete(
+        element
+      );
+    }
+
+
+    if (
+      prefersReducedMotion.matches
+    ) {
+
+      element.scrollLeft =
+        targetLeft;
+
+      return;
+    }
+
+
+    const startLeft =
+      element.scrollLeft;
+
+
+    const distance =
+      targetLeft -
+      startLeft;
+
+
+    if (
+      Math.abs(
+        distance
+      ) < 1
+    ) {
+
+      element.scrollLeft =
+        targetLeft;
+
+      return;
+    }
+
+
+    const startTime =
+      performance.now();
+
+
+    function frame(
+      now
+    ) {
+
+      const progress =
+        Math.min(
+          (
+            now -
+            startTime
+          ) /
+          duration,
+          1
+        );
+
+
+      const eased =
+        easeInOutQuint(
+          progress
+        );
+
+
+      element.scrollLeft =
+        startLeft +
+        distance *
+        eased;
+
+
+      if (
+        progress <
+        1
+      ) {
+
+        const frameId =
+          requestAnimationFrame(
+            frame
+          );
+
+
+        activeAnimations.set(
+          element,
+          frameId
+        );
+
+      } else {
+
+        element.scrollLeft =
+          targetLeft;
+
+
+        activeAnimations.delete(
+          element
+        );
+
+      }
+
+    }
+
+
+    const frameId =
+      requestAnimationFrame(
+        frame
+      );
+
+
+    activeAnimations.set(
+      element,
+      frameId
+    );
+  }
+
+
+  // ============================================================
+  // NEAREST CARD
+  // ============================================================
+
+  function getTrackCards(
+    track
+  ) {
+
+    return Array.from(
+      track.children
+    ).filter(
+      (
+        child
+      ) =>
+
+        child.matches(
+          '.editorial-card, .flow-card, .service-card, .one-product-card'
+        )
+
+    );
+  }
+
+
+  function getNearestCardTarget(
+    track
+  ) {
+
+    const cards =
+      getTrackCards(
+        track
+      );
+
+
+    if (
+      !cards.length
+    ) {
+
+      return track.scrollLeft;
+    }
+
+
+    const viewportCenter =
+      track.scrollLeft +
+      track.clientWidth /
+      2;
+
+
+    let bestCard =
+      cards[0];
+
+
+    let bestDistance =
+      Infinity;
+
+
+    cards.forEach(
+      (
+        card
+      ) => {
+
+        const cardCenter =
+          card.offsetLeft +
+          card.offsetWidth /
+          2;
+
+
+        const distance =
+          Math.abs(
+            cardCenter -
+            viewportCenter
+          );
+
+
+        if (
+          distance <
+          bestDistance
+        ) {
+
+          bestDistance =
+            distance;
+
+
+          bestCard =
+            card;
+        }
+
+      }
+    );
+
+
+    return Math.max(
+      0,
+
+      bestCard.offsetLeft -
+      (
+        track.clientWidth -
+        bestCard.clientWidth
+      ) /
+      2
+    );
+  }
+
+
+  function settleTrack(
+    track
+  ) {
+
+    animateScrollLeft(
+
+      track,
+
+      getNearestCardTarget(
+        track
+      ),
+
+      MOTION.snapDuration
+
+    );
+  }
+
+
+  // ============================================================
+  // SLOW TOUCH DRAG
+  //
+  // 기존 문제:
+  //
+  // 브라우저 native momentum scroll이
+  // 손가락을 놓은 후 너무 멀리 이동함.
+  //
+  // 이번 방식:
+  //
+  // 손가락 수평 이동량 × 0.48
+  //
+  // 즉 손가락을 100px 움직여도
+  // 카드 트랙은 약 48px만 이동.
+  //
+  // 이후 가까운 카드로 760ms에 걸쳐 정착.
+  //
+  // 세로 페이지 스크롤은 그대로 유지.
+  // ============================================================
+
+  function setupCalmHorizontalTrack(
+    track
+  ) {
+
+    if (
+      !track
+    ) {
+
+      return;
+    }
+
+
+    const coarsePointer =
+      window.matchMedia(
+        '(pointer: coarse)'
+      ).matches;
+
+
+    if (
+      !coarsePointer
+    ) {
+
+      return;
+    }
+
+
+    let pointerId =
+      null;
+
+
+    let startX =
+      0;
+
+
+    let startY =
+      0;
+
+
+    let startScrollLeft =
+      0;
+
+
+    let horizontalIntent =
+      false;
+
+
+    let moved =
+      false;
+
+
+    // ----------------------------------------------------------
+    // POINTER DOWN
+    // ----------------------------------------------------------
+
+    function onPointerDown(
+      event
+    ) {
+
+      if (
+        event.pointerType !==
+          'touch' &&
+
+        event.pointerType !==
+          'pen'
+      ) {
+
+        return;
+      }
+
+
+      pointerId =
+        event.pointerId;
+
+
+      startX =
+        event.clientX;
+
+
+      startY =
+        event.clientY;
+
+
+      startScrollLeft =
+        track.scrollLeft;
+
+
+      horizontalIntent =
+        false;
+
+
+      moved =
+        false;
+    }
+
+
+    // ----------------------------------------------------------
+    // POINTER MOVE
+    // ----------------------------------------------------------
+
+    function onPointerMove(
+      event
+    ) {
+
+      if (
+        event.pointerId !==
+        pointerId
+      ) {
+
+        return;
+      }
+
+
+      const deltaX =
+        event.clientX -
+        startX;
+
+
+      const deltaY =
+        event.clientY -
+        startY;
+
+
+      if (
+        !horizontalIntent
+      ) {
+
+        const absX =
+          Math.abs(
+            deltaX
+          );
+
+
+        const absY =
+          Math.abs(
+            deltaY
+          );
+
+
+        if (
+          absX <
+            MOTION.dragThreshold &&
+
+          absY <
+            MOTION.dragThreshold
+        ) {
+
+          return;
+        }
+
+
+        /*
+         * 세로 움직임이 더 크면
+         * 페이지 스크롤로 판단.
+         */
+
+        if (
+          absY >
+          absX
+        ) {
+
+          pointerId =
+            null;
+
+
+          return;
+        }
+
+
+        horizontalIntent =
+          true;
+
+
+        try {
+
+          track.setPointerCapture(
+            event.pointerId
+          );
+
+        } catch (
+          error
+        ) {
+
+          // 브라우저별 안전 fallback.
+
+        }
+
+      }
+
+
+      if (
+        !horizontalIntent
+      ) {
+
+        return;
+      }
+
+
+      moved =
+        true;
+
+
+      event.preventDefault();
+
+
+      /*
+       * 실제 감속 핵심.
+       */
+
+      track.scrollLeft =
+        startScrollLeft -
+        deltaX *
+        MOTION.dragResistance;
+    }
+
+
+    // ----------------------------------------------------------
+    // FINISH
+    // ----------------------------------------------------------
+
+    function finishPointer(
+      event
+    ) {
+
+      if (
+        pointerId ===
+          null ||
+
+        event.pointerId !==
+          pointerId
+      ) {
+
+        return;
+      }
+
+
+      if (
+        horizontalIntent
+      ) {
+
+        try {
+
+          track.releasePointerCapture(
+            event.pointerId
+          );
+
+        } catch (
+          error
+        ) {
+
+          // 안전 fallback.
+
+        }
+
+      }
+
+
+      pointerId =
+        null;
+
+
+      if (
+        moved
+      ) {
+
+        settleTrack(
+          track
+        );
+      }
+
+
+      horizontalIntent =
+        false;
+
+
+      moved =
+        false;
+    }
+
+
+    track.addEventListener(
+      'pointerdown',
+      onPointerDown
+    );
+
+
+    track.addEventListener(
+      'pointermove',
+      onPointerMove,
+      {
+        passive:
+          false
+      }
+    );
+
+
+    track.addEventListener(
+      'pointerup',
+      finishPointer
+    );
+
+
+    track.addEventListener(
+      'pointercancel',
+      finishPointer
+    );
+
+  }
+
+
+  function setupCalmHorizontalScrolling() {
+
+    document
+      .querySelectorAll(
+        '.calm-horizontal-track'
+      )
+      .forEach(
+        setupCalmHorizontalTrack
+      );
+  }
+
+
+  // ============================================================
+  // TOP OBJECT NAVIGATION
   // ============================================================
 
   function selectObject(
@@ -1892,196 +2807,11 @@
               selected
             )
           );
+
         }
       );
   }
 
-
-  // ============================================================
-  // SMOOTH HORIZONTAL SCROLL
-  //
-  // Native smooth scroll speed differs by browser.
-  // This custom animation gives the MOOHAE sliders a calmer,
-  // more controlled transition when navigation is triggered.
-  // ============================================================
-
-  const activeHorizontalAnimations =
-    new WeakMap();
-
-
-  function easeInOutCubic(
-    progress
-  ) {
-
-    if (
-      progress < 0.5
-    ) {
-
-      return (
-        4 *
-        progress *
-        progress *
-        progress
-      );
-    }
-
-
-    return (
-      1 -
-      Math.pow(
-        -2 * progress + 2,
-        3
-      ) /
-      2
-    );
-  }
-
-
-  function animateHorizontalScroll(
-    element,
-    targetLeft,
-    duration =
-      MOTION.horizontalDuration
-  ) {
-
-    if (
-      !element
-    ) {
-      return;
-    }
-
-
-    const previousAnimation =
-      activeHorizontalAnimations.get(
-        element
-      );
-
-
-    if (
-      previousAnimation
-    ) {
-
-      window.cancelAnimationFrame(
-        previousAnimation
-      );
-    }
-
-
-    const startLeft =
-      element.scrollLeft;
-
-
-    const distance =
-      targetLeft -
-      startLeft;
-
-
-    if (
-      Math.abs(
-        distance
-      ) < 1
-    ) {
-
-      element.scrollLeft =
-        targetLeft;
-
-      return;
-    }
-
-
-    // ----------------------------------------------------------
-    // ACCESSIBILITY
-    // ----------------------------------------------------------
-
-    if (
-      prefersReducedMotion.matches
-    ) {
-
-      element.scrollLeft =
-        targetLeft;
-
-      return;
-    }
-
-
-    const startTime =
-      performance.now();
-
-
-    function step(
-      now
-    ) {
-
-      const elapsed =
-        now -
-        startTime;
-
-
-      const progress =
-        Math.min(
-          elapsed /
-            duration,
-          1
-        );
-
-
-      const eased =
-        easeInOutCubic(
-          progress
-        );
-
-
-      element.scrollLeft =
-        startLeft +
-        distance *
-          eased;
-
-
-      if (
-        progress <
-        1
-      ) {
-
-        const frameId =
-          window.requestAnimationFrame(
-            step
-          );
-
-
-        activeHorizontalAnimations.set(
-          element,
-          frameId
-        );
-
-      } else {
-
-        element.scrollLeft =
-          targetLeft;
-
-
-        activeHorizontalAnimations.delete(
-          element
-        );
-      }
-    }
-
-
-    const frameId =
-      window.requestAnimationFrame(
-        step
-      );
-
-
-    activeHorizontalAnimations.set(
-      element,
-      frameId
-    );
-  }
-
-
-  // ============================================================
-  // CARD HIGHLIGHT
-  // ============================================================
 
   function highlightCard(
     card
@@ -2090,6 +2820,7 @@
     if (
       !card
     ) {
+
       return;
     }
 
@@ -2115,14 +2846,10 @@
         );
 
       },
-      MOTION.highlightDuration
+      920
     );
   }
 
-
-  // ============================================================
-  // MOVE TO SERVICE CARD
-  // ============================================================
 
   function moveToServiceCard(
     card
@@ -2131,6 +2858,7 @@
     if (
       !card
     ) {
+
       return;
     }
 
@@ -2148,14 +2876,12 @@
 
 
     const headerOffset =
-      window.innerWidth <= 768
+      window.innerWidth <=
+        768
+
         ? 66
         : 76;
 
-
-    // ----------------------------------------------------------
-    // VERTICAL SECTION MOVE
-    // ----------------------------------------------------------
 
     if (
       section
@@ -2172,6 +2898,7 @@
 
       window.scrollTo({
         top,
+
         behavior:
           prefersReducedMotion.matches
             ? 'auto'
@@ -2179,10 +2906,6 @@
       });
     }
 
-
-    // ----------------------------------------------------------
-    // HORIZONTAL CARD CENTERING
-    // ----------------------------------------------------------
 
     window.setTimeout(
       () => {
@@ -2200,7 +2923,8 @@
             2;
 
 
-          animateHorizontalScroll(
+          animateScrollLeft(
+
             track,
 
             Math.max(
@@ -2208,7 +2932,8 @@
               targetLeft
             ),
 
-            MOTION.horizontalDuration
+            MOTION.navigationDuration
+
           );
         }
 
@@ -2218,16 +2943,13 @@
         );
 
       },
+
       prefersReducedMotion.matches
         ? 0
-        : MOTION.verticalDelay
+        : MOTION.navigationDelay
     );
   }
 
-
-  // ============================================================
-  // TOP OBJECT NAVIGATION
-  // ============================================================
 
   function setupObjectNavigation() {
 
@@ -2254,16 +2976,18 @@
 
               const target =
                 targetId
-                  ? document
-                      .getElementById(
-                        targetId
-                      )
+
+                  ? document.getElementById(
+                      targetId
+                    )
+
                   : null;
 
 
               if (
                 !target
               ) {
+
                 return;
               }
 
@@ -2276,8 +3000,10 @@
               moveToServiceCard(
                 target
               );
+
             }
           );
+
         }
       );
   }
@@ -2298,31 +3024,14 @@
     if (
       !elements.length
     ) {
-      return;
-    }
-
-
-    if (
-      prefersReducedMotion.matches
-    ) {
-
-      elements.forEach(
-        (
-          element
-        ) => {
-
-          element.classList.add(
-            'in-view'
-          );
-        }
-      );
-
 
       return;
     }
 
 
     if (
+      prefersReducedMotion.matches ||
+
       !(
         'IntersectionObserver'
         in window
@@ -2337,6 +3046,7 @@
           element.classList.add(
             'in-view'
           );
+
         }
       );
 
@@ -2347,6 +3057,7 @@
 
     const observer =
       new IntersectionObserver(
+
         (
           entries
         ) => {
@@ -2359,22 +3070,26 @@
               if (
                 !entry.isIntersecting
               ) {
+
                 return;
               }
 
 
-              entry.target.classList.add(
-                'in-view'
-              );
+              entry.target
+                .classList.add(
+                  'in-view'
+                );
 
 
               observer.unobserve(
                 entry.target
               );
+
             }
           );
 
         },
+
         {
           threshold:
             0.1,
@@ -2382,6 +3097,7 @@
           rootMargin:
             '0px 0px -5% 0px'
         }
+
       );
 
 
@@ -2393,6 +3109,7 @@
         observer.observe(
           element
         );
+
       }
     );
   }
@@ -2416,7 +3133,10 @@
 
     renderOneProducts();
 
+
     setupObjectNavigation();
+
+    setupCalmHorizontalScrolling();
 
     setupReveal();
   }
@@ -2435,7 +3155,8 @@
       'DOMContentLoaded',
       init,
       {
-        once: true
+        once:
+          true
       }
     );
 
