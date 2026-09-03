@@ -848,3 +848,125 @@ textarea{
     font-size:16px;
   }
 }
+/* ============================================================
+   MOOHAE CHECK — CARE PLAN RESULT 2026-09
+   ============================================================ */
+.result-recommend{
+  display:grid;
+  gap:12px;
+  margin-top:26px;
+  padding:30px;
+  border:1px solid rgba(41,41,39,.06);
+  border-radius:22px;
+  background:#fff;
+  text-align:left;
+  box-shadow:0 18px 50px rgba(41,41,39,.045);
+}
+.result-recommend .result-plan-name{
+  margin:0;
+  color:var(--sage-dark);
+  font-size:12px;
+  font-weight:750;
+  letter-spacing:.12em;
+}
+.result-recommend .result-plan-copy{
+  margin:0;
+  color:var(--ink);
+  font-size:clamp(27px,4vw,38px);
+  font-weight:650;
+  line-height:1.18;
+  letter-spacing:-.045em;
+}
+.result-recommend .result-plan-desc{
+  max-width:600px;
+  margin:2px 0 4px;
+  color:var(--gray);
+  font-size:14px;
+  line-height:1.7;
+}
+.result-plan-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:max-content;
+  min-height:44px;
+  margin-top:5px;
+  padding:0 18px;
+  border-radius:999px;
+  background:var(--ink);
+  color:#fff;
+  font-size:12px;
+  font-weight:650;
+}
+.result-note{
+  text-align:left;
+  background:var(--sage-soft);
+}
+.result-note strong{
+  display:block;
+  margin-bottom:12px;
+  color:var(--ink);
+  font-size:13px;
+}
+.result-note ul{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.result-note li{
+  padding:8px 11px;
+  border-radius:999px;
+  background:rgba(255,255,255,.58);
+  color:var(--ink-soft);
+  font-size:12px;
+}
+.plan-explore{
+  width:100%;
+  max-width:860px;
+  margin:26px auto 0;
+  text-align:left;
+}
+.plan-explore-title{
+  display:block;
+  margin-bottom:10px;
+  color:var(--gray);
+  font-size:12px;
+}
+.plan-explore-list{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.plan-explore-link{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:40px;
+  padding:0 14px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.62);
+  color:var(--ink-soft);
+  font-size:12px;
+  font-weight:650;
+}
+.plan-explore-link[aria-current="true"]{
+  border-color:rgba(102,125,101,.28);
+  background:var(--sage-soft);
+  color:var(--sage-dark);
+}
+.plan-explore-badge{
+  font-size:9px;
+  letter-spacing:.06em;
+}
+@media(max-width:600px){
+  .result-recommend{padding:24px 20px;border-radius:18px}
+  .result-recommend .result-plan-copy{font-size:29px}
+  .result-plan-link{width:100%}
+  .plan-explore-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .plan-explore-link{justify-content:center;padding:0 8px}
+  .plan-explore-badge{display:none}
+}
