@@ -513,9 +513,15 @@
         value || ''
       ).slice(0, 5);
 
-    return VISIT_TIME_SLOTS.has(time)
-      ? time
-      : '';
+    const legacySlotMap = {
+      '10:00': '10:00',
+      '13:00': '13:00',
+      '13:30': '13:00',
+      '16:00': '16:00',
+      '17:00': '16:00'
+    };
+
+    return legacySlotMap[time] || '';
   }
 
 
@@ -613,16 +619,23 @@
     booking
   ) {
 
-    const input =
-      bookingToInputValue(booking);
-
-
     if (
-      !input
+      !booking?.booking_date ||
+      !booking?.booking_time
     ) {
 
       return '요청 일정 없음';
     }
+
+
+    const originalTime =
+      String(
+        booking.booking_time
+      ).slice(0, 5);
+
+
+    const input =
+      `${booking.booking_date}T${originalTime}`;
 
 
     const date =
@@ -636,9 +649,7 @@
     ) {
 
       return (
-        `${booking.booking_date} ${String(
-          booking.booking_time
-        ).slice(0, 5)}`
+        `${booking.booking_date} ${originalTime}`
       );
     }
 
@@ -1082,6 +1093,7 @@
 
     return article;
   }
+
 
   // ============================================================
   // VISIT / REPORT HISTORY
@@ -2052,7 +2064,11 @@
 
 
     statusSelect.value =
-      customer.status || 'new';
+      ALLOWED_STATUSES.has(
+        customer.status
+      )
+        ? customer.status
+        : 'new';
 
 
     notesInput.value =
@@ -2061,20 +2077,25 @@
 
     setWorkflowState(
       step1State,
-      customer.notes ||
-      customer.status !== 'new'
-        ? '기록됨'
-        : '작성 필요',
-      customer.notes ||
-      customer.status !== 'new'
+      statusText,
+      customer.notes
         ? 'done'
-        : 'wait'
+        : 'ready'
     );
 
 
     // ----------------------------------------------------------
     // CHECK
     // ----------------------------------------------------------
+
+    const latestDiagnosis =
+      document.getElementById(
+        'latestDiagnosis'
+      );
+
+
+    latestDiagnosis.replaceChildren();
+
 
     document
       .getElementById(
@@ -2084,15 +2105,6 @@
         String(
           diagnoses.length
         );
-
-
-    const latestDiagnosis =
-      document.getElementById(
-        'latestDiagnosis'
-      );
-
-
-    latestDiagnosis.replaceChildren();
 
 
     if (
@@ -2112,7 +2124,7 @@
         make(
           'p',
           'muted-copy',
-          '등록된 MOOHAE CHECK가 없습니다.'
+          '아직 MOOHAE CHECK 기록이 없습니다.'
         )
       );
     }
@@ -2129,7 +2141,16 @@
 
 
     // ----------------------------------------------------------
-    // VISIT HISTORY
+    // REPORT
+    // ----------------------------------------------------------
+
+    populateReportEditor(
+      reports
+    );
+
+
+    // ----------------------------------------------------------
+    // HISTORY VISIT
     // ----------------------------------------------------------
 
     const visitHistory =
@@ -2138,19 +2159,17 @@
       );
 
 
-    const visitHistoryCount =
-      document.getElementById(
-        'visitHistoryCount'
-      );
-
-
-    visitHistoryCount.textContent =
-      String(
-        visits.length
-      );
-
-
     visitHistory.replaceChildren();
+
+
+    document
+      .getElementById(
+        'visitHistoryCount'
+      )
+      .textContent =
+        String(
+          visits.length
+        );
 
 
     if (
@@ -2161,9 +2180,7 @@
         (visit) => {
 
           visitHistory.appendChild(
-            visitCard(
-              visit
-            )
+            visitCard(visit)
           );
         }
       );
@@ -2175,14 +2192,14 @@
         make(
           'p',
           'muted-copy',
-          '아직 방문 CARE 기록이 없습니다.'
+          '방문 CARE 기록이 없습니다.'
         )
       );
     }
 
 
     // ----------------------------------------------------------
-    // REPORT HISTORY
+    // HISTORY REPORT
     // ----------------------------------------------------------
 
     const reportHistory =
@@ -2191,19 +2208,17 @@
       );
 
 
-    const reportHistoryCount =
-      document.getElementById(
-        'reportHistoryCount'
-      );
-
-
-    reportHistoryCount.textContent =
-      String(
-        reports.length
-      );
-
-
     reportHistory.replaceChildren();
+
+
+    document
+      .getElementById(
+        'reportHistoryCount'
+      )
+      .textContent =
+        String(
+          reports.length
+        );
 
 
     if (
@@ -2214,9 +2229,7 @@
         (report) => {
 
           reportHistory.appendChild(
-            reportCard(
-              report
-            )
+            reportCard(report)
           );
         }
       );
@@ -2234,19 +2247,6 @@
     }
 
 
-    // ----------------------------------------------------------
-    // REPORT EDITOR
-    // ----------------------------------------------------------
-
-    populateReportEditor(
-      reports
-    );
-
-
-    // ----------------------------------------------------------
-    // DELETED STATE
-    // ----------------------------------------------------------
-
     applyDeletedCustomerState(
       customer
     );
@@ -2255,6 +2255,7 @@
     detailMessage.textContent =
       '';
   }
+
 
   // ============================================================
   // STEP 01 SAVE
@@ -2543,13 +2544,10 @@
           visitTimeSlot?.value || ''
         )
       ) {
-
         setMessage(
           visitMessage,
           '방문 시간은 10:00–12:30, 13:00–15:30, 16:00–18:30 중에서 선택해주세요.'
         );
-
-
         return;
       }
 
@@ -2629,7 +2627,6 @@
 
         visitForm.reset();
 
-
         syncVisitScheduledAt();
 
 
@@ -2675,18 +2672,15 @@
   if (
     visitDate
   ) {
-
     visitDate.addEventListener(
       'change',
       syncVisitScheduledAt
     );
   }
 
-
   if (
     visitTimeSlot
   ) {
-
     visitTimeSlot.addEventListener(
       'change',
       syncVisitScheduledAt
@@ -2878,9 +2872,7 @@
     'click',
     () => {
 
-      saveReport(
-        'draft'
-      );
+      saveReport('draft');
     }
   );
 
@@ -2889,15 +2881,13 @@
     'click',
     () => {
 
-      saveReport(
-        'published'
-      );
+      saveReport('published');
     }
   );
 
 
   // ============================================================
-  // SOFT DELETE
+  // DELETE
   // ============================================================
 
   function closeDeleteDialog() {
@@ -2965,12 +2955,9 @@
 
   deleteCustomerDialog.addEventListener(
     'cancel',
-    (
-      event
-    ) => {
+    (event) => {
 
       event.preventDefault();
-
 
       closeDeleteDialog();
     }
@@ -3102,17 +3089,13 @@
   // ============================================================
 
   function closePermanentDeleteDialog() {
-
     if (
       permanentDeleteDialog?.open
     ) {
-
       permanentDeleteDialog.close();
     }
 
-
     permanentDeleteForm?.reset();
-
 
     setMessage(
       permanentDeleteDialogMessage,
@@ -3124,88 +3107,59 @@
   async function removeStorageFiles(
     mediaRows
   ) {
-
     const groups =
       new Map();
 
-
-    (
-      mediaRows ||
-      []
-    ).forEach(
-      (
-        row
-      ) => {
-
+    (mediaRows || []).forEach(
+      (row) => {
         const bucket =
           String(
-            row?.storage_bucket ||
-            ''
+            row?.storage_bucket || ''
           ).trim();
-
 
         const path =
           String(
-            row?.storage_path ||
-            ''
+            row?.storage_path || ''
           ).trim();
-
 
         if (
           !bucket ||
           !path
         ) {
-
           throw new Error(
             'INVALID_MEDIA_PATH'
           );
         }
 
-
         if (
-          !groups.has(
-            bucket
-          )
+          !groups.has(bucket)
         ) {
-
           groups.set(
             bucket,
             []
           );
         }
 
-
         groups
-          .get(
-            bucket
-          )
-          .push(
-            path
-          );
+          .get(bucket)
+          .push(path);
       }
     );
 
-
     for (
-      const [
-        bucket,
-        paths
-      ]
+      const [bucket, paths]
       of groups.entries()
     ) {
-
       for (
         let index = 0;
         index < paths.length;
         index += 100
       ) {
-
         const batch =
           paths.slice(
             index,
             index + 100
           );
-
 
         const {
           error
@@ -3213,48 +3167,37 @@
           await window
             .moohaeSupabase
             .storage
-            .from(
-              bucket
-            )
-            .remove(
-              batch
-            );
-
+            .from(bucket)
+            .remove(batch);
 
         if (
           error
         ) {
-
           throw error;
         }
       }
     }
   }
 
+
   openPermanentDeleteButton?.addEventListener(
     'click',
     () => {
-
       if (
         !currentCustomer
       ) {
-
         return;
       }
-
 
       permanentDeleteTarget.textContent =
         `${currentCustomer.name || '이름 없음'} 고객과 연결된 모든 데이터를 영구 삭제합니다.`;
 
-
       permanentDeleteForm.reset();
-
 
       setMessage(
         permanentDeleteDialogMessage,
         ''
       );
-
 
       permanentDeleteDialog.showModal();
     }
@@ -3266,22 +3209,15 @@
     closePermanentDeleteDialog
   );
 
-
   cancelPermanentDeleteButton?.addEventListener(
     'click',
     closePermanentDeleteDialog
   );
 
-
   permanentDeleteDialog?.addEventListener(
     'cancel',
-    (
-      event
-    ) => {
-
+    (event) => {
       event.preventDefault();
-
-
       closePermanentDeleteDialog();
     }
   );
@@ -3292,66 +3228,49 @@
     async (
       event
     ) => {
-
       event.preventDefault();
-
 
       if (
         !currentCustomer
       ) {
-
         return;
       }
-
 
       const reason =
         permanentDeleteReason
           .value
           .trim();
 
-
       const confirmName =
         permanentDeleteNameConfirm
           .value
           .trim();
 
-
       const expectedName =
         String(
-          currentCustomer.name ||
-          ''
+          currentCustomer.name || ''
         ).trim();
-
 
       if (
         reason.length < 2
       ) {
-
         setMessage(
           permanentDeleteDialogMessage,
           '영구 삭제 사유를 2자 이상 입력해주세요.'
         );
-
-
         return;
       }
 
-
       if (
         !expectedName ||
-        confirmName !==
-          expectedName
+        confirmName !== expectedName
       ) {
-
         setMessage(
           permanentDeleteDialogMessage,
           `고객명 “${expectedName || '이름 없음'}”을 정확히 입력해주세요.`
         );
-
-
         return;
       }
-
 
       setBusy(
         confirmPermanentDeleteButton,
@@ -3360,27 +3279,18 @@
         '영구 삭제'
       );
 
-
       if (
         openPermanentDeleteButton
       ) {
-
         openPermanentDeleteButton.disabled =
           true;
       }
 
-
       try {
-
         setMessage(
           permanentDeleteDialogMessage,
           'CARE 사진 파일을 확인하고 있습니다.'
         );
-
-
-        // ------------------------------------------------------
-        // 1. 삭제 대상 CARE MEDIA 조회
-        // ------------------------------------------------------
 
         const {
           data: mediaRows,
@@ -3396,40 +3306,17 @@
               }
             );
 
-
         if (
           prepareError
         ) {
-
           throw prepareError;
         }
 
-
-        // ------------------------------------------------------
-        // 2. Supabase Storage 실제 파일 삭제
-        //
-        // DB metadata보다 Storage 파일을 먼저 삭제한다.
-        // Storage 삭제가 실패하면 고객 DB 삭제로 넘어가지 않는다.
-        // ------------------------------------------------------
-
         await removeStorageFiles(
-          Array.isArray(
-            mediaRows
-          )
+          Array.isArray(mediaRows)
             ? mediaRows
             : []
         );
-
-
-        setMessage(
-          permanentDeleteDialogMessage,
-          'CARE 사진 기록을 정리하고 있습니다.'
-        );
-
-
-        // ------------------------------------------------------
-        // 3. care_visit_media metadata 삭제
-        // ------------------------------------------------------
 
         const {
           error: mediaCleanupError
@@ -3444,26 +3331,11 @@
               }
             );
 
-
         if (
           mediaCleanupError
         ) {
-
           throw mediaCleanupError;
         }
-
-
-        setMessage(
-          permanentDeleteDialogMessage,
-          '고객 데이터를 안전하게 삭제하고 있습니다.'
-        );
-
-
-        // ------------------------------------------------------
-        // 4. 연결된 DB 데이터 + 고객 영구삭제
-        //
-        // 서버 RPC에서 FK 순서에 맞춰 처리한다.
-        // ------------------------------------------------------
 
         const {
           error: deleteError
@@ -3475,24 +3347,16 @@
               {
                 p_customer_id:
                   customerId,
-
                 p_reason:
                   reason
               }
             );
 
-
         if (
           deleteError
         ) {
-
           throw deleteError;
         }
-
-
-        // ------------------------------------------------------
-        // 5. 완료
-        // ------------------------------------------------------
 
         setMessage(
           permanentDeleteDialogMessage,
@@ -3500,102 +3364,45 @@
           true
         );
 
-
-        setMessage(
-          permanentDeleteMessage,
-          '고객 데이터가 영구 삭제되었습니다.',
-          true
-        );
-
-
         window.setTimeout(
           () => {
-
             window.location.replace(
               './dashboard.html'
             );
-
           },
           650
         );
 
-
       } catch (
         error
       ) {
-
         console.error(
           'MOOHAE permanent customer delete error:',
           error
         );
 
-
         const message =
           String(
-            error?.message ||
-            ''
+            error?.message || ''
           );
-
 
         if (
           message.includes(
             'CARE_MEDIA_STILL_EXISTS'
           )
         ) {
-
           setMessage(
             permanentDeleteDialogMessage,
             'CARE 사진 정리가 완료되지 않아 영구 삭제를 중단했습니다. 다시 시도해주세요.'
           );
-
-
-        } else if (
-          message.includes(
-            'CUSTOMER_NOT_FOUND'
-          )
-        ) {
-
-          setMessage(
-            permanentDeleteDialogMessage,
-            '삭제할 고객 정보를 찾을 수 없습니다.'
-          );
-
-
-        } else if (
-          message.includes(
-            'MOOHAE_ADMIN_REQUIRED'
-          )
-        ) {
-
-          setMessage(
-            permanentDeleteDialogMessage,
-            '영구 삭제 권한을 확인할 수 없습니다.'
-          );
-
-
-        } else if (
-          message.includes(
-            'INVALID_MEDIA_PATH'
-          )
-        ) {
-
-          setMessage(
-            permanentDeleteDialogMessage,
-            'CARE 사진 저장 경로를 확인할 수 없어 삭제를 중단했습니다.'
-          );
-
-
         } else {
-
           setMessage(
             permanentDeleteDialogMessage,
             '영구 삭제를 완료하지 못했습니다. 데이터 보호를 위해 작업을 중단했습니다.'
           );
         }
 
-
       } finally {
-
         setBusy(
           confirmPermanentDeleteButton,
           false,
@@ -3603,11 +3410,9 @@
           '영구 삭제'
         );
 
-
         if (
           openPermanentDeleteButton
         ) {
-
           openPermanentDeleteButton.disabled =
             false;
         }
