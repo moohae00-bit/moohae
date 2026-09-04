@@ -1776,3 +1776,60 @@
   }
 
 }
+
+/* ============================================================
+   2026-09-04 · VISIT SLOT + PERMANENT DELETE
+   ============================================================ */
+
+.visit-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.visit-slot-helper {
+  margin-top: -8px;
+}
+
+.permanent-delete-zone {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(154, 92, 92, .20);
+}
+
+.permanent-delete-zone strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.permanent-delete-zone p {
+  margin: 0;
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.danger-button-solid {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+}
+
+.permanent-warning {
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .visit-slot-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .permanent-delete-zone .danger-button {
+    width: 100%;
+  }
+}

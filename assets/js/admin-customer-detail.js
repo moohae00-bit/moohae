@@ -3,7 +3,7 @@
 
 
   // ============================================================
-  // MOOHAE ADMIN · CUSTOMER DETAIL V3
+  // MOOHAE ADMIN · CUSTOMER DETAIL V4.1
   //
   // FLOW
   //
@@ -50,6 +50,13 @@
     requested: '고객 요청',
     confirmed: '확정'
   };
+
+
+  const VISIT_TIME_SLOTS = new Map([
+    ['10:00', '10:00–12:30'],
+    ['13:00', '13:00–15:30'],
+    ['16:00', '16:00–18:30']
+  ]);
 
 
   const ALLOWED_STATUSES =
@@ -107,6 +114,13 @@
 
   const visitScheduledAt =
     document.getElementById('visitScheduledAt');
+
+
+  const visitDate =
+    document.getElementById('visitDate');
+
+  const visitTimeSlot =
+    document.getElementById('visitTimeSlot');
 
   const visitCareArea =
     document.getElementById('visitCareArea');
@@ -207,6 +221,40 @@
 
   const deleteDialogMessage =
     document.getElementById('deleteDialogMessage');
+
+
+  const openPermanentDeleteButton =
+    document.getElementById('openPermanentDeleteButton');
+
+  const permanentDeleteMessage =
+    document.getElementById('permanentDeleteMessage');
+
+  const permanentDeleteDialog =
+    document.getElementById('permanentDeleteDialog');
+
+  const permanentDeleteForm =
+    document.getElementById('permanentDeleteForm');
+
+  const permanentDeleteTarget =
+    document.getElementById('permanentDeleteTarget');
+
+  const permanentDeleteReason =
+    document.getElementById('permanentDeleteReason');
+
+  const permanentDeleteNameConfirm =
+    document.getElementById('permanentDeleteNameConfirm');
+
+  const closePermanentDeleteDialogButton =
+    document.getElementById('closePermanentDeleteDialogButton');
+
+  const cancelPermanentDeleteButton =
+    document.getElementById('cancelPermanentDeleteButton');
+
+  const confirmPermanentDeleteButton =
+    document.getElementById('confirmPermanentDeleteButton');
+
+  const permanentDeleteDialogMessage =
+    document.getElementById('permanentDeleteDialogMessage');
 
 
   // ============================================================
@@ -456,6 +504,21 @@
   }
 
 
+  function normalizeBookingTime(
+    value
+  ) {
+
+    const time =
+      String(
+        value || ''
+      ).slice(0, 5);
+
+    return VISIT_TIME_SLOTS.has(time)
+      ? time
+      : '';
+  }
+
+
   function bookingToInputValue(
     booking
   ) {
@@ -464,28 +527,85 @@
       !booking?.booking_date ||
       !booking?.booking_time
     ) {
-
       return '';
     }
-
 
     const time =
-      String(
+      normalizeBookingTime(
         booking.booking_time
-      ).slice(0, 5);
-
+      );
 
     if (
-      !/^\d{2}:\d{2}$/.test(time)
+      !time
     ) {
-
       return '';
     }
 
+    return `${booking.booking_date}T${time}`;
+  }
 
-    return (
-      `${booking.booking_date}T${time}`
-    );
+
+  function syncVisitScheduledAt() {
+
+    if (
+      !visitScheduledAt ||
+      !visitDate ||
+      !visitTimeSlot
+    ) {
+      return '';
+    }
+
+    const date =
+      visitDate.value;
+
+    const time =
+      visitTimeSlot.value;
+
+    if (
+      !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+      !VISIT_TIME_SLOTS.has(time)
+    ) {
+      visitScheduledAt.value = '';
+      return '';
+    }
+
+    const value =
+      `${date}T${time}`;
+
+    visitScheduledAt.value =
+      value;
+
+    return value;
+  }
+
+
+  function applyVisitSlot(
+    date,
+    time
+  ) {
+
+    const normalizedTime =
+      normalizeBookingTime(time);
+
+    if (
+      visitDate
+    ) {
+      visitDate.value =
+        /^\d{4}-\d{2}-\d{2}$/.test(
+          String(date || '')
+        )
+          ? String(date)
+          : '';
+    }
+
+    if (
+      visitTimeSlot
+    ) {
+      visitTimeSlot.value =
+        normalizedTime;
+    }
+
+    return syncVisitScheduledAt();
   }
 
 
@@ -667,6 +787,14 @@
 
       openDeleteCustomerButton.disabled =
         currentCustomerDeleted;
+    }
+
+
+    if (
+      openPermanentDeleteButton
+    ) {
+      openPermanentDeleteButton.hidden = false;
+      openPermanentDeleteButton.disabled = false;
     }
 
 
@@ -954,7 +1082,6 @@
 
     return article;
   }
-
 
   // ============================================================
   // VISIT / REPORT HISTORY
@@ -1421,12 +1548,14 @@
       inputValue
     ) {
 
-      visitScheduledAt.value =
-        inputValue;
+      applyVisitSlot(
+        booking.booking_date,
+        booking.booking_time
+      );
 
 
       bookingRequestNote.textContent =
-        '고객 요청 일정이 방문 일시에 자동 반영되었습니다. 변경이 필요하면 수정 후 등록하세요.';
+        '고객 요청 일정이 방문 날짜와 CARE 시간에 자동 반영되었습니다. 필요하면 3개 시간 중에서 변경하세요.';
 
 
       setWorkflowState(
@@ -1923,11 +2052,7 @@
 
 
     statusSelect.value =
-      ALLOWED_STATUSES.has(
-        customer.status
-      )
-        ? customer.status
-        : 'new';
+      customer.status || 'new';
 
 
     notesInput.value =
@@ -1936,25 +2061,20 @@
 
     setWorkflowState(
       step1State,
-      statusText,
-      customer.notes
+      customer.notes ||
+      customer.status !== 'new'
+        ? '기록됨'
+        : '작성 필요',
+      customer.notes ||
+      customer.status !== 'new'
         ? 'done'
-        : 'ready'
+        : 'wait'
     );
 
 
     // ----------------------------------------------------------
     // CHECK
     // ----------------------------------------------------------
-
-    const latestDiagnosis =
-      document.getElementById(
-        'latestDiagnosis'
-      );
-
-
-    latestDiagnosis.replaceChildren();
-
 
     document
       .getElementById(
@@ -1964,6 +2084,15 @@
         String(
           diagnoses.length
         );
+
+
+    const latestDiagnosis =
+      document.getElementById(
+        'latestDiagnosis'
+      );
+
+
+    latestDiagnosis.replaceChildren();
 
 
     if (
@@ -1983,7 +2112,7 @@
         make(
           'p',
           'muted-copy',
-          '아직 MOOHAE CHECK 기록이 없습니다.'
+          '등록된 MOOHAE CHECK가 없습니다.'
         )
       );
     }
@@ -2000,16 +2129,7 @@
 
 
     // ----------------------------------------------------------
-    // REPORT
-    // ----------------------------------------------------------
-
-    populateReportEditor(
-      reports
-    );
-
-
-    // ----------------------------------------------------------
-    // HISTORY VISIT
+    // VISIT HISTORY
     // ----------------------------------------------------------
 
     const visitHistory =
@@ -2018,17 +2138,19 @@
       );
 
 
-    visitHistory.replaceChildren();
-
-
-    document
-      .getElementById(
+    const visitHistoryCount =
+      document.getElementById(
         'visitHistoryCount'
-      )
-      .textContent =
-        String(
-          visits.length
-        );
+      );
+
+
+    visitHistoryCount.textContent =
+      String(
+        visits.length
+      );
+
+
+    visitHistory.replaceChildren();
 
 
     if (
@@ -2039,7 +2161,9 @@
         (visit) => {
 
           visitHistory.appendChild(
-            visitCard(visit)
+            visitCard(
+              visit
+            )
           );
         }
       );
@@ -2051,14 +2175,14 @@
         make(
           'p',
           'muted-copy',
-          '방문 CARE 기록이 없습니다.'
+          '아직 방문 CARE 기록이 없습니다.'
         )
       );
     }
 
 
     // ----------------------------------------------------------
-    // HISTORY REPORT
+    // REPORT HISTORY
     // ----------------------------------------------------------
 
     const reportHistory =
@@ -2067,17 +2191,19 @@
       );
 
 
-    reportHistory.replaceChildren();
-
-
-    document
-      .getElementById(
+    const reportHistoryCount =
+      document.getElementById(
         'reportHistoryCount'
-      )
-      .textContent =
-        String(
-          reports.length
-        );
+      );
+
+
+    reportHistoryCount.textContent =
+      String(
+        reports.length
+      );
+
+
+    reportHistory.replaceChildren();
 
 
     if (
@@ -2088,7 +2214,9 @@
         (report) => {
 
           reportHistory.appendChild(
-            reportCard(report)
+            reportCard(
+              report
+            )
           );
         }
       );
@@ -2106,6 +2234,19 @@
     }
 
 
+    // ----------------------------------------------------------
+    // REPORT EDITOR
+    // ----------------------------------------------------------
+
+    populateReportEditor(
+      reports
+    );
+
+
+    // ----------------------------------------------------------
+    // DELETED STATE
+    // ----------------------------------------------------------
+
     applyDeletedCustomerState(
       customer
     );
@@ -2114,7 +2255,6 @@
     detailMessage.textContent =
       '';
   }
-
 
   // ============================================================
   // STEP 01 SAVE
@@ -2358,7 +2498,7 @@
 
 
       const localDateTime =
-        visitScheduledAt.value;
+        syncVisitScheduledAt();
 
 
       const careArea =
@@ -2390,7 +2530,23 @@
 
         setMessage(
           visitMessage,
-          '방문 일시를 선택해주세요.'
+          '방문 날짜와 CARE 시간을 선택해주세요.'
+        );
+
+
+        return;
+      }
+
+
+      if (
+        !VISIT_TIME_SLOTS.has(
+          visitTimeSlot?.value || ''
+        )
+      ) {
+
+        setMessage(
+          visitMessage,
+          '방문 시간은 10:00–12:30, 13:00–15:30, 16:00–18:30 중에서 선택해주세요.'
         );
 
 
@@ -2474,6 +2630,9 @@
         visitForm.reset();
 
 
+        syncVisitScheduledAt();
+
+
         await loadCustomerData();
 
 
@@ -2511,6 +2670,28 @@
       }
     }
   );
+
+
+  if (
+    visitDate
+  ) {
+
+    visitDate.addEventListener(
+      'change',
+      syncVisitScheduledAt
+    );
+  }
+
+
+  if (
+    visitTimeSlot
+  ) {
+
+    visitTimeSlot.addEventListener(
+      'change',
+      syncVisitScheduledAt
+    );
+  }
 
 
   // ============================================================
@@ -2697,7 +2878,9 @@
     'click',
     () => {
 
-      saveReport('draft');
+      saveReport(
+        'draft'
+      );
     }
   );
 
@@ -2706,13 +2889,15 @@
     'click',
     () => {
 
-      saveReport('published');
+      saveReport(
+        'published'
+      );
     }
   );
 
 
   // ============================================================
-  // DELETE
+  // SOFT DELETE
   // ============================================================
 
   function closeDeleteDialog() {
@@ -2780,9 +2965,12 @@
 
   deleteCustomerDialog.addEventListener(
     'cancel',
-    (event) => {
+    (
+      event
+    ) => {
 
       event.preventDefault();
+
 
       closeDeleteDialog();
     }
@@ -2904,6 +3092,525 @@
           '처리 중...',
           '삭제 처리'
         );
+      }
+    }
+  );
+
+
+  // ============================================================
+  // PERMANENT DELETE
+  // ============================================================
+
+  function closePermanentDeleteDialog() {
+
+    if (
+      permanentDeleteDialog?.open
+    ) {
+
+      permanentDeleteDialog.close();
+    }
+
+
+    permanentDeleteForm?.reset();
+
+
+    setMessage(
+      permanentDeleteDialogMessage,
+      ''
+    );
+  }
+
+
+  async function removeStorageFiles(
+    mediaRows
+  ) {
+
+    const groups =
+      new Map();
+
+
+    (
+      mediaRows ||
+      []
+    ).forEach(
+      (
+        row
+      ) => {
+
+        const bucket =
+          String(
+            row?.storage_bucket ||
+            ''
+          ).trim();
+
+
+        const path =
+          String(
+            row?.storage_path ||
+            ''
+          ).trim();
+
+
+        if (
+          !bucket ||
+          !path
+        ) {
+
+          throw new Error(
+            'INVALID_MEDIA_PATH'
+          );
+        }
+
+
+        if (
+          !groups.has(
+            bucket
+          )
+        ) {
+
+          groups.set(
+            bucket,
+            []
+          );
+        }
+
+
+        groups
+          .get(
+            bucket
+          )
+          .push(
+            path
+          );
+      }
+    );
+
+
+    for (
+      const [
+        bucket,
+        paths
+      ]
+      of groups.entries()
+    ) {
+
+      for (
+        let index = 0;
+        index < paths.length;
+        index += 100
+      ) {
+
+        const batch =
+          paths.slice(
+            index,
+            index + 100
+          );
+
+
+        const {
+          error
+        } =
+          await window
+            .moohaeSupabase
+            .storage
+            .from(
+              bucket
+            )
+            .remove(
+              batch
+            );
+
+
+        if (
+          error
+        ) {
+
+          throw error;
+        }
+      }
+    }
+  }
+
+  openPermanentDeleteButton?.addEventListener(
+    'click',
+    () => {
+
+      if (
+        !currentCustomer
+      ) {
+
+        return;
+      }
+
+
+      permanentDeleteTarget.textContent =
+        `${currentCustomer.name || '이름 없음'} 고객과 연결된 모든 데이터를 영구 삭제합니다.`;
+
+
+      permanentDeleteForm.reset();
+
+
+      setMessage(
+        permanentDeleteDialogMessage,
+        ''
+      );
+
+
+      permanentDeleteDialog.showModal();
+    }
+  );
+
+
+  closePermanentDeleteDialogButton?.addEventListener(
+    'click',
+    closePermanentDeleteDialog
+  );
+
+
+  cancelPermanentDeleteButton?.addEventListener(
+    'click',
+    closePermanentDeleteDialog
+  );
+
+
+  permanentDeleteDialog?.addEventListener(
+    'cancel',
+    (
+      event
+    ) => {
+
+      event.preventDefault();
+
+
+      closePermanentDeleteDialog();
+    }
+  );
+
+
+  permanentDeleteForm?.addEventListener(
+    'submit',
+    async (
+      event
+    ) => {
+
+      event.preventDefault();
+
+
+      if (
+        !currentCustomer
+      ) {
+
+        return;
+      }
+
+
+      const reason =
+        permanentDeleteReason
+          .value
+          .trim();
+
+
+      const confirmName =
+        permanentDeleteNameConfirm
+          .value
+          .trim();
+
+
+      const expectedName =
+        String(
+          currentCustomer.name ||
+          ''
+        ).trim();
+
+
+      if (
+        reason.length < 2
+      ) {
+
+        setMessage(
+          permanentDeleteDialogMessage,
+          '영구 삭제 사유를 2자 이상 입력해주세요.'
+        );
+
+
+        return;
+      }
+
+
+      if (
+        !expectedName ||
+        confirmName !==
+          expectedName
+      ) {
+
+        setMessage(
+          permanentDeleteDialogMessage,
+          `고객명 “${expectedName || '이름 없음'}”을 정확히 입력해주세요.`
+        );
+
+
+        return;
+      }
+
+
+      setBusy(
+        confirmPermanentDeleteButton,
+        true,
+        '영구 삭제 중...',
+        '영구 삭제'
+      );
+
+
+      if (
+        openPermanentDeleteButton
+      ) {
+
+        openPermanentDeleteButton.disabled =
+          true;
+      }
+
+
+      try {
+
+        setMessage(
+          permanentDeleteDialogMessage,
+          'CARE 사진 파일을 확인하고 있습니다.'
+        );
+
+
+        // ------------------------------------------------------
+        // 1. 삭제 대상 CARE MEDIA 조회
+        // ------------------------------------------------------
+
+        const {
+          data: mediaRows,
+          error: prepareError
+        } =
+          await window
+            .moohaeSupabase
+            .rpc(
+              'admin_prepare_permanent_customer_delete',
+              {
+                p_customer_id:
+                  customerId
+              }
+            );
+
+
+        if (
+          prepareError
+        ) {
+
+          throw prepareError;
+        }
+
+
+        // ------------------------------------------------------
+        // 2. Supabase Storage 실제 파일 삭제
+        //
+        // DB metadata보다 Storage 파일을 먼저 삭제한다.
+        // Storage 삭제가 실패하면 고객 DB 삭제로 넘어가지 않는다.
+        // ------------------------------------------------------
+
+        await removeStorageFiles(
+          Array.isArray(
+            mediaRows
+          )
+            ? mediaRows
+            : []
+        );
+
+
+        setMessage(
+          permanentDeleteDialogMessage,
+          'CARE 사진 기록을 정리하고 있습니다.'
+        );
+
+
+        // ------------------------------------------------------
+        // 3. care_visit_media metadata 삭제
+        // ------------------------------------------------------
+
+        const {
+          error: mediaCleanupError
+        } =
+          await window
+            .moohaeSupabase
+            .rpc(
+              'admin_delete_customer_care_media_metadata',
+              {
+                p_customer_id:
+                  customerId
+              }
+            );
+
+
+        if (
+          mediaCleanupError
+        ) {
+
+          throw mediaCleanupError;
+        }
+
+
+        setMessage(
+          permanentDeleteDialogMessage,
+          '고객 데이터를 안전하게 삭제하고 있습니다.'
+        );
+
+
+        // ------------------------------------------------------
+        // 4. 연결된 DB 데이터 + 고객 영구삭제
+        //
+        // 서버 RPC에서 FK 순서에 맞춰 처리한다.
+        // ------------------------------------------------------
+
+        const {
+          error: deleteError
+        } =
+          await window
+            .moohaeSupabase
+            .rpc(
+              'admin_permanently_delete_customer',
+              {
+                p_customer_id:
+                  customerId,
+
+                p_reason:
+                  reason
+              }
+            );
+
+
+        if (
+          deleteError
+        ) {
+
+          throw deleteError;
+        }
+
+
+        // ------------------------------------------------------
+        // 5. 완료
+        // ------------------------------------------------------
+
+        setMessage(
+          permanentDeleteDialogMessage,
+          '고객 데이터가 영구 삭제되었습니다.',
+          true
+        );
+
+
+        setMessage(
+          permanentDeleteMessage,
+          '고객 데이터가 영구 삭제되었습니다.',
+          true
+        );
+
+
+        window.setTimeout(
+          () => {
+
+            window.location.replace(
+              './dashboard.html'
+            );
+
+          },
+          650
+        );
+
+
+      } catch (
+        error
+      ) {
+
+        console.error(
+          'MOOHAE permanent customer delete error:',
+          error
+        );
+
+
+        const message =
+          String(
+            error?.message ||
+            ''
+          );
+
+
+        if (
+          message.includes(
+            'CARE_MEDIA_STILL_EXISTS'
+          )
+        ) {
+
+          setMessage(
+            permanentDeleteDialogMessage,
+            'CARE 사진 정리가 완료되지 않아 영구 삭제를 중단했습니다. 다시 시도해주세요.'
+          );
+
+
+        } else if (
+          message.includes(
+            'CUSTOMER_NOT_FOUND'
+          )
+        ) {
+
+          setMessage(
+            permanentDeleteDialogMessage,
+            '삭제할 고객 정보를 찾을 수 없습니다.'
+          );
+
+
+        } else if (
+          message.includes(
+            'MOOHAE_ADMIN_REQUIRED'
+          )
+        ) {
+
+          setMessage(
+            permanentDeleteDialogMessage,
+            '영구 삭제 권한을 확인할 수 없습니다.'
+          );
+
+
+        } else if (
+          message.includes(
+            'INVALID_MEDIA_PATH'
+          )
+        ) {
+
+          setMessage(
+            permanentDeleteDialogMessage,
+            'CARE 사진 저장 경로를 확인할 수 없어 삭제를 중단했습니다.'
+          );
+
+
+        } else {
+
+          setMessage(
+            permanentDeleteDialogMessage,
+            '영구 삭제를 완료하지 못했습니다. 데이터 보호를 위해 작업을 중단했습니다.'
+          );
+        }
+
+
+      } finally {
+
+        setBusy(
+          confirmPermanentDeleteButton,
+          false,
+          '영구 삭제 중...',
+          '영구 삭제'
+        );
+
+
+        if (
+          openPermanentDeleteButton
+        ) {
+
+          openPermanentDeleteButton.disabled =
+            false;
+        }
       }
     }
   );

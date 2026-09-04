@@ -48,7 +48,7 @@
 
   <link
     rel="stylesheet"
-    href="../assets/css/admin-customer-detail.css?v=20260828-4"
+    href="../assets/css/admin-customer-detail.css?v=20260904-1"
   >
 
 </head>
@@ -542,23 +542,30 @@
         novalidate
       >
 
-        <label>
+        <div class="visit-slot-grid">
 
-          <span>
-            방문 일시
-          </span>
+          <label>
+            <span>방문 날짜</span>
+            <input id="visitDate" type="date" required>
+          </label>
 
-          <input
-            id="visitScheduledAt"
-            type="datetime-local"
-            required
-          >
+          <label>
+            <span>방문 시간</span>
+            <select id="visitTimeSlot" required>
+              <option value="">시간을 선택해주세요</option>
+              <option value="10:00">10:00–12:30</option>
+              <option value="13:00">13:00–15:30</option>
+              <option value="16:00">16:00–18:30</option>
+            </select>
+          </label>
 
-          <small class="field-helper">
-            고객 요청 일정이 자동 입력됩니다. 변경이 필요하면 관리자가 직접 수정하세요.
-          </small>
+        </div>
 
-        </label>
+        <input id="visitScheduledAt" type="hidden" value="">
+
+        <small class="field-helper visit-slot-helper">
+          고객 예약과 동일한 3개 CARE 시간만 등록할 수 있습니다.
+        </small>
 
 
         <label>
@@ -1083,6 +1090,31 @@
         aria-live="polite"
       ></p>
 
+      <div class="permanent-delete-zone">
+        <div>
+          <strong>고객 데이터 전체 삭제</strong>
+          <p>
+            고객 기본정보와 연결된 CHECK · 예약 · HOUSE · CARE · REPORT · CARE 사진을 영구 삭제합니다.
+            실행 후 복구할 수 없습니다.
+          </p>
+        </div>
+
+        <button
+          id="openPermanentDeleteButton"
+          class="danger-button danger-button-solid"
+          type="button"
+        >
+          고객 데이터 전체 삭제
+        </button>
+
+        <p
+          id="permanentDeleteMessage"
+          class="inline-message"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </div>
+
     </section>
 
 
@@ -1229,6 +1261,101 @@
 
 
   <!-- =========================================================
+       PERMANENT DELETE DIALOG
+  ========================================================== -->
+
+  <dialog
+    id="permanentDeleteDialog"
+    class="customer-delete-dialog permanent-delete-dialog"
+    aria-labelledby="permanentDeleteDialogTitle"
+  >
+    <form
+      id="permanentDeleteForm"
+      class="customer-delete-form"
+      method="dialog"
+      novalidate
+    >
+      <div class="customer-delete-dialog-head">
+        <div>
+          <p class="eyebrow">PERMANENT DELETE</p>
+          <h2 id="permanentDeleteDialogTitle">
+            고객 데이터를 영구 삭제하시겠어요?
+          </h2>
+        </div>
+
+        <button
+          id="closePermanentDeleteDialogButton"
+          class="dialog-close-button"
+          type="button"
+          aria-label="영구 삭제 창 닫기"
+        >
+          ×
+        </button>
+      </div>
+
+      <p id="permanentDeleteTarget" class="customer-delete-target">—</p>
+
+      <p class="customer-delete-warning permanent-warning">
+        이 작업은 복구할 수 없습니다. CARE 사진의 Storage 파일까지 먼저 삭제한 뒤
+        고객과 연결된 데이터를 DB에서 영구 삭제합니다.
+      </p>
+
+      <label>
+        <span>영구 삭제 사유</span>
+        <textarea
+          id="permanentDeleteReason"
+          maxlength="500"
+          rows="4"
+          placeholder="예: 고객의 개인정보 삭제 요청, 테스트 데이터 완전 제거"
+          required
+        ></textarea>
+      </label>
+
+      <label>
+        <span>고객명 확인</span>
+        <input
+          id="permanentDeleteNameConfirm"
+          type="text"
+          maxlength="200"
+          autocomplete="off"
+          placeholder="고객 이름을 정확히 입력"
+          required
+        >
+      </label>
+
+      <p class="muted-copy">
+        위 고객의 <strong>이름을 정확히 입력</strong>해야 영구 삭제할 수 있습니다.
+      </p>
+
+      <div class="customer-delete-action-row">
+        <button
+          id="cancelPermanentDeleteButton"
+          class="secondary-button"
+          type="button"
+        >
+          취소
+        </button>
+
+        <button
+          id="confirmPermanentDeleteButton"
+          class="danger-button danger-button-solid"
+          type="submit"
+        >
+          영구 삭제
+        </button>
+      </div>
+
+      <p
+        id="permanentDeleteDialogMessage"
+        class="inline-message"
+        role="status"
+        aria-live="polite"
+      ></p>
+    </form>
+  </dialog>
+
+
+  <!-- =========================================================
        SCRIPTS — 각각 정확히 1회
   ========================================================== -->
 
@@ -1236,7 +1363,7 @@
 
   <script src="../assets/js/supabase-config.js?v=20260828-4"></script>
 
-  <script src="../assets/js/admin-customer-detail.js?v=20260828-4"></script>
+  <script src="../assets/js/admin-customer-detail.js?v=20260904-1"></script>
 
   <script src="../assets/js/admin-customer-contact.js?v=20260828-4"></script>
 
