@@ -14,6 +14,7 @@
   // - 예약 관리
   // - 예약 확정 / 취소
   // - 슬롯 열기 / 마감
+  // - CARE PLAN 명칭 CORE / CORE+ / PRIVATE 통일
   //
   // allergy_concerns는 더 이상 신규 관리자 UI에서 사용하지 않는다.
   // ============================================================
@@ -198,6 +199,39 @@
   };
 
 
+  // ------------------------------------------------------------
+  // CARE PLAN LABELS
+  //
+  // DB 호환성은 그대로 유지하면서
+  // 관리자 화면에는 신규 CARE PLAN 명칭만 표시한다.
+  //
+  // STANDARD  → CORE
+  // PLUS      → CORE+
+  // SIGNATURE → PRIVATE
+  // ------------------------------------------------------------
+
+  const PLAN_LABELS = {
+
+    STANDARD:
+      'CORE',
+
+    PLUS:
+      'CORE+',
+
+    SIGNATURE:
+      'PRIVATE',
+
+    CORE:
+      'CORE',
+
+    'CORE+':
+      'CORE+',
+
+    PRIVATE:
+      'PRIVATE'
+  };
+
+
   const BOOKING_DAYS =
     14;
 
@@ -279,6 +313,51 @@
 
     return node;
   };
+
+
+
+  // ============================================================
+  // CARE PLAN HELPER
+  // ============================================================
+
+  function getPlanLabel(
+    value
+  ) {
+
+    if (
+      value === null ||
+      value === undefined
+    ) {
+
+      return '';
+    }
+
+
+    const raw =
+      String(
+        value
+      ).trim();
+
+
+    if (
+      !raw
+    ) {
+
+      return '';
+    }
+
+
+    const key =
+      raw.toUpperCase();
+
+
+    return (
+      PLAN_LABELS[
+        key
+      ] ||
+      raw
+    );
+  }
 
 
 
@@ -704,7 +783,9 @@
               make(
                 'span',
                 'booking-plan',
-                row.recommended_plan
+                getPlanLabel(
+                  row.recommended_plan
+                )
               )
             );
           }
@@ -1433,7 +1514,9 @@
       ) {
 
         chips.push(
-          diagnosis.recommended_plan
+          getPlanLabel(
+            diagnosis.recommended_plan
+          )
         );
       }
 
@@ -1973,6 +2056,17 @@
             );
 
 
+          const rawPlan =
+            diagnosis?.recommended_plan ||
+            '';
+
+
+          const displayPlan =
+            getPlanLabel(
+              rawPlan
+            );
+
+
           const searchData = [
 
             customer.name ||
@@ -1989,8 +2083,9 @@
             customer.delete_reason ||
               '',
 
-            diagnosis?.recommended_plan ||
-              '',
+            rawPlan,
+
+            displayPlan,
 
             diagnosis?.result_level ||
               '',
@@ -2323,7 +2418,9 @@
 
       const resultLabel =
 
-        diagnosis?.recommended_plan ||
+        getPlanLabel(
+          diagnosis?.recommended_plan
+        ) ||
 
         diagnosis?.result_level ||
 
