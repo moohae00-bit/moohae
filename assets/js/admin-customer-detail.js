@@ -504,6 +504,18 @@
   }
 
 
+  // ============================================================
+  // BOOKING TIME NORMALIZER
+  //
+  // 기존 예약시간도 새 CARE 슬롯으로 자동 매핑
+  //
+  // 10:00 → 10:00
+  // 13:00 → 13:00
+  // 13:30 → 13:00
+  // 16:00 → 16:00
+  // 17:00 → 16:00
+  // ============================================================
+
   function normalizeBookingTime(
     value
   ) {
@@ -513,6 +525,7 @@
         value || ''
       ).slice(0, 5);
 
+
     const legacySlotMap = {
       '10:00': '10:00',
       '13:00': '13:00',
@@ -520,6 +533,7 @@
       '16:00': '16:00',
       '17:00': '16:00'
     };
+
 
     return legacySlotMap[time] || '';
   }
@@ -533,19 +547,24 @@
       !booking?.booking_date ||
       !booking?.booking_time
     ) {
+
       return '';
     }
+
 
     const time =
       normalizeBookingTime(
         booking.booking_time
       );
 
+
     if (
       !time
     ) {
+
       return '';
     }
+
 
     return `${booking.booking_date}T${time}`;
   }
@@ -558,28 +577,43 @@
       !visitDate ||
       !visitTimeSlot
     ) {
+
       return '';
     }
+
 
     const date =
       visitDate.value;
 
+
     const time =
       visitTimeSlot.value;
 
+
     if (
-      !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
-      !VISIT_TIME_SLOTS.has(time)
+      !/^\d{4}-\d{2}-\d{2}$/.test(
+        date
+      ) ||
+      !VISIT_TIME_SLOTS.has(
+        time
+      )
     ) {
-      visitScheduledAt.value = '';
+
+      visitScheduledAt.value =
+        '';
+
+
       return '';
     }
+
 
     const value =
       `${date}T${time}`;
 
+
     visitScheduledAt.value =
       value;
+
 
     return value;
   }
@@ -591,25 +625,34 @@
   ) {
 
     const normalizedTime =
-      normalizeBookingTime(time);
+      normalizeBookingTime(
+        time
+      );
+
 
     if (
       visitDate
     ) {
+
       visitDate.value =
         /^\d{4}-\d{2}-\d{2}$/.test(
-          String(date || '')
+          String(
+            date || ''
+          )
         )
           ? String(date)
           : '';
     }
 
+
     if (
       visitTimeSlot
     ) {
+
       visitTimeSlot.value =
         normalizedTime;
     }
+
 
     return syncVisitScheduledAt();
   }
@@ -804,8 +847,13 @@
     if (
       openPermanentDeleteButton
     ) {
-      openPermanentDeleteButton.hidden = false;
-      openPermanentDeleteButton.disabled = false;
+
+      openPermanentDeleteButton.hidden =
+        false;
+
+
+      openPermanentDeleteButton.disabled =
+        false;
     }
 
 
@@ -1455,14 +1503,15 @@
     const activeVisit =
       visits.find(
         (visit) =>
-          visit.visit_status ===
-            'scheduled' ||
-
-          visit.visit_status ===
-            'in_progress'
+          visit.visit_status === 'scheduled' ||
+          visit.visit_status === 'in_progress'
       ) ||
       null;
 
+
+    // ==========================================================
+    // CURRENT VISIT STATE
+    // ==========================================================
 
     if (
       activeVisit
@@ -1491,6 +1540,10 @@
     }
 
 
+    // ==========================================================
+    // NO CUSTOMER BOOKING REQUEST
+    // ==========================================================
+
     if (
       !booking
     ) {
@@ -1509,10 +1562,8 @@
 
       bookingRequestNote.textContent =
         activeVisit
-
           ? '이미 등록된 방문 일정이 있습니다.'
-
-          : '고객 요청 일정이 없습니다. 관리자가 직접 방문 일시를 입력할 수 있습니다.';
+          : '고객 요청 일정이 없습니다. 관리자가 직접 방문 일시를 선택할 수 있습니다.';
 
 
       if (
@@ -1530,6 +1581,10 @@
       return;
     }
 
+
+    // ==========================================================
+    // SHOW ORIGINAL CUSTOMER REQUEST
+    // ==========================================================
 
     bookingRequestDateTime.textContent =
       formatBookingDateTime(
@@ -1549,41 +1604,82 @@
       `booking-request-status status-${booking.booking_status || 'requested'}`;
 
 
-    const inputValue =
-      bookingToInputValue(
-        booking
-      );
+    // ==========================================================
+    // CUSTOMER REQUEST -> ADMIN FIXED SLOT
+    //
+    // 10:00 -> 10:00
+    // 13:00 -> 13:00
+    // 13:30 -> 13:00
+    // 16:00 -> 16:00
+    // 17:00 -> 16:00
+    // ==========================================================
 
-
-    if (
-      !activeVisit &&
-      inputValue
-    ) {
-
-      applyVisitSlot(
-        booking.booking_date,
+    const mappedTime =
+      normalizeBookingTime(
         booking.booking_time
       );
 
 
-      bookingRequestNote.textContent =
-        '고객 요청 일정이 방문 날짜와 CARE 시간에 자동 반영되었습니다. 필요하면 3개 시간 중에서 변경하세요.';
+    const bookingDate =
+      String(
+        booking.booking_date ||
+        ''
+      ).trim();
 
 
-      setWorkflowState(
-        step2State,
-        '고객 요청 있음',
-        'ready'
+    const hasValidBooking =
+      /^\d{4}-\d{2}-\d{2}$/.test(
+        bookingDate
+      ) &&
+      VISIT_TIME_SLOTS.has(
+        mappedTime
       );
 
 
-    } else if (
-      activeVisit
+    // ==========================================================
+    // ALWAYS APPLY CUSTOMER REQUEST TO SELECTS
+    //
+    // 기존 방문 일정이 이미 있어도 고객이 요청한 날짜/시간은
+    // STEP 02 선택창에 자동 반영한다.
+    // ==========================================================
+
+    if (
+      hasValidBooking
     ) {
 
-      bookingRequestNote.textContent =
-        '고객 요청 일정이 확인되었습니다. 이미 등록된 방문 일정이 있으므로 중복 등록하지 않습니다.';
+      applyVisitSlot(
+        bookingDate,
+        mappedTime
+      );
+
+
+      if (
+        activeVisit
+      ) {
+
+        bookingRequestNote.textContent =
+          '고객이 요청한 날짜와 시간이 아래 일정 선택창에 자동 반영되었습니다. 기존 방문 일정이 있으므로 변경 등록 전 일정을 확인해주세요.';
+
+      } else {
+
+        bookingRequestNote.textContent =
+          '고객이 요청한 날짜와 시간이 아래 일정 선택창에 자동 반영되었습니다. 필요하면 변경 후 방문 일정을 등록하세요.';
+
+
+        setWorkflowState(
+          step2State,
+          '고객 요청 있음',
+          'ready'
+        );
+      }
+
+
+      return;
     }
+
+
+    bookingRequestNote.textContent =
+      '고객의 요청 일정은 확인되었지만 시간 자동 선택에 실패했습니다. 방문 시간을 직접 선택해주세요.';
   }
 
 
@@ -2544,10 +2640,13 @@
           visitTimeSlot?.value || ''
         )
       ) {
+
         setMessage(
           visitMessage,
           '방문 시간은 10:00–12:30, 13:00–15:30, 16:00–18:30 중에서 선택해주세요.'
         );
+
+
         return;
       }
 
@@ -2627,6 +2726,7 @@
 
         visitForm.reset();
 
+
         syncVisitScheduledAt();
 
 
@@ -2672,15 +2772,18 @@
   if (
     visitDate
   ) {
+
     visitDate.addEventListener(
       'change',
       syncVisitScheduledAt
     );
   }
 
+
   if (
     visitTimeSlot
   ) {
+
     visitTimeSlot.addEventListener(
       'change',
       syncVisitScheduledAt
@@ -2887,7 +2990,7 @@
 
 
   // ============================================================
-  // DELETE
+  // SOFT DELETE
   // ============================================================
 
   function closeDeleteDialog() {
@@ -3089,13 +3192,17 @@
   // ============================================================
 
   function closePermanentDeleteDialog() {
+
     if (
       permanentDeleteDialog?.open
     ) {
+
       permanentDeleteDialog.close();
     }
 
+
     permanentDeleteForm?.reset();
+
 
     setMessage(
       permanentDeleteDialogMessage,
@@ -3107,38 +3214,51 @@
   async function removeStorageFiles(
     mediaRows
   ) {
+
     const groups =
       new Map();
 
-    (mediaRows || []).forEach(
+
+    (
+      mediaRows || []
+    ).forEach(
       (row) => {
+
         const bucket =
           String(
             row?.storage_bucket || ''
           ).trim();
+
 
         const path =
           String(
             row?.storage_path || ''
           ).trim();
 
+
         if (
           !bucket ||
           !path
         ) {
+
           throw new Error(
             'INVALID_MEDIA_PATH'
           );
         }
 
+
         if (
-          !groups.has(bucket)
+          !groups.has(
+            bucket
+          )
         ) {
+
           groups.set(
             bucket,
             []
           );
         }
+
 
         groups
           .get(bucket)
@@ -3146,20 +3266,24 @@
       }
     );
 
+
     for (
       const [bucket, paths]
       of groups.entries()
     ) {
+
       for (
         let index = 0;
         index < paths.length;
         index += 100
       ) {
+
         const batch =
           paths.slice(
             index,
             index + 100
           );
+
 
         const {
           error
@@ -3170,9 +3294,11 @@
             .from(bucket)
             .remove(batch);
 
+
         if (
           error
         ) {
+
           throw error;
         }
       }
@@ -3183,21 +3309,27 @@
   openPermanentDeleteButton?.addEventListener(
     'click',
     () => {
+
       if (
         !currentCustomer
       ) {
+
         return;
       }
+
 
       permanentDeleteTarget.textContent =
         `${currentCustomer.name || '이름 없음'} 고객과 연결된 모든 데이터를 영구 삭제합니다.`;
 
+
       permanentDeleteForm.reset();
+
 
       setMessage(
         permanentDeleteDialogMessage,
         ''
       );
+
 
       permanentDeleteDialog.showModal();
     }
@@ -3209,15 +3341,20 @@
     closePermanentDeleteDialog
   );
 
+
   cancelPermanentDeleteButton?.addEventListener(
     'click',
     closePermanentDeleteDialog
   );
 
+
   permanentDeleteDialog?.addEventListener(
     'cancel',
     (event) => {
+
       event.preventDefault();
+
+
       closePermanentDeleteDialog();
     }
   );
@@ -3228,49 +3365,64 @@
     async (
       event
     ) => {
+
       event.preventDefault();
+
 
       if (
         !currentCustomer
       ) {
+
         return;
       }
+
 
       const reason =
         permanentDeleteReason
           .value
           .trim();
 
+
       const confirmName =
         permanentDeleteNameConfirm
           .value
           .trim();
+
 
       const expectedName =
         String(
           currentCustomer.name || ''
         ).trim();
 
+
       if (
         reason.length < 2
       ) {
+
         setMessage(
           permanentDeleteDialogMessage,
           '영구 삭제 사유를 2자 이상 입력해주세요.'
         );
+
+
         return;
       }
+
 
       if (
         !expectedName ||
         confirmName !== expectedName
       ) {
+
         setMessage(
           permanentDeleteDialogMessage,
           `고객명 “${expectedName || '이름 없음'}”을 정확히 입력해주세요.`
         );
+
+
         return;
       }
+
 
       setBusy(
         confirmPermanentDeleteButton,
@@ -3279,18 +3431,23 @@
         '영구 삭제'
       );
 
+
       if (
         openPermanentDeleteButton
       ) {
+
         openPermanentDeleteButton.disabled =
           true;
       }
 
+
       try {
+
         setMessage(
           permanentDeleteDialogMessage,
           'CARE 사진 파일을 확인하고 있습니다.'
         );
+
 
         const {
           data: mediaRows,
@@ -3306,17 +3463,23 @@
               }
             );
 
+
         if (
           prepareError
         ) {
+
           throw prepareError;
         }
 
+
         await removeStorageFiles(
-          Array.isArray(mediaRows)
+          Array.isArray(
+            mediaRows
+          )
             ? mediaRows
             : []
         );
+
 
         const {
           error: mediaCleanupError
@@ -3331,11 +3494,14 @@
               }
             );
 
+
         if (
           mediaCleanupError
         ) {
+
           throw mediaCleanupError;
         }
+
 
         const {
           error: deleteError
@@ -3347,16 +3513,20 @@
               {
                 p_customer_id:
                   customerId,
+
                 p_reason:
                   reason
               }
             );
 
+
         if (
           deleteError
         ) {
+
           throw deleteError;
         }
+
 
         setMessage(
           permanentDeleteDialogMessage,
@@ -3364,8 +3534,10 @@
           true
         );
 
+
         window.setTimeout(
           () => {
+
             window.location.replace(
               './dashboard.html'
             );
@@ -3373,36 +3545,46 @@
           650
         );
 
+
       } catch (
         error
       ) {
+
         console.error(
           'MOOHAE permanent customer delete error:',
           error
         );
+
 
         const message =
           String(
             error?.message || ''
           );
 
+
         if (
           message.includes(
             'CARE_MEDIA_STILL_EXISTS'
           )
         ) {
+
           setMessage(
             permanentDeleteDialogMessage,
             'CARE 사진 정리가 완료되지 않아 영구 삭제를 중단했습니다. 다시 시도해주세요.'
           );
+
+
         } else {
+
           setMessage(
             permanentDeleteDialogMessage,
             '영구 삭제를 완료하지 못했습니다. 데이터 보호를 위해 작업을 중단했습니다.'
           );
         }
 
+
       } finally {
+
         setBusy(
           confirmPermanentDeleteButton,
           false,
@@ -3410,9 +3592,11 @@
           '영구 삭제'
         );
 
+
         if (
           openPermanentDeleteButton
         ) {
+
           openPermanentDeleteButton.disabled =
             false;
         }
