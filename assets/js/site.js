@@ -131,7 +131,7 @@
         'img',
         {
           src:
-            './assets/images/moohae-logo.webp?v=20260903-1',
+            './assets/images/moohae-logo.png?v=20260903-1',
 
           alt:
             'MOOHAE',
