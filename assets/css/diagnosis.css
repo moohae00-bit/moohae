@@ -16,10 +16,6 @@
   --ease:cubic-bezier(.22,1,.36,1);
 }
 
-*{box-sizing:border-box}
-
-html{scroll-behavior:smooth}
-
 body{
   margin:0;
   overflow-x:hidden;
@@ -28,17 +24,6 @@ body{
   font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,sans-serif;
   -webkit-font-smoothing:antialiased;
   word-break:keep-all;
-}
-
-a{
-  color:inherit;
-  text-decoration:none;
-}
-
-button,
-input,
-textarea{
-  font:inherit;
 }
 
 
@@ -202,14 +187,6 @@ textarea{
   color:var(--gray);
 }
 
-.result{
-  display:none;
-  padding:48px 35px;
-  text-align:center;
-  border-radius:28px;
-  background:var(--paper);
-}
-
 .result h2{
   margin:18px 0;
   font-size:36px;
@@ -218,24 +195,6 @@ textarea{
 .result p{
   color:var(--gray);
   line-height:1.7;
-}
-
-.result-actions{
-  margin-top:30px;
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  flex-wrap:wrap;
-}
-
-.result-note{
-  margin-top:28px;
-  padding:18px;
-  border-radius:16px;
-  background:var(--sage-soft);
-  color:var(--ink-soft);
-  font-size:13px;
-  line-height:1.6;
 }
 
 .multi-hint{
@@ -256,25 +215,6 @@ textarea{
   font-size:10px;
   font-weight:750;
   letter-spacing:.08em;
-}
-
-.result-copy{
-  max-width:590px;
-  margin:0 auto;
-  color:var(--gray);
-  font-size:15px;
-  line-height:1.8;
-}
-
-.result-recommend{
-  margin:26px 0 0;
-  padding:22px;
-  border-radius:18px;
-  background:#f2efe8;
-  text-align:left;
-  color:var(--ink-soft);
-  font-size:13px;
-  line-height:1.75;
 }
 
 .result-recommend strong{
@@ -630,12 +570,16 @@ textarea{
    ============================================================ */
 
 .result{
+  display:none;
   position:relative;
   left:50%;
   width:min(980px,calc(100vw - 48px));
   max-width:none;
   transform:translateX(-50%);
   padding:56px 52px;
+  text-align:center;
+  border-radius:28px;
+  background:var(--paper);
 }
 
 .result>h2{
@@ -648,6 +592,8 @@ textarea{
 
 .result-copy{
   max-width:780px;
+  margin:0 auto;
+  color:var(--gray);
   font-size:16px;
   line-height:1.85;
 }
@@ -663,13 +609,22 @@ textarea{
 }
 
 .result-recommend{
+  margin:26px 0 0;
   padding:26px 28px;
+  border-radius:18px;
+  background:#f2efe8;
+  text-align:left;
+  color:var(--ink-soft);
   font-size:14px;
   line-height:1.8;
 }
 
 .result-note{
+  margin-top:28px;
   padding:22px 24px;
+  border-radius:16px;
+  background:var(--sage-soft);
+  color:var(--ink-soft);
   font-size:14px;
   line-height:1.75;
 }
@@ -680,7 +635,12 @@ textarea{
 }
 
 .result-actions{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
   max-width:860px;
+  margin-top:30px;
   margin-left:auto;
   margin-right:auto;
 }
@@ -969,4 +929,74 @@ textarea{
   .plan-explore-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
   .plan-explore-link{justify-content:center;padding:0 8px}
   .plan-explore-badge{display:none}
+}
+
+/* ============================================================
+   MOOHAE HOME CHECK — FINAL 6Q UX
+   ============================================================ */
+
+.progress-wrap{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  margin-bottom:35px;
+}
+
+.progress-wrap .progress{
+  margin-bottom:0;
+}
+
+.progress-count{
+  min-width:42px;
+  color:var(--gray);
+  font-size:11px;
+  font-weight:700;
+  text-align:right;
+  letter-spacing:.04em;
+}
+
+.other-input-wrap{
+  margin-top:14px;
+}
+
+.other-input-label{
+  display:block;
+  margin-bottom:7px;
+  color:var(--gray);
+  font-size:11px;
+  font-weight:650;
+}
+
+.other-input{
+  width:100%;
+  min-height:50px;
+  padding:0 15px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  color:var(--ink);
+  font:inherit;
+  outline:none;
+}
+
+.other-input:focus{
+  border-color:var(--sage-dark);
+  box-shadow:0 0 0 4px rgba(102,125,101,.08);
+}
+
+@media(max-width:600px){
+  .progress-wrap{
+    gap:10px;
+    margin-bottom:28px;
+  }
+
+  .progress-count{
+    font-size:10px;
+  }
+
+  .other-input{
+    min-height:52px;
+    font-size:16px;
+  }
 }

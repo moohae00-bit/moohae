@@ -111,6 +111,26 @@
 
   function isDeletedCustomer() {
 
+    const snapshot =
+      getCustomerDetailSnapshot();
+
+
+    if (
+      snapshot &&
+      snapshot.customer
+    ) {
+
+      return Boolean(
+        snapshot.customer.deletedAt
+      );
+    }
+
+
+    /*
+     * 초기 스냅샷이 준비되기 전에는 기존 DOM 상태를
+     * 안전한 fallback으로 사용한다.
+     */
+
     return Boolean(
       deletedCustomerNotice &&
       deletedCustomerNotice.hidden === false
@@ -275,58 +295,108 @@
 
 
   // ============================================================
-  // ACTIVE VISIT CHECK
+  // CUSTOMER DETAIL SNAPSHOT
+  //
+  // admin-customer-detail.js가 이미 조회한 care_visits 결과를
+  // 재사용한다. 이 파일은 care_visits를 다시 조회하지 않는다.
   // ============================================================
 
-  async function getActiveVisit(
-    supabase
-  ) {
+  function getCustomerDetailSnapshot() {
 
-    const {
-      data,
-      error
-    } =
-      await supabase
-        .from(
-          'care_visits'
-        )
-        .select(
-          'id, customer_id, visit_status, scheduled_at'
-        )
-        .eq(
-          'customer_id',
-          customerId
-        )
-        .in(
-          'visit_status',
-          ACTIVE_VISIT_STATUSES
-        )
-        .order(
-          'scheduled_at',
-          {
-            ascending:
-              true
-          }
-        )
-        .limit(
-          1
-        );
+    const snapshot =
+      window.moohaeCustomerDetailSnapshot;
 
 
     if (
-      error
+      !snapshot ||
+      snapshot.customerId !== customerId
     ) {
 
-      throw error;
+      return null;
     }
 
 
-    return Array.isArray(
-      data
-    ) &&
-    data.length
-      ? data[0]
-      : null;
+    return snapshot;
+  }
+
+
+  function waitForCustomerDetailSnapshot() {
+
+    const existingSnapshot =
+      getCustomerDetailSnapshot();
+
+
+    if (
+      existingSnapshot
+    ) {
+
+      return Promise.resolve(
+        existingSnapshot
+      );
+    }
+
+
+    return new Promise(
+      (resolve) => {
+
+        const handleLoaded =
+          () => {
+
+            const snapshot =
+              getCustomerDetailSnapshot();
+
+
+            if (
+              !snapshot
+            ) {
+
+              return;
+            }
+
+
+            window.removeEventListener(
+              'moohae:customer-detail-loaded',
+              handleLoaded
+            );
+
+
+            resolve(
+              snapshot
+            );
+          };
+
+
+        window.addEventListener(
+          'moohae:customer-detail-loaded',
+          handleLoaded
+        );
+      }
+    );
+  }
+
+
+  function hasActiveVisit(
+    snapshot
+  ) {
+
+    if (
+      !snapshot ||
+      !Array.isArray(
+        snapshot.visits
+      )
+    ) {
+
+      return false;
+    }
+
+
+    return snapshot.visits.some(
+      (visit) =>
+        visit &&
+        ACTIVE_VISIT_STATUSES.includes(
+          visit.visit_status
+        )
+    );
   }
 
 
@@ -354,23 +424,30 @@
 
 
       /*
-       * HOUSE와 VISIT은 서로 독립적인 조회이므로
-       * 병렬 실행.
+       * HOUSE는 이 파일에서 필요한 유일한 추가 DB 조회다.
+       * VISIT은 admin-customer-detail.js가 이미 조회한
+       * 페이지 스냅샷을 재사용한다.
+       *
+       * 서로 독립적이므로 병렬로 준비해 대기 시간을 늘리지 않는다.
        */
 
       const [
         house,
-        visit
+        snapshot
       ] =
         await Promise.all([
           getPrimaryHouse(
             supabase
           ),
 
-          getActiveVisit(
-            supabase
-          )
+          waitForCustomerDetailSnapshot()
         ]);
+
+
+      const activeVisitExists =
+        hasActiveVisit(
+          snapshot
+        );
 
 
       // --------------------------------------------------------
@@ -424,7 +501,7 @@
       // --------------------------------------------------------
 
       if (
-        !visit
+        !activeVisitExists
       ) {
 
         hideButton();
@@ -466,49 +543,20 @@
 
 
   // ============================================================
-  // DELETED CUSTOMER STATE WATCH
+  // CUSTOMER DETAIL STATE SUPPORT
+  //
+  // 삭제 상태를 DOM MutationObserver로 감시하지 않는다.
+  // admin-customer-detail.js가 최신 customer/visit 스냅샷을
+  // 게시한 뒤 보내는 이벤트를 단일 상태 갱신 신호로 사용한다.
   // ============================================================
 
-  let deletedObserver =
-    null;
+  window.addEventListener(
+    'moohae:customer-detail-loaded',
+    () => {
 
-
-  if (
-    deletedCustomerNotice
-  ) {
-
-    deletedObserver =
-      new MutationObserver(
-        () => {
-
-          if (
-            isDeletedCustomer()
-          ) {
-
-            hideButton();
-
-
-            return;
-          }
-
-
-          resolveCareEntry();
-        }
-      );
-
-
-    deletedObserver.observe(
-      deletedCustomerNotice,
-      {
-        attributes:
-          true,
-
-        attributeFilter: [
-          'hidden'
-        ]
-      }
-    );
-  }
+      resolveCareEntry();
+    }
+  );
 
 
   // ============================================================
@@ -591,26 +639,5 @@
 
   resolveCareEntry();
 
-
-  // ============================================================
-  // CLEANUP
-  // ============================================================
-
-  window.addEventListener(
-    'pagehide',
-    () => {
-
-      if (
-        deletedObserver
-      ) {
-
-        deletedObserver.disconnect();
-      }
-    },
-    {
-      once:
-        true
-    }
-  );
 
 })();

@@ -975,6 +975,54 @@
   }
 
 
+  function isFinalHomeCheck6Q(
+    diagnosis
+  ) {
+
+    const preference =
+      Array.isArray(
+        diagnosis?.management_preference
+      )
+        ? diagnosis.management_preference
+        : [];
+
+
+    const reviewValues =
+      new Set([
+        '네, 함께 확인해요',
+        '가능하면 함께 볼게요',
+        '저 혼자 확인해요',
+        '1인 가구예요'
+      ]);
+
+
+    const managerValues =
+      new Set([
+        '제가 주로 해요',
+        '가족과 함께 해요',
+        '다른 가족이 주로 해요'
+      ]);
+
+
+    return (
+      preference.length >= 2 &&
+      reviewValues.has(
+        String(
+          preference[0] ||
+          ''
+        )
+      ) &&
+      managerValues.has(
+        String(
+          preference[1] ||
+          ''
+        )
+      )
+    );
+
+  }
+
+
   function diagnosisCard(
     diagnosis
   ) {
@@ -1001,6 +1049,12 @@
       Number(
         diagnosis.check_version
       ) >= 2;
+
+
+    const isFinal6Q =
+      isFinalHomeCheck6Q(
+        diagnosis
+      );
 
 
     left.appendChild(
@@ -1041,49 +1095,82 @@
 
 
     const groups =
-      isV2
+      isFinal6Q
 
         ? [
             [
-              '함께 생활',
+              '관심 공간',
               diagnosis.household
             ],
             [
-              '주요 생활 공간',
+              '신경 쓰이는 점',
               diagnosis.living_spaces
             ],
             [
-              '주요 접촉면',
+              '현재 관리',
               diagnosis.contact_surfaces
             ],
             [
-              '관리 고민',
+              '방문에서 확인',
               diagnosis.management_worries
             ],
             [
-              '원하는 관리 방식',
-              diagnosis.management_preference
+              '결과 확인',
+              [
+                diagnosis.management_preference?.[0]
+              ].filter(Boolean)
+            ],
+            [
+              '평소 집 관리',
+              [
+                diagnosis.management_preference?.[1]
+              ].filter(Boolean)
             ]
           ]
 
-        : [
-            [
-              '생활 공간',
-              diagnosis.spaces
-            ],
-            [
-              '신경 쓰이는 부분',
-              diagnosis.concerns
-            ],
-            [
-              '관리 어려움',
-              diagnosis.difficulties
-            ],
-            [
-              '희망 방식',
-              diagnosis.preferred_contact
+        : isV2
+
+          ? [
+              [
+                '함께 생활',
+                diagnosis.household
+              ],
+              [
+                '주요 생활 공간',
+                diagnosis.living_spaces
+              ],
+              [
+                '주요 접촉면',
+                diagnosis.contact_surfaces
+              ],
+              [
+                '관리 고민',
+                diagnosis.management_worries
+              ],
+              [
+                '원하는 관리 방식',
+                diagnosis.management_preference
+              ]
             ]
-          ];
+
+          : [
+              [
+                '생활 공간',
+                diagnosis.spaces
+              ],
+              [
+                '신경 쓰이는 부분',
+                diagnosis.concerns
+              ],
+              [
+                '관리 어려움',
+                diagnosis.difficulties
+              ],
+              [
+                '희망 방식',
+                diagnosis.preferred_contact
+              ]
+            ];
 
 
     groups.forEach(
@@ -2345,6 +2432,57 @@
 
     applyDeletedCustomerState(
       customer
+    );
+
+
+    // ----------------------------------------------------------
+    // PAGE DATA SNAPSHOT
+    //
+    // 같은 페이지의 보조 UI가 customers / care_visits를
+    // 다시 조회하지 않도록, 이미 검증된 최신 조회 결과를
+    // 읽기 전용 스냅샷 형태로 공유한다.
+    // ----------------------------------------------------------
+
+    window.moohaeCustomerDetailSnapshot =
+      Object.freeze({
+        customerId:
+          customer.id,
+
+        customer:
+          Object.freeze({
+            phone:
+              customer.phone || '',
+
+            address:
+              customer.address || '',
+
+            deletedAt:
+              customer.deleted_at || null
+          }),
+
+        visits:
+          Object.freeze(
+            visits.map(
+              (visit) =>
+                Object.freeze({
+                  id:
+                    visit.id,
+
+                  scheduled_at:
+                    visit.scheduled_at,
+
+                  visit_status:
+                    visit.visit_status
+                })
+            )
+          )
+      });
+
+
+    window.dispatchEvent(
+      new CustomEvent(
+        'moohae:customer-detail-loaded'
+      )
     );
 
 

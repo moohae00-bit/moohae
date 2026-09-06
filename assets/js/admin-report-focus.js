@@ -38,10 +38,6 @@
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 
-  const CHECK_INTERVAL_MS =
-    150;
-
-
   const MAX_WAIT_MS =
     10000;
 
@@ -132,10 +128,6 @@
     false;
 
 
-  let intervalId =
-    null;
-
-
   let timeoutId =
     null;
 
@@ -187,20 +179,6 @@
   // ============================================================
 
   function stopWatcher() {
-
-    if (
-      intervalId
-    ) {
-
-      window.clearInterval(
-        intervalId
-      );
-
-
-      intervalId =
-        null;
-    }
-
 
     if (
       timeoutId
@@ -384,25 +362,29 @@
   // ============================================================
   // WAIT FOR CUSTOMER DATA
   //
-  // admin-customer-detail.js의
-  // loadCustomerData()
-  //      ↓
-  // populateReportEditor()
-  //      ↓
-  // reportEditorId.value 설정
+  // admin-customer-detail.js는 loadCustomerData()에서
+  // Report Editor 렌더링까지 끝낸 뒤
+  // moohae:customer-detail-loaded 이벤트를 보낸다.
   //
-  // 위 과정이 끝날 때까지만 짧게 확인.
+  // 이전의 150ms polling 대신 이 이벤트를 1회 기다려
+  // 불필요한 반복 DOM 검사를 제거한다.
   // ============================================================
 
-  intervalId =
-    window.setInterval(
-      () => {
+  const handleCustomerDetailLoaded =
+    () => {
 
-        moveToReport();
+      moveToReport();
+    };
 
-      },
-      CHECK_INTERVAL_MS
-    );
+
+  window.addEventListener(
+    'moohae:customer-detail-loaded',
+    handleCustomerDetailLoaded,
+    {
+      once:
+        true
+    }
+  );
 
 
   // ============================================================
@@ -422,6 +404,12 @@
 
           return;
         }
+
+
+        window.removeEventListener(
+          'moohae:customer-detail-loaded',
+          handleCustomerDetailLoaded
+        );
 
 
         stopWatcher();
@@ -473,6 +461,12 @@
   window.addEventListener(
     'pagehide',
     () => {
+
+      window.removeEventListener(
+        'moohae:customer-detail-loaded',
+        handleCustomerDetailLoaded
+      );
+
 
       stopWatcher();
 

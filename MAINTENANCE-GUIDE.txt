@@ -1,0 +1,85 @@
+MOOHAE MAINTENANCE GUIDE — 2026-09-06
+
+QUICK EDIT LOCATIONS
+
+1. LOGO
+   File: assets/images/moohae-logo.webp
+   Reference: assets/js/site.js
+   Header and footer both use the common site logo flow.
+
+2. PUBLIC HOME PAGE
+   HTML: index.html
+   CSS : assets/css/index.css
+   JS  : assets/js/index.js
+
+3. CARE PAGE
+   HTML: care.html
+   CSS : assets/css/care.css
+   JS  : assets/js/care.js
+   Images: assets/images/care/
+
+4. CARE TOP OBJECTS
+   Data/images: assets/js/care.js -> CARE_ASSETS.objects
+   Styles: assets/css/care.css -> care-object-* selectors
+   Never diagnose an object-background problem from image or CSS alone; check both.
+
+5. MOOHAE ONE
+   Data/prices/images: assets/js/care.js -> CARE_CONTENT.one
+   Card styles: assets/css/care.css -> one-product-* selectors
+   Current card background is intentionally unified through the ONE card style source of truth.
+
+6. CHECK / DIAGNOSIS
+   HTML: diagnosis.html
+   CSS : assets/css/diagnosis.css
+   JS  : assets/js/diagnosis.js
+   Redirect helper: assets/js/diagnosis-success-redirect.js
+
+7. REPORT
+   HTML: report.html
+   CSS : assets/css/report.css
+   JS  : assets/js/report.js
+
+8. ADMIN CUSTOMER DETAIL
+   HTML: admin/customer-detail.html
+   CSS : assets/css/admin-customer-detail.css
+   Primary data controller: assets/js/admin-customer-detail.js
+   Contact UI: assets/js/admin-customer-contact.js
+   House/CARE link: assets/js/admin-house-care-link.js
+   Report focus: assets/js/admin-report-focus.js
+
+9. ADMIN DASHBOARD
+   HTML: admin/dashboard.html
+   CSS : assets/css/admin-auth.css
+   JS  : assets/js/admin-dashboard.js
+
+10. HOUSE CARE
+   HTML: admin/house-care.html
+   CSS : assets/css/partner-care.css
+   JS  : assets/js/partner-house-care.js
+
+SAFE CHANGE WORKFLOW
+  A. Capture the current working result.
+  B. Read the complete relevant HTML/CSS/JS files.
+  C. Search duplicate selectors/functions/queries and dynamic states.
+  D. Cross-check at least twice, preferably three times.
+  E. Change one responsibility at a time.
+  F. Validate JS syntax and local asset references.
+  G. Test desktop and mobile behavior.
+  H. Only then commit and push.
+
+DO NOT
+  - Add another !important or FINAL OVERRIDE before finding the original cascade cause.
+  - Add another Supabase query when the same data already exists in the page controller snapshot.
+  - Add polling when an existing event can signal completion.
+  - Add MutationObserver when explicit state/event flow can do the same job.
+  - Put secrets in public JavaScript.
+  - Remove backend RPC/RLS/FK/Storage policies without dependency review.
+
+PERFORMANCE PRINCIPLE
+  Prioritize changes that reduce actual work:
+    network requests
+    repeated DOM rendering
+    observers/timers/polling
+    unnecessary eager image loading
+    oversized assets
+  Do not optimize merely to reduce line count.

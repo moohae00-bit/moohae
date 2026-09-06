@@ -164,7 +164,6 @@ a{color:inherit;text-decoration:none}
 .booking-range-label{min-width:190px;text-align:center;font-size:12px;letter-spacing:-.02em}
 .booking-message{margin:18px 0 0;color:var(--muted);font-size:12px;line-height:1.6}
 .booking-message.error{color:var(--danger)}
-.booking-calendar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
 .booking-day-card{min-width:0;padding:20px;border:1px solid var(--line);border-radius:20px;background:#fff}
 .booking-day-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:15px;border-bottom:1px solid var(--line)}
 .booking-day-eyebrow{display:block;margin-bottom:5px;color:var(--sage);font-size:9px;font-weight:850;letter-spacing:.12em}
@@ -190,7 +189,6 @@ a{color:inherit;text-decoration:none}
 .booking-slot-note{color:var(--muted);font-size:10px;line-height:1.45}
 .danger-action{color:var(--danger);border-color:rgba(154,81,77,.22)}
 .booking-empty{padding-bottom:24px}
-@media(max-width:900px){.booking-calendar{grid-template-columns:1fr}}
 @media(max-width:620px){
   .booking-section{padding:20px;border-radius:20px}
   .booking-section-heading{display:block}

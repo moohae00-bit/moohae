@@ -1,0 +1,100 @@
+MOOHAE PROJECT MAP — FINAL FRONTEND BASELINE
+Baseline date: 2026-09-06
+
+PURPOSE
+  This project map is the maintenance baseline for the current MOOHAE website.
+  UI/UX, copy, URLs, behavior, Supabase data flow, auth, RPC results and customer data must not be changed casually.
+
+PUBLIC PAGES
+  index.html
+    CSS: assets/css/site.css + assets/css/index.css
+    JS : assets/js/site.js + assets/js/index.js
+
+  care.html
+    CSS: assets/css/site.css + assets/css/care.css
+    JS : assets/js/site.js + assets/js/care.js
+    CARE images: assets/images/care/
+
+  diagnosis.html
+    CSS: assets/css/site.css + assets/css/diagnosis.css
+    JS : assets/js/site.js + assets/js/supabase-config.js + assets/js/diagnosis.js + assets/js/diagnosis-success-redirect.js
+
+  report.html
+    CSS: assets/css/site.css + assets/css/report.css
+    JS : assets/js/site.js + assets/js/supabase-config.js + assets/js/report.js
+
+ADMIN PAGES
+  admin/login.html
+    CSS: assets/css/admin-auth.css
+    JS : assets/js/supabase-config.js + assets/js/admin-auth.js
+
+  admin/dashboard.html
+    CSS: assets/css/admin-auth.css
+    JS : assets/js/supabase-config.js + assets/js/admin-dashboard.js
+
+  admin/customer-detail.html
+    CSS: assets/css/admin-customer-detail.css
+    JS : assets/js/supabase-config.js
+         assets/js/admin-customer-detail.js
+         assets/js/admin-customer-contact.js
+         assets/js/admin-house-care-link.js
+         assets/js/admin-report-focus.js
+         assets/js/admin-care-media.js where referenced by the active page flow
+
+  admin/house-care.html
+    CSS: assets/css/partner-care.css
+    JS : assets/js/supabase-config.js + assets/js/partner-house-care.js
+
+COMMON
+  assets/css/site.css
+    Global public UI foundation.
+
+  assets/js/site.js
+    Public header/footer and common public-page behavior.
+    Logo source: assets/images/moohae-logo.webp
+
+  assets/js/supabase-config.js
+    Browser Supabase configuration.
+    Publishable key only. Never place service_role, passwords, DB credentials, JWT secrets or private keys here.
+
+CARE IMAGE MAP
+  assets/images/care/01_private.webp
+  assets/images/care/02_core_plus.webp
+  assets/images/care/03_core.webp
+  assets/images/care/04_one_room.webp
+  assets/images/care/05_one_care.webp
+  assets/images/care/06_sofa.webp
+  assets/images/care/07_mattress.webp
+  assets/images/care/08_bedding.webp
+  assets/images/care/09_rug.webp
+  assets/images/care/10_floor.webp
+
+MOOHAE ONE FILE MAP
+  SOFA     -> assets/images/care/06_sofa.webp
+  MATTRESS -> assets/images/care/07_mattress.webp
+  BEDDING  -> assets/images/care/08_bedding.webp
+  RUG      -> assets/images/care/09_rug.webp
+  FLOOR    -> assets/images/care/10_floor.webp
+
+MAINTENANCE RULES
+  1. Common public UI belongs in site.css / site.js.
+  2. Page-specific UI and behavior stay in that page's CSS/JS unless cross-page reuse is proven.
+  3. Do not delete code because it merely looks unused. Check HTML -> CSS -> JS -> dynamic class/id -> other pages first.
+  4. Before changing CSS, inspect hover/focus/is-selected/nth-child/::before/::after/transform/filter/box-shadow/background and media queries.
+  5. Before changing admin code, inspect Supabase requests, shared snapshots/events, auth, RPC and DOM ownership.
+  6. Prefer one source of truth over repeated overrides or duplicate requests.
+  7. Keep changes zero-regression: current rendered result and behavior must stay the same unless the user explicitly requests a change.
+  8. Use full-file integrated replacements for user-facing code changes whenever practical.
+
+CACHE RULE
+  Local CSS/JS references use one shared query-version value per deployment.
+  Current baseline version: v=20260905-4
+  When deploying a changed CSS/JS bundle, increment the version consistently across all local CSS/JS references.
+
+GIT RULE
+  .gitattributes defines text/binary handling to reduce line-ending noise.
+  Do not perform a mass renormalization together with feature work. If needed, do it in a separate commit.
+
+SECURITY BOUNDARY
+  Frontend files do not prove backend safety by themselves.
+  RLS, RPC, SECURITY DEFINER, FK, triggers and Storage policies must be reviewed separately in Supabase before backend changes.

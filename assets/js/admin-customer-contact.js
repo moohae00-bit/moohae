@@ -13,8 +13,7 @@
   //
   // 핵심 admin-customer-detail.js와 분리
   //
-  // 기존 JS가 전화번호 DOM을 다시 쓰더라도
-  // MutationObserver가 다시 액션 UI를 복원한다.
+  // 핵심 JS가 제공하는 최신 고객 스냅샷으로 UI를 갱신한다.
   // ============================================================
 
 
@@ -579,10 +578,26 @@
 
 
   // ============================================================
-  // LOAD CUSTOMER CONTACT DATA
+  // CUSTOMER DETAIL SNAPSHOT
+  //
+  // admin-customer-detail.js가 이미 조회한 고객 데이터를 사용한다.
+  // 별도의 customers 조회와 MutationObserver는 사용하지 않는다.
   // ============================================================
 
-  async function loadContactData() {
+  function renderFromSnapshot() {
+
+    const snapshot =
+      window.moohaeCustomerDetailSnapshot;
+
+
+    if (
+      !snapshot ||
+      !snapshot.customer
+    ) {
+
+      return false;
+    }
+
 
     const customerId =
       new URLSearchParams(
@@ -597,145 +612,56 @@
       !UUID_PATTERN.test(
         customerId
       ) ||
-      !window.moohaeSupabase
+      snapshot.customerId !==
+        customerId
     ) {
 
-      return;
+      return false;
     }
 
 
-    try {
+    loadedPhone =
+      typeof snapshot.customer.phone ===
+        'string'
 
-      const {
-        data,
-        error
-      } =
-        await window
-          .moohaeSupabase
-          .from(
-            'customers'
-          )
-          .select(
-            'phone, address'
-          )
-          .eq(
-            'id',
-            customerId
-          )
-          .maybeSingle();
+        ? snapshot.customer.phone
+
+        : '';
 
 
-      if (
-        error
-      ) {
+    loadedAddress =
+      typeof snapshot.customer.address ===
+        'string'
 
-        throw error;
-      }
+        ? snapshot.customer.address
 
-
-      if (
-        !data
-      ) {
-
-        return;
-      }
+        : '';
 
 
-      loadedPhone =
-        typeof data.phone ===
-          'string'
-
-          ? data.phone
-
-          : '';
+    renderPhone();
 
 
-      loadedAddress =
-        typeof data.address ===
-          'string'
-
-          ? data.address
-
-          : '';
+    renderAddress();
 
 
-      renderPhone();
-
-
-      renderAddress();
-
-
-    } catch (
-      error
-    ) {
-
-      console.error(
-        'MOOHAE customer contact load error:',
-        error
-      );
-
-
-      loadedAddress =
-        '';
-
-
-      renderAddress();
-    }
+    return true;
   }
 
 
-
   // ============================================================
-  // PHONE MUTATION WATCH
+  // DATA READY EVENT
   //
-  // admin-customer-detail.js가 비동기로
-  // detailPhone.textContent를 다시 입력하면
-  // 전화 / 문자 UI를 자동으로 복원한다.
+  // 초기 조회가 아직 끝나지 않았으면 이벤트를 기다리고,
+  // 고객 정보가 다시 로드되면 동일 UI를 최신 값으로 갱신한다.
   // ============================================================
 
-  const phoneObserver =
-    new MutationObserver(
-      () => {
-
-        if (
-          renderingPhone ||
-          !loadedPhone
-        ) {
-
-          return;
-        }
-
-
-        queueMicrotask(
-          () => {
-
-            renderPhone();
-          }
-        );
-      }
-    );
-
-
-  phoneObserver.observe(
-    phoneTarget,
-    {
-      childList:
-        true,
-
-      subtree:
-        true,
-
-      characterData:
-        true
-    }
+  window.addEventListener(
+    'moohae:customer-detail-loaded',
+    renderFromSnapshot
   );
 
 
-
-  // ============================================================
-  // START
-  // ============================================================
-
-  loadContactData();
+  // 스크립트 실행 전에 메인 데이터가 이미 준비된 경우를 지원한다.
+  renderFromSnapshot();
 
 })();

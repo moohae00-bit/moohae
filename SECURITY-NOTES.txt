@@ -1,15 +1,38 @@
-MOOHAE STATIC SECURITY REVIEW — 2026-08-18
+MOOHAE SECURITY NOTES — 2026-09-05
 
-PUBLIC DEPLOYMENT
-- index.html, care.html, diagnosis.html, report.html
-- No admin/editor page is included in public deployment until authentication/authorization is implemented.
-- No API keys, database credentials, passwords, private tokens, or service secrets are included.
-- There is no database code in this version, so SQL injection currently has no execution path.
-- Dynamic diagnosis output uses textContent/createElement rather than user-controlled innerHTML.
-- Public ?edit=1 behavior and public image upload controls were removed.
-- External font CDN was removed to tighten CSP and reduce third-party dependencies.
-- Kakao links use HTTPS.
-- CSP is present as a meta policy. GitHub Pages is static hosting, so server response security headers require a hosting/CDN layer that supports custom headers.
+[PUBLIC PAGES]
+- index.html
+- care.html
+- diagnosis.html
+- report.html
 
-DO NOT COMMIT
-.env, API keys, service-role keys, DB passwords, access tokens, private customer exports or private report data.
+[ADMIN PAGES]
+- admin/login.html
+- admin/dashboard.html
+- admin/customer-detail.html
+- admin/house-care.html
+- 관리자 페이지가 저장소에 포함되어 있으므로 실제 보호는 URL 은닉이 아니라 Supabase Auth + 권한 검증 + DB RLS/RPC 정책으로 구성해야 합니다.
+
+[FRONTEND SECURITY]
+- 동적 출력은 textContent/createElement/replaceChildren 등 안전한 DOM 방식을 우선합니다.
+- 사용자 입력을 innerHTML/eval/document.write 등에 직접 연결하지 않습니다.
+- 공개 페이지의 인증이 필요한 작업은 프론트엔드 UI만으로 보호하지 않습니다.
+- CSP 적용 여부는 페이지별로 별도 확인합니다. 정적 호스팅에서 응답 헤더 기반 정책이 필요하면 이를 지원하는 호스팅/CDN 계층이 필요합니다.
+
+[SUPABASE]
+- 브라우저 코드에는 Publishable/anon 용도의 공개 키만 사용합니다.
+- Secret key / service_role key / DB 비밀번호 / 개인 access token을 브라우저 코드나 Git 저장소에 넣지 않습니다.
+- 실제 데이터 보호는 RLS, RPC 권한, SECURITY DEFINER 함수, Storage policy를 포함해 서버 측에서 검증해야 합니다.
+- 프론트엔드 저장소만으로 RLS/RPC/Storage 정책의 안전성을 확정하지 않습니다.
+
+[DO NOT COMMIT]
+- .env 비밀값
+- service_role / secret keys
+- DB passwords
+- private access tokens
+- 고객 개인정보 export
+- 비공개 REPORT/CARE 데이터 원본
+
+[CHANGE SAFETY]
+- 고객/예약/CHECK/CARE/REPORT 데이터 삭제 또는 수정 로직은 데이터 무결성 검증 없이 변경하지 않습니다.
+- FK/RPC/RLS/Storage 관련 변경은 의존성을 확인하고 별도 백업/검증 절차 후 적용합니다.

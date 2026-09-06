@@ -1,26 +1,27 @@
-무해 통합 업데이트
+MOOHAE FRONTEND BASELINE — 2026-09-06
 
-이번 수정:
-1. 무료 진단에 알레르기 관련 질문 추가
-   - 아토피 관련 고민
-   - 비염 관련 고민
-   - 천식 관련 고민
-   - 털 알레르기
-   - 먼지 알레르기
-   - 해당 없음
+This package is the validated frontend baseline after the ZERO-REGRESSION audit/refactor.
 
-2. 알레르기 관련 항목은 복수 선택 가능
-3. '해당 없음'은 다른 알레르기 항목과 동시에 선택되지 않음
-4. 알레르기 관련 고민 선택 시 결과에
-   집먼지진드기, 미세 각질, 비듬 등 눈에 잘 보이지 않는 요소를
-   꾸준히 관리하는 것이 중요하다는 안내가 자동 추가됨
-5. 기존 상담 / 방문 진단 연결 문구 유지
-6. 메인 페이지의 소파 / 침실 / Care Report 미리보기 이미지 경로 수정 유지
+Main outcomes:
+1. Legacy/dead code cleanup.
+2. Safe CSS duplicate/override cleanup.
+3. Consistent cache-version management.
+4. Cleaner Git text/binary handling.
+5. Asset payload/repository reduction.
+6. Customer-detail duplicate network work reduced.
+7. Unnecessary observers/polling reduced.
+8. Existing visual result, public flow and admin flow preserved by design.
 
-설치:
-압축을 풀고 내용 전체를
-moohae-site > moohae
-폴더에 그대로 덮어쓰세요.
+Before future edits, read:
+  PROJECT-MAP.txt
+  MAINTENANCE-GUIDE.txt
+  SECURITY-NOTES.txt
+  REFACTOR-SUMMARY.txt
 
-기존 CNAME 파일은 삭제하지 마세요.
-GitHub Desktop에서 Commit to main → Push origin 하면 됩니다.
+Deployment:
+  Copy the project contents into the moohae-site repository root used for deployment.
+  Preserve CNAME.
+  Review GitHub Desktop changes before Commit to main -> Push origin.
+
+Important:
+  This frontend baseline does not replace a separate Supabase backend audit.

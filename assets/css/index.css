@@ -20,7 +20,7 @@
 .hero-actions{margin-top:30px}
 .hero-photo{
   width:min(920px,94vw);height:440px;margin:54px auto 0;border-radius:34px 34px 0 0;
-  background-image:url("../images/hero-sofa.png");background-size:cover;background-position:center;
+  background-image:url("../images/hero-sofa.webp");background-size:cover;background-position:center;
   box-shadow:0 40px 90px rgba(40,40,30,.11)
 }
 

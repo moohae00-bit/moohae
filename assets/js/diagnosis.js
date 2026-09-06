@@ -50,6 +50,12 @@
     );
 
 
+  const progressCount =
+    document.getElementById(
+      'progressCount'
+    );
+
+
   const prev =
     document.getElementById(
       'prev'
@@ -296,11 +302,24 @@
       progress.style.width =
         `${
           (
-            current /
+            (
+              current +
+              1
+            ) /
             qs.length
           ) *
           100
         }%`;
+
+    }
+
+
+    if (
+      progressCount
+    ) {
+
+      progressCount.textContent =
+        `${current + 1} / ${qs.length}`;
 
     }
 
@@ -336,6 +355,157 @@
   // QUESTION ANSWERS
   // ============================================================
 
+  function getOtherInput(
+    question
+  ) {
+
+    return question
+      .querySelector(
+        '.other-input'
+      );
+
+  }
+
+
+  function getOtherWrap(
+    question
+  ) {
+
+    return question
+      .querySelector(
+        '.other-input-wrap'
+      );
+
+  }
+
+
+  function getOptionValue(
+    question,
+    button
+  ) {
+
+    const baseValue =
+      button
+        .textContent
+        .trim();
+
+
+    if (
+      button.dataset.other !==
+      'true'
+    ) {
+
+      return baseValue;
+
+    }
+
+
+    const input =
+      getOtherInput(
+        question
+      );
+
+
+    const detail =
+      String(
+        input?.value ||
+        ''
+      ).trim();
+
+
+    return detail
+      ? `기타: ${detail}`
+      : '기타';
+
+  }
+
+
+  function syncOtherState(
+    question,
+    qIndex
+  ) {
+
+    const otherButton =
+      question
+        .querySelector(
+          '.option[data-other="true"]'
+        );
+
+
+    const wrap =
+      getOtherWrap(
+        question
+      );
+
+
+    const input =
+      getOtherInput(
+        question
+      );
+
+
+    if (
+      !otherButton ||
+      !wrap ||
+      !input
+    ) {
+
+      return;
+
+    }
+
+
+    const selected =
+      otherButton
+        .classList
+        .contains(
+          'selected'
+        );
+
+
+    wrap.hidden =
+      !selected;
+
+
+    if (
+      selected
+    ) {
+
+      answers[qIndex] =
+        answers[qIndex]
+          .filter(
+            (value) =>
+              !String(value)
+                .startsWith(
+                  '기타'
+                )
+          );
+
+
+      answers[qIndex].push(
+        getOptionValue(
+          question,
+          otherButton
+        )
+      );
+
+    } else {
+
+      answers[qIndex] =
+        answers[qIndex]
+          .filter(
+            (value) =>
+              !String(value)
+                .startsWith(
+                  '기타'
+                )
+          );
+
+    }
+
+  }
+
+
   qs.forEach(
     (
       question,
@@ -346,6 +516,39 @@
         question.dataset
           .single ===
         'true';
+
+
+      const maxSelect =
+        Number(
+          question.dataset
+            .maxSelect ||
+          0
+        );
+
+
+      const otherInput =
+        getOtherInput(
+          question
+        );
+
+
+      if (
+        otherInput
+      ) {
+
+        otherInput.addEventListener(
+          'input',
+          () => {
+
+            syncOtherState(
+              question,
+              qIndex
+            );
+
+          }
+        );
+
+      }
 
 
       question
@@ -365,7 +568,7 @@
               'click',
               () => {
 
-                const value =
+                const baseValue =
                   button
                     .textContent
                     .trim();
@@ -397,14 +600,45 @@
 
 
                   answers[qIndex] =
-                    [
-                      value
-                    ];
+                    [];
 
 
                   button.classList.add(
                     'selected'
                   );
+
+
+                  answers[qIndex].push(
+                    getOptionValue(
+                      question,
+                      button
+                    )
+                  );
+
+
+                  syncOtherState(
+                    question,
+                    qIndex
+                  );
+
+
+                  if (
+                    button.dataset.other ===
+                    'true'
+                  ) {
+
+                    window.setTimeout(
+                      () => {
+
+                        getOtherInput(
+                          question
+                        )?.focus();
+
+                      },
+                      0
+                    );
+
+                  }
 
 
                   return;
@@ -415,6 +649,29 @@
                 // ------------------------------------------------
                 // MULTIPLE
                 // ------------------------------------------------
+
+                const alreadySelected =
+                  button.classList.contains(
+                    'selected'
+                  );
+
+
+                if (
+                  !alreadySelected &&
+                  maxSelect > 0 &&
+                  answers[qIndex].length >=
+                    maxSelect
+                ) {
+
+                  alert(
+                    `최대 ${maxSelect}개까지 선택할 수 있습니다.`
+                  );
+
+
+                  return;
+
+                }
+
 
                 button.classList.toggle(
                   'selected'
@@ -427,36 +684,80 @@
                   )
                 ) {
 
+                  const value =
+                    getOptionValue(
+                      question,
+                      button
+                    );
+
+
                   if (
-                    !answers[
-                      qIndex
-                    ].includes(
-                      value
-                    )
+                    !answers[qIndex]
+                      .includes(
+                        value
+                      )
                   ) {
 
-                    answers[
-                      qIndex
-                    ].push(
-                      value
-                    );
+                    answers[qIndex]
+                      .push(
+                        value
+                      );
 
                   }
 
                 } else {
 
-                  answers[
-                    qIndex
-                  ] =
-                    answers[
-                      qIndex
-                    ].filter(
-                      (
-                        item
-                      ) =>
-                        item !==
-                        value
-                    );
+                  answers[qIndex] =
+                    answers[qIndex]
+                      .filter(
+                        (item) => {
+
+                          if (
+                            button.dataset.other ===
+                            'true'
+                          ) {
+
+                            return !String(item)
+                              .startsWith(
+                                '기타'
+                              );
+
+                          }
+
+
+                          return item !==
+                            baseValue;
+
+                        }
+                      );
+
+                }
+
+
+                syncOtherState(
+                  question,
+                  qIndex
+                );
+
+
+                if (
+                  button.dataset.other ===
+                    'true' &&
+                  button.classList.contains(
+                    'selected'
+                  )
+                ) {
+
+                  window.setTimeout(
+                    () => {
+
+                      getOtherInput(
+                        question
+                      )?.focus();
+
+                    },
+                    0
+                  );
 
                 }
 
@@ -468,6 +769,71 @@
 
     }
   );
+
+
+  function validateCurrentAnswer() {
+
+    if (
+      answers[current].length ===
+      0
+    ) {
+
+      alert(
+        '한 개 이상 선택해주세요.'
+      );
+
+
+      return false;
+
+    }
+
+
+    const question =
+      qs[current];
+
+
+    const otherButton =
+      question
+        ?.querySelector(
+          '.option[data-other="true"].selected'
+        );
+
+
+    if (
+      otherButton
+    ) {
+
+      const input =
+        getOtherInput(
+          question
+        );
+
+
+      if (
+        !String(
+          input?.value ||
+          ''
+        ).trim()
+      ) {
+
+        alert(
+          '기타 내용을 짧게 입력해주세요.'
+        );
+
+
+        input?.focus();
+
+
+        return false;
+
+      }
+
+    }
+
+
+    return true;
+
+  }
 
 
   // ============================================================
@@ -683,170 +1049,65 @@
 
   function buildPersonalizedCopy() {
 
-    const household =
+    const focusAreas =
       answers[0] ||
       [];
 
 
-    const spaces =
-      answers[1] ||
-      [];
+    const primaryConcern =
+      answers[1]?.[0] ||
+      '';
 
 
-    const surfaces =
-      answers[2] ||
-      [];
-
-
-    const worries =
-      answers[3] ||
-      [];
-
-
-    const preference =
-      answers[4]?.[0] ||
+    const visitGoal =
+      answers[3]?.[0] ||
       '';
 
 
     // ----------------------------------------------------------
-    // HOUSEHOLD
+    // CONSERVATIVE PLAN COMPATIBILITY
+    //
+    // 새 설문은 "원하는 PLAN"을 직접 묻지 않는다.
+    // 따라서 PRIVATE를 자동 추천하지 않고,
+    // 아이/반려동물 생활공간 등 더 세심한 범위가
+    // 명확한 경우에만 CORE+로 분기한다.
+    // 그 외에는 CORE를 기본값으로 유지한다.
     // ----------------------------------------------------------
 
-    const hasChild =
-      household.includes(
-        '아이'
-      );
-
-
-    const hasPet =
-      household.includes(
-        '반려동물'
-      );
-
-
-    // ----------------------------------------------------------
-    // SPACE / SURFACE
-    // ----------------------------------------------------------
-
-    const manySpaces =
-      spaces.length >=
-        2 ||
-
-      spaces.includes(
-        '여러 공간에 고르게'
-      );
-
-
-    const manySurfaces =
-      surfaces.length >=
-        3 ||
-
-      surfaces.includes(
-        '여러 곳이 함께'
-      );
-
-
-    // ----------------------------------------------------------
-    // WORRIES
-    // ----------------------------------------------------------
-
-    const feelsRecurring =
-      worries.includes(
-        '관리해도 금방 다시 신경 쓰인다'
-      );
-
-
-    const unsureScope =
-      worries.includes(
-        '언제, 어디까지 관리해야 할지 모르겠다'
-      );
-
-
-    const childFocus =
-      worries.includes(
-        '아이의 생활공간은 조금 더 세심하게 보고 싶다'
-      );
-
-
-    const petFocus =
-      worries.includes(
-        '반려동물의 생활공간은 조금 더 세심하게 보고 싶다'
-      );
-
-
-    // ----------------------------------------------------------
-    // MANAGEMENT PREFERENCE
-    // ----------------------------------------------------------
-
-    const wantsDedicated =
-      preference.includes(
-        '담당 관리자가'
-      );
-
-
-    const wantsPlus =
-      preference.includes(
-        '더 신경 쓰이는 생활까지'
-      );
-
-
-    // ==========================================================
-    // PLAN DECISION
-    // ==========================================================
-
-    /*
-     * PRIVATE는 단순 고점수 자동 추천이 아니다.
-     *
-     * 현재 CHECK에서 고객이
-     * 전담 관리자를 명시적으로 원하는 경우에만
-     * PRIVATE를 추천한다.
-     */
-
-    let plan =
-      'CORE';
-
-
-    if (
-      wantsDedicated
-    ) {
-
-      plan =
-        'PRIVATE';
-
-    } else if (
-
-      wantsPlus ||
-
-      childFocus ||
-
-      petFocus ||
-
-      (
-        hasChild &&
-        manySurfaces
+    const childOrPetFocus =
+      focusAreas.some(
+        (value) =>
+          value ===
+            '아이 생활공간' ||
+          value ===
+            '반려동물 생활공간'
       ) ||
+      primaryConcern ===
+        '아이가 생활하는 곳이라 신경 쓰여요' ||
+      primaryConcern ===
+        '반려동물이 함께 생활해요';
 
+
+    const broadAttention =
+      focusAreas.length >=
+        2 &&
       (
-        hasPet &&
-        manySurfaces
-      ) ||
+        primaryConcern ===
+          '평소 관리하기 어려워요' ||
+        primaryConcern ===
+          '먼지·털 등이 신경 쓰여요' ||
+        visitGoal ===
+          '관리가 필요한 곳' ||
+        visitGoal ===
+          '적절한 관리 주기'
+      );
 
-      (
-        feelsRecurring &&
-        unsureScope
-      ) ||
 
-      (
-        manySpaces &&
-        manySurfaces
-      )
-
-    ) {
-
-      plan =
-        'CORE+';
-
-    }
+    const plan =
+      childOrPetFocus ||
+      broadAttention
+        ? 'CORE+'
+        : 'CORE';
 
 
     const planInfo =
@@ -855,51 +1116,34 @@
       ];
 
 
-    // ==========================================================
-    // RESULT HIGHLIGHTS
-    // ==========================================================
-
     const highlights =
       [];
 
 
-    if (
-      surfaces.length
-    ) {
+    focusAreas
+      .slice(
+        0,
+        2
+      )
+      .forEach(
+        (value) => {
 
-      highlights.push(
-        '침구 · 패브릭'
+          highlights.push(
+            value
+          );
+
+        }
       );
 
-    }
-
 
     if (
-      manySpaces ||
-      spaces.length
+      visitGoal &&
+      highlights.length <
+        3
     ) {
 
       highlights.push(
-        '생활 공간'
-      );
-
-    }
-
-
-    if (
-
-      feelsRecurring ||
-
-      unsureScope ||
-
-      wantsDedicated ||
-
-      wantsPlus
-
-    ) {
-
-      highlights.push(
-        'CARE 주기'
+        visitGoal
       );
 
     }
@@ -928,27 +1172,17 @@
         planInfo.description,
 
       recommendation:
-        planInfo.description,
+        planInfo.headline,
 
       plan,
 
-      highlights:
-        [
-          ...new Set(
-            highlights
-          )
-        ].slice(
-          0,
-          3
-        )
+      highlights
 
     };
 
   }
 
 
-  // ============================================================
-  // RENDER RECOMMENDATION PLAN
   // ============================================================
 
   function renderRecommendationPlan(
@@ -1351,16 +1585,8 @@
     () => {
 
       if (
-        answers[
-          current
-        ].length ===
-        0
+        !validateCurrentAnswer()
       ) {
-
-        alert(
-          '한 개 이상 선택해주세요.'
-        );
-
 
         return;
 
@@ -3021,6 +3247,19 @@
        */
       website,
 
+      /*
+       * HOME CHECK FINAL 6Q → 기존 V2 API 호환 매핑
+       *
+       * DB/API 구조를 즉시 변경하지 않고 신규 설문 6개 답변을
+       * 모두 보존하기 위한 무중단 호환 방식이다.
+       *
+       * household             = Q1 관심 공간
+       * spaces                = Q2 신경 쓰이는 점
+       * contact_surfaces      = Q3 현재 관리 방법
+       * worries               = Q4 방문 확인 목표
+       * management_preference = Q5 결과 확인 방식 + Q6 주 관리 주체
+       */
+
       household:
         answers[0],
 
@@ -3034,7 +3273,10 @@
         answers[3],
 
       management_preference:
-        answers[4],
+        [
+          answers[4]?.[0] || '',
+          answers[5]?.[0] || ''
+        ].filter(Boolean),
 
       client_result_level:
         resultData.level,

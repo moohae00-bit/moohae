@@ -1,0 +1,55 @@
+MOOHAE ZERO-REGRESSION REFACTOR — FINAL SUMMARY
+Date: 2026-09-06
+
+OBJECTIVE
+  Preserve current visible and functional results while reducing legacy code, duplicate work and maintenance risk.
+
+COMPLETED
+  - Removed unreferenced legacy JavaScript files.
+  - Removed dead legacy UI logic and old Report editor CSS where dependency checks confirmed no active use.
+  - Consolidated safe duplicate CSS declarations without changing computed results.
+  - Simplified CARE ONE background overrides to a clearer source of truth.
+  - Added consistent local CSS/JS cache-versioning policy.
+  - Added .gitattributes for cleaner Git line-ending behavior.
+  - Updated stale project/security documentation.
+  - Converted the public hero image to lossless WebP with decoded pixel equality verified.
+  - Removed unused image assets after reference checks.
+  - Removed one duplicate customer Supabase read on customer detail.
+  - Removed one duplicate care_visits Supabase read on customer detail.
+  - Removed two unnecessary MutationObservers by using explicit page state/events.
+  - Removed Report polling interval and repeated DOM checks by using an existing completion event.
+  - Preserved safety-critical primary-house, deleted-customer and CARE-entry checks.
+
+PERFORMANCE EFFECTS CONFIRMED DURING THE REFACTOR
+  - Duplicate customers network request: reduced by 1 per relevant customer-detail load.
+  - Duplicate care_visits network request: reduced by 1 per relevant customer-detail load.
+  - Unnecessary MutationObservers: reduced by 2.
+  - Report polling interval: removed.
+  - Repeated Report readiness DOM checks: removed (previously could repeat many times within the timeout window).
+  - Hero image payload: reduced substantially through lossless WebP conversion.
+  - Image repository size: reduced by removing confirmed-unused legacy assets.
+
+PRESERVED INTENTIONALLY
+  - Vanilla HTML/CSS/JS architecture.
+  - Page-local helpers where centralization would increase coupling.
+  - Required IntersectionObservers for reveal/UI behavior.
+  - Required async synchronization logic where no safer explicit event/state replacement was proven.
+  - Supabase auth/data/RPC behavior.
+  - Existing URLs, copy, layouts, breakpoints and user flows.
+
+NOT VERIFIED BY FRONTEND STATIC AUDIT
+  - Supabase RLS definitions.
+  - RPC function bodies and grants.
+  - SECURITY DEFINER correctness.
+  - Database triggers/FK behavior beyond previously supplied schema checks.
+  - Storage policies.
+  These require separate backend review.
+
+OFFICIAL FRONTEND BASELINE
+  MOOHAE_FRONTEND_BASELINE_2026-09-06.zip
+
+NEXT BACKEND WORK
+  1. Finish and verify full permanent customer-data deletion.
+  2. Add safe bulk customer deletion.
+  3. Add customer-data editing.
+  Backend changes must preserve auth, data integrity, auditability and zero-regression principles.

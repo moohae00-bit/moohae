@@ -1,0 +1,33 @@
+MOOHAE HOME CHECK — FINAL 6Q SAFE COMPATIBILITY NOTE
+Date: 2026-09-06
+
+목표
+- 실제 운영 중인 CHECK → 저장 → 예약 → 관리자 흐름을 중단하지 않고 6문항으로 전환한다.
+- 기존 diagnoses 데이터는 삭제/수정하지 않는다.
+- 기존 submit-diagnosis Edge Function / RPC 계약은 그대로 유지한다.
+
+신규 6문항 저장 호환 매핑
+1. 관심 공간                  → diagnoses.household
+2. 신경 쓰이는 점             → diagnoses.living_spaces (프론트 payload key: spaces)
+3. 현재 관리 방법             → diagnoses.contact_surfaces
+4. 방문에서 확인하고 싶은 것   → diagnoses.management_worries (프론트 payload key: worries)
+5. 방문 결과 가족 동반 확인     → diagnoses.management_preference[0]
+6. 평소 집 관리 주체           → diagnoses.management_preference[1]
+
+왜 이 방식을 사용했는가
+- 현재 Edge Function/RPC가 5개의 V2 배열 필드를 계약으로 사용한다.
+- 운영 중 API/DB 스키마를 동시에 교체하면 CHECK/예약 흐름의 중단 위험이 있다.
+- 따라서 신규 답변 6개를 기존 계약 안에서 모두 보존하는 호환 방식으로 먼저 전환한다.
+- 기존 V2 고객 데이터는 그대로 남는다.
+- 관리자 고객 상세는 신규 6Q 패턴을 감지해 새 라벨로 표시하고, 기존 V2 데이터는 기존 라벨로 표시한다.
+
+향후 권장
+- 신규 설문 운영이 검증된 뒤 additive migration으로 6개 의미 컬럼을 별도 추가하는 V3 스키마를 검토할 수 있다.
+- 그때도 기존 V1/V2 데이터는 삭제하지 않고 읽기 호환을 유지한다.
+
+PLAN 추천 호환 정책
+- 새 설문에는 고객이 원하는 PLAN을 직접 묻는 항목이 없다.
+- 따라서 PRIVATE는 자동 추천하지 않는다.
+- 아이/반려동물 생활공간 또는 다중 관심영역 + 명확한 관리 필요 신호가 있을 때 CORE+,
+  그 외에는 CORE를 기본 추천한다.
+- 이는 기존 결과/예약 흐름을 유지하기 위한 보수적 임시 정책이며, 별도의 PLAN 추천 기준이 확정되면 독립적으로 교체 가능하다.

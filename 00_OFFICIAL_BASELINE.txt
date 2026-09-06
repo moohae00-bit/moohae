@@ -1,0 +1,12 @@
+MOOHAE OFFICIAL WORKING BASELINE
+Date: 2026-09-06
+
+This folder is the single working baseline after merging:
+1) MOOHAE frontend Stage 5 refactor baseline
+2) HOME CHECK final 6-question update
+
+Continue all future development from the local Git repository folder:
+Documents/GitHub/moohae-site
+
+Do not develop from old STAGE/MOOHAE backup folders or ZIP archives.
+Before replacing the local repository, keep one backup or Git commit/tag of the existing state.

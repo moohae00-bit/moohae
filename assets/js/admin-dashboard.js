@@ -1483,6 +1483,54 @@
   }
 
 
+  function isFinalHomeCheck6Q(
+    diagnosis
+  ) {
+
+    const preference =
+      Array.isArray(
+        diagnosis?.management_preference
+      )
+        ? diagnosis.management_preference
+        : [];
+
+
+    const reviewValues =
+      new Set([
+        '네, 함께 확인해요',
+        '가능하면 함께 볼게요',
+        '저 혼자 확인해요',
+        '1인 가구예요'
+      ]);
+
+
+    const managerValues =
+      new Set([
+        '제가 주로 해요',
+        '가족과 함께 해요',
+        '다른 가족이 주로 해요'
+      ]);
+
+
+    return (
+      preference.length >= 2 &&
+      reviewValues.has(
+        String(
+          preference[0] ||
+          ''
+        )
+      ) &&
+      managerValues.has(
+        String(
+          preference[1] ||
+          ''
+        )
+      )
+    );
+
+  }
+
+
   function getCustomerProfileChips(
     diagnosis
   ) {
@@ -1492,6 +1540,74 @@
     ) {
 
       return [];
+    }
+
+
+    const isFinal6Q =
+      isFinalHomeCheck6Q(
+        diagnosis
+      );
+
+
+    if (
+      isFinal6Q
+    ) {
+
+      const chips =
+        [];
+
+
+      if (
+        diagnosis.recommended_plan
+      ) {
+
+        chips.push(
+          getPlanLabel(
+            diagnosis.recommended_plan
+          )
+        );
+
+      }
+
+
+      const focusAreas =
+        Array.isArray(
+          diagnosis.household
+        )
+          ? diagnosis.household
+          : [];
+
+
+      for (
+        const item
+        of focusAreas
+      ) {
+
+        if (
+          chips.length >= 3
+        ) {
+
+          break;
+
+        }
+
+
+        chips.push(
+          item
+        );
+
+      }
+
+
+      return [
+        ...new Set(
+          chips
+        )
+      ].slice(
+        0,
+        3
+      );
+
     }
 
 
