@@ -1,0 +1,132 @@
+/* ============================================================
+   MOOHAE ADMIN · FACILITY CHECK V3 VIEW
+   기존 관리자 디자인 시스템을 침범하지 않는 시설 전용 스타일
+   ============================================================ */
+
+.facility-check-card{
+  display:grid;
+  gap:16px;
+  width:100%;
+}
+
+.facility-check-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  padding-bottom:15px;
+  border-bottom:1px solid var(--line);
+}
+
+.facility-check-head-copy{
+  min-width:0;
+}
+
+.facility-check-head-copy strong{
+  display:block;
+  color:var(--ink);
+  font-size:16px;
+  font-weight:800;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+
+.facility-check-head-copy span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.5;
+}
+
+.facility-check-type-badge{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:28px;
+  padding:5px 10px;
+  border-radius:999px;
+  background:#e3eee5;
+  color:#4f6d55;
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.06em;
+  white-space:nowrap;
+}
+
+.facility-check-group{
+  display:grid;
+  gap:7px;
+}
+
+.facility-check-label{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+
+.facility-check-value{
+  color:var(--ink);
+  font-size:13px;
+  font-weight:650;
+  line-height:1.6;
+  word-break:keep-all;
+  overflow-wrap:anywhere;
+}
+
+.facility-check-chip-line{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.facility-check-chip{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:5px 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:#fff;
+  color:var(--ink);
+  font-size:10px;
+  font-weight:700;
+  line-height:1.4;
+}
+
+.facility-check-empty{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.facility-check-result-message{
+  margin:2px 0 0;
+  padding:14px 16px;
+  border-radius:13px;
+  background:rgba(229,236,226,.52);
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.7;
+  word-break:keep-all;
+}
+
+@media(max-width:600px){
+  .facility-check-head{
+    align-items:flex-start;
+  }
+
+  .facility-check-head-copy strong{
+    font-size:15px;
+  }
+
+  .facility-check-type-badge{
+    font-size:8px;
+  }
+
+  .facility-check-chip{
+    min-height:32px;
+    font-size:10px;
+  }
+}

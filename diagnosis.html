@@ -1,91 +1,393 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>무해 우리 집 체크</title><meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests"><meta name="referrer" content="strict-origin-when-cross-origin"><link rel="stylesheet" href="./assets/css/site.css?v=20260905-4"><link rel="stylesheet" href="./assets/css/diagnosis.css?v=20260906-1"></head><body data-page="diagnosis"><div id="site-header"></div><main class="page"><section class="intro reveal"><span class="eyebrow">MOOHAE CHECK</span><h1>우리 집은<br>어떻게 관리하면 좋을까요?</h1><p>더 정확한 HOME CHECK를 위해<br>방문 전 몇 가지만 여쭤볼게요.</p></section><div class="progress-wrap" aria-label="HOME CHECK 진행 상태"><div class="progress"><div class="progress-bar" id="progress"></div></div><span class="progress-count" id="progressCount">1 / 6</span></div>
-<section class="question active" data-max-select="2"><span class="question-num">01</span><h2>가장 신경 쓰이는 곳은 어디인가요?</h2><p class="multi-hint">최대 2개까지 선택해주세요.</p><div class="options"><button class="option">매트리스·침구</button><button class="option">소파·패브릭</button><button class="option">아이 생활공간</button><button class="option">반려동물 생활공간</button><button class="option">바닥·러그</button><button class="option" data-other="true">기타</button></div><div class="other-input-wrap" hidden><label class="other-input-label" for="otherAnswer1">기타 내용을 짧게 입력해주세요.</label><input id="otherAnswer1" class="other-input" type="text" maxlength="80" autocomplete="off" placeholder="직접 입력"></div></section>
-<section class="question" data-single="true"><span class="question-num">02</span><h2>어떤 점이 가장 신경 쓰이시나요?</h2><p class="multi-hint">하나만 선택해주세요.</p><div class="options"><button class="option">평소 관리하기 어려워요</button><button class="option">먼지·털 등이 신경 쓰여요</button><button class="option">아이가 생활하는 곳이라 신경 쓰여요</button><button class="option">반려동물이 함께 생활해요</button><button class="option">현재 상태가 궁금해요</button><button class="option" data-other="true">기타</button></div><div class="other-input-wrap" hidden><label class="other-input-label" for="otherAnswer2">기타 내용을 짧게 입력해주세요.</label><input id="otherAnswer2" class="other-input" type="text" maxlength="80" autocomplete="off" placeholder="직접 입력"></div></section>
-<section class="question" data-single="true"><span class="question-num">03</span><h2>평소에는 어떻게 관리하시나요?</h2><div class="options"><button class="option">일반적인 집 관리</button><button class="option">세탁을 자주 해요</button><button class="option">전용 장비를 사용해요</button><button class="option">전문 CARE를 받아요</button><button class="option">따로 관리하지 못하고 있어요</button></div></section>
-<section class="question" data-single="true"><span class="question-num">04</span><h2>이번 방문에서 무엇을 가장 확인하고 싶으신가요?</h2><div class="options"><button class="option">현재 상태</button><button class="option">CARE 전후 차이</button><button class="option">관리가 필요한 곳</button><button class="option">적절한 관리 주기</button></div></section>
-<section class="question" data-single="true"><span class="question-num">05</span><h2>방문 결과를 가족분과 함께 확인하시나요?</h2><div class="options"><button class="option">네, 함께 확인해요</button><button class="option">가능하면 함께 볼게요</button><button class="option">저 혼자 확인해요</button><button class="option">1인 가구예요</button></div></section>
-<section class="question" data-single="true"><span class="question-num">06</span><h2>평소 집 관리는 주로 누가 하시나요?</h2><div class="options"><button class="option">제가 주로 해요</button><button class="option">가족과 함께 해요</button><button class="option">다른 가족이 주로 해요</button></div></section><div class="nav-buttons" id="navButtons"><button class="btn btn-prev" id="prev">이전</button><button class="btn btn-next" id="next">다음</button></div>
-<section class="result" id="result">
-  <span class="eyebrow">MOOHAE CHECK 완료</span>
-  <h2 id="resultTitle">우리 집에는<br>이 CARE가 잘 맞습니다.</h2>
-  <div class="result-recommend" id="resultRecommend" aria-live="polite"></div>
-  <div class="result-note" id="resultSummary"></div>
-  <nav class="plan-explore" id="planExplore" aria-label="다른 MOOHAE CARE PLAN 살펴보기"></nav>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>무해 MOOHAE CHECK</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="stylesheet" href="./assets/css/site.css?v=20260905-4">
+  <link rel="stylesheet" href="./assets/css/diagnosis.css?v=20260906-1">
+  <link rel="stylesheet" href="./assets/css/diagnosis-facility.css?v=20260908-1">
+</head>
+<body data-page="diagnosis">
+  <div id="site-header"></div>
 
-  <section class="lead-form" id="leadFormSection">
-    <div class="lead-form-head">
-      <span class="eyebrow">REQUEST A CONSULTATION</span>
-      <h3>우리 집에 맞는 관리 상담을 이어서 받아보세요.</h3>
-      <p>연락 가능한 정보를 남겨주시면 무해가 체크 내용을 바탕으로 우리 집에 맞는 관리 방향을 함께 정리해드립니다.</p>
-    </div>
+  <main class="page">
+    <section class="intro reveal" id="checkIntro">
+      <span class="eyebrow">MOOHAE CHECK</span>
+      <h1 id="checkIntroTitle">우리 집은<br>어떻게 관리하면 좋을까요?</h1>
+      <p id="checkIntroCopy">더 정확한 HOME CHECK를 위해<br>방문 전 몇 가지만 여쭤볼게요.</p>
+    </section>
 
-    <form id="diagnosisSubmitForm" novalidate>
-      <label class="field-label" for="customerName">
-        <span>이름</span>
-        <input id="customerName" name="customerName" type="text" maxlength="80" autocomplete="name"
-               placeholder="이름을 입력해주세요" required>
-      </label>
+    <nav class="check-type-tabs" aria-label="MOOHAE CHECK 유형 선택">
+      <button
+        id="homeCheckTab"
+        class="check-type-tab is-active"
+        type="button"
+        role="tab"
+        aria-selected="true"
+        aria-controls="homeCheckPanel"
+        data-check-type="home"
+      >
+        개인
+      </button>
+      <button
+        id="facilityCheckTab"
+        class="check-type-tab"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="facilityCheckPanel"
+        data-check-type="facility"
+      >
+        시설
+      </button>
+    </nav>
 
-      <label class="field-label" for="customerPhone">
-        <span>연락처</span>
-        <input id="customerPhone" name="customerPhone" type="tel" inputmode="tel" maxlength="20"
-               autocomplete="tel" placeholder="010-0000-0000" required>
-      </label>
-
-      <div class="consent-box">
-        <label class="consent-row">
-          <input id="privacyConsent" type="checkbox" required>
-          <span><strong>[필수] 개인정보 수집·이용 동의</strong><small>관리 상담과 방문 예약을 위해 필요한 정보를 수집합니다.</small></span>
-        </label>
-        <p class="consent-detail">수집 목적: MOOHAE 365 관리 상담, 서비스 안내 및 방문 예약 · 수집 항목: 이름, 연락처, MOOHAE CHECK 응답, 방문 예약 시 주소 · 보유: 상담 및 서비스 관리 목적이 유지되는 기간 동안 보관 후 파기 · 동의를 거부할 수 있으나 상담 및 방문 예약 신청은 제한될 수 있습니다.</p>
+    <!-- =======================================================
+         HOME CHECK
+         기존 HOME 6Q 구조를 그대로 유지한다.
+         ======================================================= -->
+    <section id="homeCheckPanel" class="check-type-panel is-active" role="tabpanel" aria-labelledby="homeCheckTab">
+      <div class="progress-wrap" aria-label="HOME CHECK 진행 상태">
+        <div class="progress"><div class="progress-bar" id="progress"></div></div>
+        <span class="progress-count" id="progressCount">1 / 6</span>
       </div>
-<input id="websiteField" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
 
-      <button id="diagnosisSubmitButton" class="btn-primary submit-diagnosis" type="button">체크 결과 보내고 관리 상담 신청하기</button>
-      <p id="diagnosisSubmitMessage" class="submit-message" role="status" aria-live="polite"></p>
-    </form>
-  </section>
+      <section class="question active" data-max-select="2">
+        <span class="question-num">01</span>
+        <h2>가장 신경 쓰이는 곳은 어디인가요?</h2>
+        <p class="multi-hint">최대 2개까지 선택해주세요.</p>
+        <div class="options">
+          <button class="option">매트리스·침구</button>
+          <button class="option">소파·패브릭</button>
+          <button class="option">아이 생활공간</button>
+          <button class="option">반려동물 생활공간</button>
+          <button class="option">바닥·러그</button>
+          <button class="option" data-other="true">기타</button>
+        </div>
+        <div class="other-input-wrap" hidden>
+          <label class="other-input-label" for="otherAnswer1">기타 내용을 짧게 입력해주세요.</label>
+          <input id="otherAnswer1" class="other-input" type="text" maxlength="80" autocomplete="off" placeholder="직접 입력">
+        </div>
+      </section>
 
+      <section class="question" data-single="true">
+        <span class="question-num">02</span>
+        <h2>어떤 점이 가장 신경 쓰이시나요?</h2>
+        <p class="multi-hint">하나만 선택해주세요.</p>
+        <div class="options">
+          <button class="option">평소 관리하기 어려워요</button>
+          <button class="option">먼지·털 등이 신경 쓰여요</button>
+          <button class="option">아이가 생활하는 곳이라 신경 쓰여요</button>
+          <button class="option">반려동물이 함께 생활해요</button>
+          <button class="option">현재 상태가 궁금해요</button>
+          <button class="option" data-other="true">기타</button>
+        </div>
+        <div class="other-input-wrap" hidden>
+          <label class="other-input-label" for="otherAnswer2">기타 내용을 짧게 입력해주세요.</label>
+          <input id="otherAnswer2" class="other-input" type="text" maxlength="80" autocomplete="off" placeholder="직접 입력">
+        </div>
+      </section>
 
-  <section class="booking-panel" id="bookingSection" hidden>
-    <div class="booking-panel-head">
-      <span class="eyebrow">VISIT CARE BOOKING</span>
-      <h3>우리 집을 직접 함께 살펴볼까요?</h3>
-      <p>예약 가능한 날짜와 시간을 선택해주세요. 담당자가 확인한 뒤 최종 일정을 안내드립니다.</p>
-    </div>
+      <section class="question" data-single="true">
+        <span class="question-num">03</span>
+        <h2>평소에는 어떻게 관리하시나요?</h2>
+        <div class="options">
+          <button class="option">일반적인 집 관리</button>
+          <button class="option">세탁을 자주 해요</button>
+          <button class="option">전용 장비를 사용해요</button>
+          <button class="option">전문 CARE를 받아요</button>
+          <button class="option">따로 관리하지 못하고 있어요</button>
+        </div>
+      </section>
 
-    <div id="bookingCalendar" class="public-booking-calendar" aria-live="polite"></div>
+      <section class="question" data-single="true">
+        <span class="question-num">04</span>
+        <h2>이번 방문에서 무엇을 가장 확인하고 싶으신가요?</h2>
+        <div class="options">
+          <button class="option">현재 상태</button>
+          <button class="option">CARE 전후 차이</button>
+          <button class="option">관리가 필요한 곳</button>
+          <button class="option">적절한 관리 주기</button>
+        </div>
+      </section>
 
-    <div class="booking-selection" id="bookingSelection" hidden>
-      <span>선택한 일정</span>
-      <strong id="bookingSelectedSummary">—</strong>
-    </div>
+      <section class="question" data-single="true">
+        <span class="question-num">05</span>
+        <h2>방문 결과를 가족분과 함께 확인하시나요?</h2>
+        <div class="options">
+          <button class="option">네, 함께 확인해요</button>
+          <button class="option">가능하면 함께 볼게요</button>
+          <button class="option">저 혼자 확인해요</button>
+          <button class="option">1인 가구예요</button>
+        </div>
+      </section>
 
-    <div class="booking-address" id="bookingAddressField" hidden>
-      <label class="field-label" for="bookingAddress">
-        <span>방문 주소</span>
-        <input
-          id="bookingAddress"
-          name="bookingAddress"
-          type="text"
-          minlength="5"
-          maxlength="500"
-          autocomplete="street-address"
-          placeholder="방문할 주소와 상세 주소를 입력해주세요"
-        >
-      </label>
-      <p class="booking-address-help">방문 일정 확인을 위해 실제 케어 받을 주소를 입력해주세요.</p>
-    </div>
+      <section class="question" data-single="true">
+        <span class="question-num">06</span>
+        <h2>평소 집 관리는 주로 누가 하시나요?</h2>
+        <div class="options">
+          <button class="option">제가 주로 해요</button>
+          <button class="option">가족과 함께 해요</button>
+          <button class="option">다른 가족이 주로 해요</button>
+        </div>
+      </section>
 
-    <button id="bookingSubmitButton" class="btn-primary booking-submit" type="button" disabled>
-      이 일정으로 방문 요청하기
-    </button>
+      <div class="nav-buttons" id="navButtons">
+        <button class="btn btn-prev" id="prev">이전</button>
+        <button class="btn btn-next" id="next">다음</button>
+      </div>
 
-    <p id="bookingMessage" class="booking-public-message" role="status" aria-live="polite"></p>
-  </section>
+      <section class="result" id="result">
+        <span class="eyebrow">MOOHAE CHECK 완료</span>
+        <h2 id="resultTitle">우리 집에는<br>이 CARE가 잘 맞습니다.</h2>
+        <div class="result-recommend" id="resultRecommend" aria-live="polite"></div>
+        <div class="result-note" id="resultSummary"></div>
+        <nav class="plan-explore" id="planExplore" aria-label="다른 MOOHAE CARE PLAN 살펴보기"></nav>
 
-  <div class="result-actions">
-    <a href="https://pf.kakao.com/_uRbiX/chat" target="_blank" rel="noopener noreferrer" class="btn-text">카카오 상담 바로가기</a>
-    <a href="./care.html" class="btn-text">MOOHAE CARE 보기</a>
-  </div>
-</section></main><div id="site-footer"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./assets/js/supabase-config.js?v=20260905-4"></script><script src="./assets/js/site.js?v=20260905-4"></script><script src="./assets/js/diagnosis.js?v=20260906-1"></script><script src="./assets/js/diagnosis-success-redirect.js?v=20260905-4"></script></body></html>
+        <section class="lead-form" id="leadFormSection">
+          <div class="lead-form-head">
+            <span class="eyebrow">REQUEST A CONSULTATION</span>
+            <h3>우리 집에 맞는 관리 상담을 이어서 받아보세요.</h3>
+            <p>연락 가능한 정보를 남겨주시면 무해가 체크 내용을 바탕으로 우리 집에 맞는 관리 방향을 함께 정리해드립니다.</p>
+          </div>
+
+          <form id="diagnosisSubmitForm" novalidate>
+            <label class="field-label" for="customerName">
+              <span>이름</span>
+              <input id="customerName" name="customerName" type="text" maxlength="80" autocomplete="name" placeholder="이름을 입력해주세요" required>
+            </label>
+
+            <label class="field-label" for="customerPhone">
+              <span>연락처</span>
+              <input id="customerPhone" name="customerPhone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="010-0000-0000" required>
+            </label>
+
+            <div class="consent-box">
+              <label class="consent-row">
+                <input id="privacyConsent" type="checkbox" required>
+                <span>
+                  <strong>[필수] 개인정보 수집·이용 동의</strong>
+                  <small>관리 상담과 방문 예약을 위해 필요한 정보를 수집합니다.</small>
+                </span>
+              </label>
+              <p class="consent-detail">수집 목적: MOOHAE 365 관리 상담, 서비스 안내 및 방문 예약 · 수집 항목: 이름, 연락처, MOOHAE CHECK 응답, 방문 예약 시 주소 · 보유: 상담 및 서비스 관리 목적이 유지되는 기간 동안 보관 후 파기 · 동의를 거부할 수 있으나 상담 및 방문 예약 신청은 제한될 수 있습니다.</p>
+            </div>
+
+            <input id="websiteField" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
+
+            <button id="diagnosisSubmitButton" class="btn-primary submit-diagnosis" type="button">체크 결과 보내고 관리 상담 신청하기</button>
+            <p id="diagnosisSubmitMessage" class="submit-message" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="booking-panel" id="bookingSection" hidden>
+          <div class="booking-panel-head">
+            <span class="eyebrow">VISIT CARE BOOKING</span>
+            <h3>우리 집을 직접 함께 살펴볼까요?</h3>
+            <p>예약 가능한 날짜와 시간을 선택해주세요. 담당자가 확인한 뒤 최종 일정을 안내드립니다.</p>
+          </div>
+
+          <div id="bookingCalendar" class="public-booking-calendar" aria-live="polite"></div>
+
+          <div class="booking-selection" id="bookingSelection" hidden>
+            <span>선택한 일정</span>
+            <strong id="bookingSelectedSummary">—</strong>
+          </div>
+
+          <div class="booking-address" id="bookingAddressField" hidden>
+            <label class="field-label" for="bookingAddress">
+              <span>방문 주소</span>
+              <input id="bookingAddress" name="bookingAddress" type="text" minlength="5" maxlength="500" autocomplete="street-address" placeholder="방문할 주소와 상세 주소를 입력해주세요">
+            </label>
+            <p class="booking-address-help">방문 일정 확인을 위해 실제 케어 받을 주소를 입력해주세요.</p>
+          </div>
+
+          <button id="bookingSubmitButton" class="btn-primary booking-submit" type="button" disabled>이 일정으로 방문 요청하기</button>
+          <p id="bookingMessage" class="booking-public-message" role="status" aria-live="polite"></p>
+        </section>
+
+        <div class="result-actions">
+          <a href="https://pf.kakao.com/_uRbiX/chat" target="_blank" rel="noopener noreferrer" class="btn-text">카카오 상담 바로가기</a>
+          <a href="./care.html" class="btn-text">MOOHAE CARE 보기</a>
+        </div>
+      </section>
+    </section>
+
+    <!-- =======================================================
+         FACILITY CHECK V3
+         HOME .question과 분리하여 기존 diagnosis.js와 충돌하지 않는다.
+         ======================================================= -->
+    <section id="facilityCheckPanel" class="check-type-panel" role="tabpanel" aria-labelledby="facilityCheckTab" hidden>
+      <div class="facility-progress-wrap" aria-label="시설 CHECK 진행 상태">
+        <div class="facility-progress"><div class="facility-progress-bar" id="facilityProgress"></div></div>
+        <span class="facility-progress-count" id="facilityProgressCount">1 / 7</span>
+      </div>
+
+      <section class="facility-question is-active" data-facility-index="0" data-max-select="2">
+        <span class="question-num">01</span>
+        <h2>시설에서 가장 신경 쓰이는 곳은 어디인가요?</h2>
+        <p class="multi-hint">최대 2개까지 선택해주세요.</p>
+        <div class="options">
+          <button class="facility-option" type="button">침구·매트리스</button>
+          <button class="facility-option" type="button">소파·패브릭</button>
+          <button class="facility-option" type="button">러그·매트</button>
+          <button class="facility-option" type="button">바닥</button>
+          <button class="facility-option" type="button">고객 이용공간</button>
+          <button class="facility-option" type="button">기타</button>
+        </div>
+      </section>
+
+      <section class="facility-question" data-facility-index="1" data-single="true">
+        <span class="question-num">02</span>
+        <h2>현재 관리에서 가장 어려운 점은 무엇인가요?</h2>
+        <p class="multi-hint">하나만 선택해주세요.</p>
+        <div class="options">
+          <button class="facility-option" type="button">관리하기 까다로운 곳이 있음</button>
+          <button class="facility-option" type="button">관리에 시간이 많이 듦</button>
+          <button class="facility-option" type="button">좋은 상태를 유지하기 어려움</button>
+          <button class="facility-option" type="button">운영 중 관리하기 어려움</button>
+          <button class="facility-option" type="button">관리 상태를 확인하기 어려움</button>
+          <button class="facility-option" type="button">특별히 없음</button>
+        </div>
+      </section>
+
+      <section class="facility-question" data-facility-index="2" data-single="true">
+        <span class="question-num">03</span>
+        <h2>현재 시설은 어떻게 관리하고 있나요?</h2>
+        <div class="options">
+          <button class="facility-option" type="button">내부에서 직접 관리</button>
+          <button class="facility-option" type="button">내부 관리 + 전문업체 이용</button>
+          <button class="facility-option" type="button">정기적으로 전문업체 이용</button>
+          <button class="facility-option" type="button">필요할 때 전문업체 이용</button>
+          <button class="facility-option" type="button">공간별로 다르게 관리</button>
+        </div>
+      </section>
+
+      <section class="facility-question" data-facility-index="3" data-max-select="2" data-exclusive-value="현재는 없음">
+        <span class="question-num">04</span>
+        <h2>전문 CARE가 필요하다고 느끼는 곳은 어디인가요?</h2>
+        <p class="multi-hint">최대 2개까지 선택해주세요.</p>
+        <div class="options">
+          <button class="facility-option" type="button">침구·매트리스</button>
+          <button class="facility-option" type="button">소파·패브릭</button>
+          <button class="facility-option" type="button">러그·매트</button>
+          <button class="facility-option" type="button">바닥</button>
+          <button class="facility-option" type="button">고객 이용공간</button>
+          <button class="facility-option" type="button">현재는 없음</button>
+        </div>
+      </section>
+
+      <section class="facility-question" data-facility-index="4" data-single="true">
+        <span class="question-num">05</span>
+        <h2>전문 CARE를 결정할 때 가장 중요한 기준은 무엇인가요?</h2>
+        <p class="multi-hint">하나만 선택해주세요.</p>
+        <div class="options">
+          <button class="facility-option" type="button">CARE 결과</button>
+          <button class="facility-option" type="button">전문성</button>
+          <button class="facility-option" type="button">운영에 방해가 적은 것</button>
+          <button class="facility-option" type="button">정기적인 관리</button>
+          <button class="facility-option" type="button">결과를 확인할 수 있는 것</button>
+          <button class="facility-option" type="button">비용</button>
+        </div>
+      </section>
+
+      <section class="facility-question" data-facility-index="5" data-single="true">
+        <span class="question-num">06</span>
+        <h2>어떤 방식의 CARE가 가장 잘 맞을 것 같나요?</h2>
+        <p class="multi-hint">하나만 선택해주세요.</p>
+        <div class="options">
+          <button class="facility-option" type="button">필요할 때 이용</button>
+          <button class="facility-option" type="button">정기적으로 방문</button>
+          <button class="facility-option" type="button">상태 확인 후 필요한 곳만 CARE</button>
+          <button class="facility-option" type="button">시설 전체를 정기적으로 관리</button>
+          <button class="facility-option" type="button">아직 잘 모르겠음</button>
+        </div>
+      </section>
+
+      <section class="facility-question" data-facility-index="6" data-single="true">
+        <span class="question-num">07</span>
+        <h2>무해를 처음 검토한다면 어떤 방식이 가장 편한가요?</h2>
+        <p class="multi-hint">하나만 선택해주세요.</p>
+        <div class="options">
+          <button class="facility-option" type="button">자료를 먼저 확인</button>
+          <button class="facility-option" type="button">간단한 설명을 먼저 듣기</button>
+          <button class="facility-option" type="button">일부 공간을 먼저 경험</button>
+          <button class="facility-option" type="button">현장을 함께 확인한 뒤 결정</button>
+          <button class="facility-option" type="button">필요할 때 검토</button>
+        </div>
+      </section>
+
+      <div class="nav-buttons facility-nav-buttons" id="facilityNavButtons">
+        <button class="btn btn-prev" id="facilityPrev" type="button">이전</button>
+        <button class="btn btn-next" id="facilityNext" type="button">다음</button>
+      </div>
+
+      <section class="facility-result" id="facilityResult" hidden>
+        <span class="eyebrow">MOOHAE FACILITY CHECK 완료</span>
+        <h2>시설의 관리 방식과<br>필요한 CARE 범위를 확인했습니다.</h2>
+        <p class="facility-result-copy">플랜을 임의로 추천하기보다, 체크한 내용을 바탕으로 실제 운영에 맞는 관리 방향을 함께 정리합니다.</p>
+
+        <div class="facility-result-summary" id="facilityResultSummary" aria-live="polite"></div>
+
+        <section class="facility-lead-form">
+          <div class="lead-form-head">
+            <span class="eyebrow">FACILITY CONSULTATION</span>
+            <h3>시설 정보를 남겨주시면 체크 내용을 기준으로 상담을 이어갑니다.</h3>
+            <p>업종을 구분하지 않고 시설명과 담당자 연락처만 받습니다.</p>
+          </div>
+
+          <form id="facilitySubmitForm" novalidate>
+            <label class="field-label" for="facilityName">
+              <span>시설명</span>
+              <input id="facilityName" name="facilityName" type="text" maxlength="120" autocomplete="organization" placeholder="시설 또는 업체 이름을 입력해주세요" required>
+            </label>
+
+            <label class="field-label" for="facilityCustomerName">
+              <span>담당자 이름</span>
+              <input id="facilityCustomerName" name="facilityCustomerName" type="text" maxlength="80" autocomplete="name" placeholder="이름을 입력해주세요" required>
+            </label>
+
+            <label class="field-label" for="facilityCustomerPhone">
+              <span>연락처</span>
+              <input id="facilityCustomerPhone" name="facilityCustomerPhone" type="tel" inputmode="tel" maxlength="20" autocomplete="tel" placeholder="010-0000-0000" required>
+            </label>
+
+            <div class="consent-box">
+              <label class="consent-row">
+                <input id="facilityPrivacyConsent" type="checkbox" required>
+                <span>
+                  <strong>[필수] 개인정보 수집·이용 동의</strong>
+                  <small>시설 CARE 상담과 서비스 안내를 위해 필요한 정보를 수집합니다.</small>
+                </span>
+              </label>
+              <p class="consent-detail">수집 목적: 시설 CARE 상담 및 서비스 안내 · 수집 항목: 시설명, 담당자 이름, 연락처, FACILITY CHECK 응답 · 보유: 상담 및 서비스 관리 목적이 유지되는 기간 동안 보관 후 파기 · 동의를 거부할 수 있으나 상담 신청은 제한될 수 있습니다.</p>
+            </div>
+
+            <input id="facilityWebsiteField" name="facilityWebsite" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
+
+            <button id="facilitySubmitButton" class="btn-primary submit-diagnosis" type="button">시설 CHECK 보내고 상담 신청하기</button>
+            <p id="facilitySubmitMessage" class="submit-message" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <div class="result-actions">
+          <a href="https://pf.kakao.com/_uRbiX/chat" target="_blank" rel="noopener noreferrer" class="btn-text">카카오 상담 바로가기</a>
+          <a href="./care.html" class="btn-text">MOOHAE CARE 보기</a>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./assets/js/supabase-config.js?v=20260905-4"></script>
+  <script src="./assets/js/site.js?v=20260905-4"></script>
+  <script src="./assets/js/diagnosis.js?v=20260906-1"></script>
+  <script src="./assets/js/diagnosis-facility.js?v=20260908-1"></script>
+  <script src="./assets/js/diagnosis-success-redirect.js?v=20260905-4"></script>
+</body>
+</html>

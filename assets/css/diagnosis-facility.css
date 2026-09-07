@@ -1,0 +1,324 @@
+/* ============================================================
+   MOOHAE CHECK — HOME / FACILITY TYPE TABS
+   2026-09-08
+
+   기존 diagnosis.css를 변경하지 않고 시설 전용 UI만 분리한다.
+   ============================================================ */
+
+.check-type-tabs{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  width:min(360px,100%);
+  margin:0 auto 34px;
+  padding:5px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.55);
+}
+
+.check-type-tab{
+  min-height:46px;
+  padding:0 18px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:var(--gray);
+  cursor:pointer;
+  font:inherit;
+  font-size:13px;
+  font-weight:700;
+  transition:background .2s ease,color .2s ease,box-shadow .2s ease;
+}
+
+.check-type-tab.is-active{
+  background:var(--ink);
+  color:#fff;
+  box-shadow:0 6px 18px rgba(41,41,39,.12);
+}
+
+.check-type-tab:focus-visible{
+  outline:2px solid var(--sage-dark);
+  outline-offset:3px;
+}
+
+.check-type-panel[hidden]{
+  display:none!important;
+}
+
+/* ============================================================
+   FACILITY PROGRESS
+   ============================================================ */
+
+.facility-progress-wrap{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  margin-bottom:35px;
+}
+
+.facility-progress{
+  height:4px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#dedbd3;
+}
+
+.facility-progress-bar{
+  width:0;
+  height:100%;
+  border-radius:999px;
+  background:var(--sage-dark);
+  transition:width .35s ease;
+}
+
+.facility-progress-count{
+  min-width:42px;
+  color:var(--gray);
+  font-size:11px;
+  font-weight:700;
+  text-align:right;
+  letter-spacing:.04em;
+}
+
+/* ============================================================
+   FACILITY QUESTIONS
+   .question 클래스를 사용하지 않는다.
+   기존 diagnosis.js와 완전히 분리한다.
+   ============================================================ */
+
+.facility-question{
+  display:none;
+  min-height:390px;
+  padding:42px 35px;
+  border-radius:28px;
+  background:var(--paper);
+}
+
+.facility-question.is-active{
+  display:block;
+}
+
+.facility-question h2{
+  margin:18px 0 30px;
+  font-size:28px;
+  line-height:1.35;
+}
+
+.facility-option{
+  width:100%;
+  padding:17px 18px;
+  text-align:left;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+  color:var(--ink);
+  cursor:pointer;
+  font:inherit;
+  font-size:14px;
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+
+.facility-option:hover{
+  border-color:rgba(102,125,101,.42);
+}
+
+.facility-option:focus-visible{
+  outline:2px solid var(--sage-dark);
+  outline-offset:2px;
+}
+
+.facility-option.is-selected{
+  border-color:var(--sage-dark);
+  background:#edf1ea;
+}
+
+.facility-nav-buttons[hidden]{
+  display:none!important;
+}
+
+/* ============================================================
+   FACILITY RESULT
+   시설은 CARE PLAN / 가격을 추천하지 않는다.
+   ============================================================ */
+
+.facility-result{
+  position:relative;
+  left:50%;
+  width:min(980px,calc(100vw - 48px));
+  max-width:none;
+  transform:translateX(-50%);
+  padding:56px 52px;
+  border-radius:28px;
+  background:var(--paper);
+  text-align:center;
+}
+
+.facility-result[hidden]{
+  display:none!important;
+}
+
+.facility-result>h2{
+  max-width:820px;
+  margin:18px auto;
+  font-size:clamp(32px,4.2vw,44px);
+  line-height:1.24;
+  letter-spacing:-.045em;
+}
+
+.facility-result-copy{
+  max-width:680px;
+  margin:0 auto;
+  color:var(--gray);
+  font-size:15px;
+  line-height:1.8;
+}
+
+.facility-result-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  width:100%;
+  max-width:860px;
+  margin:28px auto 0;
+  text-align:left;
+}
+
+.facility-summary-card{
+  min-width:0;
+  padding:20px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#fff;
+}
+
+.facility-summary-card span{
+  display:block;
+  margin-bottom:8px;
+  color:var(--sage-dark);
+  font-size:10px;
+  font-weight:750;
+  letter-spacing:.08em;
+}
+
+.facility-summary-card strong{
+  display:block;
+  color:var(--ink);
+  font-size:14px;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+
+.facility-lead-form{
+  width:100%;
+  max-width:860px;
+  margin:30px auto 0;
+  padding:32px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:#fff;
+  text-align:left;
+}
+
+#facilitySubmitForm{
+  display:grid;
+  gap:14px;
+}
+
+.facility-submit-complete{
+  width:100%;
+  max-width:860px;
+  margin:24px auto 0;
+  padding:22px;
+  border-radius:18px;
+  background:var(--sage-soft);
+  color:var(--ink-soft);
+  font-size:13px;
+  line-height:1.7;
+  text-align:center;
+}
+
+/* ============================================================
+   MOBILE FIRST ADJUSTMENT
+   ============================================================ */
+
+@media(max-width:820px){
+  .facility-result{
+    width:calc(100vw - 36px);
+    padding:42px 28px;
+  }
+
+  .facility-result-summary{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:600px){
+  .check-type-tabs{
+    width:100%;
+    margin-bottom:28px;
+  }
+
+  .check-type-tab{
+    min-height:44px;
+    font-size:12px;
+  }
+
+  .facility-progress-wrap{
+    gap:10px;
+    margin-bottom:28px;
+  }
+
+  .facility-progress-count{
+    font-size:10px;
+  }
+
+  .facility-question{
+    min-height:auto;
+    padding:30px 22px;
+  }
+
+  .facility-question h2{
+    font-size:23px;
+  }
+
+  .facility-option{
+    min-height:54px;
+    padding:15px 16px;
+    font-size:14px;
+  }
+
+  .facility-result{
+    width:calc(100vw - 24px);
+    padding:32px 18px;
+    border-radius:22px;
+  }
+
+  .facility-result>h2{
+    margin:16px auto;
+    font-size:28px;
+    line-height:1.3;
+  }
+
+  .facility-result-copy{
+    font-size:14px;
+  }
+
+  .facility-summary-card{
+    padding:18px;
+  }
+
+  .facility-lead-form{
+    padding:22px 18px;
+  }
+
+  .facility-lead-form .lead-form-head h3{
+    font-size:21px;
+  }
+
+  #facilitySubmitForm input{
+    min-height:52px;
+    font-size:16px;
+  }
+}
