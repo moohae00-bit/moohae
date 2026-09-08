@@ -2,48 +2,93 @@
   'use strict';
 
   // ============================================================
-  // MOOHAE ADMIN · FACILITY CHECK V3 VIEW
+  // MOOHAE ADMIN · CHECK DISPLAY V3
   //
-  // 역할
-  // 1. 기존 admin-customer-detail.js를 수정하지 않는다.
-  // 2. 현재 고객의 최신 diagnosis 1건만 다시 확인한다.
-  // 3. 최신 CHECK가 facility인 경우에만 관리자 최신 CHECK 카드를
-  //    FACILITY V3 구조로 안전하게 교체한다.
-  // 4. HOME CHECK 고객에게는 아무 변화도 주지 않는다.
+  // 기존 admin-customer-detail.js를 수정하지 않는다.
   //
-  // SECURITY
-  // - 관리자 인증/RLS는 기존 Supabase 세션을 그대로 사용한다.
-  // - service_role / secret key를 브라우저에 두지 않는다.
-  // - 동적 출력은 innerHTML 없이 textContent만 사용한다.
+  // HOME
+  // STANDARD  -> CORE
+  // PLUS      -> CORE+
+  // SIGNATURE -> PRIVATE
+  //
+  // FACILITY
+  // BASIC을 플랜으로 노출하지 않는다.
+  // FACILITY CHECK 구조로 표시한다.
   // ============================================================
+
 
   const UUID_PATTERN =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-  let loading = false;
-  let renderedDiagnosisId = '';
+
+  const PLAN_LABELS =
+    Object.freeze({
+
+      STANDARD:
+        'CORE',
+
+      PLUS:
+        'CORE+',
+
+      SIGNATURE:
+        'PRIVATE',
+
+      CORE:
+        'CORE',
+
+      'CORE+':
+        'CORE+',
+
+      PRIVATE:
+        'PRIVATE'
+
+    });
+
+
+  let loading =
+    false;
+
+
+  let renderedDiagnosisId =
+    '';
+
 
   // ============================================================
-  // HELPERS
+  // DOM HELPERS
   // ============================================================
+
 
   function make(
     tag,
     className = '',
     text = ''
   ) {
-    const node =
-      document.createElement(tag);
 
-    if (className) {
+    const node =
+      document.createElement(
+        tag
+      );
+
+
+    if (
+      className
+    ) {
+
       node.className =
         className;
+
     }
 
-    if (text) {
+
+    if (
+      text
+    ) {
+
       node.textContent =
         text;
+
     }
+
 
     return node;
   }
@@ -52,62 +97,260 @@
   function formatDateTime(
     value
   ) {
-    if (!value) {
+
+    if (
+      !value
+    ) {
+
       return '—';
+
     }
 
+
     const date =
-      new Date(value);
+      new Date(
+        value
+      );
+
 
     if (
       Number.isNaN(
         date.getTime()
       )
     ) {
+
       return '—';
+
     }
+
 
     return new Intl.DateTimeFormat(
       'ko-KR',
       {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
+
+        year:
+          'numeric',
+
+        month:
+          '2-digit',
+
+        day:
+          '2-digit',
+
+        hour:
+          '2-digit',
+
+        minute:
+          '2-digit'
+
       }
-    ).format(date);
+    ).format(
+      date
+    );
   }
 
 
   function normalizeArray(
     value
   ) {
-    if (!Array.isArray(value)) {
+
+    if (
+      !Array.isArray(
+        value
+      )
+    ) {
+
       return [];
+
     }
 
+
     return value
+
       .filter(
         (item) =>
-          typeof item === 'string'
+          typeof item ===
+            'string'
       )
+
       .map(
         (item) =>
           item.trim()
       )
-      .filter(Boolean);
+
+      .filter(
+        Boolean
+      );
   }
+
+
+  // ============================================================
+  // PUBLIC HOME PLAN NAME
+  // ============================================================
+
+
+  function publicPlanName(
+    diagnosis
+  ) {
+
+    const raw =
+      String(
+        diagnosis?.recommended_plan ||
+        diagnosis?.result_level ||
+        ''
+      ).trim();
+
+
+    return (
+      PLAN_LABELS[
+        raw
+      ] ||
+      'CORE'
+    );
+  }
+
+
+  // ============================================================
+  // OLD RESULT MESSAGE NORMALIZER
+  // ============================================================
+
+
+  function normalizeLegacyMessage(
+    value
+  ) {
+
+    return String(
+      value ||
+      ''
+    )
+
+      .replace(
+        /추천 관리 유형:\s*STANDARD\.?/g,
+        '추천 CARE PLAN: CORE.'
+      )
+
+      .replace(
+        /추천 관리 유형:\s*PLUS\.?/g,
+        '추천 CARE PLAN: CORE+.'
+      )
+
+      .replace(
+        /추천 관리 유형:\s*SIGNATURE\.?/g,
+        '추천 CARE PLAN: PRIVATE.'
+      )
+
+      .replace(
+        /추천 CARE PLAN:\s*STANDARD\.?/g,
+        '추천 CARE PLAN: CORE.'
+      )
+
+      .replace(
+        /추천 CARE PLAN:\s*PLUS\.?/g,
+        '추천 CARE PLAN: CORE+.'
+      )
+
+      .replace(
+        /추천 CARE PLAN:\s*SIGNATURE\.?/g,
+        '추천 CARE PLAN: PRIVATE.'
+      );
+  }
+
+
+  // ============================================================
+  // HOME CHECK DISPLAY
+  // ============================================================
+
+
+  function renderHomeDiagnosis(
+    diagnosis
+  ) {
+
+    const target =
+      document.getElementById(
+        'latestDiagnosis'
+      );
+
+
+    if (
+      !target
+    ) {
+
+      return;
+
+    }
+
+
+    const publicPlan =
+      publicPlanName(
+        diagnosis
+      );
+
+
+    const planNode =
+      target.querySelector(
+        '.history-item-head strong'
+      );
+
+
+    if (
+      planNode
+    ) {
+
+      planNode.textContent =
+        publicPlan;
+
+    }
+
+
+    const copyNode =
+      target.querySelector(
+        '.history-copy'
+      );
+
+
+    if (
+      copyNode
+    ) {
+
+      copyNode.textContent =
+        normalizeLegacyMessage(
+
+          diagnosis.result_message ||
+          copyNode.textContent
+
+        );
+
+    }
+
+
+    renderedDiagnosisId =
+      String(
+        diagnosis.id ||
+        ''
+      );
+  }
+
+
+  // ============================================================
+  // FACILITY HELPERS
+  // ============================================================
 
 
   function appendChips(
     parent,
     values
   ) {
-    const normalized =
-      normalizeArray(values);
 
-    if (!normalized.length) {
+    const normalized =
+      normalizeArray(
+        values
+      );
+
+
+    if (
+      !normalized.length
+    ) {
+
       parent.appendChild(
         make(
           'span',
@@ -116,11 +359,17 @@
         )
       );
 
+
       return;
+
     }
 
+
     normalized.forEach(
-      (value) => {
+      (
+        value
+      ) => {
+
         parent.appendChild(
           make(
             'span',
@@ -128,21 +377,8 @@
             value
           )
         );
+
       }
-    );
-  }
-
-
-  function appendTextValue(
-    parent,
-    value
-  ) {
-    parent.appendChild(
-      make(
-        'strong',
-        'facility-check-value',
-        String(value || '').trim() || '—'
-      )
     );
   }
 
@@ -153,11 +389,13 @@
     value,
     type = 'text'
   ) {
+
     const group =
       make(
         'div',
         'facility-check-group'
       );
+
 
     group.appendChild(
       make(
@@ -167,59 +405,76 @@
       )
     );
 
-    if (type === 'chips') {
+
+    if (
+      type ===
+        'chips'
+    ) {
+
       const chips =
         make(
           'div',
           'facility-check-chip-line'
         );
 
+
       appendChips(
         chips,
         value
       );
 
-      group.appendChild(chips);
+
+      group.appendChild(
+        chips
+      );
+
 
     } else {
-      appendTextValue(
-        group,
-        value
+
+      group.appendChild(
+        make(
+          'strong',
+          'facility-check-value',
+          String(
+            value ||
+            ''
+          ).trim() ||
+          '—'
+        )
       );
+
     }
 
-    article.appendChild(group);
+
+    article.appendChild(
+      group
+    );
   }
 
 
   // ============================================================
-  // RENDER
+  // FACILITY CHECK DISPLAY
   // ============================================================
+
 
   function renderFacilityDiagnosis(
     diagnosis
   ) {
+
     const target =
       document.getElementById(
         'latestDiagnosis'
       );
 
-    if (!target) {
-      return;
-    }
-
-    const diagnosisId =
-      String(
-        diagnosis?.id || ''
-      );
 
     if (
-      diagnosisId &&
-      diagnosisId ===
-        renderedDiagnosisId
+      !target
     ) {
+
       return;
+
     }
+
 
     const article =
       make(
@@ -227,11 +482,13 @@
         'facility-check-card'
       );
 
+
     const head =
       make(
         'div',
         'facility-check-head'
       );
+
 
     const headText =
       make(
@@ -239,14 +496,16 @@
         'facility-check-head-copy'
       );
 
+
     headText.appendChild(
       make(
         'strong',
         '',
         diagnosis.facility_name ||
-          '시설 CHECK'
+        '시설 CHECK'
       )
     );
+
 
     headText.appendChild(
       make(
@@ -258,9 +517,11 @@
       )
     );
 
+
     head.appendChild(
       headText
     );
+
 
     head.appendChild(
       make(
@@ -270,7 +531,11 @@
       )
     );
 
-    article.appendChild(head);
+
+    article.appendChild(
+      head
+    );
+
 
     appendGroup(
       article,
@@ -279,17 +544,20 @@
       'chips'
     );
 
+
     appendGroup(
       article,
       '현재 관리에서 어려운 점',
       diagnosis.facility_pain_point
     );
 
+
     appendGroup(
       article,
       '현재 관리 방식',
       diagnosis.facility_management_method
     );
+
 
     appendGroup(
       article,
@@ -298,11 +566,13 @@
       'chips'
     );
 
+
     appendGroup(
       article,
       'CARE 결정 기준',
       diagnosis.facility_decision_factor
     );
+
 
     appendGroup(
       article,
@@ -310,17 +580,20 @@
       diagnosis.facility_service_preference
     );
 
+
     appendGroup(
       article,
       '첫 검토 방식',
       diagnosis.facility_sales_preference
     );
 
+
     if (
       typeof diagnosis.result_message ===
         'string' &&
       diagnosis.result_message.trim()
     ) {
+
       article.appendChild(
         make(
           'p',
@@ -328,14 +601,20 @@
           diagnosis.result_message.trim()
         )
       );
+
     }
+
 
     target.replaceChildren(
       article
     );
 
+
     renderedDiagnosisId =
-      diagnosisId;
+      String(
+        diagnosis.id ||
+        ''
+      );
   }
 
 
@@ -343,15 +622,25 @@
   // LOAD LATEST CHECK
   // ============================================================
 
-  async function renderLatestFacilityCheck() {
-    if (loading) {
+
+  async function renderLatestCheck() {
+
+    if (
+      loading
+    ) {
+
       return;
+
     }
+
 
     const customerId =
       new URLSearchParams(
         window.location.search
-      ).get('id');
+      ).get(
+        'id'
+      );
+
 
     if (
       !customerId ||
@@ -359,32 +648,46 @@
         customerId
       )
     ) {
+
       return;
+
     }
+
 
     if (
       !window.moohaeSupabaseConfigReady ||
       !window.moohaeSupabase
     ) {
+
       return;
+
     }
+
 
     loading =
       true;
 
+
     try {
+
+
       const {
         data,
         error
       } =
+
         await window
           .moohaeSupabase
-          .from('diagnoses')
+          .from(
+            'diagnoses'
+          )
           .select(
             `
               id,
               customer_type,
               check_version,
+              recommended_plan,
+              result_level,
               result_message,
               created_at,
               facility_name,
@@ -404,90 +707,149 @@
           .order(
             'created_at',
             {
-              ascending: false
+              ascending:
+                false
             }
           )
-          .limit(1)
+          .limit(
+            1
+          )
           .maybeSingle();
 
-      if (error) {
-        throw error;
-      }
 
       if (
-        !data ||
-        data.customer_type !==
+        error
+      ) {
+
+        throw error;
+
+      }
+
+
+      if (
+        !data
+      ) {
+
+        return;
+
+      }
+
+
+      // ========================================================
+      // FACILITY
+      // ========================================================
+
+
+      if (
+        data.customer_type ===
           'facility'
       ) {
-        // HOME CHECK 또는 기록 없음:
-        // 기존 관리자 화면을 그대로 유지한다.
+
+        renderFacilityDiagnosis(
+          data
+        );
+
+
         return;
+
       }
 
-      if (
-        Number(
-          data.check_version
-        ) < 3
-      ) {
-        return;
-      }
 
-      renderFacilityDiagnosis(
+      // ========================================================
+      // HOME
+      // ========================================================
+
+
+      renderHomeDiagnosis(
         data
       );
 
-    } catch (error) {
+
+    } catch (
+      error
+    ) {
+
+
       console.error(
-        '[MOOHAE] Facility admin view load failed',
+        '[MOOHAE] Admin CHECK display load failed',
         {
+
           code:
-            error?.code || '',
+            error?.code ||
+            '',
+
           message:
-            error?.message || 'unknown_error'
+            error?.message ||
+            'unknown_error'
+
         }
       );
 
+
     } finally {
+
+
       loading =
         false;
+
     }
   }
 
 
   // ============================================================
-  // EVENTS
+  // CUSTOMER DETAIL RELOAD EVENT
   // ============================================================
+
 
   window.addEventListener(
     'moohae:customer-detail-loaded',
     () => {
-      renderLatestFacilityCheck();
+
+      renderedDiagnosisId =
+        '';
+
+
+      renderLatestCheck();
+
     }
   );
+
+
+  // ============================================================
+  // INITIAL LOAD
+  // ============================================================
 
 
   if (
     document.readyState ===
       'loading'
   ) {
+
     document.addEventListener(
       'DOMContentLoaded',
       () => {
+
         window.setTimeout(
-          renderLatestFacilityCheck,
+          renderLatestCheck,
           0
         );
+
       },
       {
-        once: true
+        once:
+          true
       }
     );
 
+
   } else {
+
+
     window.setTimeout(
-      renderLatestFacilityCheck,
+      renderLatestCheck,
       0
     );
+
   }
 
 })();
