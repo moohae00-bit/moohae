@@ -1,24 +1,20 @@
 (() => {
   'use strict';
 
-
   // ============================================================
   // MOOHAE ADMIN DASHBOARD
   //
-  // CHECK V2 READY
+  // CHECK V3 DISPLAY READY
   //
   // - 활성 고객 / 삭제 고객 분리
   // - 삭제 고객 복구
-  // - V2 Home Profile 요약
+  // - HOME / FACILITY CHECK 구분
+  // - CORE / CORE+ / PRIVATE 표시
   // - 고객 검색
   // - 예약 관리
   // - 예약 확정 / 취소
   // - 슬롯 열기 / 마감
-  // - CARE PLAN 명칭 CORE / CORE+ / PRIVATE 통일
-  //
-  // allergy_concerns는 더 이상 신규 관리자 UI에서 사용하지 않는다.
   // ============================================================
-
 
 
   // ============================================================
@@ -30,72 +26,60 @@
       'adminIdentity'
     );
 
-
   const logoutButton =
     document.getElementById(
       'logoutButton'
     );
-
 
   const dashboardMessage =
     document.getElementById(
       'dashboardMessage'
     );
 
-
   const customerList =
     document.getElementById(
       'customerList'
     );
-
 
   const emptyCustomers =
     document.getElementById(
       'emptyCustomers'
     );
 
-
   const customerSearch =
     document.getElementById(
       'customerSearch'
     );
-
 
   const statusFilter =
     document.getElementById(
       'statusFilter'
     );
 
-
   const activeCustomersTab =
     document.getElementById(
       'activeCustomersTab'
     );
-
 
   const deletedCustomersTab =
     document.getElementById(
       'deletedCustomersTab'
     );
 
-
   const activeCustomersTabCount =
     document.getElementById(
       'activeCustomersTabCount'
     );
-
 
   const deletedCustomersTabCount =
     document.getElementById(
       'deletedCustomersTabCount'
     );
 
-
   const emptyCustomersTitle =
     document.getElementById(
       'emptyCustomersTitle'
     );
-
 
   const emptyCustomersText =
     document.getElementById(
@@ -103,45 +87,39 @@
     );
 
 
-  // ------------------------------------------------------------
-  // BOOKING
-  // ------------------------------------------------------------
+  // ============================================================
+  // BOOKING DOM
+  // ============================================================
 
   const bookingCalendar =
     document.getElementById(
       'bookingCalendar'
     );
 
-
   const bookingMessage =
     document.getElementById(
       'bookingMessage'
     );
-
 
   const emptyBookings =
     document.getElementById(
       'emptyBookings'
     );
 
-
   const bookingRangeLabel =
     document.getElementById(
       'bookingRangeLabel'
     );
-
 
   const bookingPrevButton =
     document.getElementById(
       'bookingPrevButton'
     );
 
-
   const bookingNextButton =
     document.getElementById(
       'bookingNextButton'
     );
-
 
 
   // ============================================================
@@ -172,7 +150,6 @@
   };
 
 
-
   // ============================================================
   // CONSTANTS
   // ============================================================
@@ -199,46 +176,124 @@
   };
 
 
-  // ------------------------------------------------------------
-  // CARE PLAN LABELS
+  // ============================================================
+  // PUBLIC CHECK LABELS
   //
-  // DB 호환성은 그대로 유지하면서
-  // 관리자 화면에는 신규 CARE PLAN 명칭만 표시한다.
+  // DB 내부 호환값과 관리자 표시명을 완전히 분리한다.
   //
-  // STANDARD  → CORE
-  // PLUS      → CORE+
-  // SIGNATURE → PRIVATE
-  // ------------------------------------------------------------
+  // STANDARD  -> CORE
+  // PLUS      -> CORE+
+  // SIGNATURE -> PRIVATE
+  //
+  // 시설 내부 BASIC 값은 고객/관리자 화면에서 노출하지 않는다.
+  // ============================================================
 
-  const PLAN_LABELS = {
+  const CARE_PLAN_LABELS =
+    Object.freeze({
 
-    STANDARD:
-      'CORE',
+      STANDARD:
+        'CORE',
 
-    PLUS:
-      'CORE+',
+      standard:
+        'CORE',
 
-    SIGNATURE:
-      'PRIVATE',
+      BASIC:
+        'CORE',
 
-    CORE:
-      'CORE',
+      basic:
+        'CORE',
 
-    'CORE+':
-      'CORE+',
+      CORE:
+        'CORE',
 
-    PRIVATE:
-      'PRIVATE'
-  };
+      core:
+        'CORE',
+
+      PLUS:
+        'CORE+',
+
+      plus:
+        'CORE+',
+
+      'CORE+':
+        'CORE+',
+
+      'core-plus':
+        'CORE+',
+
+      corePlus:
+        'CORE+',
+
+      SIGNATURE:
+        'PRIVATE',
+
+      signature:
+        'PRIVATE',
+
+      PRIVATE:
+        'PRIVATE',
+
+      private:
+        'PRIVATE'
+    });
+
+
+  function publicPlanLabel(
+    value
+  ) {
+
+    const key =
+      String(
+        value || ''
+      ).trim();
+
+    return (
+      CARE_PLAN_LABELS[
+        key
+      ] ||
+      ''
+    );
+  }
+
+
+  function publicCheckLabel(
+    diagnosis
+  ) {
+
+    if (
+      !diagnosis
+    ) {
+
+      return '—';
+    }
+
+    if (
+      String(
+        diagnosis.customer_type || ''
+      ).toLowerCase() ===
+        'facility'
+    ) {
+
+      return 'FACILITY CHECK';
+    }
+
+    return (
+      publicPlanLabel(
+        diagnosis.recommended_plan
+      ) ||
+      publicPlanLabel(
+        diagnosis.result_level
+      ) ||
+      'CORE'
+    );
+  }
 
 
   const BOOKING_DAYS =
     14;
 
-
   const BOOKING_PAGE_STEP =
     7;
-
 
 
   // ============================================================
@@ -248,33 +303,24 @@
   let customers =
     [];
 
-
   let deletedCustomers =
     [];
-
 
   let currentCustomerView =
     'active';
 
-
   let latestDiagnosisByCustomer =
     new Map();
-
 
   let bookingStartDate =
     new Date();
 
-
   bookingStartDate =
     new Date(
-
       bookingStartDate.getFullYear(),
-
       bookingStartDate.getMonth(),
-
       bookingStartDate.getDate()
     );
-
 
 
   // ============================================================
@@ -283,7 +329,7 @@
 
   const make = (
     tag,
-    className,
+    className = '',
     text = ''
   ) => {
 
@@ -291,7 +337,6 @@
       document.createElement(
         tag
       );
-
 
     if (
       className
@@ -301,7 +346,6 @@
         className;
     }
 
-
     if (
       text
     ) {
@@ -310,55 +354,8 @@
         text;
     }
 
-
     return node;
   };
-
-
-
-  // ============================================================
-  // CARE PLAN HELPER
-  // ============================================================
-
-  function getPlanLabel(
-    value
-  ) {
-
-    if (
-      value === null ||
-      value === undefined
-    ) {
-
-      return '';
-    }
-
-
-    const raw =
-      String(
-        value
-      ).trim();
-
-
-    if (
-      !raw
-    ) {
-
-      return '';
-    }
-
-
-    const key =
-      raw.toUpperCase();
-
-
-    return (
-      PLAN_LABELS[
-        key
-      ] ||
-      raw
-    );
-  }
-
 
 
   // ============================================================
@@ -376,12 +373,10 @@
       return '—';
     }
 
-
     const date =
       new Date(
         value
       );
-
 
     if (
       Number.isNaN(
@@ -392,13 +387,9 @@
       return '—';
     }
 
-
     return new Intl.DateTimeFormat(
-
       'ko-KR',
-
       {
-
         year:
           'numeric',
 
@@ -408,12 +399,10 @@
         day:
           '2-digit'
       }
-
     ).format(
       date
     );
   };
-
 
 
   // ============================================================
@@ -427,7 +416,6 @@
     const year =
       date.getFullYear();
 
-
     const month =
       String(
         date.getMonth() + 1
@@ -436,7 +424,6 @@
         '0'
       );
 
-
     const day =
       String(
         date.getDate()
@@ -444,7 +431,6 @@
         2,
         '0'
       );
-
 
     return (
       `${year}-${month}-${day}`
@@ -462,12 +448,10 @@
         date
       );
 
-
     next.setDate(
       next.getDate() +
       days
     );
-
 
     return next;
   };
@@ -498,13 +482,9 @@
         `${value}T00:00:00`
       );
 
-
     return new Intl.DateTimeFormat(
-
       'ko-KR',
-
       {
-
         month:
           '2-digit',
 
@@ -514,12 +494,10 @@
         weekday:
           'short'
       }
-
     ).format(
       date
     );
   };
-
 
 
   // ============================================================
@@ -538,17 +516,14 @@
       return;
     }
 
-
     bookingMessage.textContent =
       text;
-
 
     bookingMessage.classList.toggle(
       'error',
       error
     );
   }
-
 
 
   // ============================================================
@@ -561,10 +536,8 @@
 
     bookingCalendar.replaceChildren();
 
-
     const groups =
       new Map();
-
 
     for (
       const row
@@ -583,7 +556,6 @@
         );
       }
 
-
       groups
         .get(
           row.booking_date
@@ -593,11 +565,9 @@
         );
     }
 
-
     emptyBookings.hidden =
       groups.size !==
       0;
-
 
 
     for (
@@ -614,19 +584,16 @@
           'booking-day-card'
         );
 
-
       const head =
         make(
           'div',
           'booking-day-head'
         );
 
-
       const title =
         make(
           'div'
         );
-
 
       title.append(
 
@@ -645,7 +612,6 @@
         )
       );
 
-
       const allClosed =
         slots.every(
           (slot) =>
@@ -653,7 +619,6 @@
             slot.manual_open ===
               false
         );
-
 
       const dayButton =
         make(
@@ -664,35 +629,28 @@
             : '빈 시간 전체 마감'
         );
 
-
       dayButton.type =
         'button';
-
 
       dayButton.dataset.bookingAction =
         'toggle-day';
 
-
       dayButton.dataset.bookingDate =
         date;
-
 
       dayButton.dataset.open =
         allClosed
           ? 'true'
           : 'false';
 
-
       head.append(
         title,
         dayButton
       );
 
-
       card.appendChild(
         head
       );
-
 
       const list =
         make(
@@ -712,7 +670,6 @@
             `booking-slot${row.booking_id ? ' has-booking' : ''}`
           );
 
-
         const time =
           make(
             'strong',
@@ -722,13 +679,11 @@
             )
           );
 
-
         const content =
           make(
             'div',
             'booking-slot-content'
           );
-
 
         const actions =
           make(
@@ -749,12 +704,10 @@
                 '이름 없음'
             );
 
-
           link.href =
             `./customer-detail.html?id=${encodeURIComponent(
               row.customer_id
             )}`;
-
 
           const meta =
             make(
@@ -762,9 +715,7 @@
               'booking-customer-meta'
             );
 
-
           meta.appendChild(
-
             make(
               'span',
               '',
@@ -774,18 +725,24 @@
           );
 
 
+          // ------------------------------------------------------
+          // 예약 화면에서도 구 등급명을 표시하지 않는다.
+          // ------------------------------------------------------
+
+          const bookingPlanLabel =
+            publicPlanLabel(
+              row.recommended_plan
+            );
+
           if (
-            row.recommended_plan
+            bookingPlanLabel
           ) {
 
             meta.appendChild(
-
               make(
                 'span',
                 'booking-plan',
-                getPlanLabel(
-                  row.recommended_plan
-                )
+                bookingPlanLabel
               )
             );
           }
@@ -799,7 +756,6 @@
               ? '예약 확정'
 
               : '예약 요청';
-
 
           content.append(
             link,
@@ -824,18 +780,14 @@
                 '예약 확정'
               );
 
-
             confirm.type =
               'button';
-
 
             confirm.dataset.bookingAction =
               'confirm';
 
-
             confirm.dataset.bookingId =
               row.booking_id;
-
 
             actions.appendChild(
               confirm
@@ -850,18 +802,14 @@
               '예약 취소'
             );
 
-
           cancel.type =
             'button';
-
 
           cancel.dataset.bookingAction =
             'cancel';
 
-
           cancel.dataset.bookingId =
             row.booking_id;
-
 
           actions.appendChild(
             cancel
@@ -872,7 +820,6 @@
           const closed =
             row.manual_open ===
               false;
-
 
           content.append(
 
@@ -900,7 +847,6 @@
             )
           );
 
-
           const toggle =
             make(
               'button',
@@ -910,32 +856,26 @@
                 : '마감'
             );
 
-
           toggle.type =
             'button';
-
 
           toggle.dataset.bookingAction =
             closed
               ? 'open-slot'
               : 'close-slot';
 
-
           toggle.dataset.bookingDate =
             row.booking_date;
-
 
           toggle.dataset.bookingTime =
             bookingTime(
               row.booking_time
             );
 
-
           actions.appendChild(
             toggle
           );
         }
-
 
         slot.append(
           time,
@@ -943,24 +883,20 @@
           actions
         );
 
-
         list.appendChild(
           slot
         );
       }
 
-
       card.appendChild(
         list
       );
-
 
       bookingCalendar.appendChild(
         card
       );
     }
   }
-
 
 
   // ============================================================
@@ -975,7 +911,6 @@
         BOOKING_DAYS - 1
       );
 
-
     bookingRangeLabel.textContent =
       `${bookingIsoDate(
         bookingStartDate
@@ -983,11 +918,9 @@
         end
       )}`;
 
-
     setBookingMessage(
       '예약 데이터를 확인하고 있습니다.'
     );
-
 
     try {
 
@@ -1010,14 +943,12 @@
             }
           );
 
-
       if (
         error
       ) {
 
         throw error;
       }
-
 
       renderBookingCalendar(
         Array.isArray(
@@ -1026,7 +957,6 @@
           ? data
           : []
       );
-
 
       setBookingMessage(
         '예약 가능 시간과 접수된 예약을 최신 상태로 확인했습니다.'
@@ -1041,13 +971,10 @@
         error
       );
 
-
       bookingCalendar.replaceChildren();
-
 
       emptyBookings.hidden =
         false;
-
 
       setBookingMessage(
         '예약 데이터를 불러오지 못했습니다. 관리자 권한과 RPC 상태를 확인해주세요.',
@@ -1055,7 +982,6 @@
       );
     }
   }
-
 
 
   // ============================================================
@@ -1072,7 +998,6 @@
     button.disabled =
       true;
 
-
     try {
 
       const {
@@ -1085,7 +1010,6 @@
             params
           );
 
-
       if (
         error
       ) {
@@ -1093,11 +1017,9 @@
         throw error;
       }
 
-
       setBookingMessage(
         message
       );
-
 
       await loadBookingCalendar();
 
@@ -1110,11 +1032,12 @@
         error
       );
 
-
       setBookingMessage(
         error?.message ===
           'slot_has_active_booking'
+
           ? '활성 예약이 있는 시간은 마감할 수 없습니다.'
+
           : '처리 중 오류가 발생했습니다.',
         true
       );
@@ -1125,7 +1048,6 @@
         false;
     }
   }
-
 
 
   // ============================================================
@@ -1141,14 +1063,12 @@
         '[data-booking-action]'
       );
 
-
     if (
       !button
     ) {
 
       return;
     }
-
 
     const action =
       button.dataset.bookingAction;
@@ -1178,12 +1098,16 @@
           p_admin_note:
             action ===
               'close-slot'
+
               ? '관리자 예약 마감'
+
               : null
         },
         action ===
           'open-slot'
+
           ? '해당 시간을 다시 열었습니다.'
+
           : '해당 시간을 마감했습니다.'
       );
 
@@ -1195,7 +1119,6 @@
       const open =
         button.dataset.open ===
           'true';
-
 
       await bookingMutation(
         button,
@@ -1252,7 +1175,6 @@
         return;
       }
 
-
       await bookingMutation(
         button,
         'admin_update_booking_status',
@@ -1272,7 +1194,6 @@
   }
 
 
-
   // ============================================================
   // ADMIN AUTH
   // ============================================================
@@ -1288,10 +1209,8 @@
         './login.html'
       );
 
-
       return null;
     }
-
 
     const {
       data,
@@ -1302,7 +1221,6 @@
         .auth
         .getUser();
 
-
     if (
       error ||
       !data?.user
@@ -1312,10 +1230,8 @@
         './login.html'
       );
 
-
       return null;
     }
-
 
     const {
       data:
@@ -1366,15 +1282,12 @@
         .auth
         .signOut();
 
-
       window.location.replace(
         './login.html'
       );
 
-
       return null;
     }
-
 
     return {
       user:
@@ -1383,7 +1296,6 @@
       profile
     };
   }
-
 
 
   // ============================================================
@@ -1403,7 +1315,6 @@
       return null;
     }
 
-
     let query =
       window
         .moohaeSupabase
@@ -1421,7 +1332,6 @@
           }
         );
 
-
     if (
       typeof configureQuery ===
       'function'
@@ -1433,13 +1343,11 @@
         );
     }
 
-
     const {
       count,
       error
     } =
       await query;
-
 
     target.textContent =
 
@@ -1452,14 +1360,12 @@
             0
           );
 
-
     return error;
   }
 
 
-
   // ============================================================
-  // HOME PROFILE HELPERS
+  // PROFILE HELPERS
   // ============================================================
 
   function arrayText(
@@ -1469,6 +1375,7 @@
     return Array.isArray(
       value
     )
+
       ? value
           .map(
             (item) =>
@@ -1479,55 +1386,8 @@
           .join(
             ' '
           )
+
       : '';
-  }
-
-
-  function isFinalHomeCheck6Q(
-    diagnosis
-  ) {
-
-    const preference =
-      Array.isArray(
-        diagnosis?.management_preference
-      )
-        ? diagnosis.management_preference
-        : [];
-
-
-    const reviewValues =
-      new Set([
-        '네, 함께 확인해요',
-        '가능하면 함께 볼게요',
-        '저 혼자 확인해요',
-        '1인 가구예요'
-      ]);
-
-
-    const managerValues =
-      new Set([
-        '제가 주로 해요',
-        '가족과 함께 해요',
-        '다른 가족이 주로 해요'
-      ]);
-
-
-    return (
-      preference.length >= 2 &&
-      reviewValues.has(
-        String(
-          preference[0] ||
-          ''
-        )
-      ) &&
-      managerValues.has(
-        String(
-          preference[1] ||
-          ''
-        )
-      )
-    );
-
   }
 
 
@@ -1543,79 +1403,59 @@
     }
 
 
-    const isFinal6Q =
-      isFinalHomeCheck6Q(
-        diagnosis
-      );
-
+    // ==========================================================
+    // FACILITY
+    // ==========================================================
 
     if (
-      isFinal6Q
+      String(
+        diagnosis.customer_type || ''
+      ).toLowerCase() ===
+        'facility'
     ) {
 
-      const chips =
+      const facilityChips =
         [];
 
+      if (
+        diagnosis.facility_name
+      ) {
+
+        facilityChips.push(
+          diagnosis.facility_name
+        );
+      }
 
       if (
-        diagnosis.recommended_plan
-      ) {
-
-        chips.push(
-          getPlanLabel(
-            diagnosis.recommended_plan
-          )
-        );
-
-      }
-
-
-      const focusAreas =
         Array.isArray(
-          diagnosis.household
+          diagnosis.facility_focus_areas
         )
-          ? diagnosis.household
-          : [];
-
-
-      for (
-        const item
-        of focusAreas
       ) {
 
-        if (
-          chips.length >= 3
-        ) {
-
-          break;
-
-        }
-
-
-        chips.push(
-          item
+        facilityChips.push(
+          ...diagnosis.facility_focus_areas
         );
-
       }
-
 
       return [
         ...new Set(
-          chips
+          facilityChips
         )
       ].slice(
         0,
         3
       );
-
     }
 
+
+    // ==========================================================
+    // HOME
+    // ==========================================================
 
     const isV2 =
       Number(
         diagnosis.check_version
       ) >= 2;
-
 
     if (
       isV2
@@ -1624,34 +1464,38 @@
       const chips =
         [];
 
+      const planChip =
+        publicCheckLabel(
+          diagnosis
+        );
 
       if (
-        diagnosis.recommended_plan
+        planChip &&
+        planChip !== '—'
       ) {
 
         chips.push(
-          getPlanLabel(
-            diagnosis.recommended_plan
-          )
+          planChip
         );
       }
-
 
       const livingSpaces =
         Array.isArray(
           diagnosis.living_spaces
         )
-          ? diagnosis.living_spaces
-          : [];
 
+          ? diagnosis.living_spaces
+
+          : [];
 
       const contactSurfaces =
         Array.isArray(
           diagnosis.contact_surfaces
         )
-          ? diagnosis.contact_surfaces
-          : [];
 
+          ? diagnosis.contact_surfaces
+
+          : [];
 
       for (
         const item
@@ -1666,12 +1510,10 @@
           break;
         }
 
-
         chips.push(
           item
         );
       }
-
 
       for (
         const item
@@ -1686,12 +1528,10 @@
           break;
         }
 
-
         chips.push(
           item
         );
       }
-
 
       return [
         ...new Set(
@@ -1704,9 +1544,12 @@
     }
 
 
+    // ==========================================================
+    // LEGACY
+    // ==========================================================
+
     const legacy =
       [];
-
 
     if (
       Array.isArray(
@@ -1719,7 +1562,6 @@
       );
     }
 
-
     if (
       Array.isArray(
         diagnosis.concerns
@@ -1731,7 +1573,6 @@
       );
     }
 
-
     return [
       ...new Set(
         legacy
@@ -1741,7 +1582,6 @@
       3
     );
   }
-
 
 
   // ============================================================
@@ -1756,6 +1596,11 @@
       diagnosisResult
     ] =
       await Promise.all([
+
+
+        // --------------------------------------------------------
+        // ACTIVE CUSTOMERS
+        // --------------------------------------------------------
 
         window
           .moohaeSupabase
@@ -1791,6 +1636,10 @@
             200
           ),
 
+
+        // --------------------------------------------------------
+        // DELETED CUSTOMERS
+        // --------------------------------------------------------
 
         window
           .moohaeSupabase
@@ -1828,6 +1677,10 @@
           ),
 
 
+        // --------------------------------------------------------
+        // LATEST CHECK DATA
+        // --------------------------------------------------------
+
         window
           .moohaeSupabase
           .from(
@@ -1838,8 +1691,18 @@
               id,
               customer_id,
 
+              customer_type,
               check_version,
               recommended_plan,
+
+              facility_name,
+              facility_focus_areas,
+              facility_pain_point,
+              facility_management_method,
+              facility_care_need_areas,
+              facility_decision_factor,
+              facility_service_preference,
+              facility_sales_preference,
 
               household,
               living_spaces,
@@ -1874,14 +1737,12 @@
       throw activeCustomerResult.error;
     }
 
-
     if (
       deletedCustomerResult.error
     ) {
 
       throw deletedCustomerResult.error;
     }
-
 
     if (
       diagnosisResult.error
@@ -1895,21 +1756,23 @@
       Array.isArray(
         activeCustomerResult.data
       )
-        ? activeCustomerResult.data
-        : [];
 
+        ? activeCustomerResult.data
+
+        : [];
 
     deletedCustomers =
       Array.isArray(
         deletedCustomerResult.data
       )
+
         ? deletedCustomerResult.data
+
         : [];
 
 
     latestDiagnosisByCustomer =
       new Map();
-
 
     for (
       const diagnosis
@@ -1931,18 +1794,26 @@
     }
 
 
-    activeCustomersTabCount.textContent =
-      String(
-        customers.length
-      );
+    if (
+      activeCustomersTabCount
+    ) {
 
+      activeCustomersTabCount.textContent =
+        String(
+          customers.length
+        );
+    }
 
-    deletedCustomersTabCount.textContent =
-      String(
-        deletedCustomers.length
-      );
+    if (
+      deletedCustomersTabCount
+    ) {
+
+      deletedCustomersTabCount.textContent =
+        String(
+          deletedCustomers.length
+        );
+    }
   }
-
 
 
   // ============================================================
@@ -1956,50 +1827,50 @@
     currentCustomerView =
       view ===
         'deleted'
-        ? 'deleted'
-        : 'active';
 
+        ? 'deleted'
+
+        : 'active';
 
     const deleted =
       currentCustomerView ===
-      'deleted';
+        'deleted';
 
 
-    activeCustomersTab.classList.toggle(
+    activeCustomersTab?.classList.toggle(
       'is-active',
       !deleted
     );
 
-
-    deletedCustomersTab.classList.toggle(
+    deletedCustomersTab?.classList.toggle(
       'is-active',
       deleted
     );
 
-
-    activeCustomersTab.setAttribute(
+    activeCustomersTab?.setAttribute(
       'aria-selected',
       String(
         !deleted
       )
     );
 
-
-    deletedCustomersTab.setAttribute(
+    deletedCustomersTab?.setAttribute(
       'aria-selected',
       String(
         deleted
       )
     );
 
+    if (
+      statusFilter
+    ) {
 
-    statusFilter.disabled =
-      deleted;
-
+      statusFilter.disabled =
+        deleted;
+    }
 
     renderCustomers();
   }
-
 
 
   // ============================================================
@@ -2018,12 +1889,10 @@
       return;
     }
 
-
     const confirmed =
       window.confirm(
         `${customer.name || '이름 없음'} 고객을 복구할까요?\n\n기존 MOOHAE CHECK · 방문 CARE · Care Report 기록은 그대로 유지됩니다.`
       );
-
 
     if (
       !confirmed
@@ -2032,18 +1901,14 @@
       return;
     }
 
-
     const originalLabel =
       button.textContent;
-
 
     button.disabled =
       true;
 
-
     button.textContent =
       '복구 중...';
-
 
     try {
 
@@ -2060,7 +1925,6 @@
             }
           );
 
-
       if (
         error
       ) {
@@ -2068,13 +1932,10 @@
         throw error;
       }
 
-
       dashboardMessage.textContent =
         `${customer.name || '고객'} 고객을 복구했습니다.`;
 
-
       await loadCustomers();
-
 
       await loadCount(
         'customers',
@@ -2085,7 +1946,6 @@
             null
           )
       );
-
 
       renderCustomers();
 
@@ -2098,20 +1958,16 @@
         error
       );
 
-
       dashboardMessage.textContent =
         '고객을 복구하지 못했습니다. 관리자 권한과 복구 RPC를 확인해주세요.';
 
-
       button.disabled =
         false;
-
 
       button.textContent =
         originalLabel;
     }
   }
-
 
 
   // ============================================================
@@ -2120,21 +1976,30 @@
 
   function renderCustomers() {
 
+    if (
+      !customerList
+    ) {
+
+      return;
+    }
+
     const term =
       customerSearch
-        .value
-        .trim()
-        .toLowerCase();
-
+        ?.value
+        ?.trim()
+        ?.toLowerCase() ||
+      '';
 
     const selectedStatus =
-      statusFilter.value;
-
+      statusFilter?.value ||
+      'all';
 
     const source =
       currentCustomerView ===
         'deleted'
+
         ? deletedCustomers
+
         : customers;
 
 
@@ -2157,7 +2022,6 @@
             return false;
           }
 
-
           if (
             !term
           ) {
@@ -2165,23 +2029,10 @@
             return true;
           }
 
-
           const diagnosis =
             latestDiagnosisByCustomer.get(
               customer.id
             );
-
-
-          const rawPlan =
-            diagnosis?.recommended_plan ||
-            '';
-
-
-          const displayPlan =
-            getPlanLabel(
-              rawPlan
-            );
-
 
           const searchData = [
 
@@ -2199,11 +2050,40 @@
             customer.delete_reason ||
               '',
 
-            rawPlan,
+            publicCheckLabel(
+              diagnosis
+            ),
 
-            displayPlan,
+            diagnosis?.recommended_plan ||
+              '',
 
             diagnosis?.result_level ||
+              '',
+
+            diagnosis?.facility_name ||
+              '',
+
+            arrayText(
+              diagnosis?.facility_focus_areas
+            ),
+
+            diagnosis?.facility_pain_point ||
+              '',
+
+            diagnosis?.facility_management_method ||
+              '',
+
+            arrayText(
+              diagnosis?.facility_care_need_areas
+            ),
+
+            diagnosis?.facility_decision_factor ||
+              '',
+
+            diagnosis?.facility_service_preference ||
+              '',
+
+            diagnosis?.facility_sales_preference ||
               '',
 
             arrayText(
@@ -2240,7 +2120,6 @@
             )
             .toLowerCase();
 
-
           return searchData.includes(
             term
           );
@@ -2250,10 +2129,14 @@
 
     customerList.replaceChildren();
 
+    if (
+      emptyCustomers
+    ) {
 
-    emptyCustomers.hidden =
-      filtered.length !==
-      0;
+      emptyCustomers.hidden =
+        filtered.length !==
+        0;
+    }
 
 
     if (
@@ -2266,23 +2149,40 @@
           'deleted'
       ) {
 
-        emptyCustomersTitle.textContent =
-          '삭제된 고객이 없습니다.';
+        if (
+          emptyCustomersTitle
+        ) {
 
+          emptyCustomersTitle.textContent =
+            '삭제된 고객이 없습니다.';
+        }
 
-        emptyCustomersText.textContent =
-          '삭제 처리한 고객은 복구 가능한 상태로 이곳에 표시됩니다.';
+        if (
+          emptyCustomersText
+        ) {
+
+          emptyCustomersText.textContent =
+            '삭제 처리한 고객은 복구 가능한 상태로 이곳에 표시됩니다.';
+        }
 
       } else {
 
-        emptyCustomersTitle.textContent =
-          '아직 등록된 고객이 없습니다.';
+        if (
+          emptyCustomersTitle
+        ) {
 
+          emptyCustomersTitle.textContent =
+            '아직 등록된 고객이 없습니다.';
+        }
 
-        emptyCustomersText.textContent =
-          '무료 진단이 접수되면 고객이 자동으로 이곳에 표시됩니다.';
+        if (
+          emptyCustomersText
+        ) {
+
+          emptyCustomersText.textContent =
+            '무료 진단이 접수되면 고객이 자동으로 이곳에 표시됩니다.';
+        }
       }
-
 
       return;
     }
@@ -2293,9 +2193,14 @@
       of filtered
     ) {
 
+
+      // ========================================================
+      // DELETED CUSTOMER
+      // ========================================================
+
       if (
         currentCustomerView ===
-        'deleted'
+          'deleted'
       ) {
 
         const row =
@@ -2304,13 +2209,11 @@
             'customer-row is-deleted'
           );
 
-
         const profile =
           make(
             'div',
             'customer-primary'
           );
-
 
         profile.append(
           make(
@@ -2334,7 +2237,6 @@
             'div',
             'deleted-customer-meta'
           );
-
 
         deletedMeta.append(
           make(
@@ -2363,13 +2265,11 @@
               '삭제 사유 미기록'
           );
 
-
         const actions =
           make(
             'div',
             'deleted-customer-actions'
           );
-
 
         const detailLink =
           make(
@@ -2378,12 +2278,10 @@
             '기록 보기'
           );
 
-
         detailLink.href =
           `./customer-detail.html?id=${encodeURIComponent(
             customer.id
           )}`;
-
 
         const restoreButton =
           make(
@@ -2392,15 +2290,11 @@
             '복구'
           );
 
-
         restoreButton.type =
           'button';
 
-
         restoreButton.addEventListener(
-
           'click',
-
           () => {
 
             restoreCustomer(
@@ -2410,12 +2304,10 @@
           }
         );
 
-
         actions.append(
           detailLink,
           restoreButton
         );
-
 
         row.append(
           profile,
@@ -2424,21 +2316,22 @@
           actions
         );
 
-
         customerList.appendChild(
           row
         );
-
 
         continue;
       }
 
 
+      // ========================================================
+      // ACTIVE CUSTOMER
+      // ========================================================
+
       const diagnosis =
         latestDiagnosisByCustomer.get(
           customer.id
         );
-
 
       const link =
         make(
@@ -2446,19 +2339,21 @@
           'customer-row'
         );
 
-
       link.href =
         `./customer-detail.html?id=${encodeURIComponent(
           customer.id
         )}`;
 
 
+      // --------------------------------------------------------
+      // PROFILE
+      // --------------------------------------------------------
+
       const profile =
         make(
           'div',
           'customer-primary'
         );
-
 
       profile.appendChild(
         make(
@@ -2468,7 +2363,6 @@
             '이름 없음'
         )
       );
-
 
       profile.appendChild(
         make(
@@ -2480,18 +2374,20 @@
       );
 
 
+      // --------------------------------------------------------
+      // CHECK PROFILE
+      // --------------------------------------------------------
+
       const concern =
         make(
           'div',
           'customer-concern'
         );
 
-
       const profileChips =
         getCustomerProfileChips(
           diagnosis
         );
-
 
       if (
         profileChips.length
@@ -2525,23 +2421,20 @@
       }
 
 
+      // --------------------------------------------------------
+      // RESULT
+      // --------------------------------------------------------
+
       const result =
         make(
           'div',
           'customer-result'
         );
 
-
       const resultLabel =
-
-        getPlanLabel(
-          diagnosis?.recommended_plan
-        ) ||
-
-        diagnosis?.result_level ||
-
-        '—';
-
+        publicCheckLabel(
+          diagnosis
+        );
 
       result.appendChild(
         make(
@@ -2550,7 +2443,6 @@
           resultLabel
         )
       );
-
 
       result.appendChild(
         make(
@@ -2564,12 +2456,15 @@
       );
 
 
+      // --------------------------------------------------------
+      // STATUS
+      // --------------------------------------------------------
+
       const statusWrap =
         make(
           'div',
           'customer-status'
         );
-
 
       const status =
         make(
@@ -2580,7 +2475,6 @@
           ] ||
             '상태 미정'
         );
-
 
       statusWrap.appendChild(
         status
@@ -2594,13 +2488,11 @@
         statusWrap
       );
 
-
       customerList.appendChild(
         link
       );
     }
   }
-
 
 
   // ============================================================
@@ -2614,7 +2506,6 @@
       const auth =
         await requireAuthorizedAdmin();
 
-
       if (
         !auth
       ) {
@@ -2622,10 +2513,8 @@
         return;
       }
 
-
       identity.textContent =
         `${auth.profile.display_name} · ${auth.profile.role}`;
-
 
       const countErrors =
         await Promise.all([
@@ -2656,15 +2545,12 @@
           )
         ]);
 
-
       await Promise.all([
         loadCustomers(),
         loadBookingCalendar()
       ]);
 
-
       renderCustomers();
-
 
       dashboardMessage.textContent =
 
@@ -2685,41 +2571,43 @@
         error
       );
 
+      if (
+        dashboardMessage
+      ) {
 
-      dashboardMessage.textContent =
-        '고객 데이터를 불러오는 중 오류가 발생했습니다.';
+        dashboardMessage.textContent =
+          '고객 데이터를 불러오는 중 오류가 발생했습니다.';
+      }
 
+      customerList?.replaceChildren();
 
-      customerList.replaceChildren();
+      if (
+        emptyCustomers
+      ) {
 
-
-      emptyCustomers.hidden =
-        false;
+        emptyCustomers.hidden =
+          false;
+      }
     }
   }
-
 
 
   // ============================================================
   // CUSTOMER EVENTS
   // ============================================================
 
-  customerSearch.addEventListener(
+  customerSearch?.addEventListener(
     'input',
     renderCustomers
   );
 
-
-  statusFilter.addEventListener(
+  statusFilter?.addEventListener(
     'change',
     renderCustomers
   );
 
-
-  activeCustomersTab.addEventListener(
-
+  activeCustomersTab?.addEventListener(
     'click',
-
     () => {
 
       setCustomerView(
@@ -2728,11 +2616,8 @@
     }
   );
 
-
-  deletedCustomersTab.addEventListener(
-
+  deletedCustomersTab?.addEventListener(
     'click',
-
     () => {
 
       setCustomerView(
@@ -2742,21 +2627,17 @@
   );
 
 
-
   // ============================================================
   // BOOKING EVENTS
   // ============================================================
 
-  bookingCalendar.addEventListener(
+  bookingCalendar?.addEventListener(
     'click',
     handleBookingAction
   );
 
-
-  bookingPrevButton.addEventListener(
-
+  bookingPrevButton?.addEventListener(
     'click',
-
     async () => {
 
       bookingStartDate =
@@ -2765,16 +2646,12 @@
           -BOOKING_PAGE_STEP
         );
 
-
       await loadBookingCalendar();
     }
   );
 
-
-  bookingNextButton.addEventListener(
-
+  bookingNextButton?.addEventListener(
     'click',
-
     async () => {
 
       bookingStartDate =
@@ -2783,26 +2660,21 @@
           BOOKING_PAGE_STEP
         );
 
-
       await loadBookingCalendar();
     }
   );
-
 
 
   // ============================================================
   // LOGOUT
   // ============================================================
 
-  logoutButton.addEventListener(
-
+  logoutButton?.addEventListener(
     'click',
-
     async () => {
 
       logoutButton.disabled =
         true;
-
 
       try {
 
@@ -2819,7 +2691,6 @@
       }
     }
   );
-
 
 
   // ============================================================
