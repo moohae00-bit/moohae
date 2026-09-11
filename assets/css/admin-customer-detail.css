@@ -1274,6 +1274,18 @@
 }
 
 
+/* ============================================================
+   DELETE VISIBILITY SAFETY
+   ============================================================ */
+
+#openDeleteCustomerButton[hidden],
+#openPermanentDeleteButton[hidden],
+.permanent-delete-zone[hidden] {
+  display:
+    none !important;
+}
+
+
 .danger-button {
   display:
     inline-flex;

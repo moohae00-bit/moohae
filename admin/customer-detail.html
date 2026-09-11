@@ -48,7 +48,7 @@
 
   <link
     rel="stylesheet"
-    href="../assets/css/admin-customer-detail.css?v=20260904-1"
+    href="../assets/css/admin-customer-detail.css?v=20260911-1"
   >
 
   <link
@@ -1080,6 +1080,7 @@
         id="openDeleteCustomerButton"
         class="danger-button"
         type="button"
+        hidden
       >
         고객 삭제
       </button>
@@ -1092,7 +1093,11 @@
         aria-live="polite"
       ></p>
 
-      <div class="permanent-delete-zone">
+      <div
+        id="permanentDeleteZone"
+        class="permanent-delete-zone"
+        hidden
+      >
         <div>
           <strong>고객 데이터 전체 삭제</strong>
           <p>
@@ -1105,6 +1110,7 @@
           id="openPermanentDeleteButton"
           class="danger-button danger-button-solid"
           type="button"
+          hidden
         >
           고객 데이터 전체 삭제
         </button>
@@ -1365,7 +1371,7 @@
 
   <script src="../assets/js/supabase-config.js?v=20260828-4"></script>
 
-  <script src="../assets/js/admin-customer-detail.js?v=20260904-1"></script>
+  <script src="../assets/js/admin-customer-detail.js?v=20260911-1"></script>
 
   <script src="../assets/js/admin-customer-facility.js?v=20260908-2"></script>
 

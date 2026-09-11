@@ -223,6 +223,9 @@
     document.getElementById('deleteDialogMessage');
 
 
+  const permanentDeleteZone =
+    document.getElementById('permanentDeleteZone');
+
   const openPermanentDeleteButton =
     document.getElementById('openPermanentDeleteButton');
 
@@ -831,6 +834,11 @@
     }
 
 
+    const canPermanentlyDelete =
+      currentCustomerDeleted &&
+      authContext?.profile?.role === 'admin';
+
+
     if (
       openDeleteCustomerButton
     ) {
@@ -845,15 +853,24 @@
 
 
     if (
+      permanentDeleteZone
+    ) {
+
+      permanentDeleteZone.hidden =
+        !canPermanentlyDelete;
+    }
+
+
+    if (
       openPermanentDeleteButton
     ) {
 
       openPermanentDeleteButton.hidden =
-        false;
+        !canPermanentlyDelete;
 
 
       openPermanentDeleteButton.disabled =
-        false;
+        !canPermanentlyDelete;
     }
 
 
@@ -3449,7 +3466,9 @@
     () => {
 
       if (
-        !currentCustomer
+        !currentCustomer ||
+        !currentCustomerDeleted ||
+        authContext?.profile?.role !== 'admin'
       ) {
 
         return;
@@ -3508,8 +3527,16 @@
 
 
       if (
-        !currentCustomer
+        !currentCustomer ||
+        !currentCustomerDeleted ||
+        authContext?.profile?.role !== 'admin'
       ) {
+
+        setMessage(
+          permanentDeleteDialogMessage,
+          '삭제 처리된 고객만 관리자 권한으로 영구 삭제할 수 있습니다.'
+        );
+
 
         return;
       }
@@ -3736,7 +3763,8 @@
         ) {
 
           openPermanentDeleteButton.disabled =
-            false;
+            !currentCustomerDeleted ||
+            authContext?.profile?.role !== 'admin';
         }
       }
     }
