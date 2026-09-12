@@ -1,4 +1,4 @@
-=<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -40,7 +40,7 @@
 
   <link
     rel="stylesheet"
-    href="../assets/css/admin-auth.css"
+    href="../assets/css/admin-auth.css?v=20260912-1"
   >
 </head>
 
@@ -443,6 +443,44 @@
 
 
       <!-- =====================================================
+           ACTIVE CUSTOMER BULK SOFT DELETE
+      ====================================================== -->
+
+      <div
+        id="bulkCustomerActions"
+        class="bulk-customer-actions"
+        hidden
+      >
+
+        <label class="bulk-select-all">
+          <input
+            id="selectVisibleCustomersCheckbox"
+            type="checkbox"
+          >
+          <span>현재 목록 전체 선택</span>
+        </label>
+
+        <div class="bulk-customer-actions-right">
+          <strong id="selectedCustomerCount">0명 선택</strong>
+
+          <button
+            id="openBulkDeleteButton"
+            class="secondary-button bulk-delete-button"
+            type="button"
+            disabled
+          >
+            선택 고객 삭제
+          </button>
+        </div>
+
+        <p class="bulk-selection-note">
+          검색·상태 필터로 현재 화면에 표시된 고객만 선택됩니다. 화면에서 사라진 고객은 선택에서 자동 제외됩니다.
+        </p>
+
+      </div>
+
+
+      <!-- =====================================================
            CUSTOMER LIST
       ====================================================== -->
 
@@ -479,6 +517,119 @@
 
 
   <!-- =========================================================
+       BULK SOFT DELETE DIALOG
+  ========================================================== -->
+
+  <dialog
+    id="bulkDeleteDialog"
+    class="bulk-delete-dialog"
+    aria-labelledby="bulkDeleteDialogTitle"
+  >
+
+    <form
+      id="bulkDeleteForm"
+      class="bulk-delete-form"
+      novalidate
+    >
+
+      <div class="bulk-delete-dialog-head">
+        <div>
+          <p class="eyebrow">BULK DELETE</p>
+          <h2 id="bulkDeleteDialogTitle">
+            선택한 고객을 삭제 처리하시겠어요?
+          </h2>
+        </div>
+
+        <button
+          id="closeBulkDeleteDialogButton"
+          class="bulk-dialog-close"
+          type="button"
+          aria-label="일괄 삭제 창 닫기"
+        >
+          ×
+        </button>
+      </div>
+
+      <p
+        id="bulkDeleteTargetSummary"
+        class="bulk-delete-target-summary"
+      >
+        선택 고객을 확인하고 있습니다.
+      </p>
+
+      <p class="bulk-delete-warning">
+        이 작업은 영구삭제가 아닙니다. 선택 고객은 일반 운영 목록에서 제외되지만 CHECK · HOUSE · CARE · REPORT · CARE 사진 기록은 보존되며 복구할 수 있습니다.
+      </p>
+
+      <label>
+        <span>삭제 사유</span>
+        <textarea
+          id="bulkDeleteReason"
+          maxlength="500"
+          rows="4"
+          placeholder="예: 테스트 데이터 정리, 중복 등록 정리"
+          required
+        ></textarea>
+      </label>
+
+      <label>
+        <span>확인 문구</span>
+        <input
+          id="bulkDeleteConfirmInput"
+          type="text"
+          maxlength="40"
+          autocomplete="off"
+          required
+        >
+      </label>
+
+      <p
+        id="bulkDeleteConfirmGuide"
+        class="bulk-delete-confirm-guide"
+      ></p>
+
+      <div
+        id="bulkDeleteResult"
+        class="bulk-delete-result"
+        hidden
+      >
+        <strong id="bulkDeleteResultSummary"></strong>
+        <div
+          id="bulkDeleteResultList"
+          class="bulk-delete-result-list"
+        ></div>
+      </div>
+
+      <div class="bulk-delete-action-row">
+        <button
+          id="cancelBulkDeleteButton"
+          class="secondary-button"
+          type="button"
+        >
+          취소
+        </button>
+
+        <button
+          id="confirmBulkDeleteButton"
+          class="bulk-delete-confirm-button"
+          type="submit"
+        >
+          선택 고객 삭제 처리
+        </button>
+      </div>
+
+      <p
+        id="bulkDeleteDialogMessage"
+        class="bulk-delete-dialog-message"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+    </form>
+  </dialog>
+
+
+  <!-- =========================================================
        SCRIPTS
   ========================================================== -->
 
@@ -491,7 +642,7 @@
   ></script>
 
   <script
-    src="../assets/js/admin-dashboard.js?v=20260908-2"
+    src="../assets/js/admin-dashboard.js?v=20260912-1"
   ></script>
 
 </body>
