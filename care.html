@@ -156,6 +156,193 @@
         font-size:22px;
       }
     }
+
+    /* =========================================================
+       MOOHAE CARE SELECTOR — VISUAL ONLY
+       Static HTML cards keep existing click navigation through
+       .care-object-button[data-target] without changing care.js.
+       ========================================================= */
+    .care-discover-section{
+      background:#F8F6EF;
+    }
+
+    .care-discover-section .care-section-head{
+      margin-bottom:34px;
+    }
+
+    .care-discover-section .care-main-title{
+      max-width:760px;
+      margin:0;
+      color:#222222;
+      font-family:"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size:clamp(42px,5.5vw,72px);
+      font-weight:780;
+      line-height:.98;
+      letter-spacing:-.065em;
+    }
+
+    .care-discover-section .care-main-title strong{
+      color:#6B7F6E;
+      font-weight:800;
+    }
+
+    .moohae-care-selector-track{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:14px;
+      width:min(1180px,calc(100% - 48px));
+      margin:0 auto;
+    }
+
+    .moohae-care-selector-card{
+      appearance:none;
+      -webkit-appearance:none;
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+      padding:0;
+      overflow:hidden;
+      border:0;
+      border-radius:28px;
+      background:#fffdf9;
+      box-shadow:0 12px 30px rgba(34,34,34,.035);
+      color:#222222;
+      text-align:left;
+      font:inherit;
+      cursor:pointer;
+      scroll-snap-align:start;
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+
+    .moohae-care-selector-card::before,
+    .moohae-care-selector-card::after{
+      content:none !important;
+      display:none !important;
+    }
+
+    .moohae-care-selector-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 34px rgba(34,34,34,.05);
+    }
+
+    .moohae-care-selector-card.is-selected{
+      transform:none;
+      box-shadow:0 12px 30px rgba(34,34,34,.035);
+    }
+
+    .moohae-care-selector-card:focus-visible{
+      outline:2px solid #6B7F6E;
+      outline-offset:3px;
+    }
+
+    .moohae-care-selector-media{
+      position:relative;
+      width:100%;
+      aspect-ratio:4/4.65;
+      overflow:hidden;
+      background:#f3f0e9;
+    }
+
+    .moohae-care-selector-media img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      transform:none !important;
+      filter:none !important;
+      transition:none !important;
+    }
+
+    .moohae-care-selector-copy{
+      display:flex;
+      flex-direction:column;
+      min-height:154px;
+      padding:22px 20px 24px;
+    }
+
+    .moohae-care-selector-name{
+      margin:0;
+      color:#222222;
+      font-family:"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size:18px;
+      font-weight:800;
+      line-height:1.1;
+      letter-spacing:-.035em;
+    }
+
+    .moohae-care-selector-desc{
+      margin:13px 0 0;
+      color:#7F817C;
+      font-family:"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size:14px;
+      font-weight:560;
+      line-height:1.58;
+      letter-spacing:-.018em;
+    }
+
+    @media(max-width:920px){
+      .moohae-care-selector-track{
+        display:flex;
+        gap:14px;
+        width:100%;
+        margin:0;
+        padding:0 20px 8px;
+        overflow-x:auto;
+        overscroll-behavior-x:contain;
+        scroll-snap-type:x mandatory;
+        scrollbar-width:none;
+        -webkit-overflow-scrolling:touch;
+      }
+
+      .moohae-care-selector-track::-webkit-scrollbar{
+        display:none;
+      }
+
+      .moohae-care-selector-card{
+        flex:0 0 85vw;
+        max-width:360px;
+        border-radius:28px;
+      }
+
+      .moohae-care-selector-media{
+        aspect-ratio:4/4.45;
+      }
+
+      .moohae-care-selector-copy{
+        min-height:138px;
+        padding:20px 20px 22px;
+      }
+
+      .moohae-care-selector-name{
+        font-size:18px;
+      }
+
+      .moohae-care-selector-desc{
+        margin-top:10px;
+        font-size:14px;
+        line-height:1.55;
+      }
+    }
+
+    @media(max-width:768px){
+      .care-discover-section .care-section-head{
+        margin-bottom:26px;
+      }
+
+      .care-discover-section .care-main-title{
+        max-width:330px;
+        font-size:clamp(40px,12vw,54px);
+        line-height:1.02;
+      }
+    }
+
+    @media(max-width:390px){
+      .moohae-care-selector-card{
+        flex-basis:84vw;
+      }
+    }
+
   </style>
 </head>
 <body data-page="care" class="care-page">
@@ -164,11 +351,63 @@
     <section class="care-section care-discover-section" id="discover" aria-labelledby="discoverTitle">
       <div class="care-wrap care-section-head reveal">
         <p class="care-kicker">MOOHAE CARE</p>
-        <h1 class="care-main-title" id="discoverTitle">내게 맞는 <strong>MOOHAE CARE</strong></h1>
-        <p class="care-section-copy">우리 집에 맞는 CARE를 찾아보세요.</p>
+        <h1 class="care-main-title" id="discoverTitle">내게 맞는<br><strong>CARE를 찾아보세요.</strong></h1>
       </div>
+
       <div class="care-wide-scroll-shell">
-        <div class="care-object-track" id="careObjectTrack" aria-label="MOOHAE CARE 서비스 탐색"></div>
+        <div class="moohae-care-selector-track" aria-label="MOOHAE CARE 서비스 탐색">
+
+          <button class="care-object-button moohae-care-selector-card reveal" type="button" data-target="plan-private" aria-label="PRIVATE 서비스 보기" aria-pressed="false">
+            <span class="moohae-care-selector-media">
+              <img src="./assets/images/care-selector/private.webp" alt="MOOHAE PRIVATE 집 전체 CARE" loading="eager" decoding="async" draggable="false">
+            </span>
+            <span class="moohae-care-selector-copy">
+              <strong class="moohae-care-selector-name">PRIVATE</strong>
+              <span class="moohae-care-selector-desc">집 전체를<br>맡기는 CARE.</span>
+            </span>
+          </button>
+
+          <button class="care-object-button moohae-care-selector-card reveal" type="button" data-target="plan-core-plus" aria-label="CORE+ 서비스 보기" aria-pressed="false">
+            <span class="moohae-care-selector-media">
+              <img src="./assets/images/care-selector/core-plus.webp" alt="MOOHAE CORE+ 생활 환경 CARE" loading="eager" decoding="async" draggable="false">
+            </span>
+            <span class="moohae-care-selector-copy">
+              <strong class="moohae-care-selector-name">CORE+</strong>
+              <span class="moohae-care-selector-desc">생활 환경을<br>더 쾌적하게.</span>
+            </span>
+          </button>
+
+          <button class="care-object-button moohae-care-selector-card reveal" type="button" data-target="plan-core" aria-label="CORE 서비스 보기" aria-pressed="false">
+            <span class="moohae-care-selector-media">
+              <img src="./assets/images/care-selector/core.webp" alt="MOOHAE CORE 패브릭 CARE" loading="eager" decoding="async" draggable="false">
+            </span>
+            <span class="moohae-care-selector-copy">
+              <strong class="moohae-care-selector-name">CORE</strong>
+              <span class="moohae-care-selector-desc">패브릭을<br>깨끗하게, 오래.</span>
+            </span>
+          </button>
+
+          <button class="care-object-button moohae-care-selector-card reveal" type="button" data-target="one-room" aria-label="ONE ROOM 서비스 보기" aria-pressed="false">
+            <span class="moohae-care-selector-media">
+              <img src="./assets/images/care-selector/one-room.webp" alt="MOOHAE ONE ROOM 방 하나 CARE" loading="lazy" decoding="async" draggable="false">
+            </span>
+            <span class="moohae-care-selector-copy">
+              <strong class="moohae-care-selector-name">ONE ROOM</strong>
+              <span class="moohae-care-selector-desc">방 하나를<br>한 번에 CARE.</span>
+            </span>
+          </button>
+
+          <button class="care-object-button moohae-care-selector-card reveal" type="button" data-target="one-mattress" aria-label="ONE CARE 서비스 보기" aria-pressed="false">
+            <span class="moohae-care-selector-media">
+              <img src="./assets/images/care-selector/one-care.webp" alt="MOOHAE ONE CARE 원하는 한 가지 CARE" loading="lazy" decoding="async" draggable="false">
+            </span>
+            <span class="moohae-care-selector-copy">
+              <strong class="moohae-care-selector-name">ONE CARE</strong>
+              <span class="moohae-care-selector-desc">원하는 한 가지부터<br>간편하게.</span>
+            </span>
+          </button>
+
+        </div>
       </div>
     </section>
 
