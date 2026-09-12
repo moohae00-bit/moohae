@@ -40,12 +40,6 @@
   const careAreaSummary =
     document.getElementById('careAreaSummary');
 
-  const beforeDiagnosis =
-    document.getElementById('beforeDiagnosis');
-
-  const afterDiagnosis =
-    document.getElementById('afterDiagnosis');
-
   const careList =
     document.getElementById('careList');
 
@@ -84,6 +78,17 @@
   const afterMediaCount =
     document.getElementById('afterMediaCount');
 
+  const mediaLightbox =
+    document.getElementById('reportMediaLightbox');
+
+  const mediaLightboxImage =
+    document.getElementById('reportMediaLightboxImage');
+
+  const mediaLightboxClose =
+    document.getElementById('reportMediaLightboxClose');
+
+  let mediaLightboxReturnFocus =
+    null;
 
 
   // ============================================================
@@ -344,6 +349,120 @@
   }
 
 
+  function closeMediaLightbox() {
+    if (
+      !mediaLightbox ||
+      !mediaLightboxImage ||
+      mediaLightbox.hidden
+    ) {
+      return;
+    }
+
+    mediaLightbox.hidden =
+      true;
+
+    mediaLightboxImage.removeAttribute(
+      'src'
+    );
+
+    mediaLightboxImage.alt =
+      '';
+
+    document.body.classList.remove(
+      'report-lightbox-open'
+    );
+
+    if (
+      mediaLightboxReturnFocus instanceof HTMLElement
+    ) {
+      mediaLightboxReturnFocus.focus();
+    }
+
+    mediaLightboxReturnFocus =
+      null;
+  }
+
+
+  function openMediaLightbox(
+    imageUrl,
+    imageAlt,
+    trigger
+  ) {
+    if (
+      !mediaLightbox ||
+      !mediaLightboxImage ||
+      !mediaLightboxClose ||
+      !isSafeSignedImageUrl(
+        imageUrl
+      )
+    ) {
+      return;
+    }
+
+    mediaLightboxReturnFocus =
+      trigger instanceof HTMLElement
+        ? trigger
+        : null;
+
+    mediaLightboxImage.src =
+      imageUrl;
+
+    mediaLightboxImage.alt =
+      imageAlt ||
+      'CARE 사진 확대 보기';
+
+    mediaLightbox.hidden =
+      false;
+
+    document.body.classList.add(
+      'report-lightbox-open'
+    );
+
+    mediaLightboxClose.focus();
+  }
+
+
+  if (
+    mediaLightboxClose
+  ) {
+    mediaLightboxClose.addEventListener(
+      'click',
+      closeMediaLightbox
+    );
+  }
+
+
+  if (
+    mediaLightbox
+  ) {
+    mediaLightbox.addEventListener(
+      'click',
+      (event) => {
+        if (
+          event.target ===
+          mediaLightbox
+        ) {
+          closeMediaLightbox();
+        }
+      }
+    );
+  }
+
+
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (
+        event.key === 'Escape' &&
+        mediaLightbox &&
+        !mediaLightbox.hidden
+      ) {
+        closeMediaLightbox();
+      }
+    }
+  );
+
+
   function createMediaItem(
     media,
     label
@@ -388,8 +507,39 @@
       'no-referrer';
 
 
-    item.appendChild(
+    const zoomButton =
+      document.createElement(
+        'button'
+      );
+
+    zoomButton.type =
+      'button';
+
+    zoomButton.className =
+      'report-media-zoom-trigger';
+
+    zoomButton.setAttribute(
+      'aria-label',
+      `${label} 확대해서 보기`
+    );
+
+    zoomButton.addEventListener(
+      'click',
+      () => {
+        openMediaLightbox(
+          media.url,
+          label,
+          zoomButton
+        );
+      }
+    );
+
+    zoomButton.appendChild(
       image
+    );
+
+    item.appendChild(
+      zoomButton
     );
 
 
@@ -578,24 +728,6 @@
 
     careAreaSummary.textContent =
       area;
-
-
-    beforeDiagnosis.textContent =
-      pickText(
-        report,
-        'before_diagnosis',
-        'beforeDiagnosis'
-      ) ||
-      '케어 전 상태 기록이 없습니다.';
-
-
-    afterDiagnosis.textContent =
-      pickText(
-        report,
-        'after_diagnosis',
-        'afterDiagnosis'
-      ) ||
-      '케어 후 상태 기록이 없습니다.';
 
 
     managerComment.textContent =

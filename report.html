@@ -20,17 +20,13 @@
                  upgrade-insecure-requests">
   <meta name="referrer" content="no-referrer">
   <link rel="stylesheet" href="./assets/css/site.css?v=20260905-4">
-  <link rel="stylesheet" href="./assets/css/report.css?v=20260913-1">
+  <link rel="stylesheet" href="./assets/css/report.css?v=20260913-2">
   <style>
     .report-state{max-width:760px;margin:70px auto;padding:38px 24px;text-align:center}
     .report-state h1{margin:8px 0 14px;font-size:32px;line-height:1.25;letter-spacing:-.04em}
     .report-state p{margin:0 auto 24px;max-width:540px;line-height:1.75;opacity:.72}
     .report-state[hidden],#reportContent[hidden],.section[hidden]{display:none!important}
-    .visit-diagnosis-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-    .visit-diagnosis-card{padding:22px;border:1px solid rgba(0,0,0,.08);border-radius:18px;background:#fff}
-    .visit-diagnosis-card span{display:block;margin-bottom:10px;font-size:11px;letter-spacing:.14em;opacity:.55}
-    .visit-diagnosis-card p{margin:0;line-height:1.7;white-space:pre-wrap}
-    @media(max-width:700px){.visit-diagnosis-grid{grid-template-columns:1fr}.report-state{margin:42px auto;padding:28px 20px}.report-state h1{font-size:27px}}
+    @media(max-width:700px){.report-state{margin:42px auto;padding:28px 20px}.report-state h1{font-size:27px}}
   </style>
 </head>
 <body data-page="report">
@@ -122,14 +118,6 @@
   </div>
 </section>
 
-          <section class="section">
-            <div class="section-eyebrow">VISIT DIAGNOSIS</div>
-            <h2>방문에서 확인한<br>케어 전과 후.</h2>
-            <div class="visit-diagnosis-grid">
-              <div class="visit-diagnosis-card"><span>BEFORE</span><p id="beforeDiagnosis">—</p></div>
-              <div class="visit-diagnosis-card"><span>AFTER</span><p id="afterDiagnosis">—</p></div>
-            </div>
-          </section>
 
           <section class="section">
             <div class="section-eyebrow">TODAY'S CARE</div>
@@ -176,11 +164,30 @@
     </div>
   </main>
 
+  <div
+    id="reportMediaLightbox"
+    class="report-lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="CARE 사진 확대 보기"
+    hidden
+  >
+    <button
+      id="reportMediaLightboxClose"
+      class="report-lightbox-close"
+      type="button"
+      aria-label="확대 사진 닫기"
+    >×</button>
+    <div class="report-lightbox-stage">
+      <img id="reportMediaLightboxImage" alt="">
+    </div>
+  </div>
+
   <div id="site-footer"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./assets/js/supabase-config.js?v=20260905-4"></script>
   <script src="./assets/js/site.js?v=20260905-4"></script>
-  <script src="./assets/js/report.js?v=20260913-1"></script>
+  <script src="./assets/js/report.js?v=20260913-2"></script>
 </body>
 </html>
