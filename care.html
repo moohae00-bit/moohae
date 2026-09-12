@@ -343,6 +343,83 @@
       }
     }
 
+
+
+    /* =========================================================
+       DESKTOP HORIZONTAL CARD NAVIGATION — ARROWS ONLY
+       Existing native horizontal scroll / swipe remains unchanged.
+       ========================================================= */
+    .care-wide-scroll-shell{
+      position:relative;
+    }
+
+    .care-scroll-arrow{
+      position:absolute;
+      top:50%;
+      z-index:20;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      padding:0;
+      border:1px solid rgba(34,34,34,.09);
+      border-radius:999px;
+      background:rgba(251,250,247,.94);
+      color:#222222;
+      box-shadow:0 8px 24px rgba(34,34,34,.08);
+      cursor:pointer;
+      transform:translateY(-50%);
+      transition:opacity .2s ease, transform .2s ease, background .2s ease;
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+    }
+
+    .care-scroll-arrow:hover:not(:disabled){
+      background:#ffffff;
+      transform:translateY(-50%) scale(1.04);
+    }
+
+    .care-scroll-arrow:focus-visible{
+      outline:2px solid #6B7F6E;
+      outline-offset:3px;
+    }
+
+    .care-scroll-arrow.is-prev{
+      left:18px;
+    }
+
+    .care-scroll-arrow.is-next{
+      right:18px;
+    }
+
+    .care-scroll-arrow svg{
+      width:18px;
+      height:18px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.8;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      pointer-events:none;
+    }
+
+    .care-scroll-arrow:disabled{
+      opacity:.22;
+      cursor:default;
+      box-shadow:none;
+    }
+
+    .care-wide-scroll-shell:not(.has-desktop-overflow) > .care-scroll-arrow{
+      display:none;
+    }
+
+    @media(max-width:768px){
+      .care-scroll-arrow{
+        display:none !important;
+      }
+    }
+
   </style>
 </head>
 <body data-page="care" class="care-page">
@@ -565,5 +642,120 @@
   <div id="site-footer"></div>
   <script src="./assets/js/site.js?v=20260905-4"></script>
   <script src="./assets/js/care.js?v=20260905-4"></script>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const DESKTOP_MIN = 769;
+      const TRACK_SELECTOR = [
+        '.moohae-care-selector-track',
+        '#moohaeLivingTrack',
+        '#moohaeFlowTrack',
+        '#carePlanTrack',
+        '#oneTrack'
+      ].join(',');
+
+      const arrowSvg = (direction) => {
+        const path = direction === 'prev'
+          ? 'M12.5 4.5 7 10l5.5 5.5'
+          : 'M7.5 4.5 13 10l-5.5 5.5';
+
+        return `<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="${path}"></path></svg>`;
+      };
+
+      const getStep = (track) => {
+        const first = track.firstElementChild;
+        if (!first) return Math.max(280, track.clientWidth * .8);
+
+        const style = window.getComputedStyle(track);
+        const gap = parseFloat(style.columnGap || style.gap || '0') || 0;
+        const cardWidth = first.getBoundingClientRect().width;
+
+        return Math.max(cardWidth + gap, track.clientWidth * .72);
+      };
+
+      const updateState = (shell, track, prev, next) => {
+        const desktop = window.innerWidth >= DESKTOP_MIN;
+        const overflow = desktop && track.scrollWidth > track.clientWidth + 4;
+
+        shell.classList.toggle('has-desktop-overflow', overflow);
+
+        if (!overflow) {
+          prev.disabled = true;
+          next.disabled = true;
+          return;
+        }
+
+        const maxLeft = Math.max(0, track.scrollWidth - track.clientWidth);
+        prev.disabled = track.scrollLeft <= 2;
+        next.disabled = track.scrollLeft >= maxLeft - 2;
+      };
+
+      const install = (track) => {
+        const shell = track.closest('.care-wide-scroll-shell');
+        if (!shell || shell.dataset.desktopArrows === 'ready') return;
+
+        shell.dataset.desktopArrows = 'ready';
+
+        const prev = document.createElement('button');
+        prev.type = 'button';
+        prev.className = 'care-scroll-arrow is-prev';
+        prev.setAttribute('aria-label', '이전 카드 보기');
+        prev.innerHTML = arrowSvg('prev');
+
+        const next = document.createElement('button');
+        next.type = 'button';
+        next.className = 'care-scroll-arrow is-next';
+        next.setAttribute('aria-label', '다음 카드 보기');
+        next.innerHTML = arrowSvg('next');
+
+        shell.append(prev, next);
+
+        prev.addEventListener('click', () => {
+          track.scrollBy({ left: -getStep(track), behavior: 'smooth' });
+        });
+
+        next.addEventListener('click', () => {
+          track.scrollBy({ left: getStep(track), behavior: 'smooth' });
+        });
+
+        track.addEventListener('scroll', () => {
+          window.requestAnimationFrame(() => updateState(shell, track, prev, next));
+        }, { passive: true });
+
+        const resizeObserver = 'ResizeObserver' in window
+          ? new ResizeObserver(() => updateState(shell, track, prev, next))
+          : null;
+
+        if (resizeObserver) {
+          resizeObserver.observe(track);
+          Array.from(track.children).forEach((child) => resizeObserver.observe(child));
+        }
+
+        updateState(shell, track, prev, next);
+      };
+
+      const init = () => {
+        document.querySelectorAll(TRACK_SELECTOR).forEach(install);
+
+        window.requestAnimationFrame(() => {
+          document.querySelectorAll(TRACK_SELECTOR).forEach((track) => {
+            const shell = track.closest('.care-wide-scroll-shell');
+            if (!shell) return;
+            const prev = shell.querySelector('.care-scroll-arrow.is-prev');
+            const next = shell.querySelector('.care-scroll-arrow.is-next');
+            if (prev && next) updateState(shell, track, prev, next);
+          });
+        });
+      };
+
+      init();
+      window.setTimeout(init, 120);
+      window.setTimeout(init, 450);
+      window.addEventListener('resize', init, { passive: true });
+    })();
+  </script>
+
 </body>
 </html>
