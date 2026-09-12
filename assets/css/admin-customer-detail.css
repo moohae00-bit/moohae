@@ -1,6 +1,6 @@
 /* ============================================================
    MOOHAE ADMIN
-   CUSTOMER DETAIL V4
+   CUSTOMER DETAIL V4.2
 
    목적
    - 관리자 5 STEP 운영 흐름
@@ -1911,8 +1911,14 @@
 .home-profile-summary span{display:block;margin-bottom:7px;color:var(--muted);font-size:9px;font-weight:800;letter-spacing:.1em}
 .home-profile-summary strong{font-size:13px;line-height:1.45}
 .home-profile-form{margin-top:18px}
-.returning-booking-admin{display:grid;gap:14px;margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
-.returning-booking-admin strong{display:block;font-size:15px}
-.returning-booking-admin p{margin:7px 0 0;color:var(--muted);font-size:11px;line-height:1.7}
-.returning-booking-admin-actions{display:flex;flex-wrap:wrap;gap:8px}
-@media(max-width:760px){.home-profile-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.returning-booking-admin-actions{display:grid;grid-template-columns:1fr}.returning-booking-admin-actions .secondary-button{width:100%}}
+.next-care-message-admin{display:grid;gap:14px;margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
+.next-care-message-admin strong{display:block;font-size:15px}
+.next-care-message-admin>div>p{margin:7px 0 0;color:var(--muted);font-size:11px;line-height:1.7}
+.next-care-message-admin-actions{display:flex;flex-wrap:wrap;gap:8px}
+.next-care-message-preview{display:grid;gap:10px;padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.next-care-message-preview[hidden]{display:none!important}
+.next-care-message-preview label{display:grid;gap:8px}
+.next-care-message-preview label>span{font-size:10px;font-weight:800}
+.next-care-message-preview textarea{box-sizing:border-box;width:100%;min-height:250px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfaf7;color:var(--ink);font:inherit;font-size:12px;line-height:1.75;resize:vertical}
+.next-care-message-preview .muted-copy{margin:0}
+@media(max-width:760px){.home-profile-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.next-care-message-admin-actions{display:grid;grid-template-columns:1fr}.next-care-message-admin-actions .secondary-button{width:100%}.next-care-message-preview{padding:14px}.next-care-message-preview textarea{min-height:290px}}

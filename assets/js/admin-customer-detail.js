@@ -3,7 +3,7 @@
 
 
   // ============================================================
-  // MOOHAE ADMIN · CUSTOMER DETAIL V4.1
+  // MOOHAE ADMIN · CUSTOMER DETAIL V4.2
   //
   // FLOW
   //
@@ -19,6 +19,9 @@
 
   const UUID_PATTERN =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+  const BOOKING_TOKEN_PATTERN =
+    /^[0-9a-f]{64}$/;
 
 
   const STATUS_LABELS = {
@@ -136,6 +139,9 @@
   const homeAreaInput =
     document.getElementById('homeAreaInput');
 
+  const homeNextCareDateInput =
+    document.getElementById('homeNextCareDateInput');
+
   const saveHomeProfileButton =
     document.getElementById('saveHomeProfileButton');
 
@@ -157,17 +163,26 @@
   const homeNextCare =
     document.getElementById('homeNextCare');
 
-  const returningBookingLinkState =
-    document.getElementById('returningBookingLinkState');
+  const nextCareMessageState =
+    document.getElementById('nextCareMessageState');
 
-  const openReturningBookingButton =
-    document.getElementById('openReturningBookingButton');
+  const prepareNextCareMessageButton =
+    document.getElementById('prepareNextCareMessageButton');
 
-  const copyReturningBookingButton =
-    document.getElementById('copyReturningBookingButton');
+  const copyNextCareMessageButton =
+    document.getElementById('copyNextCareMessageButton');
 
-  const returningBookingMessage =
-    document.getElementById('returningBookingMessage');
+  const nextCareMessagePreview =
+    document.getElementById('nextCareMessagePreview');
+
+  const nextCareMessageText =
+    document.getElementById('nextCareMessageText');
+
+  const nextCareMessageExpiry =
+    document.getElementById('nextCareMessageExpiry');
+
+  const nextCareMessageFeedback =
+    document.getElementById('nextCareMessageFeedback');
 
 
   const visitForm =
@@ -343,7 +358,7 @@
   let currentHouse =
     null;
 
-  let currentReturningReportToken =
+  let currentNextCareMessage =
     '';
 
 
@@ -971,13 +986,13 @@
       );
 
 
-      if (openReturningBookingButton) {
-        openReturningBookingButton.disabled = true;
+      if (prepareNextCareMessageButton) {
+        prepareNextCareMessageButton.disabled = true;
       }
 
 
-      if (copyReturningBookingButton) {
-        copyReturningBookingButton.disabled = true;
+      if (copyNextCareMessageButton) {
+        copyNextCareMessageButton.disabled = true;
       }
 
 
@@ -1519,13 +1534,66 @@
   }
 
 
-  function buildReturningBookingUrl(
-    publicToken
+  async function writeClipboardText(
+    value
   ) {
+    const text =
+      String(value || '');
+
+    if (!text) {
+      throw new Error('EMPTY_CLIPBOARD_TEXT');
+    }
 
     if (
-      !UUID_PATTERN.test(
-        publicToken || ''
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === 'function'
+    ) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const fallback =
+      document.createElement('textarea');
+
+    fallback.className =
+      'clipboard-fallback';
+
+    fallback.value =
+      text;
+
+    fallback.setAttribute(
+      'readonly',
+      ''
+    );
+
+    document.body.appendChild(
+      fallback
+    );
+
+    fallback.select();
+
+    const copied =
+      document.execCommand('copy');
+
+    fallback.remove();
+
+    if (!copied) {
+      throw new Error('CLIPBOARD_COPY_FAILED');
+    }
+  }
+
+
+  function buildNextCareBookingUrl(
+    bookingToken
+  ) {
+    const token =
+      String(bookingToken || '')
+        .trim()
+        .toLowerCase();
+
+    if (
+      !BOOKING_TOKEN_PATTERN.test(
+        token
       )
     ) {
       return null;
@@ -1538,52 +1606,255 @@
       );
 
     url.searchParams.set(
-      'report',
-      publicToken
+      't',
+      token
     );
 
     return url.toString();
   }
 
 
-  async function copyReturningBookingLink() {
-    const url =
-      buildReturningBookingUrl(
-        currentReturningReportToken
+  function buildNextCareMessage(
+    bookingUrl
+  ) {
+    return [
+      '안녕하세요, 무해입니다.',
+      '지난번 CARE 이후 집은 잘 지내고 있나요?',
+      '',
+      '기록해둔 다음 CARE 시점이 다가왔어요.',
+      '지금 다시 한번 관리가 필요하다고 느껴지시면 편한 일정을 확인해보세요.',
+      '',
+      '아직 상태가 괜찮다면 서두르지 않으셔도 됩니다.',
+      '무해는 필요한 시점에 다시 찾아뵐게요.',
+      '',
+      '[가능한 일정 확인하기]',
+      bookingUrl
+    ].join('\n');
+  }
+
+
+  function resetNextCareMessagePreview() {
+    currentNextCareMessage = '';
+
+    if (nextCareMessageText) {
+      nextCareMessageText.value = '';
+    }
+
+    if (nextCareMessageExpiry) {
+      nextCareMessageExpiry.textContent = '';
+    }
+
+    if (nextCareMessagePreview) {
+      nextCareMessagePreview.hidden = true;
+    }
+
+    if (copyNextCareMessageButton) {
+      copyNextCareMessageButton.hidden = true;
+      copyNextCareMessageButton.disabled = true;
+    }
+
+    setMessage(
+      nextCareMessageFeedback,
+      ''
+    );
+  }
+
+
+  function nextCareIssueErrorMessage(
+    code
+  ) {
+    switch (code) {
+      case 'next_care_not_set':
+        return '먼저 HOME 정보에서 다음 CARE 예정일을 저장해주세요.';
+
+      case 'active_booking_exists':
+        return '이미 요청 또는 확정된 방문 일정이 있습니다.';
+
+      case 'customer_unavailable':
+        return '현재 이 고객에게 재예약 안내를 만들 수 없습니다.';
+
+      case 'house_unavailable':
+        return '활성 MOOHAE HOME 정보를 확인할 수 없습니다.';
+
+      default:
+        return '재예약 안내를 준비하지 못했습니다. 잠시 후 다시 시도해주세요.';
+    }
+  }
+
+
+  async function prepareNextCareMessage() {
+    setMessage(
+      nextCareMessageFeedback,
+      ''
+    );
+
+    if (
+      currentCustomerDeleted ||
+      !currentCustomer ||
+      !currentHouse
+    ) {
+      setMessage(
+        nextCareMessageFeedback,
+        '활성 고객의 HOME에서만 재예약 안내를 만들 수 있습니다.'
+      );
+      return;
+    }
+
+    if (!currentHouse.next_care_date) {
+      setMessage(
+        nextCareMessageFeedback,
+        '먼저 HOME 정보에서 다음 CARE 예정일을 저장해주세요.'
+      );
+      return;
+    }
+
+    setBusy(
+      prepareNextCareMessageButton,
+      true,
+      '준비 중...',
+      '재예약 안내 준비'
+    );
+
+    try {
+      const { data, error } =
+        await window.moohaeSupabase.rpc(
+          'admin_issue_returning_booking_token_v2',
+          {
+            p_customer_id:
+              customerId
+          }
+        );
+
+      if (error) {
+        throw error;
+      }
+
+      const response =
+        Array.isArray(data)
+          ? data[0]
+          : data;
+
+      if (response?.ok !== true) {
+        setMessage(
+          nextCareMessageFeedback,
+          nextCareIssueErrorMessage(
+            String(
+              response?.error_code || ''
+            )
+          )
+        );
+        return;
+      }
+
+      const rawToken =
+        String(
+          response.booking_token || ''
+        )
+          .trim()
+          .toLowerCase();
+
+      const bookingUrl =
+        buildNextCareBookingUrl(
+          rawToken
+        );
+
+      if (!bookingUrl) {
+        throw new Error(
+          'INVALID_RETURNING_BOOKING_TOKEN'
+        );
+      }
+
+      currentNextCareMessage =
+        buildNextCareMessage(
+          bookingUrl
+        );
+
+      nextCareMessageText.value =
+        currentNextCareMessage;
+
+      nextCareMessagePreview.hidden =
+        false;
+
+      copyNextCareMessageButton.hidden =
+        false;
+
+      copyNextCareMessageButton.disabled =
+        false;
+
+      nextCareMessageExpiry.textContent =
+        response.expires_at
+          ? `예약 링크 유효기간 · ${formatDateTime(response.expires_at)}까지 · 예약 완료 또는 새 안내 생성 시 종료`
+          : '예약 완료 시 링크는 즉시 종료됩니다.';
+
+      setMessage(
+        nextCareMessageFeedback,
+        '고객에게 보낼 메시지가 준비되었습니다.',
+        true
       );
 
-    if (!url) {
+    } catch (error) {
+      console.error(
+        'MOOHAE NEXT CARE message prepare error:',
+        error
+      );
+
       setMessage(
-        returningBookingMessage,
-        '발행된 Care Report가 없어 재예약 링크를 만들 수 없습니다.'
+        nextCareMessageFeedback,
+        '재예약 안내를 준비하지 못했습니다. 잠시 후 다시 시도해주세요.'
+      );
+
+    } finally {
+      setBusy(
+        prepareNextCareMessageButton,
+        false,
+        '준비 중...',
+        '재예약 안내 준비'
+      );
+    }
+  }
+
+
+  async function copyNextCareMessage() {
+    if (!currentNextCareMessage) {
+      setMessage(
+        nextCareMessageFeedback,
+        '먼저 재예약 안내를 준비해주세요.'
       );
       return;
     }
 
     try {
-      await navigator.clipboard.writeText(url);
+      await writeClipboardText(
+        currentNextCareMessage
+      );
+
       setMessage(
-        returningBookingMessage,
-        '재예약 링크를 복사했습니다.',
+        nextCareMessageFeedback,
+        '메시지 전체를 복사했습니다.',
         true
       );
+
     } catch (error) {
-      console.error('MOOHAE returning booking copy error:', error);
+      console.error(
+        'MOOHAE NEXT CARE message copy error:',
+        error
+      );
+
       setMessage(
-        returningBookingMessage,
-        '링크를 복사하지 못했습니다.'
+        nextCareMessageFeedback,
+        '메시지를 복사하지 못했습니다.'
       );
     }
   }
 
 
   function renderHomeProfile(
-    house,
-    reports
+    house
   ) {
-
     currentHouse =
       house || null;
+
+    resetNextCareMessagePreview();
 
     if (!house) {
       homeIdInput.value = '';
@@ -1591,53 +1862,68 @@
       homeAddressInput.value = '';
       homeTypeSelect.value = '';
       homeAreaInput.value = '';
+      homeNextCareDateInput.value = '';
       homeNumber.textContent = '—';
       homePlan.textContent = '—';
       homeCycle.textContent = '—';
       homeNextCare.textContent = '—';
+      nextCareMessageState.textContent = 'HOME 정보 없음';
+      prepareNextCareMessageButton.disabled = true;
       setWorkflowState(homeProfileState, 'HOME 없음', 'wait');
       setFormDisabled(homeProfileForm, true);
-    } else {
-      homeIdInput.value = house.id || '';
-      homeRowVersion.value = String(house.row_version || 1);
-      homeAddressInput.value = house.address || '';
-      homeTypeSelect.value = house.home_type || '';
-      homeAreaInput.value = house.area_sqm ?? '';
-      homeNumber.textContent = house.house_number ? `#${house.house_number}` : '—';
-      homePlan.textContent = house.plan_code ? String(house.plan_code).replace('_PLUS', '+') : '미설정';
-      homeCycle.textContent = house.cycle_total ? `${house.cycle_current || 0} / ${house.cycle_total}` : String(house.cycle_current || 0);
-      homeNextCare.textContent = formatDate(house.next_care_date);
-      setWorkflowState(homeProfileState, house.status === 'active' ? 'ACTIVE' : (house.status || '상태 미정'), house.status === 'active' ? 'done' : 'ready');
-      setFormDisabled(homeProfileForm, currentCustomerDeleted);
+      setMessage(
+        nextCareMessageFeedback,
+        '활성 MOOHAE HOME 정보를 확인할 수 없습니다.'
+      );
+      return;
     }
 
-    const published =
-      (reports || []).find(
-        (report) =>
-          report.report_status === 'published' &&
-          UUID_PATTERN.test(report.public_token || '')
-      ) || null;
+    homeIdInput.value = house.id || '';
+    homeRowVersion.value = String(house.row_version || 1);
+    homeAddressInput.value = house.address || '';
+    homeTypeSelect.value = house.home_type || '';
+    homeAreaInput.value = house.area_sqm ?? '';
+    homeNextCareDateInput.value = house.next_care_date || '';
+    homeNumber.textContent = house.house_number ? `#${house.house_number}` : '—';
+    homePlan.textContent = house.plan_code ? String(house.plan_code).replace('_PLUS', '+') : '미설정';
+    homeCycle.textContent = house.cycle_total ? `${house.cycle_current || 0} / ${house.cycle_total}` : String(house.cycle_current || 0);
+    homeNextCare.textContent = formatDate(house.next_care_date);
 
-    currentReturningReportToken =
-      published?.public_token || '';
+    setWorkflowState(
+      homeProfileState,
+      house.status === 'active'
+        ? 'ACTIVE'
+        : (house.status || '상태 미정'),
+      house.status === 'active'
+        ? 'done'
+        : 'ready'
+    );
 
-    const available =
-      Boolean(currentReturningReportToken) &&
-      !currentCustomerDeleted;
+    setFormDisabled(
+      homeProfileForm,
+      currentCustomerDeleted
+    );
 
-    returningBookingLinkState.textContent =
-      published
-        ? `발행 Report · ${formatDate(published.published_at || published.created_at)}`
-        : '발행된 Care Report 없음';
+    const canPrepare =
+      !currentCustomerDeleted &&
+      house.status === 'active' &&
+      Boolean(house.next_care_date);
 
-    openReturningBookingButton.disabled = !available;
-    copyReturningBookingButton.disabled = !available;
+    prepareNextCareMessageButton.disabled =
+      !canPrepare;
+
+    nextCareMessageState.textContent =
+      house.next_care_date
+        ? `다음 CARE · ${formatDate(house.next_care_date)}`
+        : '다음 CARE 예정일 미등록';
 
     setMessage(
-      returningBookingMessage,
-      published
-        ? '이 링크로 기존 고객은 HOME CHECK 없이 바로 다음 CARE 일정을 선택할 수 있습니다.'
-        : 'Care Report 발행 후 재예약 링크가 활성화됩니다.'
+      nextCareMessageFeedback,
+      canPrepare
+        ? '고객이 필요하다고 느낄 때만 가능한 일정을 선택할 수 있도록 안내합니다.'
+        : currentCustomerDeleted
+          ? '삭제 처리된 고객에게는 재예약 안내를 만들 수 없습니다.'
+          : '먼저 HOME 정보에서 다음 CARE 예정일을 저장해주세요.'
     );
   }
 
@@ -2596,8 +2882,7 @@
     // ----------------------------------------------------------
 
     renderHomeProfile(
-      house,
-      reports
+      house
     );
 
 
@@ -2799,6 +3084,7 @@
       const homeType = homeTypeSelect.value;
       const areaRaw = homeAreaInput.value.trim();
       const area = areaRaw ? Number(areaRaw) : null;
+      const nextCareDate = homeNextCareDateInput.value.trim();
       const expectedVersion = Number(homeRowVersion.value);
 
       if (!UUID_PATTERN.test(houseId)) {
@@ -2821,6 +3107,11 @@
         return;
       }
 
+      if (nextCareDate && !/^\d{4}-\d{2}-\d{2}$/.test(nextCareDate)) {
+        setMessage(homeProfileMessage, '다음 CARE 예정일을 확인해주세요.');
+        return;
+      }
+
       if (!Number.isSafeInteger(expectedVersion) || expectedVersion < 1) {
         setMessage(homeProfileMessage, 'HOME 버전 정보를 확인할 수 없습니다. 새로고침해주세요.');
         return;
@@ -2830,13 +3121,14 @@
 
       try {
         const { data, error } = await window.moohaeSupabase.rpc(
-          'admin_update_customer_house_v1',
+          'admin_update_customer_house_v2',
           {
             p_customer_id: customerId,
             p_house_id: houseId,
             p_address: address || null,
             p_home_type: homeType || null,
             p_area_sqm: area,
+            p_next_care_date: nextCareDate || null,
             p_expected_version: expectedVersion
           }
         );
@@ -2867,19 +3159,15 @@
   );
 
 
-  openReturningBookingButton?.addEventListener(
+  prepareNextCareMessageButton?.addEventListener(
     'click',
-    () => {
-      const url = buildReturningBookingUrl(currentReturningReportToken);
-      if (!url || currentCustomerDeleted) return;
-      window.open(url, '_blank', 'noopener,noreferrer');
-    }
+    prepareNextCareMessage
   );
 
 
-  copyReturningBookingButton?.addEventListener(
+  copyNextCareMessageButton?.addEventListener(
     'click',
-    copyReturningBookingLink
+    copyNextCareMessage
   );
 
 

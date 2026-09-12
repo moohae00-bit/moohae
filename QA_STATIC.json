@@ -1,0 +1,68 @@
+{
+  "package": "MOOHAE_NEXT_CARE_BOOKING_V2",
+  "date": "2026-09-13",
+  "node_check": {
+    "assets/js/admin-customer-detail.js": "PASS",
+    "assets/js/booking.js": "PASS",
+    "assets/js/diagnosis.js": "PASS",
+    "assets/js/report.js": "PASS"
+  },
+  "html_duplicate_ids": {
+    "diagnosis.html": "PASS",
+    "report.html": "PASS",
+    "booking.html": "PASS",
+    "admin/customer-detail.html": "PASS"
+  },
+  "dom_reference_check": {
+    "assets/js/admin-customer-detail.js": "PASS",
+    "assets/js/booking.js": "PASS",
+    "assets/js/report.js": "PASS",
+    "assets/js/diagnosis.js": "PASS_WITH_PREEXISTING_RESULTCOPY"
+  },
+  "css_brace_balance": {
+    "assets/css/admin-customer-detail.css": "PASS",
+    "assets/css/report.css": "PASS",
+    "assets/css/diagnosis.css": "PASS",
+    "assets/css/booking.css": "PASS"
+  },
+  "sql_static_checks": {
+    "transaction": "PASS",
+    "function_dollar_quotes": "PASS",
+    "do_dollar_quotes": "PASS",
+    "v1_precheck": "PASS",
+    "old_report_issuer_dropped": "PASS",
+    "admin_issuer_v2": "PASS",
+    "public_context_v2": "PASS",
+    "submit_v2_preserved_and_extended": "PASS"
+  },
+  "routing_checks": {
+    "report_has_no_booking_cta": "PASS",
+    "no_report_token_booking_frontend": "PASS",
+    "final_message_exact_parts": "PASS",
+    "booking_uses_message_token": "PASS",
+    "booking_cleans_token_from_url": "PASS",
+    "booking_no_name_phone_check_form": "PASS",
+    "public_context_no_full_address": "PASS",
+    "saved_address_server_default": "PASS"
+  },
+  "known_preexisting": [
+    "diagnosis.js references resultCopy, but the uploaded original diagnosis.html also lacks that id; V2 leaves it unchanged."
+  ],
+  "sha256": {
+    "README_FIRST.txt": "76ae19799c3e383a69cac74d850b8459612b642632c020510e591907cf05502b",
+    "admin/customer-detail.html": "7e1d6bb7ec9eb326dba4ef51affe7907395cdc1152c149089d663be54612925d",
+    "assets/css/admin-customer-detail.css": "4ae7f683820473abfd96376760cb8ee5f9e950953cdd4b2a781c9dfe5e9d558d",
+    "assets/css/booking.css": "f2233a90ace4e533bde523925c542bdde8d8424ca1e71a8f7c8abfc60ff95d81",
+    "assets/css/diagnosis.css": "89033b40c25b6ab4b24fb703111f3e7e88357594c2d7221701829d6451cda540",
+    "assets/css/report.css": "89f0a093cba088ac8b1948c2e18d8d71a4bb79010275ce06d55b068e47722321",
+    "assets/js/admin-customer-detail.js": "ddbf649a282a7ede70b7eda0ea21e9c75a47312b11ed7eb866fc97b605c92f49",
+    "assets/js/booking.js": "35a2f118b2e945e997e396d4a1fb76579e634dc93e30f881e92ba59071fa8437",
+    "assets/js/diagnosis.js": "b093aa562a417c74c4e72415d39681dca62b7b808618e19152a6b6d1b3c44ea0",
+    "assets/js/report.js": "f6daab75fcdf5e2adba4f8d7384a3e9781edf6daec1efe713b16fe5a551b8e3d",
+    "booking.html": "8003827b0ad28ac620229875635e3c34f29a16acac7312a79a3cc422eb167c14",
+    "database/01_NEXT_CARE_MESSAGE_BOOKING_V2.sql": "a96c89e24b8cb097b74b52401482df5a8e0e838e16661849ecef95b803c80891",
+    "database/02_VERIFY_NEXT_CARE_MESSAGE_BOOKING_V2.sql": "ae74d2e6511b184f882a9eb83e23b5ad8a34620062a727f1f1ff4f0f53ae3de7",
+    "diagnosis.html": "8d7cbe135e98e9cf4317f0140ea098aa6f88d9d594cc360aea561697f5b622e7",
+    "report.html": "6ed443f2bfcf5c19d06eb5ec4ede3610dd0be2227e1f23f9e5cc7851eb0f8c84"
+  }
+}

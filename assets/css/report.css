@@ -121,14 +121,3 @@ body{background:#e8e5df}.report-shell{padding-top:88px}.report-intro{width:min(7
     border-radius: 14px;
   }
 }
-
-/* ============================================================
-   RETURNING CARE BOOKING CTA
-   ============================================================ */
-.returning-booking-cta{margin-top:28px;padding:24px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.58)}
-.returning-booking-cta>span{display:block;margin-bottom:9px;color:var(--sage-dark);font-size:9px;font-weight:750;letter-spacing:.15em}
-.returning-booking-cta h3{margin:0;font-size:20px;line-height:1.35;letter-spacing:-.035em}
-.returning-booking-cta p{margin:10px 0 18px;color:var(--gray);font-size:12px;line-height:1.7}
-.returning-booking-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 20px;border-radius:999px;background:var(--ink);color:#fff;font-size:12px;font-weight:750}
-.returning-booking-button[hidden]{display:none!important}
-@media(max-width:700px){.returning-booking-cta{padding:20px 18px}.returning-booking-cta h3{font-size:18px}}

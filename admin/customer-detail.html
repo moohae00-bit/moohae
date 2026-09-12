@@ -353,21 +353,36 @@
           <input id="homeAreaInput" type="number" min="1" max="10000" step="0.01" inputmode="decimal" placeholder="예: 84.95">
         </label>
 
+        <label>
+          <span>다음 CARE 예정일</span>
+          <input id="homeNextCareDateInput" type="date">
+        </label>
+
         <button id="saveHomeProfileButton" class="primary-button" type="submit">HOME 정보 저장</button>
         <p id="homeProfileMessage" class="inline-message" role="status" aria-live="polite"></p>
       </form>
 
-      <div class="returning-booking-admin">
+      <div class="next-care-message-admin">
         <div>
-          <span class="eyebrow">RETURNING CARE</span>
-          <strong id="returningBookingLinkState">Care Report 확인 중</strong>
-          <p>발행된 Care Report가 있으면 고객에게 CHECK 없는 재예약 링크를 보낼 수 있습니다.</p>
+          <span class="eyebrow">NEXT CARE MESSAGE</span>
+          <strong id="nextCareMessageState">다음 CARE 일정 확인 중</strong>
+          <p>기록해둔 다음 CARE 시점에 맞춰 고객에게 재예약 안내를 보냅니다.</p>
         </div>
-        <div class="returning-booking-admin-actions">
-          <button id="openReturningBookingButton" class="secondary-button" type="button" disabled>재예약 페이지 열기</button>
-          <button id="copyReturningBookingButton" class="secondary-button" type="button" disabled>재예약 링크 복사</button>
+
+        <div class="next-care-message-admin-actions">
+          <button id="prepareNextCareMessageButton" class="secondary-button" type="button" disabled>재예약 안내 준비</button>
+          <button id="copyNextCareMessageButton" class="secondary-button" type="button" hidden disabled>메시지 전체 복사</button>
         </div>
-        <p id="returningBookingMessage" class="inline-message" role="status" aria-live="polite"></p>
+
+        <div id="nextCareMessagePreview" class="next-care-message-preview" hidden>
+          <label>
+            <span>고객에게 보낼 메시지</span>
+            <textarea id="nextCareMessageText" rows="13" readonly></textarea>
+          </label>
+          <p id="nextCareMessageExpiry" class="muted-copy"></p>
+        </div>
+
+        <p id="nextCareMessageFeedback" class="inline-message" role="status" aria-live="polite"></p>
       </div>
     </section>
 
@@ -1488,7 +1503,7 @@
 
   <script src="../assets/js/supabase-config.js?v=20260828-4"></script>
 
-  <script src="../assets/js/admin-customer-detail.js?v=20260912-4"></script>
+  <script src="../assets/js/admin-customer-detail.js?v=20260913-1"></script>
 
   <script src="../assets/js/admin-customer-facility.js?v=20260908-2"></script>
 
