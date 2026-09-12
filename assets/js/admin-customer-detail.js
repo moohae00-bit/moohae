@@ -93,6 +93,15 @@
   const managementForm =
     document.getElementById('customerManagementForm');
 
+  const customerNameInput =
+    document.getElementById('customerNameInput');
+
+  const customerPhoneInput =
+    document.getElementById('customerPhoneInput');
+
+  const customerAddressInput =
+    document.getElementById('customerAddressInput');
+
   const statusSelect =
     document.getElementById('customerStatusSelect');
 
@@ -2263,6 +2272,18 @@
       );
 
 
+    customerNameInput.value =
+      customer.name || '';
+
+
+    customerPhoneInput.value =
+      customer.phone || '';
+
+
+    customerAddressInput.value =
+      customer.address || '';
+
+
     statusSelect.value =
       ALLOWED_STATUSES.has(
         customer.status
@@ -2532,8 +2553,31 @@
         !currentCustomer
       ) {
 
+        setMessage(
+          managementMessage,
+          '삭제된 고객은 수정할 수 없습니다. 먼저 복구해주세요.'
+        );
+
         return;
       }
+
+
+      const name =
+        customerNameInput
+          .value
+          .trim();
+
+
+      const phone =
+        customerPhoneInput
+          .value
+          .trim();
+
+
+      const address =
+        customerAddressInput
+          .value
+          .trim();
 
 
       const status =
@@ -2551,6 +2595,76 @@
 
 
       if (
+        !name
+      ) {
+
+        setMessage(
+          managementMessage,
+          '고객 이름을 입력해주세요.'
+        );
+
+        customerNameInput.focus();
+
+        return;
+      }
+
+
+      if (
+        name.length > 100
+      ) {
+
+        setMessage(
+          managementMessage,
+          '고객 이름은 100자 이내로 입력해주세요.'
+        );
+
+        return;
+      }
+
+
+      if (
+        phone.length > 50
+      ) {
+
+        setMessage(
+          managementMessage,
+          '연락처는 50자 이내로 입력해주세요.'
+        );
+
+        return;
+      }
+
+
+      if (
+        phone &&
+        !/^[0-9+\-\s()]{9,20}$/.test(
+          phone
+        )
+      ) {
+
+        setMessage(
+          managementMessage,
+          '연락처 형식을 확인해주세요.'
+        );
+
+        return;
+      }
+
+
+      if (
+        address.length > 500
+      ) {
+
+        setMessage(
+          managementMessage,
+          '주소는 500자 이내로 입력해주세요.'
+        );
+
+        return;
+      }
+
+
+      if (
         !ALLOWED_STATUSES.has(
           status
         )
@@ -2560,7 +2674,6 @@
           managementMessage,
           '고객 상태를 확인해주세요.'
         );
-
 
         return;
       }
@@ -2574,7 +2687,6 @@
           managementMessage,
           '운영 메모는 5,000자 이내로 작성해주세요.'
         );
-
 
         return;
       }
@@ -2592,7 +2704,6 @@
           '고객 버전 정보를 확인할 수 없습니다. 새로고침해주세요.'
         );
 
-
         return;
       }
 
@@ -2601,13 +2712,14 @@
         saveCustomerButton,
         true,
         '저장 중...',
-        '상담 정보 저장'
+        '고객 정보 저장'
       );
 
 
       try {
 
         const {
+          data,
           error
         } =
           await window
@@ -2619,14 +2731,14 @@
                   customerId,
 
                 p_name:
-                  currentCustomer.name,
+                  name,
 
                 p_phone:
-                  currentCustomer.phone ||
+                  phone ||
                   null,
 
                 p_address:
-                  currentCustomer.address ||
+                  address ||
                   null,
 
                 p_status:
@@ -2646,9 +2758,7 @@
         ) {
 
           if (
-            error.code ===
-              '40001' ||
-
+            error.code === '40001' ||
             String(
               error.message || ''
             ).includes(
@@ -2662,13 +2772,34 @@
           }
 
 
+          if (
+            error.code === '23505'
+          ) {
+
+            throw new Error(
+              'DUPLICATE_CUSTOMER_PHONE'
+            );
+          }
+
+
           throw error;
+        }
+
+
+        if (
+          data?.row_version
+        ) {
+
+          customerRowVersion.value =
+            String(
+              data.row_version
+            );
         }
 
 
         setMessage(
           managementMessage,
-          '상담 정보가 저장되었습니다.',
+          '고객 정보가 저장되었습니다.',
           true
         );
 
@@ -2681,7 +2812,7 @@
       ) {
 
         console.error(
-          'MOOHAE customer management error:',
+          'MOOHAE customer update error:',
           error
         );
 
@@ -2696,15 +2827,24 @@
             '다른 화면에서 고객 정보가 먼저 수정되었습니다. 최신 정보를 다시 불러옵니다.'
           );
 
-
           await loadCustomerData();
 
+
+        } else if (
+          error?.message ===
+          'DUPLICATE_CUSTOMER_PHONE'
+        ) {
+
+          setMessage(
+            managementMessage,
+            '이미 등록된 연락처입니다. 다른 고객의 연락처와 중복되지 않는지 확인해주세요.'
+          );
 
         } else {
 
           setMessage(
             managementMessage,
-            '상담 정보를 저장하지 못했습니다.'
+            '고객 정보를 저장하지 못했습니다.'
           );
         }
 
@@ -2715,7 +2855,7 @@
           saveCustomerButton,
           false,
           '저장 중...',
-          '상담 정보 저장'
+          '고객 정보 저장'
         );
       }
     }

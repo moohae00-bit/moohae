@@ -567,6 +567,60 @@
 
 
 /* ============================================================
+   CUSTOMER PROFILE EDIT
+   ============================================================ */
+
+.workflow-form input[type="text"],
+.workflow-form input[type="tel"] {
+  width:
+    100%;
+
+  min-height:
+    46px;
+
+  padding:
+    0 13px;
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:
+    13px;
+
+  background:
+    #fff;
+
+  color:
+    var(--ink);
+
+  outline:
+    none;
+}
+
+
+.workflow-form input[type="text"]:focus,
+.workflow-form input[type="tel"]:focus {
+  border-color:
+    rgba(
+      112,
+      136,
+      110,
+      .7
+    );
+
+  box-shadow:
+    0 0 0 4px
+    rgba(
+      112,
+      136,
+      110,
+      .09
+    );
+}
+
+
+/* ============================================================
    BUTTON SYSTEM
    ============================================================ */
 
