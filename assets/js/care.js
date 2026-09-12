@@ -478,10 +478,10 @@
           '79,000원',
 
         image:
-          `${IMAGE_BASE}04_one_room.webp`,
+          './assets/images/moohae-one/one-room.webp',
 
         alt:
-          '침대와 바닥, 협탁이 포함된 MOOHAE ONE ROOM 오브젝트'
+          'MOOHAE ONE ROOM 생활공간 CARE'
       },
 
 
@@ -490,19 +490,19 @@
           'one-mattress',
 
         name:
-          'MATTRESS',
+          'ONE BED',
 
         description:
-          '매일 가장 오래 머무는 곳.',
+          '매일 닿는 침대부터.',
 
         price:
           '39,000원~',
 
         image:
-          `${IMAGE_BASE}07_mattress.webp`,
+          './assets/images/moohae-one/one-bed.webp',
 
         alt:
-          '정돈된 매트리스 오브젝트'
+          'MOOHAE ONE BED 침대 CARE'
       },
 
 
@@ -511,19 +511,19 @@
           'one-sofa',
 
         name:
-          'SOFA',
+          'ONE SOFA',
 
         description:
-          '가족의 일상이 머무는 곳.',
+          '자주 머무는 소파부터.',
 
         price:
           '49,000원~',
 
         image:
-          `${IMAGE_BASE}06_sofa.webp`,
+          './assets/images/moohae-one/one-sofa.webp',
 
         alt:
-          '패브릭 소파 오브젝트'
+          'MOOHAE ONE SOFA 소파 CARE'
       },
 
 
@@ -532,19 +532,19 @@
           'one-bedding',
 
         name:
-          'BEDDING',
+          'ONE BEDDING',
 
         description:
-          '매일 피부와 가장 가까운 곳.',
+          '매일 닿는 침구부터.',
 
         price:
           '29,000원~',
 
         image:
-          `${IMAGE_BASE}08_bedding.webp`,
+          './assets/images/moohae-one/one-bedding.webp',
 
         alt:
-          '이불과 베개가 정돈된 침구류 오브젝트'
+          'MOOHAE ONE BEDDING 침구 CARE'
       },
 
 
@@ -553,19 +553,19 @@
           'one-rug',
 
         name:
-          'RUG',
+          'ONE RUG',
 
         description:
-          '생활먼지가 머무르기 쉬운 곳.',
+          '생활 가까운 러그부터.',
 
         price:
           '29,000원~',
 
         image:
-          `${IMAGE_BASE}09_rug.webp`,
+          './assets/images/moohae-one/one-rug.webp',
 
         alt:
-          'MOOHAE 러그 CARE 오브젝트'
+          'MOOHAE ONE RUG 러그 CARE'
       },
 
 
@@ -574,19 +574,19 @@
           'one-floor',
 
         name:
-          'FLOOR',
+          'ONE FLOOR',
 
         description:
-          '집 전체를 연결하는 바닥.',
+          '매일 걷는 바닥부터.',
 
         price:
           '39,000원~',
 
         image:
-          `${IMAGE_BASE}10_floor.webp`,
+          './assets/images/moohae-one/one-floor.webp',
 
         alt:
-          'MOOHAE 바닥 CARE 오브젝트'
+          'MOOHAE ONE FLOOR 바닥 CARE'
       }
 
     ]
