@@ -1000,3 +1000,24 @@ body{
     font-size:16px;
   }
 }
+
+
+/* ============================================================
+   RETURNING CUSTOMER ROUTE
+   ============================================================ */
+.returning-customer-guide{
+  margin:-24px 0 34px;
+  padding:22px 24px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:rgba(255,255,255,.55);
+}
+.returning-customer-guide .eyebrow{display:block;margin-bottom:8px}
+.returning-customer-guide strong{display:block;font-size:16px;letter-spacing:-.025em}
+.returning-customer-guide p{margin:10px 0 0;color:var(--gray);font-size:13px;line-height:1.75}
+.returning-customer-guide b{color:var(--ink);font-weight:750}
+@media(max-width:768px){
+  .returning-customer-guide{margin:-18px 0 26px;padding:19px 18px;border-radius:18px}
+  .returning-customer-guide strong{font-size:15px}
+  .returning-customer-guide p{font-size:12px}
+}

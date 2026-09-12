@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>무해 · 다음 CARE 예약</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests">
+  <meta name="referrer" content="no-referrer">
+  <link rel="stylesheet" href="./assets/css/site.css?v=20260905-4">
+  <link rel="stylesheet" href="./assets/css/booking.css?v=20260912-1">
+</head>
+<body data-page="booking">
+  <div id="site-header"></div>
+
+  <main class="returning-booking-shell">
+    <section id="bookingLoading" class="booking-state">
+      <p class="eyebrow">RETURNING CARE</p>
+      <h1>우리 집의 다음 CARE를<br>준비하고 있습니다.</h1>
+      <p>기존 HOME과 CARE HISTORY를 확인하는 중입니다.</p>
+    </section>
+
+    <section id="bookingError" class="booking-state" hidden>
+      <p class="eyebrow">RETURNING CARE</p>
+      <h1>예약을 이어갈 수 없습니다.</h1>
+      <p id="bookingErrorMessage">재예약 링크를 확인해주세요.</p>
+      <a id="bookingBackReportError" href="./index.html" class="booking-text-link">돌아가기</a>
+    </section>
+
+    <section id="bookingContent" class="booking-content" hidden>
+      <div class="booking-hero">
+        <p class="eyebrow">RETURNING CARE</p>
+        <h1><span id="bookingCustomerName">고객</span>님,<br>다음 CARE를 예약해주세요.</h1>
+        <p>다시 HOME CHECK를 작성하지 않아도 됩니다. 무해가 기억하고 있는 우리 집 기록을 이어서 관리합니다.</p>
+      </div>
+
+      <section class="booking-card">
+        <div class="booking-card-head">
+          <span>01</span>
+          <div>
+            <h2>방문 일정</h2>
+            <p>예약 가능한 날짜와 시간을 선택해주세요.</p>
+          </div>
+        </div>
+        <div id="returningBookingCalendar" class="returning-booking-calendar" aria-live="polite"></div>
+        <div id="returningBookingSelection" class="returning-booking-selection" hidden>
+          <span>선택한 일정</span>
+          <strong id="returningBookingSelectedSummary">—</strong>
+        </div>
+      </section>
+
+      <section class="booking-card">
+        <div class="booking-card-head">
+          <span>02</span>
+          <div>
+            <h2>이번 방문 주소</h2>
+            <p>저장된 HOME 주소를 기본으로 사용합니다. 이번 방문지만 다른 경우에만 수정해주세요.</p>
+          </div>
+        </div>
+        <label class="booking-field" for="returningBookingAddress">
+          <span>방문 주소</span>
+          <textarea id="returningBookingAddress" rows="3" minlength="5" maxlength="500" autocomplete="street-address" placeholder="방문할 주소와 상세 주소를 입력해주세요"></textarea>
+        </label>
+        <p class="booking-address-note">여기서 주소를 바꿔도 MOOHAE HOME의 기본 주소는 자동으로 변경되지 않습니다.</p>
+      </section>
+
+      <button id="returningBookingSubmit" class="booking-primary" type="button" disabled>이 일정으로 방문 요청하기</button>
+      <p id="returningBookingMessage" class="booking-message" role="status" aria-live="polite"></p>
+
+      <div class="booking-secondary-actions">
+        <a id="bookingBackReport" href="./index.html" class="booking-text-link">Care Report로 돌아가기</a>
+        <a href="./diagnosis.html" class="booking-text-link">HOME CHECK 다시 하기</a>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./assets/js/supabase-config.js?v=20260905-4"></script>
+  <script src="./assets/js/site.js?v=20260905-4"></script>
+  <script src="./assets/js/booking.js?v=20260912-1"></script>
+</body>
+</html>

@@ -58,6 +58,9 @@
   const nextCareSummary =
     document.getElementById('nextCareSummary');
 
+  const rebookCareLink =
+    document.getElementById('rebookCareLink');
+
 
   // ------------------------------------------------------------
   // MEDIA
@@ -854,6 +857,28 @@
       renderReport(
         rows[0]
       );
+
+
+      if (
+        rebookCareLink
+      ) {
+        const bookingUrl =
+          new URL(
+            './booking.html',
+            window.location.href
+          );
+
+        bookingUrl.searchParams.set(
+          'report',
+          token
+        );
+
+        rebookCareLink.href =
+          bookingUrl.toString();
+
+        rebookCareLink.hidden =
+          false;
+      }
 
 
       showContent();

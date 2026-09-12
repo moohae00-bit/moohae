@@ -118,6 +118,58 @@
     document.getElementById('customerManagementMessage');
 
 
+  const homeProfileForm =
+    document.getElementById('homeProfileForm');
+
+  const homeIdInput =
+    document.getElementById('homeIdInput');
+
+  const homeRowVersion =
+    document.getElementById('homeRowVersion');
+
+  const homeAddressInput =
+    document.getElementById('homeAddressInput');
+
+  const homeTypeSelect =
+    document.getElementById('homeTypeSelect');
+
+  const homeAreaInput =
+    document.getElementById('homeAreaInput');
+
+  const saveHomeProfileButton =
+    document.getElementById('saveHomeProfileButton');
+
+  const homeProfileMessage =
+    document.getElementById('homeProfileMessage');
+
+  const homeProfileState =
+    document.getElementById('homeProfileState');
+
+  const homeNumber =
+    document.getElementById('homeNumber');
+
+  const homePlan =
+    document.getElementById('homePlan');
+
+  const homeCycle =
+    document.getElementById('homeCycle');
+
+  const homeNextCare =
+    document.getElementById('homeNextCare');
+
+  const returningBookingLinkState =
+    document.getElementById('returningBookingLinkState');
+
+  const openReturningBookingButton =
+    document.getElementById('openReturningBookingButton');
+
+  const copyReturningBookingButton =
+    document.getElementById('copyReturningBookingButton');
+
+  const returningBookingMessage =
+    document.getElementById('returningBookingMessage');
+
+
   const visitForm =
     document.getElementById('visitScheduleForm');
 
@@ -287,6 +339,12 @@
 
   let currentCustomerDeleted =
     false;
+
+  let currentHouse =
+    null;
+
+  let currentReturningReportToken =
+    '';
 
 
   // ============================================================
@@ -908,6 +966,22 @@
 
 
       setFormDisabled(
+        homeProfileForm,
+        true
+      );
+
+
+      if (openReturningBookingButton) {
+        openReturningBookingButton.disabled = true;
+      }
+
+
+      if (copyReturningBookingButton) {
+        copyReturningBookingButton.disabled = true;
+      }
+
+
+      setFormDisabled(
         visitForm,
         true
       );
@@ -939,6 +1013,12 @@
       setFormDisabled(
         managementForm,
         false
+      );
+
+
+      setFormDisabled(
+        homeProfileForm,
+        !currentHouse
       );
 
 
@@ -1436,6 +1516,129 @@
         1500
       );
     }
+  }
+
+
+  function buildReturningBookingUrl(
+    publicToken
+  ) {
+
+    if (
+      !UUID_PATTERN.test(
+        publicToken || ''
+      )
+    ) {
+      return null;
+    }
+
+    const url =
+      new URL(
+        '/booking.html',
+        window.location.origin
+      );
+
+    url.searchParams.set(
+      'report',
+      publicToken
+    );
+
+    return url.toString();
+  }
+
+
+  async function copyReturningBookingLink() {
+    const url =
+      buildReturningBookingUrl(
+        currentReturningReportToken
+      );
+
+    if (!url) {
+      setMessage(
+        returningBookingMessage,
+        '발행된 Care Report가 없어 재예약 링크를 만들 수 없습니다.'
+      );
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setMessage(
+        returningBookingMessage,
+        '재예약 링크를 복사했습니다.',
+        true
+      );
+    } catch (error) {
+      console.error('MOOHAE returning booking copy error:', error);
+      setMessage(
+        returningBookingMessage,
+        '링크를 복사하지 못했습니다.'
+      );
+    }
+  }
+
+
+  function renderHomeProfile(
+    house,
+    reports
+  ) {
+
+    currentHouse =
+      house || null;
+
+    if (!house) {
+      homeIdInput.value = '';
+      homeRowVersion.value = '';
+      homeAddressInput.value = '';
+      homeTypeSelect.value = '';
+      homeAreaInput.value = '';
+      homeNumber.textContent = '—';
+      homePlan.textContent = '—';
+      homeCycle.textContent = '—';
+      homeNextCare.textContent = '—';
+      setWorkflowState(homeProfileState, 'HOME 없음', 'wait');
+      setFormDisabled(homeProfileForm, true);
+    } else {
+      homeIdInput.value = house.id || '';
+      homeRowVersion.value = String(house.row_version || 1);
+      homeAddressInput.value = house.address || '';
+      homeTypeSelect.value = house.home_type || '';
+      homeAreaInput.value = house.area_sqm ?? '';
+      homeNumber.textContent = house.house_number ? `#${house.house_number}` : '—';
+      homePlan.textContent = house.plan_code ? String(house.plan_code).replace('_PLUS', '+') : '미설정';
+      homeCycle.textContent = house.cycle_total ? `${house.cycle_current || 0} / ${house.cycle_total}` : String(house.cycle_current || 0);
+      homeNextCare.textContent = formatDate(house.next_care_date);
+      setWorkflowState(homeProfileState, house.status === 'active' ? 'ACTIVE' : (house.status || '상태 미정'), house.status === 'active' ? 'done' : 'ready');
+      setFormDisabled(homeProfileForm, currentCustomerDeleted);
+    }
+
+    const published =
+      (reports || []).find(
+        (report) =>
+          report.report_status === 'published' &&
+          UUID_PATTERN.test(report.public_token || '')
+      ) || null;
+
+    currentReturningReportToken =
+      published?.public_token || '';
+
+    const available =
+      Boolean(currentReturningReportToken) &&
+      !currentCustomerDeleted;
+
+    returningBookingLinkState.textContent =
+      published
+        ? `발행 Report · ${formatDate(published.published_at || published.created_at)}`
+        : '발행된 Care Report 없음';
+
+    openReturningBookingButton.disabled = !available;
+    copyReturningBookingButton.disabled = !available;
+
+    setMessage(
+      returningBookingMessage,
+      published
+        ? '이 링크로 기존 고객은 HOME CHECK 없이 바로 다음 CARE 일정을 선택할 수 있습니다.'
+        : 'Care Report 발행 후 재예약 링크가 활성화됩니다.'
+    );
   }
 
 
@@ -1961,7 +2164,8 @@
       diagnosisResult,
       visitResult,
       reportResult,
-      bookingResult
+      bookingResult,
+      houseResult
     ] =
       await Promise.all([
 
@@ -2088,7 +2292,32 @@
               p_customer_id:
                 customerId
             }
+          ),
+
+
+        window
+          .moohaeSupabase
+          .from('houses')
+          .select(
+            `
+              id,
+              house_number,
+              customer_id,
+              is_primary,
+              plan_code,
+              cycle_current,
+              cycle_total,
+              next_care_date,
+              status,
+              address,
+              home_type,
+              area_sqm,
+              row_version
+            `
           )
+          .eq('customer_id', customerId)
+          .eq('is_primary', true)
+          .maybeSingle()
       ]);
 
 
@@ -2138,6 +2367,13 @@
     }
 
 
+    if (
+      houseResult.error
+    ) {
+      throw houseResult.error;
+    }
+
+
     const customer =
       customerResult.data;
 
@@ -2152,6 +2388,10 @@
 
     const reports =
       reportResult.data || [];
+
+
+    const house =
+      houseResult.data || null;
 
 
     const booking =
@@ -2352,6 +2592,16 @@
 
 
     // ----------------------------------------------------------
+    // MOOHAE HOME
+    // ----------------------------------------------------------
+
+    renderHomeProfile(
+      house,
+      reports
+    );
+
+
+    // ----------------------------------------------------------
     // BOOKING
     // ----------------------------------------------------------
 
@@ -2527,6 +2777,110 @@
     detailMessage.textContent =
       '';
   }
+
+
+  // ============================================================
+  // MOOHAE HOME PROFILE SAVE
+  // ============================================================
+
+  homeProfileForm?.addEventListener(
+    'submit',
+    async (event) => {
+      event.preventDefault();
+      setMessage(homeProfileMessage, '');
+
+      if (currentCustomerDeleted || !currentCustomer || !currentHouse) {
+        setMessage(homeProfileMessage, '활성 고객의 HOME 정보만 수정할 수 있습니다.');
+        return;
+      }
+
+      const houseId = homeIdInput.value.trim();
+      const address = homeAddressInput.value.trim();
+      const homeType = homeTypeSelect.value;
+      const areaRaw = homeAreaInput.value.trim();
+      const area = areaRaw ? Number(areaRaw) : null;
+      const expectedVersion = Number(homeRowVersion.value);
+
+      if (!UUID_PATTERN.test(houseId)) {
+        setMessage(homeProfileMessage, 'HOME 식별 정보를 확인할 수 없습니다. 새로고침해주세요.');
+        return;
+      }
+
+      if (address.length > 500) {
+        setMessage(homeProfileMessage, 'HOME 주소는 500자 이내로 입력해주세요.');
+        return;
+      }
+
+      if (homeType && !['apartment','villa','detached','officetel','other'].includes(homeType)) {
+        setMessage(homeProfileMessage, '주거 형태를 확인해주세요.');
+        return;
+      }
+
+      if (area !== null && (!Number.isFinite(area) || area <= 0 || area > 10000)) {
+        setMessage(homeProfileMessage, '면적은 0보다 크고 10,000㎡ 이하로 입력해주세요.');
+        return;
+      }
+
+      if (!Number.isSafeInteger(expectedVersion) || expectedVersion < 1) {
+        setMessage(homeProfileMessage, 'HOME 버전 정보를 확인할 수 없습니다. 새로고침해주세요.');
+        return;
+      }
+
+      setBusy(saveHomeProfileButton, true, '저장 중...', 'HOME 정보 저장');
+
+      try {
+        const { data, error } = await window.moohaeSupabase.rpc(
+          'admin_update_customer_house_v1',
+          {
+            p_customer_id: customerId,
+            p_house_id: houseId,
+            p_address: address || null,
+            p_home_type: homeType || null,
+            p_area_sqm: area,
+            p_expected_version: expectedVersion
+          }
+        );
+
+        if (error) {
+          if (error.code === '40001' || String(error.message || '').includes('house_data_changed')) {
+            throw new Error('STALE_HOUSE_VERSION');
+          }
+          throw error;
+        }
+
+        const row = Array.isArray(data) ? data[0] : data;
+        if (row?.row_version) homeRowVersion.value = String(row.row_version);
+        setMessage(homeProfileMessage, 'HOME 정보가 저장되었습니다.', true);
+        await loadCustomerData();
+      } catch (error) {
+        console.error('MOOHAE HOME update error:', error);
+        setMessage(
+          homeProfileMessage,
+          error?.message === 'STALE_HOUSE_VERSION'
+            ? '다른 화면에서 HOME 정보가 먼저 변경되었습니다. 최신 정보를 다시 불러온 뒤 저장해주세요.'
+            : 'HOME 정보를 저장하지 못했습니다.'
+        );
+      } finally {
+        setBusy(saveHomeProfileButton, false, '저장 중...', 'HOME 정보 저장');
+      }
+    }
+  );
+
+
+  openReturningBookingButton?.addEventListener(
+    'click',
+    () => {
+      const url = buildReturningBookingUrl(currentReturningReportToken);
+      if (!url || currentCustomerDeleted) return;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  );
+
+
+  copyReturningBookingButton?.addEventListener(
+    'click',
+    copyReturningBookingLink
+  );
 
 
   // ============================================================

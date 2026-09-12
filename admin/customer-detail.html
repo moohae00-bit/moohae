@@ -48,7 +48,7 @@
 
   <link
     rel="stylesheet"
-    href="../assets/css/admin-customer-detail.css?v=20260912-3"
+    href="../assets/css/admin-customer-detail.css?v=20260912-4"
   >
 
   <link
@@ -231,7 +231,7 @@
           </div>
 
           <div>
-            <dt>주소</dt>
+            <dt>고객 연락 주소</dt>
 
             <dd
               id="detailAddress"
@@ -305,6 +305,71 @@
 
     </section>
 
+
+    <!-- =======================================================
+         MOOHAE HOME PROFILE V1
+    ======================================================== -->
+
+    <section class="detail-card home-profile-card" id="homeProfileCard">
+      <div class="detail-card-head home-profile-head">
+        <div>
+          <p class="eyebrow">MOOHAE HOME</p>
+          <h2>CARE 대상 HOME</h2>
+          <p class="muted-copy">고객 정보와 분리해서 실제 CARE 대상 집의 기본 정보를 관리합니다.</p>
+        </div>
+        <span id="homeProfileState" class="workflow-state">확인 중</span>
+      </div>
+
+      <div class="home-profile-summary">
+        <div><span>HOME NO.</span><strong id="homeNumber">—</strong></div>
+        <div><span>PLAN</span><strong id="homePlan">—</strong></div>
+        <div><span>CARE CYCLE</span><strong id="homeCycle">—</strong></div>
+        <div><span>NEXT CARE</span><strong id="homeNextCare">—</strong></div>
+      </div>
+
+      <form id="homeProfileForm" class="admin-form home-profile-form" novalidate>
+        <input id="homeIdInput" type="hidden" value="">
+        <input id="homeRowVersion" type="hidden" value="">
+
+        <label>
+          <span>HOME 주소</span>
+          <textarea id="homeAddressInput" maxlength="500" rows="3" autocomplete="street-address" placeholder="실제 CARE 대상 집의 주소"></textarea>
+        </label>
+
+        <label>
+          <span>주거 형태</span>
+          <select id="homeTypeSelect">
+            <option value="">미등록</option>
+            <option value="apartment">아파트</option>
+            <option value="villa">빌라 · 연립</option>
+            <option value="detached">단독주택</option>
+            <option value="officetel">오피스텔</option>
+            <option value="other">기타</option>
+          </select>
+        </label>
+
+        <label>
+          <span>면적 (㎡)</span>
+          <input id="homeAreaInput" type="number" min="1" max="10000" step="0.01" inputmode="decimal" placeholder="예: 84.95">
+        </label>
+
+        <button id="saveHomeProfileButton" class="primary-button" type="submit">HOME 정보 저장</button>
+        <p id="homeProfileMessage" class="inline-message" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="returning-booking-admin">
+        <div>
+          <span class="eyebrow">RETURNING CARE</span>
+          <strong id="returningBookingLinkState">Care Report 확인 중</strong>
+          <p>발행된 Care Report가 있으면 고객에게 CHECK 없는 재예약 링크를 보낼 수 있습니다.</p>
+        </div>
+        <div class="returning-booking-admin-actions">
+          <button id="openReturningBookingButton" class="secondary-button" type="button" disabled>재예약 페이지 열기</button>
+          <button id="copyReturningBookingButton" class="secondary-button" type="button" disabled>재예약 링크 복사</button>
+        </div>
+        <p id="returningBookingMessage" class="inline-message" role="status" aria-live="polite"></p>
+      </div>
+    </section>
 
     <!-- =======================================================
          PROCESS INTRO
@@ -421,7 +486,7 @@
         <label>
 
           <span>
-            주소
+            고객 연락 주소 (선택)
           </span>
 
           <textarea
@@ -429,7 +494,7 @@
             maxlength="500"
             rows="3"
             autocomplete="street-address"
-            placeholder="고객 방문 주소를 입력하세요."
+            placeholder="고객 프로필에 남길 연락/기본 주소를 입력하세요."
           ></textarea>
 
         </label>
@@ -1423,7 +1488,7 @@
 
   <script src="../assets/js/supabase-config.js?v=20260828-4"></script>
 
-  <script src="../assets/js/admin-customer-detail.js?v=20260912-3"></script>
+  <script src="../assets/js/admin-customer-detail.js?v=20260912-4"></script>
 
   <script src="../assets/js/admin-customer-facility.js?v=20260908-2"></script>
 
