@@ -1312,3 +1312,168 @@ select {
   }
 
 }
+
+/* ============================================================
+   MOOHAE HEADER NAV — CARE / CHECK FINAL
+   LOGO = HOME
+   2026-09-13
+   ============================================================ */
+
+/*
+ * 기존 햄버거/모바일 패널 CSS는 다른 코드 안정성을 위해 남겨두되,
+ * 현재 site.js에서는 해당 요소를 생성하지 않는다.
+ *
+ * 실제 상단 노출:
+ * LOGO(HOME) / CARE / CHECK
+ */
+
+.nav-menu {
+  display:flex;
+  align-items:center;
+  gap:28px;
+  margin-left:auto;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.01em;
+}
+
+.nav-menu a {
+  min-height:38px;
+  padding:0;
+  white-space:nowrap;
+}
+
+.nav-menu a.nav-check-cta {
+  min-width:78px;
+  min-height:38px;
+  justify-content:center;
+  padding:0 18px;
+  border-radius:999px;
+  background:#222222;
+  color:#ffffff;
+  font-size:12px;
+  font-weight:750;
+  letter-spacing:.03em;
+  box-shadow:none;
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    opacity .2s ease;
+}
+
+.nav-menu a.nav-check-cta::after {
+  display:none;
+  content:none;
+}
+
+.nav-menu a.nav-check-cta:hover {
+  color:#ffffff;
+  background:#111111;
+  transform:translateY(-1px);
+}
+
+.nav-menu a.nav-check-cta.active {
+  color:#ffffff;
+  background:#222222;
+  font-weight:800;
+}
+
+/*
+ * 더 이상 별도 상담 CTA / 햄버거 / 모바일 패널을 사용하지 않는다.
+ * 현재 JS에서는 생성되지 않지만 혹시 남아 있는 마크업도 숨긴다.
+ */
+.nav-cta,
+.mobile-toggle,
+.mobile-panel {
+  display:none !important;
+}
+
+
+@media(max-width:768px) {
+
+  .nav-inner {
+    width:calc(100% - 32px);
+  }
+
+  .logo {
+    width:118px;
+    height:52px;
+  }
+
+  .logo img {
+    height:44px;
+  }
+
+  .nav-menu {
+    display:flex !important;
+    gap:12px;
+    margin-left:auto;
+    font-size:12px;
+  }
+
+  .nav-menu a {
+    min-height:36px;
+  }
+
+  .nav-menu a:not(.nav-check-cta) {
+    padding:0 2px;
+    font-weight:700;
+  }
+
+  .nav-menu a.nav-check-cta {
+    min-width:68px;
+    min-height:36px;
+    padding:0 14px;
+    font-size:11px;
+  }
+
+}
+
+
+@media(max-width:420px) {
+
+  .nav-inner {
+    width:calc(100% - 26px);
+  }
+
+  .logo {
+    width:108px;
+    height:48px;
+  }
+
+  .logo img {
+    height:40px;
+  }
+
+  .nav-menu {
+    gap:10px;
+    font-size:11px;
+  }
+
+  .nav-menu a.nav-check-cta {
+    min-width:64px;
+    min-height:34px;
+    padding:0 12px;
+    font-size:10.5px;
+  }
+
+}
+
+
+@media(max-width:350px) {
+
+  .logo {
+    width:96px;
+  }
+
+  .nav-menu {
+    gap:8px;
+  }
+
+  .nav-menu a.nav-check-cta {
+    min-width:60px;
+    padding:0 10px;
+  }
+
+}
+
