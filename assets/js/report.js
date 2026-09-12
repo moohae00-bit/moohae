@@ -37,8 +37,14 @@
   const careAreaTop =
     document.getElementById('careAreaTop');
 
-  const careAreaSummary =
-    document.getElementById('careAreaSummary');
+  const careMainAreaSummary =
+    document.getElementById('careMainAreaSummary');
+
+  const nextCareAreaSummary =
+    document.getElementById('nextCareAreaSummary');
+
+  const nextCheckAreaSummary =
+    document.getElementById('nextCheckAreaSummary');
 
   const careList =
     document.getElementById('careList');
@@ -48,9 +54,6 @@
 
   const nextCare =
     document.getElementById('nextCare');
-
-  const nextCareSummary =
-    document.getElementById('nextCareSummary');
 
 
   // ------------------------------------------------------------
@@ -196,6 +199,109 @@
   }
 
 
+  function normalizeStringArray(value) {
+    if (!Array.isArray(value)) {
+      return [];
+    }
+
+    const normalized = [];
+    const seen = new Set();
+
+    for (const item of value) {
+      if (typeof item !== 'string') {
+        continue;
+      }
+
+      const text =
+        item.trim();
+
+      if (
+        !text ||
+        seen.has(text)
+      ) {
+        continue;
+      }
+
+      seen.add(text);
+      normalized.push(text);
+    }
+
+    return normalized;
+  }
+
+
+  function normalizeReportDetail(value) {
+    if (
+      value &&
+      typeof value === 'object' &&
+      !Array.isArray(value)
+    ) {
+      return value;
+    }
+
+    if (
+      Array.isArray(value) &&
+      value.length === 1 &&
+      value[0] &&
+      typeof value[0] === 'object' &&
+      !Array.isArray(value[0])
+    ) {
+      return value[0];
+    }
+
+    return null;
+  }
+
+
+  function makeAreaLabel(item) {
+    if (
+      !item ||
+      typeof item !== 'object'
+    ) {
+      return '';
+    }
+
+    const spaceName =
+      pickText(
+        item,
+        'space_name',
+        'spaceName'
+      );
+
+    const objectName =
+      pickText(
+        item,
+        'object_name',
+        'objectName'
+      );
+
+    if (spaceName && objectName) {
+      return `${spaceName} · ${objectName}`;
+    }
+
+    return objectName || spaceName;
+  }
+
+
+  function renderSummaryValue(
+    node,
+    values,
+    fallback = '없음'
+  ) {
+    if (!node) {
+      return;
+    }
+
+    const normalized =
+      normalizeStringArray(values);
+
+    node.textContent =
+      normalized.length > 0
+        ? normalized.join('\n')
+        : fallback;
+  }
+
+
 
   // ============================================================
   // CUSTOMER
@@ -230,12 +336,10 @@
 
 
   // ============================================================
-  // CARE ITEMS
+  // TODAY'S CARE
   // ============================================================
 
-  function renderCareItems(items) {
-    careList.replaceChildren();
-
+  function renderLegacyCareItems(items) {
     if (
       !Array.isArray(items) ||
       items.length === 0
@@ -243,8 +347,11 @@
       const empty =
         document.createElement('p');
 
+      empty.className =
+        'care-detail-empty';
+
       empty.textContent =
-        '기록된 케어 항목이 없습니다.';
+        '기록된 CARE 항목이 없습니다.';
 
       careList.appendChild(
         empty
@@ -254,10 +361,7 @@
     }
 
 
-    for (
-      const item
-      of items
-    ) {
+    for (const item of items) {
       const row =
         document.createElement('div');
 
@@ -304,6 +408,182 @@
     }
   }
 
+
+  function renderCareDetails(
+    details,
+    legacyItems
+  ) {
+    careList.replaceChildren();
+
+    const normalizedDetails =
+      Array.isArray(details)
+        ? details.filter(
+            (item) =>
+              item &&
+              typeof item === 'object' &&
+              !Array.isArray(item)
+          )
+        : [];
+
+
+    if (
+      normalizedDetails.length === 0
+    ) {
+      renderLegacyCareItems(
+        legacyItems
+      );
+
+      return;
+    }
+
+
+    for (
+      const item
+      of normalizedDetails
+    ) {
+      const card =
+        document.createElement('article');
+
+      card.className =
+        'care-detail-item';
+
+
+      const head =
+        document.createElement('div');
+
+      head.className =
+        'care-detail-head';
+
+
+      const title =
+        document.createElement('div');
+
+      title.className =
+        'care-detail-title';
+
+
+      const objectName =
+        pickText(
+          item,
+          'object_name',
+          'objectName'
+        ) ||
+        'CARE 항목';
+
+      const spaceName =
+        pickText(
+          item,
+          'space_name',
+          'spaceName'
+        );
+
+
+      if (spaceName) {
+        const space =
+          document.createElement('span');
+
+        space.className =
+          'care-detail-space';
+
+        space.textContent =
+          spaceName;
+
+        title.appendChild(
+          space
+        );
+      }
+
+
+      const name =
+        document.createElement('strong');
+
+      name.textContent =
+        objectName;
+
+      title.appendChild(
+        name
+      );
+
+
+      const state =
+        document.createElement('span');
+
+      state.className =
+        'care-state care-detail-state';
+
+      state.textContent =
+        'CARE COMPLETE';
+
+
+      head.append(
+        title,
+        state
+      );
+
+      card.appendChild(
+        head
+      );
+
+
+      const completedParts =
+        normalizeStringArray(
+          item.completed_parts ??
+          item.completedParts
+        );
+
+      const list =
+        document.createElement('ul');
+
+      list.className =
+        'care-detail-parts';
+
+
+      if (
+        completedParts.length === 0
+      ) {
+        const empty =
+          document.createElement('li');
+
+        empty.className =
+          'care-detail-part care-detail-part-empty';
+
+        empty.textContent =
+          '세부 완료 기록이 없습니다.';
+
+        list.appendChild(
+          empty
+        );
+
+      } else {
+        for (
+          const part
+          of completedParts
+        ) {
+          const listItem =
+            document.createElement('li');
+
+          listItem.className =
+            'care-detail-part';
+
+          listItem.textContent =
+            part;
+
+          list.appendChild(
+            listItem
+          );
+        }
+      }
+
+
+      card.appendChild(
+        list
+      );
+
+      careList.appendChild(
+        card
+      );
+    }
+  }
 
 
   // ============================================================
@@ -700,7 +980,10 @@
   // REPORT
   // ============================================================
 
-  function renderReport(report) {
+  function renderReport(
+    report,
+    detail
+  ) {
     renderCustomerName(
       report
     );
@@ -726,10 +1009,6 @@
       area;
 
 
-    careAreaSummary.textContent =
-      area;
-
-
     managerComment.textContent =
       pickText(
         report,
@@ -752,13 +1031,58 @@
       recommendation;
 
 
-    nextCareSummary.textContent =
-      recommendation;
+    const careDetails =
+      Array.isArray(
+        detail?.care_details
+      )
+        ? detail.care_details
+        : [];
 
 
-    renderCareItems(
+    renderCareDetails(
+      careDetails,
       report.care_items ??
       report.careItems
+    );
+
+
+    let mainAreas =
+      normalizeStringArray(
+        detail?.main_areas
+      );
+
+
+    if (
+      mainAreas.length === 0 &&
+      careDetails.length > 0
+    ) {
+      mainAreas =
+        normalizeStringArray(
+          careDetails.map(
+            makeAreaLabel
+          )
+        );
+    }
+
+
+    renderSummaryValue(
+      careMainAreaSummary,
+      mainAreas,
+      '상세 CARE 기록 없음'
+    );
+
+
+    renderSummaryValue(
+      nextCareAreaSummary,
+      detail?.next_care_areas,
+      '없음'
+    );
+
+
+    renderSummaryValue(
+      nextCheckAreaSummary,
+      detail?.next_check_areas,
+      '없음'
     );
   }
 
@@ -907,6 +1231,7 @@
     try {
       const [
         reportResult,
+        detailResult,
         mediaResult
       ] =
         await Promise.allSettled([
@@ -914,6 +1239,16 @@
             .moohaeSupabase
             .rpc(
               'get_public_care_report',
+              {
+                p_public_token:
+                  token
+              }
+            ),
+
+          window
+            .moohaeSupabase
+            .rpc(
+              'get_public_care_report_detail_v1',
               {
                 p_public_token:
                   token
@@ -983,8 +1318,51 @@
       }
 
 
+      let reportDetail =
+        null;
+
+
+      if (
+        detailResult.status ===
+        'fulfilled'
+      ) {
+        const {
+          data: detailData,
+          error: detailError
+        } =
+          detailResult.value;
+
+
+        if (detailError) {
+          console.error(
+            'MOOHAE public report detail RPC error:',
+            {
+              code:
+                detailError.code,
+
+              message:
+                detailError.message
+            }
+          );
+
+        } else {
+          reportDetail =
+            normalizeReportDetail(
+              detailData
+            );
+        }
+
+      } else {
+        console.error(
+          'MOOHAE public report detail promise rejected:',
+          detailResult.reason
+        );
+      }
+
+
       renderReport(
-        rows[0]
+        rows[0],
+        reportDetail
       );
 
 

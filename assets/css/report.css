@@ -234,3 +234,127 @@ body.report-lightbox-open {
   }
 }
 
+
+/* ============================================================
+   TODAY'S CARE — ACTUAL CARE COMPLETE DETAIL
+   ============================================================ */
+
+.care-detail-item {
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.care-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.care-detail-title {
+  min-width: 0;
+}
+
+.care-detail-space {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--gray-light);
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: .12em;
+}
+
+.care-detail-title strong {
+  display: block;
+  font-size: 19px;
+  line-height: 1.35;
+  letter-spacing: -.035em;
+}
+
+.care-detail-state {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--sage-soft);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.care-detail-parts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.care-detail-part {
+  position: relative;
+  min-width: 0;
+  padding: 13px 14px 13px 38px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.care-detail-part::before {
+  content: "✓";
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  color: var(--sage-dark);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.care-detail-part-empty {
+  grid-column: 1 / -1;
+  color: var(--gray);
+  font-weight: 500;
+}
+
+.care-detail-part-empty::before {
+  content: "–";
+  color: var(--gray-light);
+}
+
+.care-detail-empty {
+  margin: 0;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--gray);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.condition-card strong {
+  display: block;
+  white-space: pre-line;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+@media (max-width: 600px) {
+  .care-detail-item {
+    padding: 23px 0;
+  }
+
+  .care-detail-title strong {
+    font-size: 18px;
+  }
+
+  .care-detail-parts {
+    grid-template-columns: 1fr;
+    margin-top: 17px;
+  }
+
+  .care-detail-part {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
