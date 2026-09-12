@@ -177,6 +177,96 @@
     );
 
 
+  // ------------------------------------------------------------
+  // DELETED CUSTOMER BULK PERMANENT DELETE
+  // ------------------------------------------------------------
+
+  const bulkPermanentCustomerActions =
+    document.getElementById(
+      'bulkPermanentCustomerActions'
+    );
+
+  const selectVisibleDeletedCustomersCheckbox =
+    document.getElementById(
+      'selectVisibleDeletedCustomersCheckbox'
+    );
+
+  const selectedDeletedCustomerCount =
+    document.getElementById(
+      'selectedDeletedCustomerCount'
+    );
+
+  const openBulkPermanentDeleteButton =
+    document.getElementById(
+      'openBulkPermanentDeleteButton'
+    );
+
+  const bulkPermanentDeleteDialog =
+    document.getElementById(
+      'bulkPermanentDeleteDialog'
+    );
+
+  const bulkPermanentDeleteForm =
+    document.getElementById(
+      'bulkPermanentDeleteForm'
+    );
+
+  const bulkPermanentDeleteTargetSummary =
+    document.getElementById(
+      'bulkPermanentDeleteTargetSummary'
+    );
+
+  const bulkPermanentDeleteReason =
+    document.getElementById(
+      'bulkPermanentDeleteReason'
+    );
+
+  const bulkPermanentDeleteConfirmInput =
+    document.getElementById(
+      'bulkPermanentDeleteConfirmInput'
+    );
+
+  const bulkPermanentDeleteConfirmGuide =
+    document.getElementById(
+      'bulkPermanentDeleteConfirmGuide'
+    );
+
+  const bulkPermanentDeleteResult =
+    document.getElementById(
+      'bulkPermanentDeleteResult'
+    );
+
+  const bulkPermanentDeleteResultSummary =
+    document.getElementById(
+      'bulkPermanentDeleteResultSummary'
+    );
+
+  const bulkPermanentDeleteResultList =
+    document.getElementById(
+      'bulkPermanentDeleteResultList'
+    );
+
+  const cancelBulkPermanentDeleteButton =
+    document.getElementById(
+      'cancelBulkPermanentDeleteButton'
+    );
+
+  const closeBulkPermanentDeleteDialogButton =
+    document.getElementById(
+      'closeBulkPermanentDeleteDialogButton'
+    );
+
+  const confirmBulkPermanentDeleteButton =
+    document.getElementById(
+      'confirmBulkPermanentDeleteButton'
+    );
+
+  const bulkPermanentDeleteDialogMessage =
+    document.getElementById(
+      'bulkPermanentDeleteDialogMessage'
+    );
+
+
   // ============================================================
   // BOOKING DOM
   // ============================================================
@@ -406,6 +496,18 @@
     [];
 
   let bulkDeleteInProgress =
+    false;
+
+  let authContext =
+    null;
+
+  const selectedDeletedCustomerIds =
+    new Set();
+
+  let currentFilteredDeletedCustomerIds =
+    [];
+
+  let bulkPermanentDeleteInProgress =
     false;
 
   let latestDiagnosisByCustomer =
@@ -2168,6 +2270,731 @@
 
 
   // ============================================================
+  // DELETED CUSTOMER BULK PERMANENT DELETE
+  // ============================================================
+
+  function isAdminUser() {
+
+    return (
+      authContext?.profile?.role ===
+        'admin'
+    );
+  }
+
+
+  function currentSelectedDeletedCustomers() {
+
+    const deletedById =
+      new Map(
+        deletedCustomers.map(
+          (customer) => [
+            customer.id,
+            customer
+          ]
+        )
+      );
+
+    return [
+      ...selectedDeletedCustomerIds
+    ]
+      .map(
+        (id) =>
+          deletedById.get(
+            id
+          ) ||
+          null
+      )
+      .filter(
+        (customer) =>
+          Boolean(
+            customer?.deleted_at
+          )
+      );
+  }
+
+
+  function expectedBulkPermanentDeletePhrase(
+    count
+  ) {
+
+    return `${count}명 영구삭제`;
+  }
+
+
+  function resetBulkPermanentDeleteDialog() {
+
+    bulkPermanentDeleteForm?.reset();
+
+    if (
+      bulkPermanentDeleteReason
+    ) {
+
+      bulkPermanentDeleteReason.disabled =
+        false;
+    }
+
+    if (
+      bulkPermanentDeleteConfirmInput
+    ) {
+
+      bulkPermanentDeleteConfirmInput.disabled =
+        false;
+    }
+
+    if (
+      confirmBulkPermanentDeleteButton
+    ) {
+
+      confirmBulkPermanentDeleteButton.hidden =
+        false;
+
+      confirmBulkPermanentDeleteButton.disabled =
+        false;
+
+      confirmBulkPermanentDeleteButton.textContent =
+        '선택 고객 영구삭제';
+    }
+
+    if (
+      cancelBulkPermanentDeleteButton
+    ) {
+
+      cancelBulkPermanentDeleteButton.disabled =
+        false;
+
+      cancelBulkPermanentDeleteButton.textContent =
+        '취소';
+    }
+
+    if (
+      closeBulkPermanentDeleteDialogButton
+    ) {
+
+      closeBulkPermanentDeleteDialogButton.disabled =
+        false;
+    }
+
+    if (
+      bulkPermanentDeleteResult
+    ) {
+
+      bulkPermanentDeleteResult.hidden =
+        true;
+    }
+
+    bulkPermanentDeleteResultList?.replaceChildren();
+
+    if (
+      bulkPermanentDeleteResultSummary
+    ) {
+
+      bulkPermanentDeleteResultSummary.textContent =
+        '';
+    }
+
+    if (
+      bulkPermanentDeleteDialogMessage
+    ) {
+
+      bulkPermanentDeleteDialogMessage.textContent =
+        '';
+    }
+  }
+
+
+  function closeBulkPermanentDeleteDialog() {
+
+    if (
+      bulkPermanentDeleteInProgress
+    ) {
+
+      return;
+    }
+
+    if (
+      bulkPermanentDeleteDialog?.open
+    ) {
+
+      bulkPermanentDeleteDialog.close();
+    }
+
+    resetBulkPermanentDeleteDialog();
+  }
+
+
+  function updateBulkPermanentSelectionUi(
+    filteredDeletedIds =
+      currentFilteredDeletedCustomerIds
+  ) {
+
+    const available =
+      currentCustomerView ===
+        'deleted' &&
+      isAdminUser();
+
+    if (
+      bulkPermanentCustomerActions
+    ) {
+
+      bulkPermanentCustomerActions.hidden =
+        !available;
+    }
+
+    if (
+      !available
+    ) {
+
+      selectedDeletedCustomerIds.clear();
+      currentFilteredDeletedCustomerIds =
+        [];
+
+      if (
+        selectVisibleDeletedCustomersCheckbox
+      ) {
+
+        selectVisibleDeletedCustomersCheckbox.checked =
+          false;
+
+        selectVisibleDeletedCustomersCheckbox.indeterminate =
+          false;
+      }
+
+      if (
+        selectedDeletedCustomerCount
+      ) {
+
+        selectedDeletedCustomerCount.textContent =
+          '0명 선택';
+      }
+
+      if (
+        openBulkPermanentDeleteButton
+      ) {
+
+        openBulkPermanentDeleteButton.disabled =
+          true;
+      }
+
+      return;
+    }
+
+    currentFilteredDeletedCustomerIds =
+      Array.isArray(
+        filteredDeletedIds
+      )
+        ? [
+            ...filteredDeletedIds
+          ]
+        : [];
+
+    const visibleIds =
+      new Set(
+        currentFilteredDeletedCustomerIds
+      );
+
+    for (
+      const id
+      of [
+        ...selectedDeletedCustomerIds
+      ]
+    ) {
+
+      if (
+        !visibleIds.has(
+          id
+        )
+      ) {
+
+        selectedDeletedCustomerIds.delete(
+          id
+        );
+      }
+    }
+
+    const selectedCount =
+      selectedDeletedCustomerIds.size;
+
+    const visibleCount =
+      currentFilteredDeletedCustomerIds.length;
+
+    if (
+      selectedDeletedCustomerCount
+    ) {
+
+      selectedDeletedCustomerCount.textContent =
+        `${selectedCount}명 선택`;
+    }
+
+    if (
+      selectVisibleDeletedCustomersCheckbox
+    ) {
+
+      selectVisibleDeletedCustomersCheckbox.disabled =
+        visibleCount ===
+          0 ||
+        bulkPermanentDeleteInProgress;
+
+      selectVisibleDeletedCustomersCheckbox.checked =
+        visibleCount >
+          0 &&
+        selectedCount ===
+          visibleCount;
+
+      selectVisibleDeletedCustomersCheckbox.indeterminate =
+        selectedCount >
+          0 &&
+        selectedCount <
+          visibleCount;
+    }
+
+    if (
+      openBulkPermanentDeleteButton
+    ) {
+
+      openBulkPermanentDeleteButton.disabled =
+        selectedCount ===
+          0 ||
+        bulkPermanentDeleteInProgress;
+    }
+  }
+
+
+  function renderBulkPermanentDeleteResultRow(
+    customer,
+    ok,
+    detail = ''
+  ) {
+
+    if (
+      !bulkPermanentDeleteResultList
+    ) {
+
+      return;
+    }
+
+    const row =
+      make(
+        'div',
+        `bulk-delete-result-row ${
+          ok
+            ? 'is-success'
+            : 'is-failed'
+        }`
+      );
+
+    row.append(
+      make(
+        'strong',
+        '',
+        customer.name ||
+          '이름 없음'
+      ),
+      make(
+        'span',
+        '',
+        ok
+          ? '영구삭제 완료'
+          : `실패${
+              detail
+                ? ` · ${detail}`
+                : ' · 다시 시도'
+            }`
+      )
+    );
+
+    bulkPermanentDeleteResultList.appendChild(
+      row
+    );
+  }
+
+
+  function openBulkPermanentDeleteDialogForSelection() {
+
+    if (
+      bulkPermanentDeleteInProgress ||
+      currentCustomerView !==
+        'deleted' ||
+      !isAdminUser()
+    ) {
+
+      return;
+    }
+
+    const targets =
+      currentSelectedDeletedCustomers();
+
+    if (
+      targets.length ===
+        0
+    ) {
+
+      updateBulkPermanentSelectionUi();
+      return;
+    }
+
+    resetBulkPermanentDeleteDialog();
+
+    const previewNames =
+      targets
+        .slice(
+          0,
+          5
+        )
+        .map(
+          (customer) =>
+            customer.name ||
+            '이름 없음'
+        );
+
+    const extraCount =
+      targets.length -
+      previewNames.length;
+
+    if (
+      bulkPermanentDeleteTargetSummary
+    ) {
+
+      bulkPermanentDeleteTargetSummary.textContent =
+        `선택 고객 ${targets.length}명 · ${previewNames.join(
+          ', '
+        )}${
+          extraCount >
+            0
+            ? ` 외 ${extraCount}명`
+            : ''
+        }`;
+    }
+
+    const phrase =
+      expectedBulkPermanentDeletePhrase(
+        targets.length
+      );
+
+    if (
+      bulkPermanentDeleteConfirmGuide
+    ) {
+
+      bulkPermanentDeleteConfirmGuide.textContent =
+        `복구할 수 없습니다. 확인란에 “${phrase}”라고 정확히 입력해야 합니다.`;
+    }
+
+    if (
+      bulkPermanentDeleteConfirmInput
+    ) {
+
+      bulkPermanentDeleteConfirmInput.placeholder =
+        phrase;
+    }
+
+    bulkPermanentDeleteDialog?.showModal();
+  }
+
+
+  async function removeStorageFilesForPermanentDelete(
+    mediaRows
+  ) {
+
+    const groups =
+      new Map();
+
+    for (
+      const row
+      of mediaRows || []
+    ) {
+
+      const bucket =
+        String(
+          row?.storage_bucket ||
+          ''
+        ).trim();
+
+      const path =
+        String(
+          row?.storage_path ||
+          ''
+        ).trim();
+
+      if (
+        !bucket ||
+        !path
+      ) {
+
+        throw new Error(
+          'INVALID_MEDIA_PATH'
+        );
+      }
+
+      if (
+        !groups.has(
+          bucket
+        )
+      ) {
+
+        groups.set(
+          bucket,
+          new Set()
+        );
+      }
+
+      groups
+        .get(
+          bucket
+        )
+        .add(
+          path
+        );
+    }
+
+    for (
+      const [
+        bucket,
+        pathSet
+      ]
+      of groups.entries()
+    ) {
+
+      const paths =
+        [
+          ...pathSet
+        ];
+
+      for (
+        let index =
+          0;
+        index <
+          paths.length;
+        index +=
+          100
+      ) {
+
+        const batch =
+          paths.slice(
+            index,
+            index +
+              100
+          );
+
+        const {
+          error
+        } =
+          await window
+            .moohaeSupabase
+            .storage
+            .from(
+              bucket
+            )
+            .remove(
+              batch
+            );
+
+        if (
+          error
+        ) {
+
+          throw error;
+        }
+      }
+    }
+  }
+
+
+  async function runBulkPermanentDelete(
+    targets,
+    reason
+  ) {
+
+    const result = {
+      success:
+        [],
+
+      failed:
+        []
+    };
+
+    for (
+      let index =
+        0;
+      index <
+        targets.length;
+      index +=
+        1
+    ) {
+
+      const customer =
+        targets[index];
+
+      let stage =
+        '삭제 준비';
+
+      try {
+
+        if (
+          !customer?.deleted_at
+        ) {
+
+          throw new Error(
+            'CUSTOMER_NOT_SOFT_DELETED'
+          );
+        }
+
+        if (
+          bulkPermanentDeleteDialogMessage
+        ) {
+
+          bulkPermanentDeleteDialogMessage.textContent =
+            `${index + 1}/${targets.length} · ${customer.name || '이름 없음'} · CARE 사진 확인 중`;
+        }
+
+        stage =
+          'CARE 사진 확인';
+
+        const {
+          data:
+            mediaRows,
+          error:
+            prepareError
+        } =
+          await window
+            .moohaeSupabase
+            .rpc(
+              'admin_prepare_permanent_customer_delete',
+              {
+                p_customer_id:
+                  customer.id
+              }
+            );
+
+        if (
+          prepareError
+        ) {
+
+          throw prepareError;
+        }
+
+        stage =
+          'CARE 사진 삭제';
+
+        if (
+          bulkPermanentDeleteDialogMessage
+        ) {
+
+          bulkPermanentDeleteDialogMessage.textContent =
+            `${index + 1}/${targets.length} · ${customer.name || '이름 없음'} · CARE 사진 삭제 중`;
+        }
+
+        await removeStorageFilesForPermanentDelete(
+          Array.isArray(
+            mediaRows
+          )
+            ? mediaRows
+            : []
+        );
+
+        stage =
+          'CARE 사진 metadata 삭제';
+
+        const {
+          error:
+            mediaCleanupError
+        } =
+          await window
+            .moohaeSupabase
+            .rpc(
+              'admin_delete_customer_care_media_metadata',
+              {
+                p_customer_id:
+                  customer.id
+              }
+            );
+
+        if (
+          mediaCleanupError
+        ) {
+
+          throw mediaCleanupError;
+        }
+
+        stage =
+          '고객 데이터 영구삭제';
+
+        if (
+          bulkPermanentDeleteDialogMessage
+        ) {
+
+          bulkPermanentDeleteDialogMessage.textContent =
+            `${index + 1}/${targets.length} · ${customer.name || '이름 없음'} · DB 영구삭제 중`;
+        }
+
+        const {
+          error:
+            deleteError
+        } =
+          await window
+            .moohaeSupabase
+            .rpc(
+              'admin_permanently_delete_customer',
+              {
+                p_customer_id:
+                  customer.id,
+
+                p_reason:
+                  reason
+              }
+            );
+
+        if (
+          deleteError
+        ) {
+
+          throw deleteError;
+        }
+
+        result.success.push(
+          customer
+        );
+
+        renderBulkPermanentDeleteResultRow(
+          customer,
+          true
+        );
+
+      } catch (
+        error
+      ) {
+
+        console.error(
+          'MOOHAE bulk permanent delete customer error:',
+          customer?.id,
+          stage,
+          error
+        );
+
+        result.failed.push({
+          customer,
+          stage
+        });
+
+        renderBulkPermanentDeleteResultRow(
+          customer,
+          false,
+          stage
+        );
+      }
+
+      if (
+        bulkPermanentDeleteResultSummary
+      ) {
+
+        bulkPermanentDeleteResultSummary.textContent =
+          `처리 ${index + 1}/${targets.length} · 완료 ${result.success.length}명 · 실패 ${result.failed.length}명`;
+      }
+    }
+
+    return result;
+  }
+
+
+  // ============================================================
   // LOAD CUSTOMERS
   // ============================================================
 
@@ -2728,10 +3555,21 @@
         )
       );
 
+      updateBulkPermanentSelectionUi(
+        []
+      );
+
     } else {
 
       updateBulkSelectionUi(
         []
+      );
+
+      updateBulkPermanentSelectionUi(
+        filtered.map(
+          (customer) =>
+            customer.id
+        )
       );
     }
 
@@ -2925,9 +3763,100 @@
           actions
         );
 
-        customerList.appendChild(
-          row
-        );
+        if (
+          isAdminUser()
+        ) {
+
+          const wrapper =
+            make(
+              'article',
+              'customer-row-wrap deleted-customer-row-wrap'
+            );
+
+          const selectionLabel =
+            make(
+              'label',
+              'customer-select-control deleted-customer-select-control'
+            );
+
+          const selectionInput =
+            document.createElement(
+              'input'
+            );
+
+          selectionInput.type =
+            'checkbox';
+
+          selectionInput.checked =
+            selectedDeletedCustomerIds.has(
+              customer.id
+            );
+
+          selectionInput.disabled =
+            bulkPermanentDeleteInProgress;
+
+          selectionInput.setAttribute(
+            'aria-label',
+            `${customer.name || '이름 없음'} 삭제 고객 영구삭제 대상으로 선택`
+          );
+
+          selectionInput.addEventListener(
+            'change',
+            () => {
+
+              if (
+                currentCustomerView !==
+                  'deleted' ||
+                !isAdminUser() ||
+                bulkPermanentDeleteInProgress
+              ) {
+
+                selectionInput.checked =
+                  selectedDeletedCustomerIds.has(
+                    customer.id
+                  );
+
+                return;
+              }
+
+              if (
+                selectionInput.checked
+              ) {
+
+                selectedDeletedCustomerIds.add(
+                  customer.id
+                );
+
+              } else {
+
+                selectedDeletedCustomerIds.delete(
+                  customer.id
+                );
+              }
+
+              updateBulkPermanentSelectionUi();
+            }
+          );
+
+          selectionLabel.appendChild(
+            selectionInput
+          );
+
+          wrapper.append(
+            selectionLabel,
+            row
+          );
+
+          customerList.appendChild(
+            wrapper
+          );
+
+        } else {
+
+          customerList.appendChild(
+            row
+          );
+        }
 
         continue;
       }
@@ -3197,6 +4126,9 @@
 
         return;
       }
+
+      authContext =
+        auth;
 
       identity.textContent =
         `${auth.profile.display_name} · ${auth.profile.role}`;
@@ -3614,6 +4546,348 @@
 
         dashboardMessage.textContent =
           `${result.success.length}명의 고객을 삭제 처리했습니다.`;
+      }
+    }
+  );
+
+
+  // ============================================================
+  // DELETED CUSTOMER BULK PERMANENT DELETE EVENTS
+  // ============================================================
+
+  selectVisibleDeletedCustomersCheckbox?.addEventListener(
+    'change',
+    () => {
+
+      if (
+        currentCustomerView !==
+          'deleted' ||
+        !isAdminUser() ||
+        bulkPermanentDeleteInProgress
+      ) {
+
+        updateBulkPermanentSelectionUi();
+        return;
+      }
+
+      if (
+        selectVisibleDeletedCustomersCheckbox.checked
+      ) {
+
+        for (
+          const id
+          of currentFilteredDeletedCustomerIds
+        ) {
+
+          selectedDeletedCustomerIds.add(
+            id
+          );
+        }
+
+      } else {
+
+        for (
+          const id
+          of currentFilteredDeletedCustomerIds
+        ) {
+
+          selectedDeletedCustomerIds.delete(
+            id
+          );
+        }
+      }
+
+      renderCustomers();
+    }
+  );
+
+
+  openBulkPermanentDeleteButton?.addEventListener(
+    'click',
+    openBulkPermanentDeleteDialogForSelection
+  );
+
+
+  closeBulkPermanentDeleteDialogButton?.addEventListener(
+    'click',
+    closeBulkPermanentDeleteDialog
+  );
+
+
+  cancelBulkPermanentDeleteButton?.addEventListener(
+    'click',
+    closeBulkPermanentDeleteDialog
+  );
+
+
+  bulkPermanentDeleteDialog?.addEventListener(
+    'cancel',
+    (event) => {
+
+      event.preventDefault();
+      closeBulkPermanentDeleteDialog();
+    }
+  );
+
+
+  bulkPermanentDeleteForm?.addEventListener(
+    'submit',
+    async (
+      event
+    ) => {
+
+      event.preventDefault();
+
+      if (
+        bulkPermanentDeleteInProgress ||
+        currentCustomerView !==
+          'deleted' ||
+        !isAdminUser()
+      ) {
+
+        return;
+      }
+
+      const targets =
+        currentSelectedDeletedCustomers();
+
+      if (
+        targets.length ===
+          0
+      ) {
+
+        if (
+          bulkPermanentDeleteDialogMessage
+        ) {
+
+          bulkPermanentDeleteDialogMessage.textContent =
+            '영구삭제할 삭제 고객이 없습니다. 목록에서 다시 선택해주세요.';
+        }
+
+        return;
+      }
+
+      const reason =
+        bulkPermanentDeleteReason
+          ?.value
+          ?.trim() ||
+        '';
+
+      const confirmText =
+        bulkPermanentDeleteConfirmInput
+          ?.value
+          ?.trim() ||
+        '';
+
+      const expectedPhrase =
+        expectedBulkPermanentDeletePhrase(
+          targets.length
+        );
+
+      if (
+        reason.length <
+          2
+      ) {
+
+        bulkPermanentDeleteDialogMessage.textContent =
+          '영구 삭제 사유를 2자 이상 입력해주세요.';
+
+        return;
+      }
+
+      if (
+        reason.length >
+          500
+      ) {
+
+        bulkPermanentDeleteDialogMessage.textContent =
+          '영구 삭제 사유는 500자 이내로 입력해주세요.';
+
+        return;
+      }
+
+      if (
+        confirmText !==
+          expectedPhrase
+      ) {
+
+        bulkPermanentDeleteDialogMessage.textContent =
+          `확인란에 “${expectedPhrase}”라고 정확히 입력해주세요.`;
+
+        return;
+      }
+
+      bulkPermanentDeleteInProgress =
+        true;
+
+      updateBulkPermanentSelectionUi();
+
+      if (
+        bulkPermanentDeleteResult
+      ) {
+
+        bulkPermanentDeleteResult.hidden =
+          false;
+      }
+
+      bulkPermanentDeleteResultList?.replaceChildren();
+
+      if (
+        bulkPermanentDeleteResultSummary
+      ) {
+
+        bulkPermanentDeleteResultSummary.textContent =
+          `0/${targets.length} 처리 완료`;
+      }
+
+      bulkPermanentDeleteReason.disabled =
+        true;
+
+      bulkPermanentDeleteConfirmInput.disabled =
+        true;
+
+      cancelBulkPermanentDeleteButton.disabled =
+        true;
+
+      closeBulkPermanentDeleteDialogButton.disabled =
+        true;
+
+      confirmBulkPermanentDeleteButton.disabled =
+        true;
+
+      confirmBulkPermanentDeleteButton.textContent =
+        '영구삭제 처리 중...';
+
+      const result =
+        await runBulkPermanentDelete(
+          targets,
+          reason
+        );
+
+      const processedCount =
+        result.success.length +
+        result.failed.length;
+
+      if (
+        bulkPermanentDeleteResultSummary
+      ) {
+
+        bulkPermanentDeleteResultSummary.textContent =
+          `완료 ${result.success.length}명 · 실패 ${result.failed.length}명 · 총 ${processedCount}명`;
+      }
+
+      selectedDeletedCustomerIds.clear();
+
+      let refreshError =
+        null;
+
+      try {
+
+        const countErrors =
+          await Promise.all([
+
+            loadCount(
+              'customers',
+              countTargets.customers,
+              (query) =>
+                query.is(
+                  'deleted_at',
+                  null
+                )
+            ),
+
+            loadCount(
+              'diagnoses',
+              countTargets.diagnoses
+            ),
+
+            loadCount(
+              'care_visits',
+              countTargets.care_visits
+            ),
+
+            loadCount(
+              'reports',
+              countTargets.reports
+            )
+          ]);
+
+        await Promise.all([
+          loadCustomers(),
+          loadBookingCalendar()
+        ]);
+
+        renderCustomers();
+
+        if (
+          countErrors.some(
+            Boolean
+          )
+        ) {
+
+          throw new Error(
+            'COUNT_REFRESH_FAILED'
+          );
+        }
+
+      } catch (
+        error
+      ) {
+
+        refreshError =
+          error;
+
+        console.error(
+          'MOOHAE bulk permanent delete refresh error:',
+          error
+        );
+      }
+
+      bulkPermanentDeleteInProgress =
+        false;
+
+      closeBulkPermanentDeleteDialogButton.disabled =
+        false;
+
+      cancelBulkPermanentDeleteButton.disabled =
+        false;
+
+      cancelBulkPermanentDeleteButton.textContent =
+        '닫기';
+
+      confirmBulkPermanentDeleteButton.hidden =
+        true;
+
+      updateBulkPermanentSelectionUi();
+
+      if (
+        refreshError
+      ) {
+
+        bulkPermanentDeleteDialogMessage.textContent =
+          '고객별 영구삭제 결과는 아래와 같습니다. 다만 목록 또는 집계 새로고침에 실패했으므로 창을 닫고 페이지를 새로고침해 확인해주세요.';
+
+        dashboardMessage.textContent =
+          '일괄 영구삭제 후 화면 새로고침에 실패했습니다. 페이지를 새로고침해주세요.';
+
+      } else if (
+        result.failed.length >
+          0
+      ) {
+
+        bulkPermanentDeleteDialogMessage.textContent =
+          '성공 고객은 복구할 수 없도록 영구삭제되었습니다. 실패 고객은 삭제된 고객 목록에 남아 있으며 다시 선택해 재시도할 수 있습니다.';
+
+        dashboardMessage.textContent =
+          `일괄 영구삭제: ${result.success.length}명 완료, ${result.failed.length}명 실패.`;
+
+      } else {
+
+        bulkPermanentDeleteDialogMessage.textContent =
+          `${result.success.length}명 모두 영구삭제되었습니다. 고객 데이터와 연결된 CARE 사진 Storage 파일도 삭제 처리되었습니다.`;
+
+        dashboardMessage.textContent =
+          `${result.success.length}명의 고객을 영구삭제했습니다.`;
       }
     }
   );

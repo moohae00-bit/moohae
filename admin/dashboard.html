@@ -40,7 +40,7 @@
 
   <link
     rel="stylesheet"
-    href="../assets/css/admin-auth.css?v=20260912-1"
+    href="../assets/css/admin-auth.css?v=20260912-2"
   >
 </head>
 
@@ -481,6 +481,44 @@
 
 
       <!-- =====================================================
+           DELETED CUSTOMER BULK PERMANENT DELETE
+      ====================================================== -->
+
+      <div
+        id="bulkPermanentCustomerActions"
+        class="bulk-customer-actions bulk-permanent-actions"
+        hidden
+      >
+
+        <label class="bulk-select-all">
+          <input
+            id="selectVisibleDeletedCustomersCheckbox"
+            type="checkbox"
+          >
+          <span>현재 삭제 목록 전체 선택</span>
+        </label>
+
+        <div class="bulk-customer-actions-right">
+          <strong id="selectedDeletedCustomerCount">0명 선택</strong>
+
+          <button
+            id="openBulkPermanentDeleteButton"
+            class="secondary-button bulk-delete-button bulk-permanent-delete-button"
+            type="button"
+            disabled
+          >
+            선택 고객 영구삭제
+          </button>
+        </div>
+
+        <p class="bulk-selection-note bulk-permanent-selection-note">
+          관리자만 사용할 수 있습니다. 검색 결과에 현재 표시된 삭제 고객만 선택되며, 영구삭제 후 고객 데이터와 연결된 CARE 사진 Storage 파일은 복구할 수 없습니다.
+        </p>
+
+      </div>
+
+
+      <!-- =====================================================
            CUSTOMER LIST
       ====================================================== -->
 
@@ -630,6 +668,119 @@
 
 
   <!-- =========================================================
+       BULK PERMANENT DELETE DIALOG
+  ========================================================== -->
+
+  <dialog
+    id="bulkPermanentDeleteDialog"
+    class="bulk-delete-dialog bulk-permanent-delete-dialog"
+    aria-labelledby="bulkPermanentDeleteDialogTitle"
+  >
+
+    <form
+      id="bulkPermanentDeleteForm"
+      class="bulk-delete-form"
+      novalidate
+    >
+
+      <div class="bulk-delete-dialog-head">
+        <div>
+          <p class="eyebrow">BULK PERMANENT DELETE</p>
+          <h2 id="bulkPermanentDeleteDialogTitle">
+            선택한 고객을 영구 삭제하시겠어요?
+          </h2>
+        </div>
+
+        <button
+          id="closeBulkPermanentDeleteDialogButton"
+          class="bulk-dialog-close"
+          type="button"
+          aria-label="일괄 영구삭제 창 닫기"
+        >
+          ×
+        </button>
+      </div>
+
+      <p
+        id="bulkPermanentDeleteTargetSummary"
+        class="bulk-delete-target-summary"
+      >
+        선택 고객을 확인하고 있습니다.
+      </p>
+
+      <p class="bulk-delete-warning bulk-permanent-delete-warning">
+        이 작업은 복구할 수 없습니다. 각 고객의 CARE 사진 Storage 파일을 먼저 삭제한 뒤, CARE 사진 metadata와 고객·CHECK·예약·HOUSE·CARE·REPORT 데이터를 순차적으로 영구 삭제합니다. 영구삭제 감사 로그만 남습니다.
+      </p>
+
+      <label>
+        <span>영구 삭제 사유</span>
+        <textarea
+          id="bulkPermanentDeleteReason"
+          maxlength="500"
+          rows="4"
+          placeholder="예: 고객 개인정보 삭제 요청, 테스트 데이터 완전 제거"
+          required
+        ></textarea>
+      </label>
+
+      <label>
+        <span>확인 문구</span>
+        <input
+          id="bulkPermanentDeleteConfirmInput"
+          type="text"
+          maxlength="50"
+          autocomplete="off"
+          required
+        >
+      </label>
+
+      <p
+        id="bulkPermanentDeleteConfirmGuide"
+        class="bulk-delete-confirm-guide"
+      ></p>
+
+      <div
+        id="bulkPermanentDeleteResult"
+        class="bulk-delete-result"
+        hidden
+      >
+        <strong id="bulkPermanentDeleteResultSummary"></strong>
+        <div
+          id="bulkPermanentDeleteResultList"
+          class="bulk-delete-result-list"
+        ></div>
+      </div>
+
+      <div class="bulk-delete-action-row">
+        <button
+          id="cancelBulkPermanentDeleteButton"
+          class="secondary-button"
+          type="button"
+        >
+          취소
+        </button>
+
+        <button
+          id="confirmBulkPermanentDeleteButton"
+          class="bulk-delete-confirm-button bulk-permanent-confirm-button"
+          type="submit"
+        >
+          선택 고객 영구삭제
+        </button>
+      </div>
+
+      <p
+        id="bulkPermanentDeleteDialogMessage"
+        class="bulk-delete-dialog-message"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+    </form>
+  </dialog>
+
+
+  <!-- =========================================================
        SCRIPTS
   ========================================================== -->
 
@@ -642,7 +793,7 @@
   ></script>
 
   <script
-    src="../assets/js/admin-dashboard.js?v=20260912-1"
+    src="../assets/js/admin-dashboard.js?v=20260912-2"
   ></script>
 
 </body>
