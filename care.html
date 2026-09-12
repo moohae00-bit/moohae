@@ -9,6 +9,149 @@
 
   <link rel="stylesheet" href="./assets/css/site.css?v=20260905-4">
   <link rel="stylesheet" href="./assets/css/care.css?v=20260913-living3">
+
+  <style>
+    /* LIVING ENVIRONMENT — photo card implementation only */
+    .care-need-section .care-section-head{
+      margin-bottom:38px;
+    }
+
+    .care-need-section .care-section-title{
+      letter-spacing:-0.065em;
+    }
+
+    .care-need-section .care-section-title strong{
+      color:#6B7F6E;
+    }
+
+    .moohae-living-track{
+      display:flex;
+      gap:20px;
+      width:min(var(--max), calc(100% - 48px));
+      margin:0 auto;
+      padding:4px 2px 20px;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scroll-padding-inline:2px;
+      overscroll-behavior-inline:contain;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .moohae-living-track::-webkit-scrollbar{
+      display:none;
+    }
+
+    .moohae-living-card{
+      position:relative;
+      flex:0 0 calc((100% - 40px) / 3);
+      min-width:0;
+      aspect-ratio:0.64;
+      overflow:hidden;
+      border:0;
+      border-radius:28px;
+      background:#F8F6EF;
+      box-shadow:0 16px 42px rgba(45,49,43,.045);
+      scroll-snap-align:start;
+      scroll-snap-stop:always;
+      isolation:isolate;
+    }
+
+    .moohae-living-card img{
+      position:absolute;
+      inset:0;
+      z-index:0;
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center center;
+      background:#F8F6EF;
+      filter:none;
+      transform:none;
+      box-shadow:none;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    .moohae-living-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      background:linear-gradient(180deg, rgba(248,246,239,.38) 0%, rgba(248,246,239,.10) 28%, rgba(248,246,239,0) 48%);
+    }
+
+    .moohae-living-copy{
+      position:relative;
+      z-index:2;
+      padding:38px 38px 34px;
+      color:#222222;
+    }
+
+    .moohae-living-label{
+      margin:0;
+      color:#6B7F6E;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.3;
+      letter-spacing:.16em;
+    }
+
+    .moohae-living-card h3{
+      margin:24px 0 0;
+      color:#222222;
+      font-size:clamp(28px,2.35vw,38px);
+      font-weight:620;
+      line-height:1.27;
+      letter-spacing:-.055em;
+      text-wrap:balance;
+    }
+
+    @media(max-width:768px){
+      .care-need-section .care-section-head{
+        margin-bottom:32px;
+      }
+
+      .moohae-living-track{
+        width:100%;
+        gap:12px;
+        margin:0;
+        padding:4px 20px 16px;
+        scroll-padding-inline:20px;
+      }
+
+      .moohae-living-card{
+        flex:0 0 86%;
+        aspect-ratio:0.64;
+        border-radius:28px;
+      }
+
+      .moohae-living-copy{
+        padding:29px 26px 24px;
+      }
+
+      .moohae-living-label{
+        font-size:11px;
+        font-weight:800;
+        letter-spacing:.15em;
+      }
+
+      .moohae-living-card h3{
+        margin-top:20px;
+        font-size:30px;
+        line-height:1.25;
+        letter-spacing:-.055em;
+      }
+    }
+
+    @media(max-width:390px){
+      .moohae-living-card h3{
+        font-size:28px;
+      }
+    }
+  </style>
 </head>
 <body data-page="care" class="care-page">
   <div id="site-header"></div>
@@ -29,8 +172,33 @@
         <p class="care-kicker">LIVING ENVIRONMENT</p>
         <h2 class="care-section-title" id="needTitle">보이는 것 <strong>너머까지</strong></h2>
       </div>
+
       <div class="care-wide-scroll-shell">
-        <div class="editorial-track calm-horizontal-track" id="needTrack" aria-label="생활환경 CARE가 필요한 이유"></div>
+        <div class="moohae-living-track" id="moohaeLivingTrack" aria-label="생활환경 CARE가 필요한 이유">
+          <article class="moohae-living-card reveal">
+            <img src="./assets/images/care/living_fabric.webp" alt="밝은 패브릭 소파와 담요가 있는 생활공간" loading="eager" decoding="async" draggable="false">
+            <div class="moohae-living-copy">
+              <p class="moohae-living-label">FABRIC</p>
+              <h3>보이지 않아도,<br>남아 있습니다.</h3>
+            </div>
+          </article>
+
+          <article class="moohae-living-card reveal">
+            <img src="./assets/images/care/living_bedding.webp" alt="햇살이 비치는 밝은 침구와 베개" loading="lazy" decoding="async" draggable="false">
+            <div class="moohae-living-copy">
+              <p class="moohae-living-label">BEDDING</p>
+              <h3>매일 닿지만,<br>매일 관리하기는 어렵습니다.</h3>
+            </div>
+          </article>
+
+          <article class="moohae-living-card reveal">
+            <img src="./assets/images/care/living_space.webp" alt="햇살이 비치는 밝은 거실 생활공간" loading="lazy" decoding="async" draggable="false">
+            <div class="moohae-living-copy">
+              <p class="moohae-living-label">SPACE</p>
+              <h3>공간은<br>서로 이어져 있습니다.</h3>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
