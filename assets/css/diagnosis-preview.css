@@ -1,0 +1,694 @@
+/* ============================================================
+   MOOHAE CHECK — PREVIEW INTEGRATION 2026-09-29
+   Visual-only layer over the existing validated CHECK/booking DOM.
+   ============================================================ */
+
+body[data-page="diagnosis"]{
+  --check-bg:#f4f0e8;
+  --check-paper:#fffdf8;
+  --check-paper-2:#faf7f0;
+  --check-ink:#252522;
+  --check-soft:#6f716a;
+  --check-sage:#748a72;
+  --check-sage-soft:#e7ede3;
+  --check-line:rgba(37,37,34,.09);
+  --check-shadow:0 20px 54px rgba(56,52,43,.065);
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,255,255,.72),transparent 32%),
+    var(--check-bg);
+}
+
+body[data-page="diagnosis"] #site-header{
+  display:none;
+}
+
+body[data-page="diagnosis"] [hidden]{
+  display:none!important;
+}
+
+.check-skip-link{
+  position:fixed;
+  z-index:1000;
+  top:10px;
+  left:-9999px;
+  padding:9px 13px;
+  border-radius:999px;
+  background:var(--check-ink);
+  color:#fff;
+  font-size:12px;
+  transition:none;
+}
+.check-skip-link:focus-visible{left:10px}
+
+.check-preview-topbar{
+  position:relative;
+  z-index:80;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:min(980px,calc(100% - 36px));
+  min-height:74px;
+  margin:0 auto;
+  padding:14px 2px 10px;
+  background:linear-gradient(to bottom,rgba(244,240,232,.96),rgba(244,240,232,.82),rgba(244,240,232,0));
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+.check-preview-brand{
+  display:inline-flex;
+  align-items:center;
+  width:108px;
+  height:38px;
+}
+.check-preview-brand img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+.check-preview-progress{
+  color:var(--check-soft);
+  font-size:12px;
+  font-weight:720;
+  letter-spacing:.06em;
+}
+
+body[data-page="diagnosis"] .page{
+  width:min(900px,calc(100% - 36px));
+  min-height:calc(100dvh - 74px);
+  padding:18px 0 88px;
+}
+
+body[data-page="diagnosis"] .intro.reveal{
+  opacity:1;
+  filter:none;
+  transform:none;
+}
+
+body[data-page="diagnosis"] .question[hidden],
+body[data-page="diagnosis"] .facility-question[hidden],
+body[data-page="diagnosis"] .nav-buttons[hidden]{
+  display:none!important;
+}
+
+body[data-page="diagnosis"] .intro{
+  max-width:640px;
+  margin:0 auto 28px;
+  text-align:center;
+}
+body[data-page="diagnosis"] .intro .eyebrow{display:none}
+body[data-page="diagnosis"] .intro h1{
+  margin:0;
+  color:var(--check-ink);
+  font-size:clamp(31px,4.6vw,46px);
+  line-height:1.08;
+  letter-spacing:-.06em;
+}
+body[data-page="diagnosis"] .intro p{
+  margin:15px 0 0;
+  color:var(--check-soft);
+  font-size:14px;
+  line-height:1.72;
+}
+
+body[data-page="diagnosis"] .check-type-tabs{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  width:min(300px,100%);
+  margin:0 auto 22px;
+  padding:4px;
+  border:1px solid rgba(37,37,34,.07);
+  border-radius:999px;
+  background:rgba(255,253,248,.66);
+  box-shadow:0 8px 30px rgba(56,52,43,.035);
+}
+body[data-page="diagnosis"] .check-type-tab{
+  min-height:42px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:#898a84;
+  font-size:13px;
+  font-weight:680;
+  cursor:pointer;
+  transition:background .22s ease,color .22s ease,box-shadow .22s ease,transform .22s ease;
+}
+body[data-page="diagnosis"] .check-type-tab.is-active{
+  background:var(--check-ink);
+  color:#fff;
+  box-shadow:0 8px 22px rgba(37,37,34,.16);
+}
+body[data-page="diagnosis"] .check-type-tab:active{transform:scale(.985)}
+
+body[data-page="diagnosis"] .progress-wrap,
+body[data-page="diagnosis"] .facility-progress-wrap{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+  align-items:center;
+  width:min(760px,100%);
+  margin:0 auto 16px;
+  padding:0 4px;
+}
+body[data-page="diagnosis"] .progress,
+body[data-page="diagnosis"] .facility-progress{
+  height:3px;
+  margin:0;
+  overflow:hidden;
+  border-radius:999px;
+  background:rgba(37,37,34,.10);
+}
+body[data-page="diagnosis"] .progress-bar,
+body[data-page="diagnosis"] .facility-progress-bar{
+  height:100%;
+  border-radius:999px;
+  background:var(--check-sage);
+  transition:width .42s cubic-bezier(.22,1,.36,1);
+}
+body[data-page="diagnosis"] .progress-count,
+body[data-page="diagnosis"] .facility-progress-count{
+  display:none;
+}
+
+body[data-page="diagnosis"] .question,
+body[data-page="diagnosis"] .facility-question{
+  position:relative;
+  width:min(800px,100%);
+  min-height:0;
+  margin:0 auto;
+  padding:42px 42px 36px;
+  overflow:hidden;
+  border:1px solid rgba(37,37,34,.06);
+  border-radius:30px;
+  background:rgba(255,253,248,.95);
+  box-shadow:var(--check-shadow);
+}
+body[data-page="diagnosis"] .question.active,
+body[data-page="diagnosis"] .facility-question.is-active{
+  animation:checkCardIn .48s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes checkCardIn{
+  from{opacity:0;transform:translateY(14px) scale(.992)}
+  to{opacity:1;transform:none}
+}
+
+body[data-page="diagnosis"] .question-num{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:34px;
+  min-height:28px;
+  padding:0 10px;
+  border-radius:999px;
+  background:var(--check-sage-soft);
+  color:var(--check-sage);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+body[data-page="diagnosis"] .question h2,
+body[data-page="diagnosis"] .facility-question h2{
+  max-width:650px;
+  margin:20px 0 12px;
+  color:var(--check-ink);
+  font-size:clamp(27px,4vw,36px);
+  font-weight:720;
+  line-height:1.24;
+  letter-spacing:-.055em;
+}
+body[data-page="diagnosis"] .multi-hint{
+  margin:0 0 25px;
+  color:#8a8b84;
+  font-size:13px;
+  line-height:1.55;
+}
+
+body[data-page="diagnosis"] .options{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:11px;
+}
+body[data-page="diagnosis"] .option,
+body[data-page="diagnosis"] .facility-option{
+  position:relative;
+  display:flex;
+  align-items:center;
+  min-height:58px;
+  width:100%;
+  padding:15px 46px 15px 17px;
+  border:1px solid var(--check-line);
+  border-radius:17px;
+  background:#fff;
+  color:var(--check-ink);
+  font:inherit;
+  font-size:14px;
+  font-weight:620;
+  line-height:1.35;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(56,52,43,.018);
+  transition:border-color .2s ease,background .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+body[data-page="diagnosis"] .option::after,
+body[data-page="diagnosis"] .facility-option::after{
+  content:"";
+  position:absolute;
+  right:16px;
+  top:50%;
+  width:20px;
+  height:20px;
+  border:1px solid rgba(37,37,34,.16);
+  border-radius:50%;
+  transform:translateY(-50%);
+  background:#fff;
+  box-shadow:inset 0 0 0 5px #fff;
+  transition:all .2s ease;
+}
+body[data-page="diagnosis"] .option:hover,
+body[data-page="diagnosis"] .facility-option:hover{
+  border-color:rgba(116,138,114,.34);
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(56,52,43,.055);
+}
+body[data-page="diagnosis"] .option.selected,
+body[data-page="diagnosis"] .facility-option.is-selected{
+  border-color:rgba(116,138,114,.56);
+  background:#f0f4ed;
+  box-shadow:0 12px 28px rgba(86,105,83,.09);
+}
+body[data-page="diagnosis"] .option.selected::after,
+body[data-page="diagnosis"] .facility-option.is-selected::after{
+  border-color:var(--check-sage);
+  background:var(--check-sage);
+  box-shadow:inset 0 0 0 5px #fff;
+}
+
+/* First question = visual object cards */
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .options,
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .options{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option,
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option{
+  display:flex;
+  align-items:flex-end;
+  min-height:176px;
+  padding:126px 42px 16px 16px;
+  overflow:hidden;
+  background:var(--check-paper-2);
+}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option::before,
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option::before{
+  content:"";
+  position:absolute;
+  inset:0 0 48px;
+  z-index:0;
+  background-position:center;
+  background-size:cover;
+  transition:transform .45s cubic-bezier(.22,1,.36,1),filter .3s ease;
+}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:hover::before,
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:hover::before{
+  transform:scale(1.035);
+}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option::after,
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option::after{
+  z-index:2;
+  top:auto;
+  right:14px;
+  bottom:14px;
+  transform:none;
+}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option{
+  z-index:0;
+}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(1)::before{background-image:url('../images/moohae-one/one-bed.webp')}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(2)::before{background-image:url('../images/moohae-one/one-sofa.webp')}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(3)::before{background-image:url('../images/moohae-one/one-room.webp')}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(4)::before{background-image:url('../images/care/living_space.webp');background-position:center 60%}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(5)::before{background-image:url('../images/moohae-one/one-rug.webp')}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(6)::before{
+  background:linear-gradient(145deg,#e8e2d6,#f8f4eb 55%,#dfe7db);
+}
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(1)::before{background-image:url('../images/moohae-one/one-bed.webp')}
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(2)::before{background-image:url('../images/moohae-one/one-sofa.webp')}
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(3)::before{background-image:url('../images/moohae-one/one-rug.webp')}
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(4)::before{background-image:url('../images/moohae-one/one-floor.webp')}
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(5)::before{background-image:url('../images/care/living_space.webp');background-position:center 60%}
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(6)::before{background:linear-gradient(145deg,#e8e2d6,#f8f4eb 55%,#dfe7db)}
+
+.preview-unsure-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  margin-top:14px;
+  padding:0 3px;
+  border:0;
+  border-bottom:1px solid rgba(37,37,34,.28);
+  background:transparent;
+  color:#777972;
+  font-size:12px;
+  font-weight:650;
+  cursor:pointer;
+}
+.preview-unsure-button:hover{color:var(--check-ink);border-bottom-color:var(--check-ink)}
+
+.question-tip{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  margin-top:24px;
+  padding-top:18px;
+  border-top:1px solid rgba(37,37,34,.07);
+  color:#85877f;
+  font-size:12px;
+  line-height:1.6;
+}
+.question-tip::before{
+  content:"tip";
+  flex:0 0 auto;
+  color:var(--check-sage);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+body[data-page="diagnosis"] .other-input-wrap{
+  margin-top:14px;
+  padding:14px;
+  border-radius:16px;
+  background:#f7f4ed;
+}
+body[data-page="diagnosis"] .other-input{
+  border-radius:12px;
+  background:#fff;
+}
+
+body[data-page="diagnosis"] .nav-buttons{
+  position:relative;
+  width:min(800px,100%);
+  margin:18px auto 0;
+}
+body[data-page="diagnosis"] .btn{
+  min-height:52px;
+  padding:0 24px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:680;
+  transition:transform .18s ease,background .18s ease,box-shadow .18s ease;
+}
+body[data-page="diagnosis"] .btn-next{
+  min-width:130px;
+  background:var(--check-ink);
+  box-shadow:0 12px 28px rgba(37,37,34,.13);
+}
+body[data-page="diagnosis"] .btn-prev{
+  min-width:88px;
+  border:1px solid rgba(37,37,34,.10);
+  background:rgba(255,253,248,.72);
+}
+body[data-page="diagnosis"] .btn:active{transform:scale(.985)}
+
+/* Result / contact / booking: same soft editorial language */
+body[data-page="diagnosis"] .result,
+body[data-page="diagnosis"] .facility-result{
+  left:auto;
+  width:min(860px,100%);
+  margin:0 auto;
+  transform:none;
+  padding:46px 40px;
+  border:1px solid rgba(37,37,34,.06);
+  border-radius:30px;
+  background:rgba(255,253,248,.96);
+  box-shadow:var(--check-shadow);
+}
+body[data-page="diagnosis"] .result>h2,
+body[data-page="diagnosis"] .facility-result>h2{
+  font-size:clamp(30px,4.2vw,42px);
+  letter-spacing:-.055em;
+}
+body[data-page="diagnosis"] .result-recommend,
+body[data-page="diagnosis"] .result-note,
+body[data-page="diagnosis"] .facility-result-summary{
+  border-radius:20px;
+}
+body[data-page="diagnosis"] .lead-form,
+body[data-page="diagnosis"] .booking-panel,
+body[data-page="diagnosis"] .facility-lead-form{
+  border:1px solid rgba(37,37,34,.07);
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 12px 34px rgba(56,52,43,.035);
+}
+body[data-page="diagnosis"] .field-label input,
+body[data-page="diagnosis"] .booking-address input{
+  min-height:54px;
+  border-radius:14px;
+  background:#fbfaf6;
+  font-size:16px;
+}
+body[data-page="diagnosis"] .booking-address-lead{
+  margin:0;
+  padding:0;
+  border:0;
+  background:transparent;
+}
+body[data-page="diagnosis"] .consent-box{border-radius:16px}
+body[data-page="diagnosis"] .submit-diagnosis,
+body[data-page="diagnosis"] .booking-submit{
+  min-height:54px;
+  border-radius:16px;
+  background:var(--check-ink);
+  font-size:13px;
+}
+body[data-page="diagnosis"] .public-booking-day{
+  flex-basis:220px;
+  min-width:220px;
+  border-radius:20px;
+  background:#faf8f3;
+}
+body[data-page="diagnosis"] .public-booking-time{
+  min-height:48px;
+  border-radius:13px;
+}
+body[data-page="diagnosis"] .public-booking-time.selected{
+  border-color:var(--check-sage);
+  background:var(--check-sage-soft);
+  color:#536b52;
+}
+
+@media(max-width:700px){
+  .check-preview-topbar{
+    width:calc(100% - 30px);
+    min-height:64px;
+    padding-top:10px;
+  }
+  .check-preview-brand{width:92px}
+  body[data-page="diagnosis"] .page{
+    width:calc(100% - 24px);
+    padding:10px 0 72px;
+  }
+  body[data-page="diagnosis"] .intro{
+    margin-bottom:20px;
+    padding:0 8px;
+  }
+  body[data-page="diagnosis"] .intro h1{font-size:31px}
+  body[data-page="diagnosis"] .intro p{font-size:13px}
+  body[data-page="diagnosis"] .check-type-tabs{
+    width:min(268px,100%);
+    margin-bottom:18px;
+  }
+  body[data-page="diagnosis"] .progress-wrap,
+  body[data-page="diagnosis"] .facility-progress-wrap{
+    margin-bottom:12px;
+    padding:0 6px;
+  }
+  body[data-page="diagnosis"] .question,
+  body[data-page="diagnosis"] .facility-question{
+    padding:28px 20px 24px;
+    border-radius:24px;
+  }
+  body[data-page="diagnosis"] .question h2,
+  body[data-page="diagnosis"] .facility-question h2{
+    margin-top:16px;
+    font-size:25px;
+  }
+  body[data-page="diagnosis"] .options{grid-template-columns:1fr}
+  body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .options,
+  body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .options{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+  }
+  body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option,
+  body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option{
+    min-height:150px;
+    padding:106px 34px 13px 13px;
+    border-radius:16px;
+    font-size:12px;
+  }
+  body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option::before,
+  body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option::before{
+    inset:0 0 43px;
+  }
+  body[data-page="diagnosis"] .nav-buttons{
+    position:relative;
+    z-index:1;
+    gap:10px;
+    padding:0;
+    border:0;
+    background:transparent;
+    box-shadow:none;
+  }
+  body[data-page="diagnosis"] .nav-buttons .btn{flex:1}
+  body[data-page="diagnosis"] .nav-buttons .btn-prev{max-width:110px}
+  body[data-page="diagnosis"] .result,
+  body[data-page="diagnosis"] .facility-result{
+    width:100%;
+    padding:30px 16px;
+    border-radius:24px;
+  }
+  body[data-page="diagnosis"] .lead-form,
+  body[data-page="diagnosis"] .booking-panel,
+  body[data-page="diagnosis"] .facility-lead-form{
+    padding:20px 16px;
+  }
+  body[data-page="diagnosis"] .public-booking-calendar{
+    width:calc(100% + 16px);
+    margin-right:-16px;
+    padding-right:16px;
+  }
+  body[data-page="diagnosis"] .public-booking-day{
+    flex:0 0 88%;
+    min-width:88%;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  body[data-page="diagnosis"] *,
+  body[data-page="diagnosis"] *::before,
+  body[data-page="diagnosis"] *::after{
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+/* ============================================================
+   PRIVACY CONSENT — FINAL STEP
+   ============================================================ */
+body[data-page="diagnosis"] .privacy-consent-box{
+  padding:16px 16px 14px;
+  border:1px solid rgba(37,52,43,.12);
+  background:rgba(255,255,255,.72);
+  box-shadow:0 8px 24px rgba(37,52,43,.04);
+}
+
+body[data-page="diagnosis"] .privacy-consent-box .consent-row{
+  align-items:flex-start;
+  gap:12px;
+  cursor:pointer;
+}
+
+body[data-page="diagnosis"] .privacy-consent-box .consent-row input{
+  flex:0 0 auto;
+  width:20px;
+  height:20px;
+  margin-top:1px;
+  accent-color:#395747;
+}
+
+body[data-page="diagnosis"] .privacy-consent-box .consent-row strong{
+  display:block;
+  font-size:14px;
+  line-height:1.45;
+  letter-spacing:-.02em;
+}
+
+body[data-page="diagnosis"] .privacy-consent-box .consent-row small{
+  display:block;
+  margin-top:5px;
+  font-size:12px;
+  line-height:1.6;
+  letter-spacing:-.015em;
+  color:rgba(37,52,43,.66);
+}
+
+body[data-page="diagnosis"] .privacy-policy-details{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid rgba(37,52,43,.09);
+}
+
+body[data-page="diagnosis"] .privacy-policy-details summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  cursor:pointer;
+  list-style:none;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.5;
+  letter-spacing:-.015em;
+  color:rgba(37,52,43,.72);
+}
+
+body[data-page="diagnosis"] .privacy-policy-details summary::-webkit-details-marker{display:none}
+
+body[data-page="diagnosis"] .privacy-policy-details summary::after{
+  content:'+';
+  font-size:18px;
+  font-weight:400;
+  line-height:1;
+  transition:transform .22s ease;
+}
+
+body[data-page="diagnosis"] .privacy-policy-details[open] summary::after{
+  transform:rotate(45deg);
+}
+
+body[data-page="diagnosis"] .privacy-policy-content{
+  padding-top:12px;
+}
+
+body[data-page="diagnosis"] .privacy-policy-content dl{
+  display:grid;
+  gap:9px;
+  margin:0;
+}
+
+body[data-page="diagnosis"] .privacy-policy-content dl>div{
+  display:grid;
+  grid-template-columns:82px minmax(0,1fr);
+  gap:10px;
+  align-items:start;
+}
+
+body[data-page="diagnosis"] .privacy-policy-content dt,
+body[data-page="diagnosis"] .privacy-policy-content dd{
+  margin:0;
+  font-size:11px;
+  line-height:1.55;
+  letter-spacing:-.01em;
+}
+
+body[data-page="diagnosis"] .privacy-policy-content dt{
+  font-weight:700;
+  color:rgba(37,52,43,.72);
+}
+
+body[data-page="diagnosis"] .privacy-policy-content dd{
+  color:rgba(37,52,43,.62);
+}
+
+@media (max-width:480px){
+  body[data-page="diagnosis"] .privacy-policy-content dl>div{
+    grid-template-columns:1fr;
+    gap:2px;
+  }
+}

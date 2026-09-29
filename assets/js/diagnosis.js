@@ -1972,16 +1972,6 @@
 
 
     if (
-      bookingAddressField
-    ) {
-
-      bookingAddressField.hidden =
-        true;
-
-    }
-
-
-    if (
       bookingSubmitButton
     ) {
 
@@ -2082,16 +2072,6 @@
     }
 
 
-    if (
-      bookingAddressField
-    ) {
-
-      bookingAddressField.hidden =
-        false;
-
-    }
-
-
     updateBookingSubmitState();
 
 
@@ -2101,17 +2081,9 @@
 
         ? '선택한 일정과 방문 주소를 확인한 뒤 방문 요청 버튼을 눌러주세요.'
 
-        : '선택한 일정으로 방문할 주소를 입력해주세요.'
+        : '방문 주소를 먼저 확인해주세요.'
 
     );
-
-
-    bookingAddress?.focus({
-
-      preventScroll:
-        true
-
-    });
 
   }
 
@@ -2455,16 +2427,6 @@
 
       bookingSubmitButton.textContent =
         '이 일정으로 방문 요청하기';
-
-    }
-
-
-    if (
-      bookingAddressField
-    ) {
-
-      bookingAddressField.hidden =
-        true;
 
     }
 
@@ -3190,6 +3152,32 @@
 
 
     // ==========================================================
+    // VISIT ADDRESS — PREVIEW FLOW
+    //
+    // 미리보기 UX처럼 연락처와 주소를 먼저 받은 뒤
+    // 예약 가능 일정을 조회한다. 주소는 이 단계에서는
+    // 서버로 보내지 않고, 실제 예약 RPC에서만 전달한다.
+    // ==========================================================
+
+    const visitAddress =
+      getBookingAddressValue();
+
+    if (
+      visitAddress.length < 5 ||
+      visitAddress.length > 500
+    ) {
+
+      setSubmitMessage(
+        '방문 주소를 5자 이상 정확하게 입력해주세요.',
+        true
+      );
+
+      bookingAddress?.focus();
+      return;
+    }
+
+
+    // ==========================================================
     // SUPABASE
     // ==========================================================
 
@@ -3581,7 +3569,7 @@
 
 
       submitButton.textContent =
-        '체크 결과 보내고 관리 상담 신청하기';
+        '방문 가능한 일정 확인하기';
 
     }
 

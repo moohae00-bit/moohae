@@ -1,0 +1,13 @@
+MOOHAE DIAGNOSIS PRIVACY CONSENT UPDATE — 2026-09-29
+
+적용 내용
+1. 개인 HOME CHECK 마지막 정보 입력 단계에 필수 개인정보 수집·이용 체크박스 강화
+2. 시설 FACILITY CHECK 마지막 정보 입력 단계에도 동일 원칙 적용
+3. '개인정보 수집·이용 안내 보기' 접이식 상세 안내 추가
+4. 수집 목적 / 수집 항목 / 보유·이용 기간 / 동의 거부 권리 명시
+5. 기존 privacy_consent=true 서버 검증 로직은 변경하지 않음
+6. 기존 Supabase / 예약 / 관리자 데이터 구조는 변경하지 않음
+
+교체 파일
+- diagnosis.html
+- assets/css/diagnosis-preview.css

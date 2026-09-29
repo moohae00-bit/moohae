@@ -1,0 +1,28 @@
+MOOHAE DIAGNOSIS PREVIEW INTEGRATION — 2026-09-29
+
+적용 목적
+- 기존 diagnosis의 개인 6문항 / 시설 7문항과 DB 전송값은 유지
+- 미리보기의 한 질문 한 화면, 따뜻한 베이지 톤, 실사 오브젝트 카드, 부드러운 전환을 실제 diagnosis에 통합
+- 개인 흐름을 연락처 + 방문주소 → 가능한 일정 조회 → 날짜/시간 선택 → 방문 요청으로 정리
+- 예약 시간대 10:00–12:30 / 13:00–15:30 / 16:00–18:30 유지
+- 고객에게 노출되는 예약 가능 날짜 최대 5개 유지
+- 예약 raw token은 브라우저 메모리에만 유지하는 기존 보안 원칙 유지
+- 시설은 기존 FACILITY CHECK 상담 접수 구조 유지
+- 예약 완료 뒤 1.8초 자동 홈 리다이렉트는 제거하여 완료 상태를 고객이 직접 확인하도록 변경
+
+변경 파일
+1. diagnosis.html
+2. assets/js/diagnosis.js
+3. assets/css/diagnosis-preview.css (신규)
+4. assets/js/diagnosis-preview-ui.js (신규)
+
+중요: 백엔드 연결 상태
+현재 assets/js/supabase-config.js 의 Project URL:
+https://tvullgydrkvqbutuhvsu.supabase.co
+
+2026-09-29 미리보기 연결 테스트에서 이 호스트가 정상 해석되지 않아 실제 CHECK 저장/예약 접수는 아직 검증할 수 없음.
+프론트엔드/예약 호출 구조를 임의 변경하지 않았으며, 정상 Supabase Project URL과 동일 프로젝트의 publishable key가 확인되면 이 파일의 브라우저용 두 값만 교체한 뒤 실제 접수 QA를 진행해야 함.
+
+절대 금지
+- service_role / secret key를 supabase-config.js에 넣지 말 것
+- booking raw token을 URL/localStorage/sessionStorage/HTML에 저장하지 말 것
