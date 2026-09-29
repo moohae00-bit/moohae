@@ -306,7 +306,8 @@ body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facilit
   inset:0 0 48px;
   z-index:0;
   background-position:center;
-  background-size:cover;
+  background-size:contain;
+  background-repeat:no-repeat;
   transition:transform .45s cubic-bezier(.22,1,.36,1),filter .3s ease;
 }
 body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:hover::before,
@@ -330,23 +331,23 @@ body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option{
  */
 body[data-page="diagnosis"] [data-visual="mattress-bedding"]::before{
   background-image:url('../images/diagnosis/mattress-bedding.webp');
-  background-position:center 52%;
+  background-position:center 58%;
 }
 body[data-page="diagnosis"] [data-visual="sofa-fabric"]::before{
-  background-image:url('../images/moohae-one/one-sofa.webp');
-  background-position:center 56%;
+  background-image:url('../images/diagnosis/sofa-fabric.webp');
+  background-position:center 60%;
 }
 body[data-page="diagnosis"] [data-visual="child-space"]::before{
   background-image:url('../images/diagnosis/child-living-space.webp');
-  background-position:center 63%;
+  background-position:center 62%;
 }
 body[data-page="diagnosis"] [data-visual="pet-space"]::before{
   background-image:url('../images/diagnosis/pet-living-space.webp');
-  background-position:center 66%;
+  background-position:center 60%;
 }
 body[data-page="diagnosis"] [data-visual="floor-rug"]::before{
-  background-image:url('../images/moohae-one/one-rug.webp');
-  background-position:center 64%;
+  background-image:url('../images/diagnosis/floor-rug.webp');
+  background-position:center 62%;
 }
 body[data-page="diagnosis"] [data-visual="floor"]::before{
   background-image:url('../images/moohae-one/one-floor.webp');
@@ -357,7 +358,22 @@ body[data-page="diagnosis"] [data-visual="shared-space"]::before{
   background-position:center 60%;
 }
 body[data-page="diagnosis"] [data-visual="other"]::before{
-  background:linear-gradient(145deg,#e8e2d6,#f8f4eb 55%,#dfe7db);
+  background:none;
+}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option[data-visual="other"]{
+  justify-content:center;
+  padding-top:94px;
+}
+body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option[data-visual="other"]::before{
+  content:"+";
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  inset:0 0 43px;
+  color:#8a9584;
+  font-size:42px;
+  font-weight:300;
+  line-height:1;
 }
 
 .preview-unsure-button{
