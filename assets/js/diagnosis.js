@@ -3223,6 +3223,12 @@
 
     const payload = {
 
+      // Explicitly identify the public HOME flow.
+      // The Edge Function still supports the legacy empty value,
+      // but sending it removes ambiguity between HOME/FACILITY.
+      customer_type:
+        'home',
+
       name,
 
       phone,
@@ -3558,8 +3564,28 @@
       );
 
 
+      const errorText =
+        String(
+          error?.message ||
+          error?.context?.statusText ||
+          ''
+        ).toLowerCase();
+
+      const isOriginError =
+        errorText.includes('origin_not_allowed') ||
+        errorText.includes('403');
+
+      const isAuthError =
+        errorText.includes('401') ||
+        errorText.includes('unauthorized') ||
+        errorText.includes('jwt');
+
       setSubmitMessage(
-        '전송 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        isOriginError
+          ? '현재 접속 주소가 전송 서버의 허용 목록에 없습니다. 운영 주소에서 다시 시도해주세요.'
+          : isAuthError
+            ? '전송 서버 인증 설정을 확인하고 있습니다. 잠시 후 다시 시도해주세요.'
+            : '전송 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
         true
       );
 

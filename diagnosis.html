@@ -7,9 +7,9 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'none'; media-src 'none'; form-action 'self'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="stylesheet" href="./assets/css/site.css?v=20260905-4">
-  <link rel="stylesheet" href="./assets/css/diagnosis.css?v=20260913-1">
+  <link rel="stylesheet" href="./assets/css/diagnosis.css?v=20260929-2">
   <link rel="stylesheet" href="./assets/css/diagnosis-facility.css?v=20260908-1">
-  <link rel="stylesheet" href="./assets/css/diagnosis-preview.css?v=20260929-1">
+  <link rel="stylesheet" href="./assets/css/diagnosis-preview.css?v=20260929-2">
 </head>
 <body data-page="diagnosis">
   <a class="check-skip-link" href="#homeCheckPanel">질문으로 건너뛰기</a>
@@ -69,12 +69,12 @@
         <h2>가장 신경 쓰이는 곳은 어디인가요?</h2>
         <p class="multi-hint">두 곳까지 고를 수 있어요.</p>
         <div class="options">
-          <button class="option">매트리스·침구</button>
-          <button class="option">소파·패브릭</button>
-          <button class="option">아이 생활공간</button>
-          <button class="option">반려동물 생활공간</button>
-          <button class="option">바닥·러그</button>
-          <button class="option" data-other="true">기타</button>
+          <button class="option" data-visual="mattress-bedding">매트리스·침구</button>
+          <button class="option" data-visual="sofa-fabric">소파·패브릭</button>
+          <button class="option" data-visual="child-space">아이 생활공간</button>
+          <button class="option" data-visual="pet-space">반려동물 생활공간</button>
+          <button class="option" data-visual="floor-rug">바닥·러그</button>
+          <button class="option" data-other="true" data-visual="other">기타</button>
         </div>
         <div class="other-input-wrap" hidden>
           <label class="other-input-label" for="otherAnswer1">기타 내용을 짧게 입력해주세요.</label>
@@ -252,12 +252,12 @@
         <h2>시설에서 가장 신경 쓰이는 곳은 어디인가요?</h2>
         <p class="multi-hint">최대 2개까지 선택해주세요.</p>
         <div class="options">
-          <button class="facility-option" type="button">침구·매트리스</button>
-          <button class="facility-option" type="button">소파·패브릭</button>
-          <button class="facility-option" type="button">러그·매트</button>
-          <button class="facility-option" type="button">바닥</button>
-          <button class="facility-option" type="button">고객 이용공간</button>
-          <button class="facility-option" type="button">기타</button>
+          <button class="facility-option" type="button" data-visual="mattress-bedding">침구·매트리스</button>
+          <button class="facility-option" type="button" data-visual="sofa-fabric">소파·패브릭</button>
+          <button class="facility-option" type="button" data-visual="floor-rug">러그·매트</button>
+          <button class="facility-option" type="button" data-visual="floor">바닥</button>
+          <button class="facility-option" type="button" data-visual="shared-space">고객 이용공간</button>
+          <button class="facility-option" type="button" data-visual="other">기타</button>
         </div>
       </section>
 
@@ -418,9 +418,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./assets/js/supabase-config.js?v=20260905-4"></script>
   <script src="./assets/js/site.js?v=20260905-4"></script>
-  <script src="./assets/js/diagnosis.js?v=20260913-1"></script>
+  <script src="./assets/js/diagnosis.js?v=20260929-2"></script>
   <script src="./assets/js/diagnosis-plan-v3.js?v=20260908-2"></script>
-  <script src="./assets/js/diagnosis-facility.js?v=20260908-1"></script>
-  <script src="./assets/js/diagnosis-preview-ui.js?v=20260929-1"></script>
+  <script src="./assets/js/diagnosis-facility.js?v=20260929-2"></script>
+  <script src="./assets/js/diagnosis-preview-ui.js?v=20260929-2"></script>
 </body>
 </html>

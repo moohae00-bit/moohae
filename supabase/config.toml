@@ -1,0 +1,6 @@
+# MOOHAE Supabase Edge Function deployment settings
+# withSupabase({ auth: 'publishable' }) validates the publishable key itself.
+# Disable the platform JWT gate for this public form endpoint.
+
+[functions.submit-diagnosis]
+verify_jwt = false

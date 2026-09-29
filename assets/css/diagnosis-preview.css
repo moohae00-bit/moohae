@@ -324,20 +324,41 @@ body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facilit
 body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option{
   z-index:0;
 }
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(1)::before{background-image:url('../images/moohae-one/one-bed.webp')}
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(2)::before{background-image:url('../images/moohae-one/one-sofa.webp')}
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(3)::before{background-image:url('../images/moohae-one/one-room.webp')}
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(4)::before{background-image:url('../images/care/living_space.webp');background-position:center 60%}
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(5)::before{background-image:url('../images/moohae-one/one-rug.webp')}
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option:nth-child(6)::before{
+/*
+ * Q1 visuals are bound by semantic data-visual values instead of nth-child.
+ * This prevents a reorder from accidentally showing the wrong photo.
+ */
+body[data-page="diagnosis"] [data-visual="mattress-bedding"]::before{
+  background-image:url('../images/diagnosis/mattress-bedding.webp');
+  background-position:center 52%;
+}
+body[data-page="diagnosis"] [data-visual="sofa-fabric"]::before{
+  background-image:url('../images/moohae-one/one-sofa.webp');
+  background-position:center 56%;
+}
+body[data-page="diagnosis"] [data-visual="child-space"]::before{
+  background-image:url('../images/diagnosis/child-living-space.webp');
+  background-position:center 63%;
+}
+body[data-page="diagnosis"] [data-visual="pet-space"]::before{
+  background-image:url('../images/diagnosis/pet-living-space.webp');
+  background-position:center 66%;
+}
+body[data-page="diagnosis"] [data-visual="floor-rug"]::before{
+  background-image:url('../images/moohae-one/one-rug.webp');
+  background-position:center 64%;
+}
+body[data-page="diagnosis"] [data-visual="floor"]::before{
+  background-image:url('../images/moohae-one/one-floor.webp');
+  background-position:center 66%;
+}
+body[data-page="diagnosis"] [data-visual="shared-space"]::before{
+  background-image:url('../images/care/living_space.webp');
+  background-position:center 60%;
+}
+body[data-page="diagnosis"] [data-visual="other"]::before{
   background:linear-gradient(145deg,#e8e2d6,#f8f4eb 55%,#dfe7db);
 }
-body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(1)::before{background-image:url('../images/moohae-one/one-bed.webp')}
-body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(2)::before{background-image:url('../images/moohae-one/one-sofa.webp')}
-body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(3)::before{background-image:url('../images/moohae-one/one-rug.webp')}
-body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(4)::before{background-image:url('../images/moohae-one/one-floor.webp')}
-body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(5)::before{background-image:url('../images/care/living_space.webp');background-position:center 60%}
-body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option:nth-child(6)::before{background:linear-gradient(145deg,#e8e2d6,#f8f4eb 55%,#dfe7db)}
 
 .preview-unsure-button{
   display:inline-flex;

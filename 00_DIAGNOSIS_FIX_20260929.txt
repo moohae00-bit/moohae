@@ -1,0 +1,41 @@
+MOOHAE DIAGNOSIS FIX — 2026-09-29
+
+A. 원인 분석
+1) 이미지 중복/구분 부족
+- Q1 이미지가 nth-child 위치에 묶여 있어 항목 순서 변경에 취약했습니다.
+- '매트리스·침구'는 one-bed, '아이 생활공간'은 one-room을 사용했는데 두 이미지 모두 침실 구도여서 거의 같은 이미지처럼 보였습니다.
+- '반려동물 생활공간'은 일반 생활공간 이미지(living_space.webp)를 사용해 반려동물 맥락이 드러나지 않았습니다.
+
+2) 최종 전송 오류
+- submit-diagnosis Edge Function의 ALLOWED_ORIGINS는 https://moohae.me / https://www.moohae.me 두 주소만 허용하고 있었습니다.
+- 따라서 기존 미리보기 https://moohae-home-concept-2026.kaverchi00.chatgpt.site 에서 전송하면 서버가 403 origin_not_allowed로 거부합니다.
+- 프론트 HOME payload에는 customer_type이 생략되어 서버가 기본값 home으로 해석하고 있었습니다. 동작 가능하지만 진단/시설 분기 혼동 가능성을 제거하기 위해 customer_type:'home'을 명시했습니다.
+- 현재 Supabase @supabase/server withSupabase({auth:'publishable'}) 사용 시 배포 레벨 JWT gate를 끄는 설정이 필요합니다. 이를 supabase/config.toml에 명시했습니다. 실제 배포 환경의 현재 설정은 Supabase 프로젝트 연결 없이는 확인할 수 없습니다.
+
+B. 수정 내용
+- 폰트, 폰트 크기, 질문 레이아웃, 답변 카드 형태, 한 화면 한 질문 UX 유지.
+- Q1 이미지를 nth-child 대신 data-visual 의미 기반으로 연결.
+- 전용 이미지 3종 추가:
+  assets/images/diagnosis/mattress-bedding.webp
+  assets/images/diagnosis/child-living-space.webp
+  assets/images/diagnosis/pet-living-space.webp
+- HOME payload에 customer_type:'home' 명시.
+- 전송 오류 메시지를 origin/auth/일반 오류로 구분해 콘솔 원인 확인을 쉽게 변경.
+- Edge Function 허용 origin에 정확한 MOOHAE 미리보기 주소를 추가하고 localhost/127.0.0.1 개발 서버를 제한적으로 허용.
+- supabase/config.toml에 [functions.submit-diagnosis] verify_jwt=false 추가.
+
+C. 배포 중요사항
+- 프론트 파일만 GitHub에 올리면 Edge Function의 허용 origin 변경은 적용되지 않습니다.
+- supabase/functions/submit-diagnosis/index.ts를 실제 Supabase Edge Function에 배포해야 합니다.
+- supabase/config.toml의 verify_jwt=false 설정도 실제 Supabase 프로젝트에 반영되어야 합니다.
+- service_role/secret key는 프론트엔드나 GitHub에 절대 넣지 마세요.
+
+D. 검증
+- HOME 6문항 옵션값 ↔ Edge Function FINAL 6Q 허용값 정적 대조 PASS
+- FACILITY 7문항 옵션값 ↔ Edge Function 허용값 정적 대조 PASS
+- HOME customer_type/privacy_consent 필드 PASS
+- 중복 DOM id 없음
+- diagnosis.js / diagnosis-facility.js / diagnosis-preview-ui.js Node syntax check PASS
+- submit-diagnosis/index.ts TypeScript transpile syntax check PASS
+- 새 이미지 3종 파일 및 고유 SHA-256 확인 PASS
+- 실제 Supabase 네트워크 POST 및 운영 DB 저장은 연결된 Supabase 프로젝트 권한이 없어 이 환경에서 실행하지 않음

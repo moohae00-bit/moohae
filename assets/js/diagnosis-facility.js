@@ -1753,8 +1753,22 @@
       );
 
 
+      const errorText =
+        String(
+          error?.message ||
+          error?.context?.statusText ||
+          ''
+        ).toLowerCase();
+
       setFacilitySubmitMessage(
-        '전송 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        errorText.includes('origin_not_allowed') ||
+        errorText.includes('403')
+          ? '현재 접속 주소가 전송 서버의 허용 목록에 없습니다. 운영 주소에서 다시 시도해주세요.'
+          : errorText.includes('401') ||
+            errorText.includes('unauthorized') ||
+            errorText.includes('jwt')
+            ? '전송 서버 인증 설정을 확인하고 있습니다. 잠시 후 다시 시도해주세요.'
+            : '전송 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
         true
       );
 

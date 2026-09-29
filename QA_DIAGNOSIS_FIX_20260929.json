@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-29",
+  "home_questions": 6,
+  "facility_questions": 7,
+  "duplicate_dom_ids": [],
+  "home_payload_allowed_values": "PASS",
+  "facility_payload_allowed_values": "PASS",
+  "javascript_syntax": "PASS",
+  "edge_typescript_syntax": "PASS",
+  "preview_origin_patch": "PASS",
+  "verify_jwt_config": "PASS",
+  "live_supabase_network_test": "NOT_RUN_NO_CONNECTED_PROJECT_ACCESS",
+  "visual_assets": {
+    "assets/images/diagnosis/mattress-bedding.webp": {
+      "bytes": 73812,
+      "sha256": "dddc6caa8705b4e849638bf79823a72c2c83ef3ec069786dc66eef76a89cf964"
+    },
+    "assets/images/diagnosis/child-living-space.webp": {
+      "bytes": 57498,
+      "sha256": "d5e76edca7b562fc69d47ac0694a24e2d39023312d6a69138007c3ce9de54b1c"
+    },
+    "assets/images/diagnosis/pet-living-space.webp": {
+      "bytes": 120230,
+      "sha256": "d629d59a265d2ea66e1b9b30a2ab064e472ac8b2cf93fa8e6fd3cf9e70e50c59"
+    }
+  }
+}
