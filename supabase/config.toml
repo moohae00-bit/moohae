@@ -4,3 +4,6 @@
 
 [functions.submit-diagnosis]
 verify_jwt = false
+
+[functions.submit-home-check-v3]
+verify_jwt = false
