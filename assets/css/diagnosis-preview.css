@@ -730,59 +730,51 @@ body[data-page="diagnosis"] .privacy-policy-content dd{
   }
 }
 
-/* ============================================================
-   HOME CHECK V3 · Q1 HOUSEHOLD VISUALS V2 · 2026-10-04
-   - visible copy: 아이 -> 아이와 함께
-   - adult family and solo now use unmistakably different visuals
-   - server/data-code values are unchanged
-   ============================================================ */
 
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option::before {
-  background-size:58% auto !important;
-  background-position:center 47% !important;
-  background-repeat:no-repeat !important;
-  filter:none !important;
+/* ======================================================
+   2026-10-04 object-tone unify patch
+   개인/시설 1번 문항의 오브젝트 톤 통일
+   ====================================================== */
+body[data-page="diagnosis"] [data-visual="child-object"]::before{
+  background-image:url('../images/diagnosis-v3/child-object.webp');
+  background-position:center 60%;
 }
-
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option[data-visual="household-child"]::before {
-  background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMTMwIj4KPGcgc3Ryb2tlPSIjNzg4Nzc0IiBzdHJva2Utd2lkdGg9IjMuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIj48Y2lyY2xlIGN4PSIxMTgiIGN5PSIzOCIgcj0iMTUiLz48cGF0aCBkPSJNODkgOTJjMy0yMiAxNC0zNCAyOS0zNHMyNyAxMiAzMCAzNCIvPjxwYXRoIGQ9Ik0xMDEgNzNsLTE2IDE4TTEzNSA3M2wxNyAxOCIvPjxwYXRoIGQ9Ik0xMDggOTFsLTcgMjBNMTI5IDkxbDcgMjAiLz48cmVjdCB4PSI0OCIgeT0iNzgiIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgcng9IjQiLz48cGF0aCBkPSJNNTQgOTBoMTJNNjAgODR2MTIiLz48cGF0aCBkPSJNMTc2IDc3bDUgMTAgMTEgMi04IDggMiAxMS0xMC01LTEwIDUgMi0xMS04LTggMTEtMnoiLz48L2c+PC9zdmc+") !important;
+body[data-page="diagnosis"] [data-visual="pet-object"]::before{
+  background-image:url('../images/diagnosis-v3/pet-object.webp');
+  background-position:center 60%;
 }
-
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option[data-visual="household-pet"]::before {
-  background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgMTMwIj4KPGcgc3Ryb2tlPSIjNzg4Nzc0IiBzdHJva2Utd2lkdGg9IjMuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIj48ZWxsaXBzZSBjeD0iMTIwIiBjeT0iODMiIHJ4PSIyOSIgcnk9IjIzIi8+PGVsbGlwc2UgY3g9Ijc3IiBjeT0iNTIiIHJ4PSIxMiIgcnk9IjE3IiB0cmFuc2Zvcm09InJvdGF0ZSgtMjQgNzcgNTIpIi8+PGVsbGlwc2UgY3g9IjEwNCIgY3k9IjM4IiByeD0iMTEiIHJ5PSIxNyIgdHJhbnNmb3JtPSJyb3RhdGUoLTggMTA0IDM4KSIvPjxlbGxpcHNlIGN4PSIxMzYiIGN5PSIzOCIgcng9IjExIiByeT0iMTciIHRyYW5zZm9ybT0icm90YXRlKDggMTM2IDM4KSIvPjxlbGxpcHNlIGN4PSIxNjMiIGN5PSI1MiIgcng9IjEyIiByeT0iMTciIHRyYW5zZm9ybT0icm90YXRlKDI0IDE2MyA1MikiLz48L2c+PC9zdmc+") !important;
+body[data-page="diagnosis"] [data-visual="adult-family"]::before{
+  background-image:url('../images/diagnosis-v3/adult-family.webp');
+  background-position:center 60%;
 }
-
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option[data-visual="household-family"]::before {
-  background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNjAgMTQwIj4KPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzg4Nzc0IiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgPGNpcmNsZSBjeD0iODIiIGN5PSI0OCIgcj0iMTUiLz4KICA8Y2lyY2xlIGN4PSIxMzAiIGN5PSIzOSIgcj0iMTciLz4KICA8Y2lyY2xlIGN4PSIxNzgiIGN5PSI0OCIgcj0iMTUiLz4KICA8cGF0aCBkPSJNNTUgMTExYzQtMjggMTMtNDMgMjctNDNzMjQgMTUgMjggNDMiLz4KICA8cGF0aCBkPSJNOTYgMTExYzUtMzQgMTYtNTEgMzQtNTFzMzAgMTcgMzQgNTEiLz4KICA8cGF0aCBkPSJNMTUwIDExMWM0LTI4IDE0LTQzIDI4LTQzczIzIDE1IDI3IDQzIi8+CjwvZz4KPC9zdmc+") !important;
-  background-size:62% auto !important;
+body[data-page="diagnosis"] [data-visual="solo-home"]::before{
+  background-image:url('../images/diagnosis-v3/solo-home.webp');
+  background-position:center 60%;
 }
-
-body[data-page="diagnosis"] #homeCheckPanel .question:first-of-type .option[data-visual="household-solo"]::before {
-  background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNjAgMTQwIj4KPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzg4Nzc0IiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgPHBhdGggZD0iTTU1IDY4TDEzMCAyMGw3NSA0OCIvPgogIDxwYXRoIGQ9Ik03MCA2MnY1OGgxMjBWNjIiLz4KICA8Y2lyY2xlIGN4PSIxMzAiIGN5PSI2NyIgcj0iMTYiLz4KICA8cGF0aCBkPSJNOTYgMTEzYzUtMjUgMTctMzggMzQtMzhzMjkgMTMgMzQgMzgiLz4KPC9nPgo8L3N2Zz4=") !important;
-  background-size:58% auto !important;
+body[data-page="diagnosis"] [data-visual="mattress-bedding"]::before{
+  background-image:url('../images/diagnosis-v3/mattress-bedding.webp');
+  background-position:center 58%;
 }
-
-/* ============================================================
-   FACILITY CHECK · Q1 VISUAL BINDINGS · 2026-10-04
-   Facility Q1 now uses semantic visuals matching each answer.
-   Server values and facility submission logic are unchanged.
-   ============================================================ */
-
-body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option[data-visual="other"]{
-  justify-content:center;
-  padding-top:94px;
+body[data-page="diagnosis"] [data-visual="sofa-fabric"]::before{
+  background-image:url('../images/diagnosis-v3/sofa-fabric.webp');
+  background-position:center 60%;
 }
-
-body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option[data-visual="other"]::before{
-  content:"+";
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  inset:0 0 43px;
-  color:#8a9584;
-  font-size:42px;
-  font-weight:300;
-  line-height:1;
-  background:none !important;
+body[data-page="diagnosis"] [data-visual="floor-rug"]::before{
+  background-image:url('../images/diagnosis-v3/floor-rug.webp');
+  background-position:center 61%;
 }
-
+body[data-page="diagnosis"] [data-visual="floor"]::before{
+  background-image:url('../images/diagnosis-v3/floor.webp');
+  background-position:center 63%;
+}
+body[data-page="diagnosis"] [data-visual="customer-space"]::before{
+  background-image:url('../images/diagnosis-v3/customer-space.webp');
+  background-position:center 61%;
+}
+body[data-page="diagnosis"] [data-visual="other-object"]::before{
+  background-image:url('../images/diagnosis-v3/other-object.webp');
+  background-position:center 60%;
+}
+body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option[data-visual="other-object"]::before{
+  inset:0 0 48px;
+}
