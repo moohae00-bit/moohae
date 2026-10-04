@@ -1096,6 +1096,77 @@
   }
 
 
+  const HOME_V3_LABELS = Object.freeze({
+    household: Object.freeze({
+      child: '아이',
+      pet: '반려동물',
+      adult_family: '성인 가족',
+      solo_adult: '혼자 생활해요'
+    }),
+    spaces: Object.freeze({
+      bedroom: '침실',
+      living_room: '거실',
+      child_space: '아이 생활공간',
+      pet_space: '반려동물 생활공간',
+      whole_home: '집 전체',
+      other: '다른 공간'
+    }),
+    reasons: Object.freeze({
+      visible_dust_hair: '먼지·털이 보여요',
+      difficult_to_manage: '관리하기 어려워요',
+      frequent_contact: '생활하면서 자주 닿는 곳이에요',
+      current_condition: '현재 상태가 궁금해요',
+      general_check: '한번 확인해보고 싶어요'
+    }),
+    objects: Object.freeze({
+      mattress_bedding: '매트리스·침구',
+      sofa_fabric: '소파·패브릭',
+      rug_carpet: '러그·카펫',
+      floor: '바닥',
+      other: '다른 곳',
+      undecided: '특별히 정하지 않았어요'
+    }),
+    management: Object.freeze({
+      routine_homecare: '일상적으로 관리해요',
+      frequent_washing: '세탁을 자주 해요',
+      dedicated_equipment: '전용 장비를 사용해요',
+      professional_care: '전문 CARE를 받아봤어요',
+      not_managed: '따로 관리하지 못하고 있어요'
+    }),
+    goals: Object.freeze({
+      current_condition: '지금 우리 집의 상태가 어떤지',
+      care_priority: '어디를 먼저 관리하면 좋을지',
+      care_needed_now: '지금 CARE가 필요한지',
+      next_check_timing: '다음에는 언제 살펴보면 좋을지'
+    })
+  });
+
+  function isHomeCheckV3(diagnosis) {
+    return Boolean(
+      diagnosis &&
+      String(diagnosis.customer_type || '').toLowerCase() === 'home' &&
+      Number(diagnosis.check_version) === 3
+    );
+  }
+
+  function homeV3Label(group, value) {
+    const key = String(value || '').trim();
+    return HOME_V3_LABELS[group]?.[key] || key;
+  }
+
+  function homeV3Array(group, values, otherText = '') {
+    if (!Array.isArray(values)) {
+      return [];
+    }
+
+    return values.map((value) => {
+      if (value === 'other' && otherText) {
+        return `${homeV3Label(group, value)}: ${otherText}`;
+      }
+      return homeV3Label(group, value);
+    });
+  }
+
   function isFinalHomeCheck6Q(
     diagnosis
   ) {
@@ -1172,6 +1243,12 @@
       ) >= 2;
 
 
+    const isHomeV3 =
+      isHomeCheckV3(
+        diagnosis
+      );
+
+
     const isFinal6Q =
       isFinalHomeCheck6Q(
         diagnosis
@@ -1182,9 +1259,13 @@
       make(
         'strong',
         '',
-        diagnosis.recommended_plan ||
-        diagnosis.result_level ||
-        'MOOHAE CHECK'
+        isHomeV3
+          ? 'HOME CHECK V3'
+          : (
+              diagnosis.recommended_plan ||
+              diagnosis.result_level ||
+              'MOOHAE CHECK'
+            )
       )
     );
 
@@ -1216,7 +1297,62 @@
 
 
     const groups =
-      isFinal6Q
+      isHomeV3
+
+        ? [
+            [
+              '함께 생활',
+              homeV3Array(
+                'household',
+                diagnosis.home_household_members
+              )
+            ],
+            [
+              '먼저 살펴볼 공간',
+              homeV3Array(
+                'spaces',
+                diagnosis.home_priority_spaces,
+                diagnosis.home_priority_space_other
+              )
+            ],
+            [
+              '살펴보는 이유',
+              [
+                homeV3Label(
+                  'reasons',
+                  diagnosis.home_check_reason
+                )
+              ].filter(Boolean)
+            ],
+            [
+              '특히 확인할 곳',
+              homeV3Array(
+                'objects',
+                diagnosis.home_focus_objects,
+                diagnosis.home_focus_object_other
+              )
+            ],
+            [
+              '평소 관리',
+              [
+                homeV3Label(
+                  'management',
+                  diagnosis.home_current_management
+                )
+              ].filter(Boolean)
+            ],
+            [
+              'CHECK에서 원하는 답',
+              [
+                homeV3Label(
+                  'goals',
+                  diagnosis.home_check_goal
+                )
+              ].filter(Boolean)
+            ]
+          ]
+
+        : isFinal6Q
 
         ? [
             [
@@ -2490,8 +2626,17 @@
           .select(
             `
               id,
+              customer_type,
               check_version,
               recommended_plan,
+              home_household_members,
+              home_priority_spaces,
+              home_priority_space_other,
+              home_check_reason,
+              home_focus_objects,
+              home_focus_object_other,
+              home_current_management,
+              home_check_goal,
               household,
               living_spaces,
               contact_surfaces,

@@ -436,6 +436,92 @@
   }
 
 
+  const HOME_V3_LABELS = Object.freeze({
+    household: Object.freeze({
+      child: '아이',
+      pet: '반려동물',
+      adult_family: '성인 가족',
+      solo_adult: '혼자 생활'
+    }),
+    spaces: Object.freeze({
+      bedroom: '침실',
+      living_room: '거실',
+      child_space: '아이 생활공간',
+      pet_space: '반려동물 생활공간',
+      whole_home: '집 전체',
+      other: '다른 공간'
+    }),
+    reasons: Object.freeze({
+      visible_dust_hair: '먼지·털이 보여요',
+      difficult_to_manage: '관리하기 어려워요',
+      frequent_contact: '생활하면서 자주 닿는 곳',
+      current_condition: '현재 상태가 궁금해요',
+      general_check: '한번 확인해보고 싶어요'
+    }),
+    objects: Object.freeze({
+      mattress_bedding: '매트리스·침구',
+      sofa_fabric: '소파·패브릭',
+      rug_carpet: '러그·카펫',
+      floor: '바닥',
+      other: '다른 곳',
+      undecided: '특별히 정하지 않음'
+    }),
+    management: Object.freeze({
+      routine_homecare: '일상적으로 관리',
+      frequent_washing: '세탁을 자주 함',
+      dedicated_equipment: '전용 장비 사용',
+      professional_care: '전문 CARE 경험',
+      not_managed: '따로 관리하지 못함'
+    }),
+    goals: Object.freeze({
+      current_condition: '현재 상태',
+      care_priority: '관리 우선순위',
+      care_needed_now: '현재 CARE 필요 여부',
+      next_check_timing: '다음 CHECK 시점'
+    })
+  });
+
+  function isHomeCheckV3(diagnosis) {
+    return Boolean(
+      diagnosis &&
+      String(diagnosis.customer_type || '').toLowerCase() === 'home' &&
+      Number(diagnosis.check_version) === 3
+    );
+  }
+
+  function homeV3Label(group, value) {
+    const key = String(value || '').trim();
+    return HOME_V3_LABELS[group]?.[key] || key;
+  }
+
+  function homeV3Array(group, values, otherText = '') {
+    if (!Array.isArray(values)) {
+      return [];
+    }
+
+    return values.map((value) => {
+      if (value === 'other' && otherText) {
+        return `${homeV3Label(group, value)}: ${otherText}`;
+      }
+      return homeV3Label(group, value);
+    });
+  }
+
+  function homeV3SearchText(diagnosis) {
+    if (!isHomeCheckV3(diagnosis)) {
+      return '';
+    }
+
+    return [
+      ...homeV3Array('household', diagnosis.home_household_members),
+      ...homeV3Array('spaces', diagnosis.home_priority_spaces, diagnosis.home_priority_space_other),
+      homeV3Label('reasons', diagnosis.home_check_reason),
+      ...homeV3Array('objects', diagnosis.home_focus_objects, diagnosis.home_focus_object_other),
+      homeV3Label('management', diagnosis.home_current_management),
+      homeV3Label('goals', diagnosis.home_check_goal)
+    ].filter(Boolean).join(' ');
+  }
+
   function publicCheckLabel(
     diagnosis
   ) {
@@ -455,6 +541,15 @@
     ) {
 
       return 'FACILITY CHECK';
+    }
+
+    if (
+      isHomeCheckV3(
+        diagnosis
+      )
+    ) {
+
+      return 'HOME CHECK V3';
     }
 
     return (
@@ -1652,6 +1747,25 @@
     // ==========================================================
     // HOME
     // ==========================================================
+
+    if (
+      isHomeCheckV3(
+        diagnosis
+      )
+    ) {
+      return [
+        ...homeV3Array(
+          'spaces',
+          diagnosis.home_priority_spaces,
+          diagnosis.home_priority_space_other
+        ),
+        ...homeV3Array(
+          'objects',
+          diagnosis.home_focus_objects,
+          diagnosis.home_focus_object_other
+        )
+      ].filter(Boolean).slice(0, 3);
+    }
 
     const isV2 =
       Number(
@@ -3105,6 +3219,15 @@
               check_version,
               recommended_plan,
 
+              home_household_members,
+              home_priority_spaces,
+              home_priority_space_other,
+              home_check_reason,
+              home_focus_objects,
+              home_focus_object_other,
+              home_current_management,
+              home_check_goal,
+
               facility_name,
               facility_focus_areas,
               facility_pain_point,
@@ -3475,6 +3598,10 @@
 
             diagnosis?.result_level ||
               '',
+
+            homeV3SearchText(
+              diagnosis
+            ),
 
             diagnosis?.facility_name ||
               '',

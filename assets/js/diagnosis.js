@@ -194,28 +194,6 @@
     0;
 
 
-  let resultData = {
-
-    level:
-      '',
-
-    title:
-      '',
-
-    copy:
-      '',
-
-    recommendation:
-      '',
-
-    plan:
-      '',
-
-    highlights:
-      []
-
-  };
-
 
   /*
    * SECURITY
@@ -352,423 +330,145 @@
 
 
   // ============================================================
-  // QUESTION ANSWERS
+  // QUESTION ANSWERS — HOME CHECK V3
   // ============================================================
 
-  function getOtherInput(
-    question
-  ) {
-
-    return question
-      .querySelector(
-        '.other-input'
-      );
-
+  function getOtherInput(question) {
+    return question?.querySelector('.other-input') || null;
   }
 
-
-  function getOtherWrap(
-    question
-  ) {
-
-    return question
-      .querySelector(
-        '.other-input-wrap'
-      );
-
+  function getOtherWrap(question) {
+    return question?.querySelector('.other-input-wrap') || null;
   }
 
-
-  function getOptionValue(
-    question,
-    button
-  ) {
-
-    const baseValue =
-      button
-        .textContent
-        .trim();
-
-
-    if (
-      button.dataset.other !==
-      'true'
-    ) {
-
-      return baseValue;
-
-    }
-
-
-    const input =
-      getOtherInput(
-        question
-      );
-
-
-    const detail =
-      String(
-        input?.value ||
-        ''
-      ).trim();
-
-
-    return detail
-      ? `기타: ${detail}`
-      : '기타';
-
+  function getOptionCode(button) {
+    return String(button?.dataset?.code || '').trim();
   }
 
+  function getOtherDetail(question) {
+    const value = String(getOtherInput(question)?.value || '').trim();
+    return value || null;
+  }
 
-  function syncOtherState(
-    question,
-    qIndex
-  ) {
+  function syncQuestionAnswers(question, qIndex) {
+    answers[qIndex] = [
+      ...question.querySelectorAll('.option.selected')
+    ]
+      .map(getOptionCode)
+      .filter(Boolean);
+  }
 
-    const otherButton =
-      question
-        .querySelector(
-          '.option[data-other="true"]'
-        );
+  function syncOtherState(question, qIndex) {
+    const otherButton = question?.querySelector('.option[data-other="true"]');
+    const wrap = getOtherWrap(question);
+    const input = getOtherInput(question);
 
-
-    const wrap =
-      getOtherWrap(
-        question
-      );
-
-
-    const input =
-      getOtherInput(
-        question
-      );
-
-
-    if (
-      !otherButton ||
-      !wrap ||
-      !input
-    ) {
-
+    if (!otherButton || !wrap || !input) {
       return;
-
     }
 
+    const selected = otherButton.classList.contains('selected');
+    wrap.hidden = !selected;
 
-    const selected =
-      otherButton
-        .classList
-        .contains(
-          'selected'
-        );
-
-
-    wrap.hidden =
-      !selected;
-
-
-    if (
-      selected
-    ) {
-
-      answers[qIndex] =
-        answers[qIndex]
-          .filter(
-            (value) =>
-              !String(value)
-                .startsWith(
-                  '기타'
-                )
-          );
-
-
-      answers[qIndex].push(
-        getOptionValue(
-          question,
-          otherButton
-        )
-      );
-
-    } else {
-
-      answers[qIndex] =
-        answers[qIndex]
-          .filter(
-            (value) =>
-              !String(value)
-                .startsWith(
-                  '기타'
-                )
-          );
-
+    if (!selected) {
+      input.value = '';
     }
 
+    syncQuestionAnswers(question, qIndex);
   }
 
+  function conflictCodes(button) {
+    return String(button?.dataset?.conflicts || '')
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean);
+  }
 
-  qs.forEach(
-    (
-      question,
-      qIndex
-    ) => {
+  function removeConflicts(question, button) {
+    const buttonCode = getOptionCode(button);
+    const directConflicts = new Set(conflictCodes(button));
 
-      const single =
-        question.dataset
-          .single ===
-        'true';
-
-
-      const maxSelect =
-        Number(
-          question.dataset
-            .maxSelect ||
-          0
-        );
-
-
-      const otherInput =
-        getOtherInput(
-          question
-        );
-
-
-      if (
-        otherInput
-      ) {
-
-        otherInput.addEventListener(
-          'input',
-          () => {
-
-            syncOtherState(
-              question,
-              qIndex
-            );
-
-          }
-        );
-
+    question.querySelectorAll('.option.selected').forEach((item) => {
+      if (item === button) {
+        return;
       }
 
-
-      question
-        .querySelectorAll(
-          '.option'
-        )
-        .forEach(
-          (
-            button
-          ) => {
-
-            button.type =
-              'button';
-
-
-            button.addEventListener(
-              'click',
-              () => {
-
-                const baseValue =
-                  button
-                    .textContent
-                    .trim();
-
-
-                // ------------------------------------------------
-                // SINGLE
-                // ------------------------------------------------
-
-                if (
-                  single
-                ) {
-
-                  question
-                    .querySelectorAll(
-                      '.option'
-                    )
-                    .forEach(
-                      (
-                        item
-                      ) => {
-
-                        item.classList.remove(
-                          'selected'
-                        );
-
-                      }
-                    );
-
-
-                  answers[qIndex] =
-                    [];
-
-
-                  button.classList.add(
-                    'selected'
-                  );
-
-
-                  answers[qIndex].push(
-                    getOptionValue(
-                      question,
-                      button
-                    )
-                  );
-
-
-                  syncOtherState(
-                    question,
-                    qIndex
-                  );
-
-
-                  if (
-                    button.dataset.other ===
-                    'true'
-                  ) {
-
-                    window.setTimeout(
-                      () => {
-
-                        getOtherInput(
-                          question
-                        )?.focus();
-
-                      },
-                      0
-                    );
-
-                  }
-
-
-                  return;
-
-                }
-
-
-                // ------------------------------------------------
-                // MULTIPLE
-                // ------------------------------------------------
-
-                const alreadySelected =
-                  button.classList.contains(
-                    'selected'
-                  );
-
-
-                if (
-                  !alreadySelected &&
-                  maxSelect > 0 &&
-                  answers[qIndex].length >=
-                    maxSelect
-                ) {
-
-                  alert(
-                    `최대 ${maxSelect}개까지 선택할 수 있습니다.`
-                  );
-
-
-                  return;
-
-                }
-
-
-                button.classList.toggle(
-                  'selected'
-                );
-
-
-                if (
-                  button.classList.contains(
-                    'selected'
-                  )
-                ) {
-
-                  const value =
-                    getOptionValue(
-                      question,
-                      button
-                    );
-
-
-                  if (
-                    !answers[qIndex]
-                      .includes(
-                        value
-                      )
-                  ) {
-
-                    answers[qIndex]
-                      .push(
-                        value
-                      );
-
-                  }
-
-                } else {
-
-                  answers[qIndex] =
-                    answers[qIndex]
-                      .filter(
-                        (item) => {
-
-                          if (
-                            button.dataset.other ===
-                            'true'
-                          ) {
-
-                            return !String(item)
-                              .startsWith(
-                                '기타'
-                              );
-
-                          }
-
-
-                          return item !==
-                            baseValue;
-
-                        }
-                      );
-
-                }
-
-
-                syncOtherState(
-                  question,
-                  qIndex
-                );
-
-
-                if (
-                  button.dataset.other ===
-                    'true' &&
-                  button.classList.contains(
-                    'selected'
-                  )
-                ) {
-
-                  window.setTimeout(
-                    () => {
-
-                      getOtherInput(
-                        question
-                      )?.focus();
-
-                    },
-                    0
-                  );
-
-                }
-
-              }
-            );
-
-          }
-        );
-
+      const itemCode = getOptionCode(item);
+      const reverseConflicts = new Set(conflictCodes(item));
+
+      if (
+        directConflicts.has(itemCode) ||
+        reverseConflicts.has(buttonCode) ||
+        item.dataset.exclusive === 'true'
+      ) {
+        item.classList.remove('selected');
+      }
+    });
+  }
+
+  qs.forEach((question, qIndex) => {
+    const single = question.dataset.single === 'true';
+    const maxSelect = Number(question.dataset.maxSelect || 0);
+    const otherInput = getOtherInput(question);
+
+    if (otherInput) {
+      otherInput.addEventListener('input', () => {
+        syncQuestionAnswers(question, qIndex);
+      });
     }
-  );
+
+    question.querySelectorAll('.option').forEach((button) => {
+      button.type = 'button';
+
+      button.addEventListener('click', () => {
+        const alreadySelected = button.classList.contains('selected');
+
+        if (single) {
+          question.querySelectorAll('.option').forEach((item) => {
+            item.classList.remove('selected');
+          });
+          button.classList.add('selected');
+          syncQuestionAnswers(question, qIndex);
+          syncOtherState(question, qIndex);
+          return;
+        }
+
+        if (alreadySelected) {
+          button.classList.remove('selected');
+          syncQuestionAnswers(question, qIndex);
+          syncOtherState(question, qIndex);
+          return;
+        }
+
+        if (button.dataset.exclusive === 'true') {
+          question.querySelectorAll('.option').forEach((item) => {
+            item.classList.remove('selected');
+          });
+        } else {
+          removeConflicts(question, button);
+        }
+
+        const selectedCount = question.querySelectorAll('.option.selected').length;
+
+        if (maxSelect > 0 && selectedCount >= maxSelect) {
+          alert(`최대 ${maxSelect}개까지 선택할 수 있습니다.`);
+          syncQuestionAnswers(question, qIndex);
+          syncOtherState(question, qIndex);
+          return;
+        }
+
+        button.classList.add('selected');
+        syncQuestionAnswers(question, qIndex);
+        syncOtherState(question, qIndex);
+
+        if (button.dataset.other === 'true') {
+          window.setTimeout(() => {
+            getOtherInput(question)?.focus();
+          }, 0);
+        }
+      });
+    });
+  });
 
 
   function validateCurrentAnswer() {
@@ -867,714 +567,88 @@
 
 
   // ============================================================
-  // CARE PLAN COMPATIBILITY
+  // HOME CHECK V3 RESULT
   // ============================================================
 
-  /*
-   * 과거 DB / Edge Function 데이터와
-   * 최신 고객 표시명을 분리한다.
-   *
-   * 과거:
-   * STANDARD / PLUS / SIGNATURE
-   *
-   * 현재 고객 화면:
-   * CORE / CORE+ / PRIVATE
-   */
-
-  const PLAN_COMPATIBILITY =
-    Object.freeze({
-
-      STANDARD:
-        'CORE',
-
-      standard:
-        'CORE',
-
-      CORE:
-        'CORE',
-
-      core:
-        'CORE',
-
-      PLUS:
-        'CORE+',
-
-      plus:
-        'CORE+',
-
-      'CORE+':
-        'CORE+',
-
-      corePlus:
-        'CORE+',
-
-      'core-plus':
-        'CORE+',
-
-      SIGNATURE:
-        'PRIVATE',
-
-      signature:
-        'PRIVATE',
-
-      PRIVATE:
-        'PRIVATE',
-
-      private:
-        'PRIVATE'
-
-    });
-
-
-  // ============================================================
-  // CUSTOMER CARE PLAN DATA
-  // ============================================================
-
-  const CARE_PLANS =
-    Object.freeze({
-
-      CORE: {
-
-        name:
-          'CORE',
-
-        headline:
-          '생활의 핵심을\n1년의 주기로.',
-
-        description:
-          '침구·소파·패브릭과 바닥처럼 자주 생활하는 곳을 정기적으로 CARE합니다.',
-
-        href:
-          './care.html#core'
-
-      },
-
-
-      'CORE+': {
-
-        name:
-          'CORE+',
-
-        headline:
-          '집 전체를\n더 깊이 CARE.',
-
-        description:
-          '생활의 핵심 영역을 넘어 집 전체의 CARE가 필요한 경우에 맞습니다.',
-
-        href:
-          './care.html#core-plus'
-
-      },
-
-
-      PRIVATE: {
-
-        name:
-          'PRIVATE',
-
-        headline:
-          '우리 집을 위한\n전담 CARE.',
-
-        description:
-          '집의 CARE HISTORY를 바탕으로 전담 관리가 필요한 경우에 살펴볼 수 있습니다.',
-
-        href:
-          './care.html#private'
-
-      }
-
-    });
-
-
-  // ============================================================
-  // PLAN NORMALIZER
-  // ============================================================
-
-  function normalizePlan(
-    value
-  ) {
-
-    return (
-      PLAN_COMPATIBILITY[
-        value
-      ] ||
-      'CORE'
-    );
-
-  }
-
-
-  // ============================================================
-  // LEGACY DB / EDGE FUNCTION COMPATIBILITY
-  // ============================================================
-
-  function toLegacyPlan(
-    value
-  ) {
-
-    const plan =
-      normalizePlan(
-        value
-      );
-
-
-    if (
-      plan ===
-      'CORE+'
-    ) {
-
-      return 'PLUS';
-
+  function selectedDisplayValues(question) {
+    if (!question) {
+      return [];
     }
 
-
-    if (
-      plan ===
-      'PRIVATE'
-    ) {
-
-      return 'SIGNATURE';
-
-    }
-
-
-    return 'STANDARD';
-
-  }
-
-
-  // ============================================================
-  // BUILD PERSONALIZED RESULT
-  // ============================================================
-
-  function buildPersonalizedCopy() {
-
-    const focusAreas =
-      answers[0] ||
-      [];
-
-
-    const primaryConcern =
-      answers[1]?.[0] ||
-      '';
-
-
-    const visitGoal =
-      answers[3]?.[0] ||
-      '';
-
-
-    // ----------------------------------------------------------
-    // CONSERVATIVE PLAN COMPATIBILITY
-    //
-    // 새 설문은 "원하는 PLAN"을 직접 묻지 않는다.
-    // 따라서 PRIVATE를 자동 추천하지 않고,
-    // 아이/반려동물 생활공간 등 더 세심한 범위가
-    // 명확한 경우에만 CORE+로 분기한다.
-    // 그 외에는 CORE를 기본값으로 유지한다.
-    // ----------------------------------------------------------
-
-    const childOrPetFocus =
-      focusAreas.some(
-        (value) =>
-          value ===
-            '아이 생활공간' ||
-          value ===
-            '반려동물 생활공간'
-      ) ||
-      primaryConcern ===
-        '아이가 생활하는 곳이라 신경 쓰여요' ||
-      primaryConcern ===
-        '반려동물이 함께 생활해요';
-
-
-    const broadAttention =
-      focusAreas.length >=
-        2 &&
-      (
-        primaryConcern ===
-          '평소 관리하기 어려워요' ||
-        primaryConcern ===
-          '먼지·털 등이 신경 쓰여요' ||
-        visitGoal ===
-          '관리가 필요한 곳' ||
-        visitGoal ===
-          '적절한 관리 주기'
-      );
-
-
-    const plan =
-      childOrPetFocus ||
-      broadAttention
-        ? 'CORE+'
-        : 'CORE';
-
-
-    const planInfo =
-      CARE_PLANS[
-        plan
-      ];
-
-
-    const highlights =
-      [];
-
-
-    focusAreas
-      .slice(
-        0,
-        2
-      )
-      .forEach(
-        (value) => {
-
-          highlights.push(
-            value
-          );
-
+    return [...question.querySelectorAll('.option.selected')]
+      .map((button) => {
+        const label = String(button.textContent || '').trim();
+        if (button.dataset.other !== 'true') {
+          return label;
         }
-      );
 
-
-    if (
-      visitGoal &&
-      highlights.length <
-        3
-    ) {
-
-      highlights.push(
-        visitGoal
-      );
-
-    }
-
-
-    if (
-      !highlights.length
-    ) {
-
-      highlights.push(
-        '생활 환경'
-      );
-
-    }
-
-
-    return {
-
-      level:
-        plan,
-
-      title:
-        `우리 집에는 ${plan}가 잘 맞습니다.`,
-
-      copy:
-        planInfo.description,
-
-      recommendation:
-        planInfo.headline,
-
-      plan,
-
-      highlights
-
-    };
-
+        const detail = getOtherDetail(question);
+        return detail ? `${label}: ${detail}` : label;
+      })
+      .filter(Boolean);
   }
 
-
-  // ============================================================
-
-  function renderRecommendationPlan(
-    plan
-  ) {
-
-    const rec =
-      document.getElementById(
-        'resultRecommend'
-      );
-
-
-    if (
-      !rec
-    ) {
-
+  function renderResultSummary(highlights) {
+    const summary = document.getElementById('resultSummary');
+    if (!summary) {
       return;
-
     }
-
-
-    const normalized =
-      normalizePlan(
-        plan
-      );
-
-
-    const info =
-      CARE_PLANS[
-        normalized
-      ];
-
-
-    rec.replaceChildren();
-
-
-    // ----------------------------------------------------------
-    // PLAN NAME
-    // ----------------------------------------------------------
-
-    const name =
-      appendText(
-        rec,
-        'p',
-        info.name
-      );
-
-
-    name.className =
-      'result-plan-name';
-
-
-    // ----------------------------------------------------------
-    // HEADLINE
-    // ----------------------------------------------------------
-
-    const headline =
-      appendText(
-        rec,
-        'h3',
-        info.headline
-      );
-
-
-    headline.className =
-      'result-plan-copy';
-
-
-    headline.style.whiteSpace =
-      'pre-line';
-
-
-    // ----------------------------------------------------------
-    // DESCRIPTION
-    // ----------------------------------------------------------
-
-    const desc =
-      appendText(
-        rec,
-        'p',
-        info.description
-      );
-
-
-    desc.className =
-      'result-plan-desc';
-
-
-    // ----------------------------------------------------------
-    // CARE PAGE LINK
-    // ----------------------------------------------------------
-
-    const link =
-      document.createElement(
-        'a'
-      );
-
-
-    link.className =
-      'result-plan-link';
-
-
-    link.href =
-      info.href;
-
-
-    link.textContent =
-      `${info.name} 자세히 보기`;
-
-
-    rec.appendChild(
-      link
-    );
-
-  }
-
-
-  // ============================================================
-  // OTHER CARE PLAN EXPLORATION
-  // ============================================================
-
-  function renderPlanExplore(
-    plan
-  ) {
-
-    const nav =
-      document.getElementById(
-        'planExplore'
-      );
-
-
-    if (
-      !nav
-    ) {
-
-      return;
-
-    }
-
-
-    nav.replaceChildren();
-
-
-    const title =
-      appendText(
-        nav,
-        'span',
-        '다른 CARE도 살펴보세요.'
-      );
-
-
-    title.className =
-      'plan-explore-title';
-
-
-    const list =
-      document.createElement(
-        'div'
-      );
-
-
-    list.className =
-      'plan-explore-list';
-
-
-    [
-      'CORE',
-      'CORE+',
-      'PRIVATE'
-    ]
-      .forEach(
-        (
-          key
-        ) => {
-
-          const info =
-            CARE_PLANS[
-              key
-            ];
-
-
-          const link =
-            document.createElement(
-              'a'
-            );
-
-
-          link.className =
-            'plan-explore-link';
-
-
-          link.href =
-            info.href;
-
-
-          link.textContent =
-            info.name;
-
-
-          // ----------------------------------------------------
-          // CURRENT RECOMMENDATION
-          // ----------------------------------------------------
-
-          if (
-            key ===
-            normalizePlan(
-              plan
-            )
-          ) {
-
-            link.setAttribute(
-              'aria-current',
-              'true'
-            );
-
-
-            const badge =
-              document.createElement(
-                'span'
-              );
-
-
-            badge.className =
-              'plan-explore-badge';
-
-
-            badge.textContent =
-              'YOUR CARE';
-
-
-            link.appendChild(
-              badge
-            );
-
-          }
-
-
-          list.appendChild(
-            link
-          );
-
-        }
-      );
-
-
-    nav.appendChild(
-      list
-    );
-
-  }
-
-
-  // ============================================================
-  // RESULT SUMMARY
-  // ============================================================
-
-  function renderResultSummary(
-    highlights
-  ) {
-
-    const summary =
-      document.getElementById(
-        'resultSummary'
-      );
-
-
-    if (
-      !summary
-    ) {
-
-      return;
-
-    }
-
 
     summary.replaceChildren();
+    appendText(summary, 'strong', '이번 CHECK에서 확인한 내용');
 
-
-    appendText(
-      summary,
-      'strong',
-      '이번 CHECK에서 확인한 핵심'
-    );
-
-
-    const list =
-      document.createElement(
-        'ul'
-      );
-
-
-    (
-      highlights ||
-      []
-    )
-      .slice(
-        0,
-        3
-      )
-      .forEach(
-        (
-          item
-        ) => {
-
-          appendText(
-            list,
-            'li',
-            item
-          );
-
-        }
-      );
-
-
-    summary.appendChild(
-      list
-    );
-
+    const list = document.createElement('ul');
+    (highlights || []).slice(0, 4).forEach((item) => {
+      appendText(list, 'li', item);
+    });
+    summary.appendChild(list);
   }
-
-
-  // ============================================================
-  // BUILD RESULT
-  // ============================================================
 
   function buildResult() {
+    const resultTitle = document.getElementById('resultTitle');
+    const resultCopy = document.getElementById('resultCopy');
 
-    resultData =
-      buildPersonalizedCopy();
-
-
-    const resultTitle =
-      document.getElementById(
-        'resultTitle'
-      );
-
-
-    const resultCopy =
-      document.getElementById(
-        'resultCopy'
-      );
-
-
-    if (
-      resultTitle
-    ) {
-
-      resultTitle.textContent =
-        '우리 집에는\n이 CARE가 잘 맞습니다.';
-
-
-      resultTitle.style.whiteSpace =
-        'pre-line';
-
+    if (resultTitle) {
+      resultTitle.textContent = '우리 집을\n조금 알게 됐어요.';
+      resultTitle.style.whiteSpace = 'pre-line';
     }
 
-
-    /*
-     * 과거의 긴 분석 문단은
-     * 고객 결과 화면에서 숨긴다.
-     */
-
-    if (
-      resultCopy
-    ) {
-
-      resultCopy.textContent =
-        '';
-
-
-      resultCopy.hidden =
-        true;
-
+    if (resultCopy) {
+      resultCopy.hidden = false;
+      resultCopy.textContent = '방문 CHECK에서 필요한 곳부터 함께 살펴볼게요.';
     }
 
+    const highlights = [
+      ...selectedDisplayValues(qs[1]),
+      ...selectedDisplayValues(qs[3]),
+      ...selectedDisplayValues(qs[5])
+    ];
 
-    renderRecommendationPlan(
-      resultData.plan
-    );
-
-
-    renderResultSummary(
-      resultData.highlights
-    );
-
-
-    renderPlanExplore(
-      resultData.plan
-    );
-
+    renderResultSummary(highlights);
   }
 
+  // ============================================================
+  // HOME CHECK V3 PAYLOAD
+  // ============================================================
+
+  function buildHomeV3Payload(name, phone, website) {
+    return {
+      name,
+      phone,
+      privacy_consent: true,
+      website,
+      home_household_members: [...answers[0]],
+      home_priority_spaces: [...answers[1]],
+      home_priority_space_other:
+        answers[1].includes('other') ? getOtherDetail(qs[1]) : null,
+      home_check_reason: answers[2]?.[0] || '',
+      home_focus_objects: [...answers[3]],
+      home_focus_object_other:
+        answers[3].includes('other') ? getOtherDetail(qs[3]) : null,
+      home_current_management: answers[4]?.[0] || '',
+      home_check_goal: answers[5]?.[0] || ''
+    };
+  }
 
   // ============================================================
   // NEXT
@@ -3218,85 +2292,15 @@
 
 
     // ==========================================================
-    // PAYLOAD
+    // HOME CHECK V3 PAYLOAD
     // ==========================================================
 
-    const payload = {
-
-      // Explicitly identify the public HOME flow.
-      // The Edge Function still supports the legacy empty value,
-      // but sending it removes ambiguity between HOME/FACILITY.
-      customer_type:
-        'home',
-
-      name,
-
-      phone,
-
-      privacy_consent:
-        true,
-
-      /*
-       * honeypot
-       */
-      website,
-
-      /*
-       * HOME CHECK FINAL 6Q → 기존 V2 API 호환 매핑
-       *
-       * DB/API 구조를 즉시 변경하지 않고 신규 설문 6개 답변을
-       * 모두 보존하기 위한 무중단 호환 방식이다.
-       *
-       * household             = Q1 관심 공간
-       * spaces                = Q2 신경 쓰이는 점
-       * contact_surfaces      = Q3 현재 관리 방법
-       * worries               = Q4 방문 확인 목표
-       * management_preference = Q5 결과 확인 방식 + Q6 주 관리 주체
-       */
-
-      household:
-        answers[0],
-
-      spaces:
-        answers[1],
-
-      contact_surfaces:
-        answers[2],
-
-      worries:
-        answers[3],
-
-      management_preference:
-        [
-          answers[4]?.[0] || '',
-          answers[5]?.[0] || ''
-        ].filter(Boolean),
-
-      client_result_level:
-        resultData.level,
-
-      client_result_message:
-        `${
-          resultData.title
-        } ${
-          resultData.copy
-        }`,
-
-      /*
-       * 기존 Edge Function / DB가
-       * STANDARD / PLUS / SIGNATURE를
-       * 기대하는 동안 저장 단계에서는
-       * legacy 명칭을 유지한다.
-       *
-       * 고객 화면은
-       * CORE / CORE+ / PRIVATE만 사용.
-       */
-      recommended_plan:
-        toLegacyPlan(
-          resultData.plan
-        )
-
-    };
+    const payload =
+      buildHomeV3Payload(
+        name,
+        phone,
+        website
+      );
 
 
     try {
@@ -3309,7 +2313,7 @@
           .moohaeSupabase
           .functions
           .invoke(
-            'submit-diagnosis',
+            'submit-home-check-v3',
             {
 
               body:
@@ -3353,54 +2357,15 @@
 
 
       // ========================================================
-      // SERVER RESULT IS AUTHORITATIVE
+      // SERVER CONTRACT CHECK
       // ========================================================
 
-      /*
-       * 서버가 기존 STANDARD / PLUS / SIGNATURE를
-       * 반환하더라도 고객에게는
-       * CORE / CORE+ / PRIVATE로 변환한다.
-       */
-
-      const serverPlan =
-        typeof data
-          .recommended_plan ===
-          'string'
-
-          ? data.recommended_plan
-
-          : '';
-
-
       if (
-        serverPlan
+        data.customer_type !== 'home' ||
+        Number(data.check_version) !== 3
       ) {
-
-        const normalizedServerPlan =
-          normalizePlan(
-            serverPlan
-          );
-
-
-        resultData.plan =
-          normalizedServerPlan;
-
-
-        resultData.level =
-          normalizedServerPlan;
-
-
-        renderRecommendationPlan(
-          normalizedServerPlan
-        );
-
-
-        renderPlanExplore(
-          normalizedServerPlan
-        );
-
+        throw new Error('unexpected_home_check_version');
       }
-
 
       submitButton.textContent =
         '전달 완료';
