@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="./assets/css/site.css?v=20260905-4">
   <link rel="stylesheet" href="./assets/css/diagnosis.css?v=20260913-1">
   <link rel="stylesheet" href="./assets/css/diagnosis-facility.css?v=20260908-1">
-  <link rel="stylesheet" href="./assets/css/diagnosis-preview.css?v=20260929-1">
+  <link rel="stylesheet" href="./assets/css/diagnosis-preview.css?v=20261004-1">
 </head>
 <body data-page="diagnosis">
   <a class="check-skip-link" href="#homeCheckPanel">질문으로 건너뛰기</a>
@@ -69,10 +69,10 @@
         <h2>누구와 함께 생활하고 있나요?</h2>
         <p class="multi-hint">해당되는 항목을 선택해주세요.</p>
         <div class="options">
-          <button class="option" data-code="child" data-conflicts="solo_adult" data-visual="child-space">아이</button>
-          <button class="option" data-code="pet" data-visual="pet-space">반려동물</button>
-          <button class="option" data-code="adult_family" data-conflicts="solo_adult" data-visual="shared-space">성인 가족</button>
-          <button class="option" data-code="solo_adult" data-conflicts="child,adult_family" data-visual="shared-space">혼자 생활해요</button>
+          <button class="option" data-code="child" data-conflicts="solo_adult" data-visual="household-child">아이</button>
+          <button class="option" data-code="pet" data-visual="household-pet">반려동물</button>
+          <button class="option" data-code="adult_family" data-conflicts="solo_adult" data-visual="household-family">성인 가족</button>
+          <button class="option" data-code="solo_adult" data-conflicts="child,adult_family" data-visual="household-solo">혼자 생활해요</button>
         </div>
       </section>
 
