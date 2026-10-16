@@ -9,6 +9,7 @@
   //
   // LOGO = HOME
   // CARE
+  // EVENT
   // CHECK
   //
   // report.html은 공개 NAV에 노출하지 않는다.
@@ -173,6 +174,18 @@
 
     {
       key:
+        'event',
+
+      href:
+        './event.html',
+
+      label:
+        'EVENT'
+    },
+
+
+    {
+      key:
         'diagnosis',
 
       href:
@@ -232,7 +245,7 @@
 
     // ----------------------------------------------------------
     // PRIMARY NAV
-    // LOGO = HOME / CARE / CHECK
+    // LOGO = HOME / CARE / EVENT / CHECK
     // ----------------------------------------------------------
 
     const menu =
