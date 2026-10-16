@@ -11,11 +11,11 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 
-/* SITE INTEGRATION — V1 visual layout preserved */
+/* SITE INTEGRATION */
 body[data-page="event"] #site-header{position:relative;z-index:2000}
 body[data-page="event"] .hero{padding-top:calc(var(--header-height,76px) + 46px)}
 .house-shape{overflow:hidden}
-.house-photo{position:absolute;z-index:2;left:10px;right:10px;top:18px;bottom:28px;width:calc(100% - 20px);height:calc(100% - 46px);display:block;object-fit:cover;object-position:center;border-radius:28px 28px 22px 22px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.house-photo{position:absolute;z-index:2;left:10px;right:10px;top:18px;bottom:28px;width:calc(100% - 20px);height:calc(100% - 46px);display:block;object-fit:cover;object-position:center;border-radius:28px 28px 22px 22px}
 .house .house-window{display:none}
 .house-shape::before{z-index:3}
 .cta-button{text-decoration:none}
