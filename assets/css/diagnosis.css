@@ -1000,3 +1000,60 @@ body{
     font-size:16px;
   }
 }
+
+
+/* ============================================================
+   CUSTOM SCHEDULE CONTACT
+   예약 가능 일정 외 희망 시간 문의 — backend 변경 없음
+   ============================================================ */
+
+.booking-custom-contact{
+  margin-top:14px;
+  padding:14px 15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  border-top:1px solid var(--line);
+}
+
+.booking-custom-contact-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.booking-custom-contact-copy strong{
+  color:var(--ink);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+
+.booking-custom-contact-copy span{
+  color:var(--gray);
+  font-size:10px;
+  line-height:1.5;
+}
+
+.booking-custom-contact-link{
+  flex:0 0 auto;
+  color:var(--sage-dark);
+  font-size:10px;
+  font-weight:750;
+  white-space:nowrap;
+}
+
+.booking-custom-contact-link:hover,
+.booking-custom-contact-link:focus-visible{
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+@media (max-width:420px){
+  .booking-custom-contact{
+    align-items:flex-start;
+    padding:14px 2px 2px;
+  }
+}
