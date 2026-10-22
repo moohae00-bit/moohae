@@ -827,3 +827,26 @@ body[data-page="diagnosis"] .booking-custom-contact-link{
     align-items:flex-start;
   }
 }
+
+
+/* ======================================================
+   MOOHAE CHECK topbar — symbol only
+   Uses global .moohae-symbol from site.css
+   ====================================================== */
+body[data-page="diagnosis"] .check-preview-brand{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  width:auto;
+  height:auto;
+  min-width:46px;
+  overflow:visible;
+}
+
+body[data-page="diagnosis"] .check-preview-brand img{
+  display:none!important;
+}
+
+body[data-page="diagnosis"] .check-preview-brand .moohae-symbol{
+  display:block;
+}
