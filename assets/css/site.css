@@ -1502,3 +1502,192 @@ select {
   .logo { width:110px; }
   .logo img { height:42px; }
 }
+
+
+/* ============================================================
+   MOOHAE GLOBAL SYMBOL — FINAL
+   Header / Footer:
+   - SYMBOL ONLY
+   - CHARCOAL #2D2F2C
+   - SMALL SCALE
+   - no embedded MOOHAE wordmark visible
+   ============================================================ */
+
+:root {
+  --moohae-symbol-charcoal: #2d2f2c;
+}
+
+/*
+ * The source asset contains the official symbol + wordmark.
+ * The element is deliberately clipped to the symbol-only upper area
+ * and the alpha channel is used as a mask so the visible mark is
+ * a flat charcoal symbol.
+ */
+.moohae-symbol {
+  display: block;
+  width: 48px;
+  height: 12.7px;
+  flex: 0 0 auto;
+
+  background:
+    var(--moohae-symbol-charcoal);
+
+  -webkit-mask-image:
+    url("../images/moohae-logo.webp");
+
+  mask-image:
+    url("../images/moohae-logo.webp");
+
+  -webkit-mask-repeat:
+    no-repeat;
+
+  mask-repeat:
+    no-repeat;
+
+  -webkit-mask-position:
+    left top;
+
+  mask-position:
+    left top;
+
+  -webkit-mask-size:
+    48px auto;
+
+  mask-size:
+    48px auto;
+}
+
+
+/* Header logo container */
+.logo {
+  width: auto !important;
+  height: auto !important;
+  min-width: 48px;
+  min-height: 24px;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: flex-start;
+
+  overflow: visible !important;
+}
+
+
+/* Old image logo is intentionally not used anymore. */
+.logo img,
+.footer-logo img {
+  display: none !important;
+}
+
+
+/* Footer symbol container */
+.footer-logo {
+  width: auto !important;
+  height: auto !important;
+  min-width: 56px;
+  min-height: 18px;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  margin:
+    0 auto 18px !important;
+
+  overflow: visible !important;
+}
+
+
+.footer-logo .moohae-symbol {
+  width: 56px;
+  height: 14.8px;
+
+  -webkit-mask-size:
+    56px auto;
+
+  mask-size:
+    56px auto;
+}
+
+
+/* Reduce footer logo presence without changing footer content. */
+.footer {
+  padding-top:
+    48px;
+}
+
+
+/* Desktop */
+@media (min-width: 769px) {
+
+  .moohae-symbol {
+    width: 52px;
+    height: 13.7px;
+
+    -webkit-mask-size:
+      52px auto;
+
+    mask-size:
+      52px auto;
+  }
+
+
+  .logo {
+    min-width: 52px;
+  }
+
+
+  .footer-logo {
+    min-width: 60px;
+  }
+
+
+  .footer-logo .moohae-symbol {
+    width: 60px;
+    height: 15.8px;
+
+    -webkit-mask-size:
+      60px auto;
+
+    mask-size:
+      60px auto;
+  }
+}
+
+
+/* Small mobile */
+@media (max-width: 420px) {
+
+  .moohae-symbol {
+    width: 46px;
+    height: 12.1px;
+
+    -webkit-mask-size:
+      46px auto;
+
+    mask-size:
+      46px auto;
+  }
+
+
+  .logo {
+    min-width: 46px;
+  }
+
+
+  .footer-logo {
+    min-width: 52px;
+  }
+
+
+  .footer-logo .moohae-symbol {
+    width: 52px;
+    height: 13.7px;
+
+    -webkit-mask-size:
+      52px auto;
+
+    mask-size:
+      52px auto;
+  }
+}

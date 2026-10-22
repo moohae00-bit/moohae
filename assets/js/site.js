@@ -9,7 +9,6 @@
   //
   // LOGO = HOME
   // CARE
-  // EVENT
   // CHECK
   //
   // report.html은 공개 NAV에 노출하지 않는다.
@@ -126,27 +125,21 @@
       );
 
 
-    const image =
+    const symbol =
       make(
-        'img',
+        'span',
         {
-          src:
-            './assets/images/moohae-logo.webp',
+          class:
+            'moohae-symbol',
 
-          alt:
-            'MOOHAE',
-
-          loading:
-            'eager',
-
-          decoding:
-            'async'
+          'aria-hidden':
+            'true'
         }
       );
 
 
     link.appendChild(
-      image
+      symbol
     );
 
 
@@ -169,18 +162,6 @@
 
       label:
         'CARE'
-    },
-
-
-    {
-      key:
-        'event',
-
-      href:
-        './event.html',
-
-      label:
-        'EVENT'
     },
 
 
@@ -245,7 +226,7 @@
 
     // ----------------------------------------------------------
     // PRIMARY NAV
-    // LOGO = HOME / CARE / EVENT / CHECK
+    // LOGO = HOME / CARE / CHECK
     // ----------------------------------------------------------
 
     const menu =
