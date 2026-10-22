@@ -736,43 +736,43 @@ body[data-page="diagnosis"] .privacy-policy-content dd{
    개인/시설 1번 문항의 오브젝트 톤 통일
    ====================================================== */
 body[data-page="diagnosis"] [data-visual="child-object"]::before{
-  background-image:url('../images/diagnosis-v3/child-object.webp');
+  background-image:url('../images/child-object.webp');
   background-position:center 60%;
 }
 body[data-page="diagnosis"] [data-visual="pet-object"]::before{
-  background-image:url('../images/diagnosis-v3/pet-object.webp');
+  background-image:url('../images/pet-object.webp');
   background-position:center 60%;
 }
 body[data-page="diagnosis"] [data-visual="adult-family"]::before{
-  background-image:url('../images/diagnosis-v3/adult-family.webp');
+  background-image:url('../images/adult-family.webp');
   background-position:center 60%;
 }
 body[data-page="diagnosis"] [data-visual="solo-home"]::before{
-  background-image:url('../images/diagnosis-v3/solo-home.webp');
+  background-image:url('../images/solo-home.webp');
   background-position:center 60%;
 }
 body[data-page="diagnosis"] [data-visual="mattress-bedding"]::before{
-  background-image:url('../images/diagnosis-v3/mattress-bedding.webp');
+  background-image:url('../images/mattress-bedding.webp');
   background-position:center 58%;
 }
 body[data-page="diagnosis"] [data-visual="sofa-fabric"]::before{
-  background-image:url('../images/diagnosis-v3/sofa-fabric.webp');
+  background-image:url('../images/sofa-fabric.webp');
   background-position:center 60%;
 }
 body[data-page="diagnosis"] [data-visual="floor-rug"]::before{
-  background-image:url('../images/diagnosis-v3/floor-rug.webp');
+  background-image:url('../images/floor-rug.webp');
   background-position:center 61%;
 }
 body[data-page="diagnosis"] [data-visual="floor"]::before{
-  background-image:url('../images/diagnosis-v3/floor.webp');
+  background-image:url('../images/floor.webp');
   background-position:center 63%;
 }
 body[data-page="diagnosis"] [data-visual="customer-space"]::before{
-  background-image:url('../images/diagnosis-v3/customer-space.webp');
+  background-image:url('../images/customer-space.webp');
   background-position:center 61%;
 }
 body[data-page="diagnosis"] [data-visual="other-object"]::before{
-  background-image:url('../images/diagnosis-v3/other-object.webp');
+  background-image:url('../images/other-object.webp');
   background-position:center 60%;
 }
 body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option[data-visual="other-object"]::before{
