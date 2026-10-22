@@ -778,3 +778,52 @@ body[data-page="diagnosis"] [data-visual="other-object"]::before{
 body[data-page="diagnosis"] .facility-question[data-facility-index="0"] .facility-option[data-visual="other-object"]::before{
   inset:0 0 48px;
 }
+
+
+/* ======================================================
+   2026-10-22 schedule contact
+   Latest HOME CHECK V3 structure is preserved.
+   ====================================================== */
+body[data-page="diagnosis"] .booking-custom-contact{
+  margin-top:14px;
+  padding:14px 2px 0;
+  border-top:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+body[data-page="diagnosis"] .booking-custom-contact-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+body[data-page="diagnosis"] .booking-custom-contact-copy strong{
+  color:var(--ink);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+
+body[data-page="diagnosis"] .booking-custom-contact-copy span{
+  color:var(--gray);
+  font-size:10px;
+  line-height:1.5;
+}
+
+body[data-page="diagnosis"] .booking-custom-contact-link{
+  flex:0 0 auto;
+  color:var(--sage-dark);
+  font-size:10px;
+  font-weight:750;
+  white-space:nowrap;
+}
+
+@media (max-width:420px){
+  body[data-page="diagnosis"] .booking-custom-contact{
+    align-items:flex-start;
+  }
+}
